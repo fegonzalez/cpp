@@ -14,10 +14,21 @@
 #   1.10 Multi-threaded executions and data races
 
 
-# todo 2 Lexical conventions
+# 2 Lexical conventions
 #
 # 2.1 Separate translation
 # 2.2 Phases of translation
+# 2.3 Character sets
+# 2.4 Preprocessing tokens
+# 2.5 Alternative tokens
+# 2.6 Tokens
+# 2.7 Comments
+# 2.8 Header names
+# 2.9 Preprocessing numbers
+# 2.10 Identifiers
+# 2.11 Keywords
+# 2.12 Operators and punctuators
+# 2.13 literals
 
 # todo 3 Basic concepts
 #
@@ -459,26 +470,26 @@ My_note.- Most of this chapter is oriented to compiler builders.
   	  and/or per instantiation unit.
 
 
-1) translation units and instantiation units
+1) translation units (TU) and instantiation units
 
-   Note.- both of them are created by the compiler upon compilation time.
+a) translation units (TU)
 
-a) Translation unit = source file + included headers + included sources
-   	       	      - source lines skipped by any of the conditional
-		      	inclusion preprocessing directives.
+   def [1_1]: TU = source file + included headers + included sources -
+      	      	   - source lines skipped by any of the conditional inclusion
+             	   preprocessing directives ([1_1])
 
-   Note: A C++ program need not all be translated at the same time.
+   My-def: TU = source file after it has been processed by the C preprocessor.
+
+Note: A C++ program need not all be translated at the same time.
 
 b) Instantiation units
 
-Definitions:
+def [1_1]: These are similar to translated translation units, but contain no
+       references to uninstantiated templates and no template definitions. 
 
-Note: These are similar to translated translation units, but contain
-no references to uninstantiated templates and no template definitions. [1_1]
-
-Instantiation units are separate files where template instantiations
-encountered by the compiler in a TU are stored, so that each template
-instantiation is compiled only once per program. [6_3]
+def [6_3]: Instantiation units are separate files where template instantiations
+       encountered by the compiler in a TU are stored, so that each template
+       instantiation is compiled only once per program. 
 
 My-def: Units created by the compiler to store the template-code actually
 	INSTANTIATED in any of the translation units.
@@ -508,53 +519,128 @@ to produce an executable program (3.5).
 
 # 2.2 Phases of translation
 
-My_note.- Most of this chapter is oriented to compiler builders.
-	  Read [1_1] for complete details of threads in C++.
+My_note.- Here a brief explanation. Read [1_1] for details.
 
-Steps to compialtion & linking. Ignored (see note above)
+  C preprocessor (invoked by the compiler)
 
+1-3. Tokenization: the source file is decomposed into preprocessing tokens.
 
-My_note.- Single Compilation Unit (SCU) [6_3]
+4. Preprocessing directives are executed, macro invocations are expanded, and
+   _Pragma unary operator expressions are executed. Steps 1-4 are repeated for
+   every #include
 
-Single Compilation Unit (SCU) is a technique for the C and C++
-languages, which reduces serial compilation time and allows the
-compiler to perform certain program optimizations even when the
-compiler itself is lacking support for whole program optimization.
+5-6. Process string literals (concatenation, ...)
 
-The SCU technique uses pre-processor directives to "glue" different
-translation units together at compile time rather than at link
-time. This reduces the overall build time, due to eliminating the
-duplication, but increases the incremental build time.
+   C++ compiler:
 
-Example
+7. Tokens are syntactically and semantically analyzed and translated as a
+   translation unit.
 
-For example, if you have the source files foo.cpp and bar.cpp, they
-can be placed in a Single Compilation Unit as follows:
+8. Translated translation units and instantiation units are combined as follows:
+   a) Each translated translation unit is examined to produce a list of
+      required instantiations.   
+   b) All the required instantiations are performed to produce instantiation
+      units. The program is ill-formed if any instantiation fails.
 
-  #include "foo.cpp"
-  #include "bar.cpp"
+   C++ linker:
 
-Suppose foo.cpp and bar.cpp are:
-
-  //foo.cpp
-  #include <iostream> // A large, standard header
-  #include "bar.h"    // Declaration of function 'bar'
-  int main() { bar(); }
-
-  //bar.cpp
-  #include <iostream> // The same large, standard header
-  void bar() { ... }
-
-Now the standard header file (iostream) is compiled only once, and function bar
-may be inlined into function main, despite being from another module.
+9. a) Linkage is executed to resolve external references.
+   b) All such translator output is collected into image which contains
+      information needed for execution in its execution environment.
 
 
+# 2.3 - 2.9
 
-aki lo dejo: standard.pdf
+My_note.- Ignored. Read [1_1] for details. 
+
+
+# 2.10 Identifiers
+
+3) WARNING reserved ids:
+
+(3.1) — Each identifier that contains a double underscore __ or begins with an
+underscore followed by an uppercase letter is reserved to the implementation
+for any use.
+
+    .*__.*   is reserved
+    _[A-Z]   is reserved
+
+
+(3.2) — Each identifier that begins with an underscore is reserved to the
+implementation for use as a name in the global namespace.
+
+     _.+ is reserved
+
+# 2.11 Keywords
+
+1) Reserved keywords
+
+   alignas .. bool .. while
+
+WARNING reserved for future use:  export  register
+
+2) reserved for certain operators and punctuators
+
+   and      and_eq   bitand   bitor   compl   not
+   not_eq   or 	     or_eq    xor     xor_eq
+
+
+# 2.12 Operators and punctuators
+
+  {   ..   xor_eq
+
+# 2.13 literals
+
+integer-literal
+character-literal
+floating-literal
+string-literal
+boolean-literal
+pointer-literal
+user-defined-literal
+
+# 2.13.5 String literals
+
+- Raw string literal: string-literal that has an R in the prefix:
+
+  [ Example: The raw string
+
+  R"a(
+  )\
+  a"
+  )a"
+  
+  is equivalent to "\n)\\\na\"\n".
+
+# 2.13.7 Pointer literals 
+
+nullptr
+
+[ Note: std::nullptr_t is a distinct type that is neither a pointer type nor a
+pointer to member type; rather, a prvalue of this type is a null pointer
+constant and can be converted to a null pointer value or null member pointer
+value. See 4.10 and 4.11. —end note ]
+
+2.13.8 User-defined literals
+
+   i.e. 123_km
+
+1) If a token matches both user-defined-literal and another literal kind, it is
+   treated as the latter.
+
+2) A user-defined-literal is treated as a call to a literal operator or literal
+   operator template (13.5.8).
+
+   i.e.  void operator "" _km(long double);
+
 
 # ==============================================================================
 # 3 Basic concepts
 # ==============================================================================
+
+
+aki lo dejo: standard.pdf
+
 
 # 3.9 Types
 
