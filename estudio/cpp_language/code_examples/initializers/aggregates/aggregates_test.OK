@@ -1,0 +1,26 @@
+
+[k] Aggregates in C++14
+
+void inheritance_example()
+0 42 0
+10 12
+
+sizeof(ar) = 12
+a
+1
+1
+1
+0
+2
+0
+
+std::array is an aggregate
+1
+1
+
+narrowing conversion: error since C++11
+one
+two
+three
+1
+

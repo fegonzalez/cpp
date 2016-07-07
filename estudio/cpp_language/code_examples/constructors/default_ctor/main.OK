@@ -1,0 +1,12 @@
+
+ test.- Synthesized default constructor & base class 
+
+[C++98]: error: no matching function for call to Base::Base()
+[C++11] [C++14]: error: use of deleted function ‘B::B()’
+[C++11] [C++14]: error: ‘B::B()’ is implicitly deleted because the default definition would be ill-formed.
+
+ test.- Synthesized def. constructor - embedded data members
+
+[C++98]: error: no matching function for call to ‘Embedded::Embedded()’
+[C++11] [C++14]: error: use of deleted function ‘Compound::Compound()’
+[C++11] [C++14]: error: ‘Compound::Compound()’ is implicitly deleted because the default definition would be ill-formed.

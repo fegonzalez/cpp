@@ -1,0 +1,19 @@
+
+ ctor_order test (c++ standard 12.6.2)
+
+B::undef_f
+
+ Class_A()
+
+B::undef_f
+
+ Class_B()
+
+D::undef_f
+
+ Class_C()
+
+D::undef_f
+
+ Class_D()
+

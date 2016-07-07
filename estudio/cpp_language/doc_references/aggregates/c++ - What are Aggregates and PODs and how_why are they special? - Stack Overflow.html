@@ -1,0 +1,2814 @@
+<!DOCTYPE html>
+<html itemscope itemtype="http://schema.org/QAPage">
+<head>
+
+<title>c++ - What are Aggregates and PODs and how/why are they special? - Stack Overflow</title>
+    <link rel="shortcut icon" href="//cdn.sstatic.net/Sites/stackoverflow/img/favicon.ico?v=4f32ecc8f43d">
+    <link rel="apple-touch-icon image_src" href="//cdn.sstatic.net/Sites/stackoverflow/img/apple-touch-icon.png?v=c78bd457575a">
+    <link rel="search" type="application/opensearchdescription+xml" title="Stack Overflow" href="/opensearch.xml">
+    <meta name="twitter:card" content="summary">
+    <meta name="twitter:domain" content="stackoverflow.com"/>
+    <meta property="og:type" content="website" />    
+    <meta property="og:image" itemprop="image primaryImageOfPage" content="http://cdn.sstatic.net/Sites/stackoverflow/img/apple-touch-icon@2.png?v=73d79a89bded&a" />
+    <meta name="twitter:title" property="og:title" itemprop="title name" content="What are Aggregates and PODs and how/why are they special?" />
+    <meta name="twitter:description" property="og:description" itemprop="description" content="This FAQ is about Aggregates and PODs and covers the following material:
+
+
+What are Aggregates? 
+What are PODs (Plain Old Data)? 
+How are they related? 
+How and why are they special? 
+What changes ..." />
+    <meta property="og:url" content="http://stackoverflow.com/questions/4178175/what-are-aggregates-and-pods-and-how-why-are-they-special"/>
+    <link rel="canonical" href="http://stackoverflow.com/questions/4178175/what-are-aggregates-and-pods-and-how-why-are-they-special" />
+
+    
+    
+    <script src="//ajax.googleapis.com/ajax/libs/jquery/1.7.1/jquery.min.js"></script>
+    <script src="//cdn.sstatic.net/Js/stub.en.js?v=4db1ff9b2372"></script>
+    <link rel="stylesheet" type="text/css" href="//cdn.sstatic.net/Sites/stackoverflow/all.css?v=e30fffb1f8bd">
+
+            <link rel="alternate" type="application/atom+xml" title="Feed for question &#39;What are Aggregates and PODs and how/why are they special?&#39;" href="/feeds/question/4178175">
+            <meta name="twitter:app:country" content="US" />
+            <meta name="twitter:app:name:iphone" content="Stack Exchange iOS" />
+            <meta name="twitter:app:id:iphone" content="871299723" />
+            <meta name="twitter:app:url:iphone" content="se-zaphod://stackoverflow.com/questions/4178175/what-are-aggregates-and-pods-and-how-why-are-they-special" />
+            <meta name="twitter:app:name:ipad" content="Stack Exchange iOS" />
+            <meta name="twitter:app:id:ipad" content="871299723" />
+            <meta name="twitter:app:url:ipad" content="se-zaphod://stackoverflow.com/questions/4178175/what-are-aggregates-and-pods-and-how-why-are-they-special" />
+            <meta name="twitter:app:name:googleplay" content="Stack Exchange Android">
+            <meta name="twitter:app:url:googleplay" content="http://stackoverflow.com/questions/4178175/what-are-aggregates-and-pods-and-how-why-are-they-special">
+            <meta name="twitter:app:id:googleplay" content="com.stackexchange.marvin">
+        <script>
+        
+            StackExchange.ready(function () {
+                    
+                    StackExchange.using("snippets", function () {
+                        StackExchange.snippets.initSnippetRenderer();
+                    });
+                    
+
+                StackExchange.using("postValidation", function () {
+                    StackExchange.postValidation.initOnBlurAndSubmit($('#post-form'), 2, 'answer');
+                });
+
+                
+                StackExchange.question.init({showAnswerHelp:true,totalCommentCount:34,shownCommentCount:5,highlightColor:'#F4A83D',backgroundColor:'#FFF',questionId:4178175});
+
+                styleCode();
+
+                    StackExchange.realtime.subscribeToQuestion('1', '4178175');
+                                                                    StackExchange.using("gps", function () { StackExchange.gps.trackOutboundClicks('#content', '.post-text'); });
+
+            });
+        </script>
+
+
+    <script>
+        StackExchange.init({"locale":"en","stackAuthUrl":"https://stackauth.com","networkMetaHostname":"meta.stackexchange.com","serverTime":1466616981,"routeName":"Questions/Show","site":{"name":"Stack Overflow","description":"Q&A for professional and enthusiast programmers","isNoticesTabEnabled":true,"recaptchaPublicKey":"6LdchgIAAAAAAJwGpIzRQSOFaO0pU6s44Xt8aTwc","recaptchaAudioLang":"en","enableNewTagCreationWarning":true,"insertSpaceAfterNameTabCompletion":false,"id":1,"enableSocialMediaInSharePopup":true},"user":{"fkey":"06a29bf8bf181d0fb8763602eeebdc12","rep":0,"isAnonymous":true,"isAnonymousNetworkWide":true}}, {"site":{"allowImageUploads":true,"enableUserHovercards":true,"styleCode":true},"comments":{},"tags":{},"snippets":{"snippetsEnabled":true,"renderDomain":"stacksnippets.net"},"markdown":{"asteriskIntraWordEmphasis":true}});
+        StackExchange.using.setCacheBreakers({"js/prettify-full.en.js":"fda1e5557b88","js/moderator.en.js":"eac1a86d14d4","js/full-anon.en.js":"a632c13168a8","js/full.en.js":"3cd2a02abc26","js/wmd.en.js":"020546ac1e25","js/third-party/jquery.autocomplete.min.js":"e5f01e97f7c3","js/third-party/jquery.autocomplete.min.en.js":"","js/mobile.en.js":"2c293de7dc9e","js/help.en.js":"54b998574be9","js/tageditor.en.js":"3a17a5dd463f","js/tageditornew.en.js":"5b0866435162","js/inline-tag-editing.en.js":"a815357d00cd","js/revisions.en.js":"db5a160e1690","js/review.en.js":"ec2ae329c554","js/tagsuggestions.en.js":"d1ff9b84abe5","js/post-validation.en.js":"c94c61111d65","js/explore-qlist.en.js":"e71f14781288","js/events.en.js":"9d0048b3fff4","js/keyboard-shortcuts.en.js":"bfe83176764f","js/external-editor.en.js":"93769406446f","js/external-editor.en.js":"93769406446f","js/snippet-javascript.en.js":"8443d76307f4","js/snippet-javascript-codemirror.en.js":"e0e2d6b1bd72"});
+        StackExchange.using("gps", function() {
+             StackExchange.gps.init(true);
+        });
+    </script>
+    
+        <script>
+            StackExchange.ready(function () {
+                $('#nav-tour').click(function () {
+                    StackExchange.using("gps", function() {
+                        StackExchange.gps.track("aboutpage.click", { aboutclick_location: "headermain" }, true);
+                    });
+                });
+            });
+        </script>
+</head>
+<body class="question-page new-topbar">
+    <noscript><div id="noscript-padding"></div></noscript>
+    
+        <script>(function () { var old = $.fn.contents; $.fn.contents = function () { try { return old.apply(this, arguments); } catch (e) { return $([]); } } })()</script>
+        <iframe id="adzerk-user-match" width="0" height="0" frameborder="0" scrolling="no" onload="window.AUMIframeDone=true"
+                src="https://ssum-sec.casalemedia.com/usermatch?s=183712&amp;cb=https%3A%2F%2Fengine.adzerk.net%2Fudb%2F22%2Fsync%2Fi.gif%3FpartnerId%3D1%26userId%3D"
+                style="display: none;" marginheight="0" marginwidth="0"></iframe>
+
+
+
+
+    <div id="notify-container"></div>
+    <div id="overlay-header"></div>
+    <div id="custom-header"></div>
+
+
+
+
+
+<div class="topbar">
+    <div class="topbar-wrapper">
+
+        <div class="js-topbar-dialog-corral">
+
+
+<div class="topbar-dialog siteSwitcher-dialog dno">
+    <div class="header">
+        <h3><a href="//stackoverflow.com">current community</a></h3>
+    </div>
+    <div class="modal-content current-site-container">
+        <ul class="current-site">
+                <li>
+                        <div class="related-links">
+                    <a href="http://chat.stackoverflow.com" class="js-gps-track"     data-gps-track="site_switcher.click({ item_type:6 })"
+>chat</a>
+            </div>
+
+
+
+
+    <a href="//stackoverflow.com"
+       class="current-site-link site-link js-gps-track"
+       data-id="1"
+       data-gps-track="
+        site_switcher.click({ item_type:3 })">
+        <div class="site-icon favicon favicon-stackoverflow" title="Stack Overflow"></div>
+        Stack Overflow
+    </a>
+
+                </li>
+                <li class="related-site">
+                        <div class="L-shaped-icon-container">
+        <span class="L-shaped-icon"></span>
+    </div>
+
+                    
+
+
+
+    <a href="http://meta.stackoverflow.com"
+       class="site-link js-gps-track"
+       data-id="552"
+       data-gps-track="
+            site.switch({ target_site:552, item_type:3 }),
+        site_switcher.click({ item_type:4 })">
+        <div class="site-icon favicon favicon-stackoverflowmeta" title="Meta Stack Overflow"></div>
+        Meta Stack Overflow
+    </a>
+
+                </li>
+                            <li class="related-site">
+                        <div class="L-shaped-icon-container">
+        <span class="L-shaped-icon"></span>
+    </div>
+
+                    <a class="site-link js-gps-track"
+                       href="//careers.stackoverflow.com?utm_source=stackoverflow.com&amp;utm_medium=site-ui&amp;utm_campaign=multicollider"
+                            data-gps-track="site_switcher.click({ item_type:9 })"
+>
+                        <div class="site-icon favicon favicon-careers" title="Stack Overflow Careers"></div>
+                        Stack Overflow Careers
+                    </a>
+                </li>
+        </ul>
+    </div>
+    <div class="header" id="your-communities-header">
+        <h3>
+your communities        </h3>
+            
+    </div>
+    <div class="modal-content" id="your-communities-section">
+            
+            <div class="call-to-login">
+<a href="https://stackoverflow.com/users/signup?ssrc=site_switcher&amp;returnurl=http%3a%2f%2fstackoverflow.com%2fquestions%2f4178175%2fwhat-are-aggregates-and-pods-and-how-why-are-they-special" class="login-link js-gps-track"     data-gps-track="site_switcher.click({ item_type:10 })"
+>Sign up</a> or <a href="https://stackoverflow.com/users/login?ssrc=site_switcher&amp;returnurl=http%3a%2f%2fstackoverflow.com%2fquestions%2f4178175%2fwhat-are-aggregates-and-pods-and-how-why-are-they-special" class="login-link js-gps-track"     data-gps-track="site_switcher.click({ item_type:11 })"
+>log in</a> to customize your list.
+            </div>
+    </div>
+    <div class="header">
+        <h3><a href="//stackexchange.com/sites">more stack exchange communities</a></h3>
+        <a href="http://blog.stackoverflow.com" class="fr">company blog</a>
+    </div>
+    <div class="modal-content">
+            <div class="child-content"></div>
+    </div>
+</div>
+        </div>
+
+        <div class="network-items">
+
+            <a href="//stackexchange.com"
+               class="topbar-icon icon-site-switcher yes-hover js-site-switcher-button js-gps-track"
+               data-gps-track="site_switcher.show"
+               title="A list of all 157 Stack Exchange sites">
+                <span class="hidden-text">Stack Exchange</span>
+            </a>
+
+    <a href="#"
+       class="topbar-icon icon-inbox yes-hover js-inbox-button"
+       title="Recent inbox messages">
+        <span class="hidden-text">Inbox</span>
+        <span class="unread-count" style="display:none"></span>
+    </a>
+    <a href="#"
+       class="topbar-icon icon-achievements yes-hover js-achievements-button "
+       data-unread-class=""
+       title="Recent achievements: reputation, badges, and privileges earned">
+        <span class="hidden-text">Reputation and Badges</span>
+        <span class="unread-count" style="display:none">
+            
+        </span>
+    </a>
+        </div>
+
+        <div class="topbar-links">
+
+                <div class="links-container">
+                <span class="topbar-menu-links">
+                                    <a href="https://stackoverflow.com/users/signup?ssrc=head&returnurl=http%3a%2f%2fstackoverflow.com%2fquestions%2f4178175%2fwhat-are-aggregates-and-pods-and-how-why-are-they-special" class="login-link">sign up</a>
+                                <a href="https://stackoverflow.com/users/login?ssrc=head&returnurl=http%3a%2f%2fstackoverflow.com%2fquestions%2f4178175%2fwhat-are-aggregates-and-pods-and-how-why-are-they-special" class="login-link">log in</a>
+
+                            <a href="/tour">tour</a>
+    <a href="#" class="icon-help js-help-button" title="Help Center and other resources">
+        help
+        <span class="triangle"></span>
+    </a>
+    <div class="topbar-dialog help-dialog js-help-dialog dno">
+        <div class="modal-content">
+            <ul>
+                                    <li>
+                        <a href="/tour" class="js-gps-track" data-gps-track="help_popup.click({ item_type:1 })">
+                            Tour
+                            <span class="item-summary">
+                                Start here for a quick overview of the site
+                            </span>
+                        </a>
+                    </li>
+                <li>
+                    <a href="/help" class="js-gps-track" data-gps-track="help_popup.click({ item_type:4 })">
+                        Help Center
+                        <span class="item-summary">
+                            Detailed answers to any questions you might have
+                        </span>
+                    </a>
+                </li>
+                        <li>
+                            <a href="//meta.stackoverflow.com" class="js-gps-track" data-gps-track="help_popup.click({ item_type:2 })">
+                                Meta
+                                <span class="item-summary">
+                                    Discuss the workings and policies of this site
+                                </span>
+                            </a>
+                        </li>
+                    <li>
+                        <a href="http://stackoverflow.com/company/about" class="js-gps-track" data-gps-track="help_popup.click({ item_type:6 })">
+                            About Us
+                            <span class="item-summary">
+                                Learn more about Stack Overflow the company
+                            </span>
+                        </a>
+                    </li>
+                    <li>
+                        <a href="http://business.stackoverflow.com/?ref=topbar_help" class="js-gps-track" data-gps-track="help_popup.click({ item_type:7 })">
+                            Business
+                            <span class="item-summary">
+                                Learn more about hiring developers or posting ads with us
+                            </span>
+                        </a>
+                    </li>
+            </ul>
+        </div>
+    </div>
+                                            </span>
+                </div>
+
+            <div class="search-container">
+                <form id="search" action="/search" method="get" autocomplete="off">
+                    <input name="q" type="text" placeholder="Search Q&amp;A" value="" tabindex="1" autocomplete="off" maxlength="240" />
+                </form>
+            </div>
+
+        </div>
+    </div>
+</div>
+    <script>
+        StackExchange.ready(function() { StackExchange.topbar.init(); });
+    </script>
+
+    <div class="container">
+        <div id="header">
+            <br class="cbt">
+            <div id="hlogo">
+                <a href="/" >
+                    Stack Overflow
+                </a>
+            </div>
+            <div id="hmenus">
+                <div class="nav mainnavs">
+                    <ul>
+                        <li class="youarehere"><a id="nav-questions" href="/questions">Questions</a></li>
+                            <li><a id="nav-jobs" href="/jobs?med=site-ui&ref=jobs-tab">Jobs</a></li>
+                        <li><a id="nav-tags" href="/tags">Tags</a></li>
+                        <li><a id="nav-users" href="/users">Users</a></li>
+                        <li><a id="nav-badges" href="/help/badges">Badges</a></li>
+                                            </ul>
+                </div>
+                <div class="nav askquestion">
+                    <ul>
+                        <li>
+                            <a id="nav-askquestion"  href="/questions/ask">Ask Question</a>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+        
+
+
+
+        <div id="content" class="snippet-hidden">
+            
+
+<div itemscope itemtype="http://schema.org/Question">
+    <link itemprop="image" href="//cdn.sstatic.net/Sites/stackoverflow/img/apple-touch-icon.png?v=c78bd457575a">
+
+<div id="herobox">
+    <div id="hero-content">
+            <div id="close"><a title="click to minimize">_</a></div>
+        <div id="blurb">
+            Stack Overflow is a community of 4.7 million programmers, just like you, helping each other.
+            <br/>
+                <br/>Join them; it only takes a minute:<br/>
+            <br/>
+            <a href="/users/signup?ssrc=hero&amp;returnurl=http%3a%2f%2fstackoverflow.com%2fquestions%2f4178175%2fwhat-are-aggregates-and-pods-and-how-why-are-they-special" id="tell-me-more" class="button">Sign up</a>
+        </div>
+        <div id="desc">
+            <b>Join the Stack Overflow community to:</b>
+            <ol id="hiw">
+                <li id="q">Ask programming questions
+                </li>
+                <li id="an">Answer and help your peers
+                </li>
+                <li id="b">Get recognized for your expertise
+                </li>
+            </ol>
+        </div>
+        <div style="clear: both"></div>
+    </div>
+    <script>
+        StackExchange.ready(function () {
+
+            var location = 0;
+            if ($("body").hasClass("questions-page")) {
+                location = 1;;
+            } else if ($("body").hasClass("question-page")) {
+                location = 1;;
+            } else if ($("body").hasClass("faq-page")) {
+                location = 5;;
+            } else if ($("body").hasClass("home-page")) {
+                location = 3;;
+            }
+
+            $('#tell-me-more').click(function () {
+                StackExchange.using("gps", function () {
+                    StackExchange.gps.track("hero.action", { hero_action_type: 'cta', location: location }, true);
+                });
+            });
+            $('#herobox #close').click(function () {
+                StackExchange.using("gps", function () {
+                    StackExchange.gps.track("hero.action", { hero_action_type: "minimize", location: location }, true);
+                });
+                $.cookie("hero", "mini", { path: "/", expires: 365 });
+                $.ajax({
+                    url: "/hero-mini",
+                    success: function (data) {
+                        $("#herobox").fadeOut("fast", function () {
+                            $("#herobox").replaceWith(data);
+                            $("#herobox-mini").fadeIn("fast");
+                        });
+                    }
+                });
+                return false;
+            });
+        });
+
+    </script>
+</div>
+			<div id="question-header">
+                <h1 itemprop="name"><a href="/questions/4178175/what-are-aggregates-and-pods-and-how-why-are-they-special" class="question-hyperlink">What are Aggregates and PODs and how/why are they special?</a></h1>
+		</div>
+			<div id="mainbar">
+
+			
+
+<div class="question" data-questionid="4178175"  id="question">
+
+    <script>
+                var ados = ados || {}; ados.run = ados.run || [];
+                ados.run.push(function () { ados_add_placement(22,8277,"adzerk937836781",4).setZone(43); });
+            </script>
+            <div class="everyonelovesstackoverflow" id="adzerk937836781">
+            </div>    <table>
+        <tr>
+            <td class="votecell">
+                
+
+<div class="vote">
+        <input type="hidden" name="_id_" value="4178175">
+        <a class="vote-up-off" title="This question shows research effort; it is useful and clear">up vote</a>
+        <span itemprop="upvoteCount" class="vote-count-post ">326</span>
+        <a class="vote-down-off" title="This question does not show any research effort; it is unclear or not useful">down vote</a>
+
+        <a class="star-off" href="#">favorite</a>
+        <div class="favoritecount"><b>358</b></div>
+
+
+</div>
+
+            </td>
+            
+<td class="postcell">
+<div>
+    <div class="post-text" itemprop="text">
+
+<p>This <a href="http://stackoverflow.com/tags/c%2b%2b-faq/info">FAQ</a> is about Aggregates and PODs and covers the following material:</p>
+
+<ul>
+<li>What are <strong><em>Aggregates</em></strong>? </li>
+<li>What are <strong><em>POD</em></strong>s (Plain Old Data)? </li>
+<li>How are they related? </li>
+<li>How and why are they special? </li>
+<li>What changes for C++11?</li>
+</ul>
+    </div>
+    <div class="post-taglist">
+        <a href="/questions/tagged/c%2b%2b" class="post-tag" title="show questions tagged &#39;c++&#39;" rel="tag">c++</a> <a href="/questions/tagged/aggregate" class="post-tag" title="show questions tagged &#39;aggregate&#39;" rel="tag">aggregate</a> <a href="/questions/tagged/c%2b%2b-faq" class="post-tag" title="show questions tagged &#39;c++-faq&#39;" rel="tag">c++-faq</a> <a href="/questions/tagged/pod" class="post-tag" title="show questions tagged &#39;pod&#39;" rel="tag">pod</a> <a href="/questions/tagged/c%2b%2b11" class="post-tag" title="show questions tagged &#39;c++11&#39;" rel="tag">c++11</a> 
+    </div>
+    <table class="fw">
+    <tr>
+    <td class="vt">
+<div class="post-menu"><a href="/q/4178175" title="short permalink to this question" class="short-link" id="link-post-4178175">share</a><span class="lsep">|</span><a href="/posts/4178175/edit" class="suggest-edit-post" title="">improve this question</a></div>        
+    </td>
+    <td align="right" class="post-signature">
+<div class="user-info user-hover">
+    <div class="user-action-time">
+        <a href="/posts/4178175/revisions" title="show all edits to this post">edited <span title="2011-12-13 20:48:18Z" class="relativetime">Dec 13 '11 at 20:48</span></a>
+    </div>
+    <div class="user-gravatar32">
+        <a href="/users/560648/lightness-races-in-orbit"><div class="gravatar-wrapper-32"><img src="https://i.stack.imgur.com/ja6lJ.jpg?s=32&amp;g=1" alt="" width="32" height="32"></div></a>
+    </div>
+    <div class="user-details">
+        <a href="/users/560648/lightness-races-in-orbit">Lightness Races in Orbit</a>
+        <div class="-flair">
+            <span class="reputation-score" title="reputation score 204,708" dir="ltr">205k</span><span title="34 gold badges"><span class="badge1"></span><span class="badgecount">34</span></span><span title="303 silver badges"><span class="badge2"></span><span class="badgecount">303</span></span><span title="551 bronze badges"><span class="badge3"></span><span class="badgecount">551</span></span>
+        </div>
+    </div>
+</div>    </td>
+    <td class="post-signature owner">
+        <div class="user-info ">
+    <div class="user-action-time">
+        asked <span title="2010-11-14 15:35:50Z" class="relativetime">Nov 14 '10 at 15:35</span>
+    </div>
+    <div class="user-gravatar32">
+        <a href="/users/469935/armen-tsirunyan"><div class="gravatar-wrapper-32"><img src="https://i.stack.imgur.com/14lYV.jpg?s=32&amp;g=1" alt="" width="32" height="32"></div></a>
+    </div>
+    <div class="user-details">
+        <a href="/users/469935/armen-tsirunyan">Armen Tsirunyan</a>
+        <div class="-flair">
+            <span class="reputation-score" title="reputation score 73,430" dir="ltr">73.4k</span><span title="31 gold badges"><span class="badge1"></span><span class="badgecount">31</span></span><span title="201 silver badges"><span class="badge2"></span><span class="badgecount">201</span></span><span title="332 bronze badges"><span class="badge3"></span><span class="badgecount">332</span></span>
+        </div>
+    </div>
+</div>
+    </td>
+    </tr>
+    </table>
+</div>
+</td>
+        </tr>
+                
+<tr>
+    <td class="votecell"></td>
+    <td>
+	    <div id="comments-4178175" class="comments ">
+		    <table>
+                <tbody data-remaining-comments-count="29"
+                       data-canpost="false"
+                       data-cansee="true"
+                       data-comments-unavailable="false"
+                       data-addlink-disabled="true">
+
+
+
+    <tr id="comment-4513582" class="comment ">
+        <td class="comment-actions">
+            <table>
+                <tbody>
+                    <tr>
+                        <td class=" comment-score">
+                                <span title="number of &#39;useful comment&#39; votes received"
+                                      class="hot">19</span>
+                        </td>
+                        <td>
+                                &nbsp;
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+        </td>
+        <td class="comment-text">
+            <div style="display: block;" class="comment-body">
+                <span class="comment-copy">No downvotes from me, but I think this kind of article may bring some problems with the C++-faq system in the long run. The idea of the C++-faq was supposed to be that certain tedious questions could be dealt with quickly just by pointing them at the relevant FAQ entry. No doubt this article does answer lots of common questions, but it&#39;s <i>way</i> too long to be the answer to any single simple question. FAQ != textbook. The reason for marking your answer CW, btw, is if you want site newbies to be able to edit and improve it, rather than just power users like me. Hence the name, &quot;wiki&quot; :-)</span>
+                    &ndash;&nbsp;<a href="/users/13005/steve-jessop"
+                       title="198,570 reputation"
+                       class="comment-user">Steve Jessop</a>
+                <span class="comment-date" dir="ltr"><span title="2010-11-14 15:46:02Z" class="relativetime-clean">Nov 14 '10 at 15:46</span></span>
+                                                                            </div>
+                    </td>
+    </tr>
+    <tr id="comment-4513587" class="comment ">
+        <td class="comment-actions">
+            <table>
+                <tbody>
+                    <tr>
+                        <td class=" comment-score">
+                                <span title="number of &#39;useful comment&#39; votes received"
+                                      class="warm">13</span>
+                        </td>
+                        <td>
+                                &nbsp;
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+        </td>
+        <td class="comment-text">
+            <div style="display: block;" class="comment-body">
+                <span class="comment-copy">@Steve: Honestly, I wouldn&#39;t want any newbie to touch that text...</span>
+                    &ndash;&nbsp;<a href="/users/252000/fredoverflow"
+                       title="125,502 reputation"
+                       class="comment-user">fredoverflow</a>
+                <span class="comment-date" dir="ltr"><span title="2010-11-14 15:47:06Z" class="relativetime-clean">Nov 14 '10 at 15:47</span></span>
+                                                                            </div>
+                    </td>
+    </tr>
+    <tr id="comment-4513697" class="comment ">
+        <td class="comment-actions">
+            <table>
+                <tbody>
+                    <tr>
+                        <td class=" comment-score">
+                                <span title="number of &#39;useful comment&#39; votes received"
+                                      class="warm">10</span>
+                        </td>
+                        <td>
+                                &nbsp;
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+        </td>
+        <td class="comment-text">
+            <div style="display: block;" class="comment-body">
+                <span class="comment-copy">@Steve: While I agree with the sentiment that an FAQ should mainly consist of real user question (maybe improved), there&#39;s those <i>types of questions no real newbie ever asks</i>, yet their answers <i>apply to real questions asked very often</i>. No newbie, confronted with the baffling results of <code>++i + i++</code>, would ever ask about &quot;sequence points&quot;, yet the answer to that is exactly what they need to be pointed at. Every user wondering why their <code>struct</code> can&#39;t be initialized the C way after they added a ctor can be pointed here, although they&#39;d never ask about &quot;aggregates&quot; themselves.</span>
+                    &ndash;&nbsp;<a href="/users/140719/sbi"
+                       title="129,458 reputation"
+                       class="comment-user">sbi</a>
+                <span class="comment-date" dir="ltr"><span title="2010-11-14 16:05:08Z" class="relativetime-clean">Nov 14 '10 at 16:05</span></span>
+                    <span class="edited-yes" title="this comment was edited 2 times"></span>
+                                                                            </div>
+                    </td>
+    </tr>
+    <tr id="comment-4513831" class="comment ">
+        <td class="comment-actions">
+            <table>
+                <tbody>
+                    <tr>
+                        <td class=" comment-score">
+                                <span title="number of &#39;useful comment&#39; votes received"
+                                      class="cool">3</span>
+                        </td>
+                        <td>
+                                &nbsp;
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+        </td>
+        <td class="comment-text">
+            <div style="display: block;" class="comment-body">
+                <span class="comment-copy">@Armen: I agree with everything you said in the disclaimer, but that&#39;s really the kind of material that should be, and has been, discussed on meta, not in the body of a question here on SO (or in the comments, for that matter).  I think you have more than enough upvotes now to counter-balance any downvotes you get from a few people who don&#39;t understand that posting a question and its answer is not only <i>allowed</i> but also <i>encouraged</i>.  (Now I&#39;ve said it just in case anyone doubted it.)</span>
+                    &ndash;&nbsp;<a href="/users/1288/bill-the-lizard"
+                       title="211,977 reputation"
+                       class="comment-user">Bill the Lizard</a>
+                <span class="comment-date" dir="ltr"><span title="2010-11-14 16:23:51Z" class="relativetime-clean">Nov 14 '10 at 16:23</span></span>
+                                                                            </div>
+                    </td>
+    </tr>
+    <tr id="comment-4521971" class="comment ">
+        <td class="comment-actions">
+            <table>
+                <tbody>
+                    <tr>
+                        <td class=" comment-score">
+                                <span title="number of &#39;useful comment&#39; votes received"
+                                      class="cool">4</span>
+                        </td>
+                        <td>
+                                &nbsp;
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+        </td>
+        <td class="comment-text">
+            <div style="display: block;" class="comment-body">
+                <span class="comment-copy">@Bill: Thanks for the feedback. Please read <a href="http://meta.stackexchange.com/questions/68647/setting-up-a-faq-for-the-c-tag" title="setting up a faq for the c tag">meta.stackexchange.com/questions/68647/&hellip;</a>. There&#39;s been about half a dozen similar postings here in the last few days, most of them started by discussions in the chat, all with the C++ tag regulars&#39; approval. I think due to unfavorable timing, Prasoon&#39;s posting got a bit more heat than all the others, but I guess the up-votes prove him right. In that light, do you still think this would need a question on meta?</span>
+                    &ndash;&nbsp;<a href="/users/140719/sbi"
+                       title="129,458 reputation"
+                       class="comment-user">sbi</a>
+                <span class="comment-date" dir="ltr"><span title="2010-11-15 13:58:22Z" class="relativetime-clean">Nov 15 '10 at 13:58</span></span>
+                    <span class="edited-yes" title="this comment was edited 1 time"></span>
+                                                                            </div>
+                    </td>
+    </tr>
+                </tbody>
+		    </table>
+	    </div>
+
+        <div id="comments-link-4178175" data-rep=50 data-anon=true>
+
+                <a class="js-add-link comments-link  dno"
+                   title="Use comments to ask for more information or suggest improvements. Avoid answering questions in comments."
+                   ></a><span class="js-link-separator dno">&nbsp;|&nbsp;</span>
+            <a class="js-show-link comments-link " title="expand to show all comments on this post" href=# onclick="">show <b>29</b> more comments</a>
+        </div>         
+    </td>
+</tr>        </table>
+</div>
+
+			<div id="answers">
+
+				<a name="tab-top"></a>
+				<div id="answers-header">
+					<div class="subheader answers-subheader">
+						<h2>
+								4 Answers
+                                <span style="display:none;" itemprop="answerCount">4</span>
+						</h2>
+						<div>
+							<div id="tabs">
+        <a href="/questions/4178175/what-are-aggregates-and-pods-and-how-why-are-they-special?answertab=active#tab-top" data-nav-xhref="" title="Answers with the latest activity first" data-value="active" data-shortcut="A">
+            active</a>
+        <a href="/questions/4178175/what-are-aggregates-and-pods-and-how-why-are-they-special?answertab=oldest#tab-top" data-nav-xhref="" title="Answers in the order they were provided" data-value="oldest" data-shortcut="O">
+            oldest</a>
+        <a class="youarehere" href="/questions/4178175/what-are-aggregates-and-pods-and-how-why-are-they-special?answertab=votes#tab-top" data-nav-xhref="" title="Answers with the highest score first" data-value="votes" data-shortcut="V">
+            votes</a>
+</div>
+						</div>
+					</div>    
+				</div>    
+
+
+
+
+  
+<a name="4178176"></a>
+<div id="answer-4178176" class="answer" data-answerid="4178176"  itemscope itemtype="http://schema.org/Answer">
+    <table>
+        <tr>
+            <td class="votecell">
+                
+
+<div class="vote">
+        <input type="hidden" name="_id_" value="4178176">
+        <a class="vote-up-off" title="This answer is useful">up vote</a>
+        <span itemprop="upvoteCount" class="vote-count-post ">337</span>
+        <a class="vote-down-off" title="This answer is not useful">down vote</a>
+
+
+
+
+</div>
+
+            </td>
+            
+
+
+<td class="answercell">
+    <div class="post-text" itemprop="text">
+<h1>How to read:</h1>
+
+<p>This article is rather long. If you want to know about both aggregates and PODs (Plain Old Data) take time and read it. If you are interested just in aggregates, read only the first part. If you are interested only in PODs then you must first read the definition, implications, and examples of aggregates and then you <em>may</em> jump to PODs but I would still recommend reading the first part in its entirety. The notion of aggregates is essential for defining PODs. If you find any errors (even minor, including grammar, stylistics, formatting, syntax, etc.) please leave a comment, I'll edit.</p>
+
+<h1>What are aggregates and why they are special </h1>
+
+<p><strong>Formal definition from the C++ standard (<em>C++03 8.5.1 §1</em>)</strong>:</p>
+
+<blockquote>
+  <p>An aggregate is an array or a class (clause 9) with no user-declared 
+  constructors (12.1), no private or protected non-static data members (clause 11),
+  no base classes (clause 10), and no virtual functions (10.3).</p>
+</blockquote>
+
+<p>So, OK, let's parse this definition. First of all, any array is an aggregate. A class can also be an aggregate if… wait! nothing is said about structs or unions, can't they be aggregates? Yes, they can. In C++, the term <code>class</code> refers to all classes, structs, and unions. So, a class (or struct, or union) is an aggregate if and only if it satisfies the criteria from the above definitions. What do these criteria imply?</p>
+
+<ul>
+<li><p>This does not mean an aggregate class cannot have constructors, in fact it can have a default constructor and/or a copy constructor as long as they are implicitly declared by the compiler, and not explicitly by the user</p></li>
+<li><p>No private or protected <strong><em>non-static data members</em></strong>. You can have as many private and protected member functions (but not constructors) as well as as many private or protected <strong><em>static</em></strong> data members and member functions as you like and not violate the rules for aggregate classes</p></li>
+<li><p>An aggregate class can have a user-declared/user-defined copy-assignment operator and/or destructor</p></li>
+<li><p>An array is an aggregate even if it is an array of non-aggregate class type. </p></li>
+</ul>
+
+<p>Now let's look at some examples:</p>
+
+<pre><code>class NotAggregate1
+{
+  virtual void f() {} //remember? no virtual functions
+};
+
+class NotAggregate2
+{
+  int x; //x is private by default and non-static 
+};
+
+class NotAggregate3
+{
+public:
+  NotAggregate3(int) {} //oops, user-defined constructor
+};
+
+class Aggregate1
+{
+public:
+  NotAggregate1 member1;   //ok, public member
+  Aggregate1&amp; operator=(Aggregate1 const &amp; rhs) {/* */} //ok, copy-assignment  
+private:
+  void f() {} // ok, just a private function
+};
+</code></pre>
+
+<p>You get the idea. Now let's see how aggregates are special. They, unlike non-aggregate classes, can be initialized with curly braces <code>{}</code>. This initialization syntax is commonly known for arrays, and we just learnt that these are aggregates. So, let's start with them.</p>
+
+<p><code>Type array_name[n] = {a<sub>1</sub>, a<sub>2</sub>, …, a<sub>m</sub>};</code></p>
+
+<p><strong><em>if(m == n)</em></strong><br>
+   the i<sup>th</sup> element of the array is initialized with a<sub>i</sub><br>
+<strong><em>else if(m &lt; n)</em></strong><br>
+  the first m elements of the array are initialized with a<sub>1</sub>, a<sub>2</sub>, …, a<sub>m</sub> and the other <code>n - m</code> elements are, if possible, <em>value-initialized</em> (see below for the explanation of the term)<br>
+<strong><em>else if(m > n)</em></strong><br>
+   the compiler will issue an error<br>
+<strong><em>else</em></strong> <em>(this is the case when n isn't specified at all like <code>int a[] = {1, 2, 3};</code>)</em><BR>
+ the size of the array (n) is assumed to be equal to m, so <code>int a[] = {1, 2, 3};</code> is equivalent to <code>int a[3] = {1, 2, 3};</code></p>
+
+<p>When an object of scalar type (<code>bool</code>, <code>int</code>, <code>char</code>, <code>double</code>, pointers, etc.) is <em>value-initialized</em> it means it is initialized with <code>0</code> for that type (<code>false</code> for <code>bool</code>, <code>0.0</code> for <code>double</code>, etc.). When an object of class type with a user-declared default constructor is value-initialized its default constructor is called. If the default constructor is implicitly defined then all nonstatic members are recursively value-initialized. This definition is imprecise and a bit incorrect but it should give you the basic idea. A reference cannot be value-initialized. Value-initialization for a non-aggregate class can fail if, for example, the class has no appropriate default constructor.</p>
+
+<p>Examples of array initialization:</p>
+
+<pre><code>class A
+{
+public:
+  A(int) {} //no default constructor
+};
+class B
+{
+public:
+  B() {} //default constructor available
+};
+int main()
+{
+  A a1[3] = {A(2), A(1), A(14)}; //OK n == m
+  A a2[3] = {A(2)}; //ERROR A has no default constructor. Unable to value-initialize a2[1] and a2[2]
+  B b1[3] = {B()}; //OK b1[1] and b1[2] are value initialized, in this case with the default-ctor
+  int Array1[1000] = {0}; //All elements are initialized with 0;
+  int Array2[1000] = {1}; //Attention: only the first element is 1, the rest are 0;
+  bool Array3[1000] = {}; //the braces can be empty too. All elements initialized with false
+  int Array4[1000]; //no initializer. This is different from an empty {} initializer in that
+  //the elements in this case are not value-initialized, but have indeterminate values 
+  //(unless, of course, Array4 is a global array)
+  int array[2] = {1, 2, 3, 4}; //ERROR, too many initializers
+}
+</code></pre>
+
+<p>Now let's see how aggregate classes can be initialized with braces. Pretty much the same way. Instead of the array elements we will initialize the non-static data members in the order of their appearance in the class definition (they are all public by definition). If there are fewer initializers than members, the rest are value-initialized. If it is impossible to value-initialize one of the members which were not explicitly initialized, we get a compile-time error. If there are more initializers than necessary, we get a compile-time error as well.</p>
+
+<pre><code>struct X
+{
+  int i1;
+  int i2;
+};
+struct Y
+{
+  char c;
+  X x;
+  int i[2];
+  float f; 
+protected:
+  static double d;
+private:
+  void g(){}      
+}; 
+
+Y y = {'a', {10, 20}, {20, 30}};
+</code></pre>
+
+<p>In the above example <code>y.c</code> is initialized with <code>'a'</code>, <code>y.x.i1</code> with <code>10</code>, <code>y.x.i2</code> with <code>20</code>, <code>y.i[0]</code> with <code>20</code>, <code>y.i[1]</code> with <code>30</code> and <code>y.f</code> is value-initialized, that is, initialized with <code>0.0</code>. The protected static member <code>d</code> is not initialized at all, because it is <code>static</code>.</p>
+
+<p>Aggregate unions are different in that you may initialize only their first member with braces. I think that if you are advanced enough in C++ to even consider using unions (their use may be very dangerous and must be thought of carefully), you could look up the rules for unions in the standard yourself :). </p>
+
+<p>Now that we know what's special about aggregates, let's try to understand the restrictions on classes; that is, why they are there. We should understand that memberwise initialization with braces implies that the class is nothing more than the sum of its members. If a user-defined constructor is present, it means that the user needs to do some extra work to initialize the members therefore brace initialization would be incorrect. If virtual functions are present, it means that the objects of this class have (on most implementations) a pointer to the so-called vtable of the class, which is set in the constructor, so brace-initialization would be insufficient. You could figure out the rest of the restrictions in a similar manner as an exercise :).</p>
+
+<p>So enough about the aggregates. Now we can define a stricter set of types, to wit, PODs</p>
+
+<h1>What are PODs and why they are special</h1>
+
+<p><strong>Formal definition from the C++ standard (<em>C++03 9 §4</em>)</strong>:</p>
+
+<blockquote>
+  <p>A POD-struct is an aggregate class
+  that has no non-static data members of
+  type non-POD-struct, non-POD-union (or
+  array of such types) or reference, and
+  has no user-defined copy assignment
+  operator and no user-defined
+  destructor. Similarly, a POD-union is
+  an aggregate union that has no
+  non-static data members of type
+  non-POD-struct, non-POD-union (or
+  array of such types) or reference, and
+  has no user-defined copy assignment
+  operator and no user-defined
+  destructor. A POD class is a class
+  that is either a POD-struct or a
+  POD-union.</p>
+</blockquote>
+
+<p>Wow, this one's tougher to parse, isn't it? :) Let's leave unions out (on the same grounds as above) and rephrase in a bit clearer way:</p>
+
+<blockquote>
+  <p>An aggregate class is called a POD if
+  it has no user-defined copy-assignment
+  operator and destructor and none of
+  its nonstatic members is a non-POD
+  class, array of non-POD, or a
+  reference.</p>
+</blockquote>
+
+<p>What does this definition imply? (Did I mention <strong>POD</strong> stands for <strong><em>Plain Old Data</em></strong>?)</p>
+
+<ul>
+<li>All POD classes are aggregates, or, to put it the other way around, if a class is not an aggregate then it is sure not a POD</li>
+<li>Classes, just like structs, can be PODs even though the standard term is POD-struct for both cases</li>
+<li>Just like in the case of aggregates, it doesn't matter what static members the class has</li>
+</ul>
+
+<p>Examples:</p>
+
+<pre><code>struct POD
+{
+  int x;
+  char y;
+  void f() {} //no harm if there's a function
+  static std::vector&lt;char&gt; v; //static members do not matter
+};
+
+struct AggregateButNotPOD1
+{
+  int x;
+  ~AggregateButNotPOD1() {} //user-defined destructor
+};
+
+struct AggregateButNotPOD2
+{
+  AggregateButNotPOD1 arrOfNonPod[3]; //array of non-POD class
+};
+</code></pre>
+
+<p>POD-classes, POD-unions, scalar types, and arrays of such types are collectively called <strong><em>POD-types.</em></strong><br>
+PODs are special in many ways. I'll provide just some examples.</p>
+
+<ul>
+<li><p>POD-classes are the closest to C structs. Unlike them, PODs can have member functions and arbitrary static members, but neither of these two change the memory layout of the object. So if you want to write a more or less portable dynamic library that can be used from C and even .NET, you should try to make all your exported functions take and return only parameters of POD-types.</p></li>
+<li><p>The lifetime of objects of non-POD class type begins when the constructor has finished and ends when the destructor has finished. For POD classes, the lifetime begins when storage for the object is occupied and finishes when that storage is released or reused.  </p></li>
+<li><p>For objects of POD types it is guaranteed by the standard that when you <code>memcpy</code> the contents of your object into an array of char or unsigned char, and then <code>memcpy</code> the contents back into your object, the object will hold its original value. Do note that there is no such guarantee for objects of non-POD types. Also, you can safely copy POD objects with <code>memcpy</code>. The following example assumes T is a POD-type:</p>
+
+<pre><code>#define N sizeof(T)
+char buf[N];
+T obj; // obj initialized to its original value
+memcpy(buf, &amp;obj, N); // between these two calls to memcpy,
+// obj might be modified
+memcpy(&amp;obj, buf, N); // at this point, each subobject of obj of scalar type
+// holds its original value
+</code></pre></li>
+<li><p>goto statement. As you may know, it is illegal (the compiler should issue an error) to make a jump via goto from a point where some variable was not yet in scope to a point where it is already in scope. This restriction applies only if the variable is of non-POD type. In the following example <code>f()</code> is ill-formed whereas <code>g()</code> is well-formed. Note that Microsoft's compiler is too liberal with this rule—it just issues a warning in both cases.</p>
+
+<pre><code>int f()
+{
+  struct NonPOD {NonPOD() {}};
+  goto label;
+  NonPOD x;
+label:
+  return 0;
+}
+
+int g()
+{
+  struct POD {int i; char c;};
+  goto label;
+  POD x;
+label:
+  return 0;
+}
+</code></pre></li>
+<li><p>It is guaranteed that there will be no padding in the beginning of a POD object. In other words, if a POD-class A's first member is of type T, you can safely <code>reinterpret_cast</code> from <code>A*</code> to <code>T*</code> and get the pointer to the first member and vice versa.</p></li>
+</ul>
+
+<p>The list goes on and on…</p>
+
+<h1>Conclusion</h1>
+
+<p>It is important to understand what exactly a POD is because many language features, as you see, behave differently for them.</p>
+    </div>
+    <table class="fw">
+    <tr>
+    <td class="vt">
+<div class="post-menu"><a href="/a/4178176" title="short permalink to this answer" class="short-link" id="link-post-4178176">share</a><span class="lsep">|</span><a href="/posts/4178176/edit" class="suggest-edit-post" title="">improve this answer</a></div>                    </td>
+    <td align="right" class="post-signature">
+<div class="user-info ">
+    <div class="user-action-time">
+        <a href="/posts/4178176/revisions" title="show all edits to this post">edited <span title="2015-08-16 16:18:24Z" class="relativetime">Aug 16 '15 at 16:18</span></a>
+    </div>
+    <div class="user-gravatar32">
+        
+    </div>
+    <div class="user-details">
+        
+        <div class="-flair">
+            
+        </div>
+    </div>
+</div>    </td>
+            
+
+
+    <td align="right" class="post-signature owner">   
+       
+
+    <div class="user-info">
+    <div class="user-details">
+        <span class="community-wiki" title="This post is community owned as of Jul 27 &#39;12 at 22:01. Votes do not generate reputation, and it can be edited by users with 100 rep">
+            community wiki
+        </span>
+    </div><br>
+    <div class="user-details">
+        <a id="history-4178176" href="/posts/4178176/revisions" title="show revision history for this post">
+        17 revs, 12 users 77%<br><a href="/users/469935">Armen Tsirunyan</a>
+        </a>
+    </div>
+</div>
+    </td>
+    </tr>
+    </table>
+</td>
+        </tr>
+        
+<tr>
+    <td class="votecell"></td>
+    <td>
+	    <div id="comments-4178176" class="comments ">
+		    <table>
+                <tbody data-remaining-comments-count="20"
+                       data-canpost="false"
+                       data-cansee="true"
+                       data-comments-unavailable="false"
+                       data-addlink-disabled="true">
+
+
+
+    <tr id="comment-4513542" class="comment ">
+        <td class="comment-actions">
+            <table>
+                <tbody>
+                    <tr>
+                        <td class=" comment-score">
+                                <span title="number of &#39;useful comment&#39; votes received"
+                                      class="hot">15</span>
+                        </td>
+                        <td>
+                                &nbsp;
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+        </td>
+        <td class="comment-text">
+            <div style="display: block;" class="comment-body">
+                <span class="comment-copy">&quot;I may write another faq on differences between zero-initialization, value-initialization and default-initialization in the near future&quot; &lt;- please do!</span>
+                    &ndash;&nbsp;<a href="/users/252000/fredoverflow"
+                       title="125,502 reputation"
+                       class="comment-user">fredoverflow</a>
+                <span class="comment-date" dir="ltr"><span title="2010-11-14 15:41:46Z" class="relativetime-clean">Nov 14 '10 at 15:41</span></span>
+                                                                            </div>
+                    </td>
+    </tr>
+    <tr id="comment-4513621" class="comment ">
+        <td class="comment-actions">
+            <table>
+                <tbody>
+                    <tr>
+                        <td class=" comment-score">
+                                <span title="number of &#39;useful comment&#39; votes received"
+                                      class="cool">1</span>
+                        </td>
+                        <td>
+                                &nbsp;
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+        </td>
+        <td class="comment-text">
+            <div style="display: block;" class="comment-body">
+                <span class="comment-copy">Nice answer. Comments: &quot;If the default constructor is implicitly defined then all nonstatic members are recursively value-initialized.&quot; and &quot;Value-initialization for a non-aggregate class can fail if, for example, the class has no appropriate default constructor.&quot; is not correct: Value initialization of a class with an implicitly-<i>declared</i> default constructor does not necessiate an implicitly-defined default constructor. Thus, given (insert <code>private:</code> as appropriate): <code>struct A { int const a; };</code> then <code>A()</code> is well-formed, even if <code>A</code>&#39;s default constructor definition would be ill-formed.</span>
+                    &ndash;&nbsp;<a href="/users/34509/johannes-schaub-litb"
+                       title="329,737 reputation"
+                       class="comment-user">Johannes Schaub - litb</a>
+                <span class="comment-date" dir="ltr"><span title="2010-11-14 15:52:58Z" class="relativetime-clean">Nov 14 '10 at 15:52</span></span>
+                    <span class="edited-yes" title="this comment was edited 1 time"></span>
+                                                                            </div>
+                    </td>
+    </tr>
+    <tr id="comment-4513629" class="comment ">
+        <td class="comment-actions">
+            <table>
+                <tbody>
+                    <tr>
+                        <td class=" comment-score">
+                                <span title="number of &#39;useful comment&#39; votes received"
+                                      class="cool">1</span>
+                        </td>
+                        <td>
+                                &nbsp;
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+        </td>
+        <td class="comment-text">
+            <div style="display: block;" class="comment-body">
+                <span class="comment-copy">@Prasoon: I had thought carefully before choosing exactly that wording. While it is both user-declared and user-defined (since every definition is a declaration), but in this case only declaredness would be enough, I chose that term. Do you mind if I rollback your change?</span>
+                    &ndash;&nbsp;<a href="/users/469935/armen-tsirunyan"
+                       title="73,430 reputation"
+                       class="comment-user owner">Armen Tsirunyan</a>
+                <span class="comment-date" dir="ltr"><span title="2010-11-14 15:53:47Z" class="relativetime-clean">Nov 14 '10 at 15:53</span></span>
+                                                                            </div>
+                    </td>
+    </tr>
+    <tr id="comment-4513649" class="comment ">
+        <td class="comment-actions">
+            <table>
+                <tbody>
+                    <tr>
+                        <td class=" comment-score">
+                                <span title="number of &#39;useful comment&#39; votes received"
+                                      class="cool">3</span>
+                        </td>
+                        <td>
+                                &nbsp;
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+        </td>
+        <td class="comment-text">
+            <div style="display: block;" class="comment-body">
+                <span class="comment-copy">@Kev: If you manage to pack the same information into a shorter answer, we&#39;d all happily up-vote it!</span>
+                    &ndash;&nbsp;<a href="/users/140719/sbi"
+                       title="129,458 reputation"
+                       class="comment-user">sbi</a>
+                <span class="comment-date" dir="ltr"><span title="2010-11-14 15:55:48Z" class="relativetime-clean">Nov 14 '10 at 15:55</span></span>
+                                                                            </div>
+                    </td>
+    </tr>
+    <tr id="comment-4514095" class="comment ">
+        <td class="comment-actions">
+            <table>
+                <tbody>
+                    <tr>
+                        <td class=" comment-score">
+                                <span title="number of &#39;useful comment&#39; votes received"
+                                      class="cool">2</span>
+                        </td>
+                        <td>
+                                &nbsp;
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+        </td>
+        <td class="comment-text">
+            <div style="display: block;" class="comment-body">
+                <span class="comment-copy">@Armen also do note you can do multiple answers to the same question. Each answer could contain part of the solution to the question. Screw that accepted-mark thing, in my opinion :)</span>
+                    &ndash;&nbsp;<a href="/users/34509/johannes-schaub-litb"
+                       title="329,737 reputation"
+                       class="comment-user">Johannes Schaub - litb</a>
+                <span class="comment-date" dir="ltr"><span title="2010-11-14 17:10:24Z" class="relativetime-clean">Nov 14 '10 at 17:10</span></span>
+                    <span class="edited-yes" title="this comment was edited 1 time"></span>
+                                                                            </div>
+                    </td>
+    </tr>
+                </tbody>
+		    </table>
+	    </div>
+
+        <div id="comments-link-4178176" data-rep=50 data-anon=true>
+
+                <a class="js-add-link comments-link  dno"
+                   title="Use comments to ask for more information or suggest improvements. Avoid comments like “+1” or “thanks”."
+                   ></a><span class="js-link-separator dno">&nbsp;|&nbsp;</span>
+            <a class="js-show-link comments-link " title="expand to show all comments on this post" href=# onclick="">show <b>20</b> more comments</a>
+        </div>         
+    </td>
+</tr>    </table>
+</div>
+<script>
+                var ados = ados || {}; ados.run = ados.run || [];
+                ados.run.push(function () { ados_add_placement(22,8277,"adzerk785202299",4).setZone(44); });
+            </script>
+            <div class="everyonelovesstackoverflow" id="adzerk785202299">
+            </div>
+  
+<a name="7189821"></a>
+<div id="answer-7189821" class="answer" data-answerid="7189821"  itemscope itemtype="http://schema.org/Answer">
+    <table>
+        <tr>
+            <td class="votecell">
+                
+
+<div class="vote">
+        <input type="hidden" name="_id_" value="7189821">
+        <a class="vote-up-off" title="This answer is useful">up vote</a>
+        <span itemprop="upvoteCount" class="vote-count-post ">285</span>
+        <a class="vote-down-off" title="This answer is not useful">down vote</a>
+
+
+
+<div class="bounty-award-container"><span class="bounty-award" title="This answer has been awarded bounties worth 100 reputation by Nicol Bolas">+100</span></div>
+</div>
+
+            </td>
+            
+
+
+<td class="answercell">
+    <div class="post-text" itemprop="text">
+<h1>What changes for C++11?</h1>
+
+<h2>Aggregates</h2>
+
+<p>The standard definition of an aggregate has changed slightly, but it's still pretty much the same:</p>
+
+<blockquote>
+  <p>An aggregate is an array or a class (Clause 9) with no user-provided constructors (12.1),
+  no <em>brace-or-equal-initializers</em> for non-static data members (9.2), no private or protected
+  non-static data members (Clause 11), no base classes (Clause 10), and no virtual functions (10.3).</p>
+</blockquote>
+
+<p>Ok, what changed?</p>
+
+<ol>
+<li><p>Previously, an aggregate could have no <em>user-declared</em> constructors, but now it can't have <em>user-provided</em> constructors. Is there a difference? Yes, there is, because now you can declare constructors and <em>default</em> them:</p>
+
+<pre><code>struct Aggregate {
+    Aggregate() = default; // asks the compiler to generate the default implementation
+};
+</code></pre>
+
+<p>This is still an aggregate because a constructor (or any special member function) <em>that is defaulted on the first declaration</em> is not user-provided.</p></li>
+<li><p>Now an aggregate cannot have any <em>brace-or-equal-initializers</em> for non-static data members. What does this mean? Well, this is just because with this new standard, we can initialize members directly in the class like this:</p>
+
+<pre><code>struct NotAggregate {
+    int x = 5; // valid in C++11
+    std::vector&lt;int&gt; s{1,2,3}; // also valid
+};
+</code></pre>
+
+<p>Using this feature makes the class no longer an aggregate because it's basically equivalent to providing your own default constructor.</p></li>
+</ol>
+
+<p>So, what is an aggregate didn't change much at all. It's still the same basic idea, adapted to the new features.</p>
+
+<h2>What about PODs?</h2>
+
+<p>PODs went through a lot of changes. Lots of previous rules about PODs were relaxed in this new standard, and the way the definition is provided in the standard was radically changed.</p>
+
+<p>The idea of a POD is to capture basically two distinct properties:</p>
+
+<ol>
+<li>It supports static initialization, and</li>
+<li>Compiling a POD in C++ gives you the same memory layout as a struct compiled in C.</li>
+</ol>
+
+<p>Because of this, the definition has been split into two distinct concepts: <em>trivial</em> classes and <em>standard-layout</em> classes, because these are more useful than POD. The standard now rarely uses the term POD, preferring the more specific <em>trivial</em> and <em>standard-layout</em> concepts.</p>
+
+<p>The new definition basically says that a POD is a class that is both trivial and has standard-layout, and this property must hold recursively for all non-static data members:</p>
+
+<blockquote>
+  <p>A POD struct is a non-union class that is both a trivial class and a standard-layout class,
+  and has no non-static data members of type non-POD struct, non-POD union (or array of such types).
+  Similarly, a POD union is a union that is both a trivial class and a standard layout class, and has
+  no non-static data members of type non-POD struct, non-POD union (or array of such types).
+  A POD class is a class that is either a POD struct or a POD union.</p>
+</blockquote>
+
+<p>Let's go over each of these two properties in detail separately.</p>
+
+<h2>Trivial classes</h2>
+
+<p><em>Trivial</em> is the first property mentioned above: trivial classes support static initialization. 
+If a class is trivially copyable (a superset of trivial classes), it is ok to copy its representation over the place with things like <code>memcpy</code> and expect the result to be the same.</p>
+
+<p>The standard defines a trivial class as follows:</p>
+
+<blockquote>
+  <p>A trivially copyable class is a class that:</p>
+  
+  <p>— has no non-trivial copy constructors (12.8),</p>
+  
+  <p>— has no non-trivial move constructors (12.8),</p>
+  
+  <p>— has no non-trivial copy assignment operators (13.5.3, 12.8),</p>
+  
+  <p>— has no non-trivial move assignment operators (13.5.3, 12.8), and</p>
+  
+  <p>— has a trivial destructor (12.4).</p>
+  
+  <p>A trivial class is a class that has a trivial default constructor (12.1) and is trivially copyable.</p>
+  
+  <p>[ <em>Note:</em> In particular, a trivially copyable or trivial class does not have virtual functions
+  or virtual base classes.<em>—end note</em> ]</p>
+</blockquote>
+
+<p>So, what are all those trivial and non-trivial things?</p>
+
+<blockquote>
+  <p>A copy/move constructor for class X is trivial if it is not user-provided and if</p>
+  
+  <p>— class X has no virtual functions (10.3) and no virtual base classes (10.1), and</p>
+  
+  <p>— the constructor selected to copy/move each direct base class subobject is trivial, and</p>
+  
+  <p>— for each non-static data member of X that is of class type (or array thereof), the constructor
+  selected to copy/move that member is trivial;</p>
+  
+  <p>otherwise the copy/move constructor is non-trivial.</p>
+</blockquote>
+
+<p>Basically this means that a copy or move constructor is trivial if it is not user-provided, the class has nothing virtual in it, and this property holds recursively for all the members of the class and for the base class.</p>
+
+<p>The definition of a trivial copy/move assignment operator is very similar, simply replacing the word "constructor" with "assignment operator".</p>
+
+<p>A trivial destructor also has a similar definition, with the added constraint that it can't be virtual.</p>
+
+<p>And yet another similar rule exists for trivial default constructors, with the addition that a default constructor is not-trivial if the class has non-static data members with <em>brace-or-equal-initializers</em>, which we've seen above.</p>
+
+<p>Here are some examples to clear everything up:</p>
+
+<pre><code>// empty classes are trivial
+struct Trivial1 {};
+
+// all special members are implicit
+struct Trivial2 {
+    int x;
+};
+
+struct Trivial3 : Trivial2 { // base class is trivial
+    Trivial3() = default; // not a user-provided ctor
+    int y;
+};
+
+struct Trivial4 {
+public:
+    int a;
+private: // no restrictions on access modifiers
+    int b;
+};
+
+struct Trivial5 {
+    Trivial1 a;
+    Trivial2 b;
+    Trivial3 c;
+    Trivial4 d;
+};
+
+struct Trivial6 {
+    Trivial2 a[23];
+};
+
+struct Trivial7 {
+    Trivial6 c;
+    void f(); // it's okay to have non-virtual functions
+};
+
+struct Trivial8 {
+     int x;
+     static NonTrivial1 y; // no restrictions on static members
+}
+
+struct Trivial9 {
+     Trivial9() = default; // not user-provided
+      // a regular constructor is okay because we still have default ctor
+     Trivial9(int x) : x(x) {};
+     int x;
+}
+
+struct NonTrivial1 : Trivial 3 {
+    virtual f(); // virtual members make non-trivial ctors
+}
+
+struct NonTrivial2 {
+    NonTrivial2() : z(42) {} // user-provided ctor
+    int z;
+}
+
+struct NonTrivial3 {
+    NonTrivial3(); // user-provided ctor
+    int w;
+}
+NonTrivial3::NonTrivial3() = default; // defaulted but not on first declaration
+                                      // still counts as user-provided
+struct NonTrivial5 {
+    virtual ~NonTrivial5(); // virtual destructors are not trivial
+};
+</code></pre>
+
+<h2>Standard-layout</h2>
+
+<p><em>Standard-layout</em> is the second property. The standard mentions that these are useful for communicating with other languages, and that's because a standard-layout class has the same memory layout of the equivalent C struct or union.</p>
+
+<p>This is another property that must hold recursively for members and all base classes. And as usual, no virtual functions or virtual base classes are allowed. That would make the layout incompatible with C.</p>
+
+<p>A relaxed rule here is that standard-layout classes must have all non-static data members with the same access control. Previously these had to be all <em>public</em>, but now you can make them private or protected, as long as they are <em>all</em> private or <em>all</em> protected.</p>
+
+<p>When using inheritance, <em>only one</em> class in the whole inheritance tree can have non-static data members, and the first non-static data member cannot be of a base class type (this could break aliasing rules), otherwise, it's not a standard-layout class.</p>
+
+<p>This is how the definition goes in the standard text:</p>
+
+<blockquote>
+  <p>A standard-layout class is a class that:</p>
+  
+  <p>— has no non-static data members of type non-standard-layout class (or array of such types)
+  or reference,</p>
+  
+  <p>— has no virtual functions (10.3) and no virtual base classes (10.1),</p>
+  
+  <p>— has the same access control (Clause 11) for all non-static data members,</p>
+  
+  <p>— has no non-standard-layout base classes,</p>
+  
+  <p>— either has no non-static data members in the most derived class and at most one base class with
+  non-static data members, or has no base classes with non-static data members, and</p>
+  
+  <p>— has no base classes of the same type as the first non-static data member.</p>
+  
+  <p>A standard-layout struct is a standard-layout class defined with the class-key struct or
+  the class-key class.</p>
+  
+  <p>A standard-layout union is a standard-layout class defined with the class-key union.</p>
+  
+  <p>[ <em>Note:</em> Standard-layout classes are useful for communicating with code written in other programming languages. Their layout is specified in 9.2.<em>—end note</em> ]</p>
+</blockquote>
+
+<p>And let's see a few examples.</p>
+
+<pre><code>// empty classes have standard-layout
+struct StandardLayout1 {};
+
+struct StandardLayout2 {
+    int x;
+};
+
+struct StandardLayout3 {
+private: // both are private, so it's ok
+    int x;
+    int y;
+};
+
+struct StandardLayout4 : StandardLayout1 {
+    int x;
+    int y;
+
+    void f(); // perfectly fine to have non-virtual functions
+};
+
+struct StandardLayout5 : StandardLayout1 {
+    int x;
+    StandardLayout1 y; // can have members of base type if they're not the first
+};
+
+struct StandardLayout6 : StandardLayout1, StandardLayout5 {
+    // can use multiple inheritance as long only
+    // one class in the hierarchy has non-static data members
+};
+
+struct StandardLayout7 {
+    int x;
+    int y;
+    StandardLayout7(int x, int y) : x(x), y(y) {} // user-provided ctors are ok
+};
+
+struct StandardLayout8 {
+public:
+    StandardLayout8(int x) : x(x) {} // user-provided ctors are ok
+// ok to have non-static data members and other members with different access
+private:
+    int x;
+};
+
+struct StandardLayout9 {
+    int x;
+    static NonStandardLayout1 y; // no restrictions on static members
+};
+
+struct NonStandardLayout1 {
+    virtual f(); // cannot have virtual functions
+};
+
+struct NonStandardLayout2 {
+    NonStandardLayout1 X; // has non-standard-layout member
+};
+
+struct NonStandardLayout3 : StandardLayout1 {
+    StandardLayout1 x; // first member cannot be of the same type as base
+};
+
+struct NonStandardLayout4 : StandardLayout3 {
+    int z; // more than one class has non-static data members
+};
+
+struct NonStandardLayout5 : NonStandardLayout3 {}; // has a non-standard-layout base class
+</code></pre>
+
+<h2>Conclusion</h2>
+
+<p>With these new rules a lot more types can be PODs now. And even if a type is not POD, we can take advantage of some of the POD properties separately (if it is only one of trivial or standard-layout).</p>
+
+<p>The standard library has traits to test these properties in the header <code>&lt;type_traits&gt;</code>:</p>
+
+<pre><code>template &lt;typename T&gt;
+struct std::is_pod;
+template &lt;typename T&gt;
+struct std::is_trivial;
+template &lt;typename T&gt;
+struct std::is_trivially_copyable;
+template &lt;typename T&gt;
+struct std::is_standard_layout;
+</code></pre>
+    </div>
+    <table class="fw">
+    <tr>
+    <td class="vt">
+<div class="post-menu"><a href="/a/7189821" title="short permalink to this answer" class="short-link" id="link-post-7189821">share</a><span class="lsep">|</span><a href="/posts/7189821/edit" class="suggest-edit-post" title="">improve this answer</a></div>                    </td>
+    <td align="right" class="post-signature">
+<div class="user-info ">
+    <div class="user-action-time">
+        <a href="/posts/7189821/revisions" title="show all edits to this post">edited <span title="2012-05-16 14:32:38Z" class="relativetime">May 16 '12 at 14:32</span></a>
+    </div>
+    <div class="user-gravatar32">
+        
+    </div>
+    <div class="user-details">
+        
+        <div class="-flair">
+            
+        </div>
+    </div>
+</div>    </td>
+            
+
+
+    <td align="right" class="post-signature">   
+       
+
+    <div class="user-info user-hover">
+    <div class="user-action-time">
+        answered <span title="2011-08-25 11:48:47Z" class="relativetime">Aug 25 '11 at 11:48</span>
+    </div>
+    <div class="user-gravatar32">
+        <a href="/users/46642/r-martinho-fernandes"><div class="gravatar-wrapper-32"><img src="https://i.stack.imgur.com/wjb79.jpg?s=32&amp;g=1" alt="" width="32" height="32"></div></a>
+    </div>
+    <div class="user-details">
+        <a href="/users/46642/r-martinho-fernandes">R. Martinho Fernandes</a>
+        <div class="-flair">
+            <span class="reputation-score" title="reputation score 127,582" dir="ltr">128k</span><span title="39 gold badges"><span class="badge1"></span><span class="badgecount">39</span></span><span title="315 silver badges"><span class="badge2"></span><span class="badgecount">315</span></span><span title="409 bronze badges"><span class="badge3"></span><span class="badgecount">409</span></span>
+        </div>
+    </div>
+</div>
+    </td>
+    </tr>
+    </table>
+</td>
+        </tr>
+        
+<tr>
+    <td class="votecell"></td>
+    <td>
+	    <div id="comments-7189821" class="comments ">
+		    <table>
+                <tbody data-remaining-comments-count="1"
+                       data-canpost="false"
+                       data-cansee="true"
+                       data-comments-unavailable="false"
+                       data-addlink-disabled="true">
+
+
+
+    <tr id="comment-8896384" class="comment ">
+        <td class="comment-actions">
+            <table>
+                <tbody>
+                    <tr>
+                        <td class=" comment-score">
+                                <span title="number of &#39;useful comment&#39; votes received"
+                                      class="cool">1</span>
+                        </td>
+                        <td>
+                                &nbsp;
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+        </td>
+        <td class="comment-text">
+            <div style="display: block;" class="comment-body">
+                <span class="comment-copy">can you please elaborate following rules: a) standard-layout classes must have all non-static data members with the same access control; b) only one class in the whole inheritance tree can have non-static data members, and the first non-static data member cannot be of a base class type (this could break aliasing rules). Especially what are the reasons for them? For the later rule, can you provide an example of breaking aliasing?</span>
+                    &ndash;&nbsp;<a href="/users/453271/andy-t"
+                       title="9,232 reputation"
+                       class="comment-user">Andy T</a>
+                <span class="comment-date" dir="ltr"><span title="2011-09-10 09:16:46Z" class="relativetime-clean">Sep 10 '11 at 9:16</span></span>
+                                                                            </div>
+                    </td>
+    </tr>
+    <tr id="comment-12015747" class="comment ">
+        <td>
+            <table>
+                <tbody>
+                    <tr>
+                        <td class=" comment-score">
+                                &nbsp;&nbsp;
+                        </td>
+                        <td>
+                                &nbsp;
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+        </td>
+        <td class="comment-text">
+            <div style="display: block;" class="comment-body">
+                <span class="comment-copy">@AndyT: See my answer. I tried to answer to the best of my knowledge.</span>
+                    &ndash;&nbsp;<a href="/users/734069/nicol-bolas"
+                       title="183,204 reputation"
+                       class="comment-user">Nicol Bolas</a>
+                <span class="comment-date" dir="ltr"><span title="2012-02-28 23:26:54Z" class="relativetime-clean">Feb 28 '12 at 23:26</span></span>
+                                                                            </div>
+                    </td>
+    </tr>
+    <tr id="comment-39804494" class="comment ">
+        <td class="comment-actions">
+            <table>
+                <tbody>
+                    <tr>
+                        <td class=" comment-score">
+                                <span title="number of &#39;useful comment&#39; votes received"
+                                      class="cool">1</span>
+                        </td>
+                        <td>
+                                &nbsp;
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+        </td>
+        <td class="comment-text">
+            <div style="display: block;" class="comment-body">
+                <span class="comment-copy">Might want to update this for C++14, which removed the &quot;no brace-or-equal-initializers&quot; requirement for aggregates.</span>
+                    &ndash;&nbsp;<a href="/users/2756719/t-c"
+                       title="66,813 reputation"
+                       class="comment-user">T.C.</a>
+                <span class="comment-date" dir="ltr"><span title="2014-08-26 08:01:44Z" class="relativetime-clean">Aug 26 '14 at 8:01</span></span>
+                                                                            </div>
+                    </td>
+    </tr>
+    <tr id="comment-39813599" class="comment ">
+        <td>
+            <table>
+                <tbody>
+                    <tr>
+                        <td class=" comment-score">
+                                &nbsp;&nbsp;
+                        </td>
+                        <td>
+                                &nbsp;
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+        </td>
+        <td class="comment-text">
+            <div style="display: block;" class="comment-body">
+                <span class="comment-copy">@T.C. thanks for heads-up. I&#39;ll look up those changes soon and update it.</span>
+                    &ndash;&nbsp;<a href="/users/46642/r-martinho-fernandes"
+                       title="127,582 reputation"
+                       class="comment-user">R. Martinho Fernandes</a>
+                <span class="comment-date" dir="ltr"><span title="2014-08-26 12:18:39Z" class="relativetime-clean">Aug 26 '14 at 12:18</span></span>
+                                                                            </div>
+                    </td>
+    </tr>
+    <tr id="comment-53820636" class="comment ">
+        <td>
+            <table>
+                <tbody>
+                    <tr>
+                        <td class=" comment-score">
+                                &nbsp;&nbsp;
+                        </td>
+                        <td>
+                                &nbsp;
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+        </td>
+        <td class="comment-text">
+            <div style="display: block;" class="comment-body">
+                <span class="comment-copy">For user-declared constructors, it&#39;s also useful when user declare a constructor as private without providing definition.</span>
+                    &ndash;&nbsp;<a href="/users/3528438/user3528438"
+                       title="1,214 reputation"
+                       class="comment-user">user3528438</a>
+                <span class="comment-date" dir="ltr"><span title="2015-10-07 16:46:56Z" class="relativetime-clean">Oct 7 '15 at 16:46</span></span>
+                                                                            </div>
+                    </td>
+    </tr>
+                </tbody>
+		    </table>
+	    </div>
+
+        <div id="comments-link-7189821" data-rep=50 data-anon=true>
+
+                <a class="js-add-link comments-link  dno"
+                   title="Use comments to ask for more information or suggest improvements. Avoid comments like “+1” or “thanks”."
+                   ></a><span class="js-link-separator dno">&nbsp;|&nbsp;</span>
+            <a class="js-show-link comments-link " title="expand to show all comments on this post" href=# onclick="">show <b>1</b> more comment</a>
+        </div>         
+    </td>
+</tr>    </table>
+</div>
+
+  
+<a name="27511360"></a>
+<div id="answer-27511360" class="answer" data-answerid="27511360"  itemscope itemtype="http://schema.org/Answer">
+    <table>
+        <tr>
+            <td class="votecell">
+                
+
+<div class="vote">
+        <input type="hidden" name="_id_" value="27511360">
+        <a class="vote-up-off" title="This answer is useful">up vote</a>
+        <span itemprop="upvoteCount" class="vote-count-post ">43</span>
+        <a class="vote-down-off" title="This answer is not useful">down vote</a>
+
+
+
+<div class="bounty-award-container"><span class="bounty-award" title="This answer has been awarded bounties worth 500 reputation by R. Martinho Fernandes">+500</span></div>
+</div>
+
+            </td>
+            
+
+
+<td class="answercell">
+    <div class="post-text" itemprop="text">
+<h1>What has changed for C++14</h1>
+
+<p>We can refer to the <a href="https://github.com/cplusplus/draft/blob/master/papers/n4140.pdf">Draft C++14 standard</a> for reference. </p>
+
+<h2>Aggregates</h2>
+
+<p>This is covered in section <code>8.5.1</code> <em>Aggregates</em> which gives us the following definition:</p>
+
+<blockquote>
+  <p>An aggregate is an array or a class (Clause 9) with no user-provided
+  constructors (12.1), no private or protected non-static data members
+  (Clause 11), no base classes (Clause 10), and no virtual functions
+  (10.3).</p>
+</blockquote>
+
+<p>The only change is now adding <em>in-class member initializers</em> does not make a class a non-aggregate. So the following example from <a href="http://stackoverflow.com/q/27118535/1708801">C++11 aggregate initialization for classes with member in-pace initializers</a>:</p>
+
+<pre><code>struct A
+{
+  int a = 3;
+  int b = 3;
+};
+</code></pre>
+
+<p>was not an aggregate in C++11 but it is in C++14. This change is covered in <a href="http://www.open-std.org/jtc1/sc22/wg21/docs/papers/2013/n3605.html">N3605: Member initializers and aggregates</a>, which has the following abstract:</p>
+
+<blockquote>
+  <p>Bjarne Stroustrup and Richard Smith raised an issue about aggregate
+  initialization and member-initializers not working together. This
+  paper proposes to fix the issue by adopting Smith's proposed wording
+  that removes a restriction that aggregates can't have
+  member-initializers.</p>
+</blockquote>
+
+<h1>POD stays the same</h1>
+
+<p>The definition for POD(<em>plain old data</em>) struct is covered in section <code>9</code> <em>Classes</em> which says:</p>
+
+<blockquote>
+  <p>A POD struct<sup>110</sup> is a non-union class that is both a trivial class and
+  a standard-layout class, and has no non-static data members of type
+  non-POD struct, non-POD union (or array of such types). Similarly, a
+  POD union is a union that is both a trivial class and a
+  standard-layout class, and has no non-static data members of type
+  non-POD struct, non-POD union (or array of such types). A POD class is
+  a class that is either a POD struct or a POD union.</p>
+</blockquote>
+
+<p>which is the same wording as C++11.</p>
+    </div>
+    <table class="fw">
+    <tr>
+    <td class="vt">
+<div class="post-menu"><a href="/a/27511360" title="short permalink to this answer" class="short-link" id="link-post-27511360">share</a><span class="lsep">|</span><a href="/posts/27511360/edit" class="suggest-edit-post" title="">improve this answer</a></div>                    </td>
+    <td align="right" class="post-signature">
+<div class="user-info ">
+    <div class="user-action-time">
+        <a href="/posts/27511360/revisions" title="show all edits to this post">edited <span title="2014-12-20 02:35:08Z" class="relativetime">Dec 20 '14 at 2:35</span></a>
+    </div>
+    <div class="user-gravatar32">
+        
+    </div>
+    <div class="user-details">
+        
+        <div class="-flair">
+            
+        </div>
+    </div>
+</div>    </td>
+            
+
+
+    <td align="right" class="post-signature">   
+       
+
+    <div class="user-info user-hover">
+    <div class="user-action-time">
+        answered <span title="2014-12-16 18:21:24Z" class="relativetime">Dec 16 '14 at 18:21</span>
+    </div>
+    <div class="user-gravatar32">
+        <a href="/users/1708801/shafik-yaghmour"><div class="gravatar-wrapper-32"><img src="https://www.gravatar.com/avatar/db869d4e8c636d15bd18678f6ced444b?s=32&amp;d=identicon&amp;r=PG" alt="" width="32" height="32"></div></a>
+    </div>
+    <div class="user-details">
+        <a href="/users/1708801/shafik-yaghmour">Shafik Yaghmour</a>
+        <div class="-flair">
+            <span class="reputation-score" title="reputation score 98,156" dir="ltr">98.2k</span><span title="19 gold badges"><span class="badge1"></span><span class="badgecount">19</span></span><span title="221 silver badges"><span class="badge2"></span><span class="badgecount">221</span></span><span title="317 bronze badges"><span class="badge3"></span><span class="badgecount">317</span></span>
+        </div>
+    </div>
+</div>
+    </td>
+    </tr>
+    </table>
+</td>
+        </tr>
+        
+<tr>
+    <td class="votecell"></td>
+    <td>
+	    <div id="comments-27511360" class="comments ">
+		    <table>
+                <tbody data-remaining-comments-count="0"
+                       data-canpost="false"
+                       data-cansee="true"
+                       data-comments-unavailable="false"
+                       data-addlink-disabled="true">
+
+
+
+    <tr id="comment-47403725" class="comment ">
+        <td class="comment-actions">
+            <table>
+                <tbody>
+                    <tr>
+                        <td class=" comment-score">
+                                <span title="number of &#39;useful comment&#39; votes received"
+                                      class="cool">2</span>
+                        </td>
+                        <td>
+                                &nbsp;
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+        </td>
+        <td class="comment-text">
+            <div style="display: block;" class="comment-body">
+                <span class="comment-copy">There is a proposal to allow aggregates to have a base class as long as it is default constructable see <a href="http://www.open-std.org/jtc1/sc22/wg21/docs/papers/2015/n4404.html" rel="nofollow">N4404</a></span>
+                    &ndash;&nbsp;<a href="/users/1708801/shafik-yaghmour"
+                       title="98,156 reputation"
+                       class="comment-user">Shafik Yaghmour</a>
+                <span class="comment-date" dir="ltr"><span title="2015-04-14 14:49:39Z" class="relativetime-clean">Apr 14 '15 at 14:49</span></span>
+                                                                            </div>
+                    </td>
+    </tr>
+                </tbody>
+		    </table>
+	    </div>
+
+        <div id="comments-link-27511360" data-rep=50 data-anon=true>
+
+                <a class="js-add-link comments-link disabled-link "
+                   title="Use comments to ask for more information or suggest improvements. Avoid comments like “+1” or “thanks”."
+                   >add a comment</a><span class="js-link-separator dno">&nbsp;|&nbsp;</span>
+            <a class="js-show-link comments-link dno" title="expand to show all comments on this post" href=# onclick=""></a>
+        </div>         
+    </td>
+</tr>    </table>
+</div>
+
+  
+<a name="9491406"></a>
+<div id="answer-9491406" class="answer" data-answerid="9491406"  itemscope itemtype="http://schema.org/Answer">
+    <table>
+        <tr>
+            <td class="votecell">
+                
+
+<div class="vote">
+        <input type="hidden" name="_id_" value="9491406">
+        <a class="vote-up-off" title="This answer is useful">up vote</a>
+        <span itemprop="upvoteCount" class="vote-count-post ">29</span>
+        <a class="vote-down-off" title="This answer is not useful">down vote</a>
+
+
+
+
+</div>
+
+            </td>
+            
+
+
+<td class="answercell">
+    <div class="post-text" itemprop="text">
+<blockquote>
+  <p>can you please elaborate following rules: </p>
+</blockquote>
+
+<p>I'll try:</p>
+
+<blockquote>
+  <p>a) standard-layout classes must have all non-static data members with the same access control</p>
+</blockquote>
+
+<p>That's simple: all non-static data members must <em>all</em> be <code>public</code>, <code>private</code>, or <code>protected</code>. You can't have some <code>public</code> and some <code>private</code>.</p>
+
+<p>The reasoning for them goes to the reasoning for having a distinction between "standard layout" and "not standard layout" at all. Namely, to give the compiler the freedom to choose how to put things into memory. It's not just about vtable pointers.</p>
+
+<p>Back when they standardized C++ in 98, they had to basically predict how people would implement it. While they had quite a bit of implementation experience with various flavors of C++, they weren't certain about things. So they decided to be cautious: give the compilers as much freedom as possible.</p>
+
+<p>That's why the definition of POD in C++98 is so strict. It gave C++ compilers great latitude on member layout for most classes. Basically, POD types were intended to be special cases, something you specifically wrote for a reason.</p>
+
+<p>When C++11 was being worked on, they had a lot more experience with compilers. And they realized that... C++ compiler writers are really lazy. They had all this freedom, but they didn't <em>do</em> anything with it.</p>
+
+<p>The rules of standard layout are more or less codifying common practice: most compilers didn't really have to change much if anything at all to implement them (outside of maybe some stuff for the corresponding type traits).</p>
+
+<p>Now, when it came to <code>public</code>/<code>private</code>, things are different. The freedom to reorder which members are <code>public</code> vs. <code>private</code> actually can matter to the compiler, particularly in debugging builds. And since the point of standard layout is that there is compatibility with other languages, you can't have the layout be different in debug vs. release.</p>
+
+<p>Then there's the fact that it doesn't really hurt the user. If you're making an encapsulated class, odds are good that all of your data members will be <code>private</code> anyway. You generally don't expose public data members on fully encapsulated types. So this would only be a problem for those few users who do want to do that, who want that division.</p>
+
+<p>So it's no big loss.</p>
+
+<blockquote>
+  <p>b) only one class in the whole inheritance tree can have non-static data members,</p>
+</blockquote>
+
+<p>The reason for this one comes back to why they standardized standard layout again: common practice.</p>
+
+<p>There's <em>no</em> common practice when it comes to having two members of an inheritance tree that actually store things. Some put the base class before the derived, others do it the other way. Which way do you order the members if they come from two base classes? And so on. Compilers diverge greatly on these questions.</p>
+
+<p>Also, thanks to the zero/one/infinity rule, once you say you can have two classes with members, you can say as many as you want. This requires adding a lot of layout rules for how to handle this. You have to say how multiple inheritance works, which classes put their data before other classes, etc. That's a lot of rules, for very little material gain.</p>
+
+<p>You can't make everything that doesn't have virtual functions and a default constructor standard layout.</p>
+
+<blockquote>
+  <p>and the first non-static data member cannot be of a base class type (this could break aliasing rules).</p>
+</blockquote>
+
+<p>I can't really speak to this one. I'm not educated enough in C++'s aliasing rules to really understand it. But it has something to do with the fact that the base member will share the same address as the base class itself. That is:</p>
+
+<pre><code>struct Base {};
+struct Derived : Base { Base b; };
+
+Derived d;
+static_cast&lt;Base*&gt;(&amp;d) == &amp;d.b;
+</code></pre>
+
+<p>And that's probably against C++'s aliasing rules. In some way.</p>
+
+<p>However, consider this: how useful could having the ability to do this ever <em>actually</em> be? Since only one class can have non-static data members, then <code>Derived</code> must be that class (since it has a <code>Base</code> as a member). So <code>Base</code> <em>must</em> be empty (of data). And if <code>Base</code> is empty, <em>as well as</em> a base class... why have a data member of it at all?</p>
+
+<p>Since <code>Base</code> is empty, it has no state. So any non-static member functions will do what they do based on their parameters, not their <code>this</code> pointer.</p>
+
+<p>So again: no big loss.</p>
+    </div>
+    <table class="fw">
+    <tr>
+    <td class="vt">
+<div class="post-menu"><a href="/a/9491406" title="short permalink to this answer" class="short-link" id="link-post-9491406">share</a><span class="lsep">|</span><a href="/posts/9491406/edit" class="suggest-edit-post" title="">improve this answer</a></div>                    </td>
+    <td align="right" class="post-signature">
+<div class="user-info ">
+    <div class="user-action-time">
+        <a href="/posts/9491406/revisions" title="show all edits to this post">edited <span title="2012-03-16 02:43:10Z" class="relativetime">Mar 16 '12 at 2:43</span></a>
+    </div>
+    <div class="user-gravatar32">
+        
+    </div>
+    <div class="user-details">
+        
+        <div class="-flair">
+            
+        </div>
+    </div>
+</div>    </td>
+            
+
+
+    <td align="right" class="post-signature">   
+       
+
+    <div class="user-info user-hover">
+    <div class="user-action-time">
+        answered <span title="2012-02-28 23:26:31Z" class="relativetime">Feb 28 '12 at 23:26</span>
+    </div>
+    <div class="user-gravatar32">
+        <a href="/users/734069/nicol-bolas"><div class="gravatar-wrapper-32"><img src="https://www.gravatar.com/avatar/a356923f858fbe363dad1dc566837fc6?s=32&amp;d=identicon&amp;r=PG" alt="" width="32" height="32"></div></a>
+    </div>
+    <div class="user-details">
+        <a href="/users/734069/nicol-bolas">Nicol Bolas</a>
+        <div class="-flair">
+            <span class="reputation-score" title="reputation score 183,204" dir="ltr">183k</span><span title="24 gold badges"><span class="badge1"></span><span class="badgecount">24</span></span><span title="298 silver badges"><span class="badge2"></span><span class="badgecount">298</span></span><span title="415 bronze badges"><span class="badge3"></span><span class="badgecount">415</span></span>
+        </div>
+    </div>
+</div>
+    </td>
+    </tr>
+    </table>
+</td>
+        </tr>
+        
+<tr>
+    <td class="votecell"></td>
+    <td>
+	    <div id="comments-9491406" class="comments ">
+		    <table>
+                <tbody data-remaining-comments-count="0"
+                       data-canpost="false"
+                       data-cansee="true"
+                       data-comments-unavailable="false"
+                       data-addlink-disabled="true">
+
+
+
+    <tr id="comment-12039672" class="comment ">
+        <td>
+            <table>
+                <tbody>
+                    <tr>
+                        <td class=" comment-score">
+                                &nbsp;&nbsp;
+                        </td>
+                        <td>
+                                &nbsp;
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+        </td>
+        <td class="comment-text">
+            <div style="display: block;" class="comment-body">
+                <span class="comment-copy">Thanks for explanation, it helps a lot. Probably despite <code>static_cast&lt;Base*&gt;(&amp;d)</code> and <code>&amp;d.b</code> are the same <code>Base*</code> type, they points to different things thus breaking aliasing rule. Please correct me.</span>
+                    &ndash;&nbsp;<a href="/users/453271/andy-t"
+                       title="9,232 reputation"
+                       class="comment-user">Andy T</a>
+                <span class="comment-date" dir="ltr"><span title="2012-02-29 21:43:12Z" class="relativetime-clean">Feb 29 '12 at 21:43</span></span>
+                                                                            </div>
+                    </td>
+    </tr>
+    <tr id="comment-12039685" class="comment ">
+        <td class="comment-actions">
+            <table>
+                <tbody>
+                    <tr>
+                        <td class=" comment-score">
+                                <span title="number of &#39;useful comment&#39; votes received"
+                                      class="cool">1</span>
+                        </td>
+                        <td>
+                                &nbsp;
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+        </td>
+        <td class="comment-text">
+            <div style="display: block;" class="comment-body">
+                <span class="comment-copy">and, why if only one class can have non-static data members, then <code>Derived</code> must be that class?</span>
+                    &ndash;&nbsp;<a href="/users/453271/andy-t"
+                       title="9,232 reputation"
+                       class="comment-user">Andy T</a>
+                <span class="comment-date" dir="ltr"><span title="2012-02-29 21:44:05Z" class="relativetime-clean">Feb 29 '12 at 21:44</span></span>
+                                                                            </div>
+                    </td>
+    </tr>
+    <tr id="comment-12040094" class="comment ">
+        <td class="comment-actions">
+            <table>
+                <tbody>
+                    <tr>
+                        <td class=" comment-score">
+                                <span title="number of &#39;useful comment&#39; votes received"
+                                      class="cool">3</span>
+                        </td>
+                        <td>
+                                &nbsp;
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+        </td>
+        <td class="comment-text">
+            <div style="display: block;" class="comment-body">
+                <span class="comment-copy">@AndyT: In order for <code>Derived</code>&#39;s first member to be its base class, it must have two things: a base class, and a <i>member</i>. And since only one class in the hierarchy can have members (and still be standard-layout), this means that its base class cannot have members.</span>
+                    &ndash;&nbsp;<a href="/users/734069/nicol-bolas"
+                       title="183,204 reputation"
+                       class="comment-user">Nicol Bolas</a>
+                <span class="comment-date" dir="ltr"><span title="2012-02-29 22:04:07Z" class="relativetime-clean">Feb 29 '12 at 22:04</span></span>
+                                                                            </div>
+                    </td>
+    </tr>
+    <tr id="comment-58818650" class="comment ">
+        <td>
+            <table>
+                <tbody>
+                    <tr>
+                        <td class=" comment-score">
+                                &nbsp;&nbsp;
+                        </td>
+                        <td>
+                                &nbsp;
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+        </td>
+        <td class="comment-text">
+            <div style="display: block;" class="comment-body">
+                <span class="comment-copy">@AndyT, Yeah, you&#39;re essentially correct, IME, about the aliasing rule.  Two distinct instances of the same type are required to have distinct memory addresses.  (This allows object identity tracking with memory addresses.)  The base object and the first derived member are different instances, so they must have different addresses, which forces padding to be added, affecting the class&#39;s layout.  If they were of different types, it wouldn&#39;t matter; objects with different types are allowed to have the same address (a class and its first data member, for example).</span>
+                    &ndash;&nbsp;<a href="/users/798193/adam-h-peterson"
+                       title="3,621 reputation"
+                       class="comment-user">Adam H. Peterson</a>
+                <span class="comment-date" dir="ltr"><span title="2016-02-22 22:28:37Z" class="relativetime-clean">Feb 22 at 22:28</span></span>
+                    <span class="edited-yes" title="this comment was edited 1 time"></span>
+                                                                            </div>
+                    </td>
+    </tr>
+                </tbody>
+		    </table>
+	    </div>
+
+        <div id="comments-link-9491406" data-rep=50 data-anon=true>
+
+                <a class="js-add-link comments-link disabled-link "
+                   title="Use comments to ask for more information or suggest improvements. Avoid comments like “+1” or “thanks”."
+                   >add a comment</a><span class="js-link-separator dno">&nbsp;|&nbsp;</span>
+            <a class="js-show-link comments-link dno" title="expand to show all comments on this post" href=# onclick=""></a>
+        </div>         
+    </td>
+</tr>    </table>
+</div>
+									<a name='new-answer'></a>
+						<form id="post-form" action="/questions/4178175/answer/submit" method="post"  class="post-form">
+						    <input type="hidden" id="post-id" value="4178175" />
+                            <input type="hidden" id="qualityBanWarningShown" name="qualityBanWarningShown" value="false" />
+                            <input type="hidden" name="referrer" value=""/>
+							<h2 class="space">Your Answer</h2>
+
+
+            <script>
+            StackExchange.ifUsing("editor", function () {
+                StackExchange.using("externalEditor", function () {
+                    StackExchange.using("snippets", function () {
+                        StackExchange.snippets.init();
+                    });
+                });
+            }, "code-snippets");
+        </script>
+    
+
+<script>
+    StackExchange.ready(function() {
+        initTagRenderer("".split(" "), "".split(" "));
+       
+        StackExchange.using("externalEditor", function() {
+                // Have to fire editor after snippets, if snippets enabled
+                if (StackExchange.settings.snippets.snippetsEnabled) {
+                    StackExchange.using("snippets", function() {
+                        createEditor();
+                    });
+                }
+                else {
+                    createEditor();
+                }
+            });
+
+            function createEditor() {
+                prepareEditor({
+                    heartbeatType: 'answer',
+                convertImagesToLinks: true,
+                reputationToPostImages: 10,
+                bindNavPrevention: true,
+                postfix: "",
+                    onDemand: true,
+                    discardSelector: ".discard-answer"
+                    ,immediatelyShowMarkdownHelp:true
+                    });
+                
+
+        }
+    });  
+</script>
+
+
+<div id="post-editor" class="post-editor js-post-editor">
+
+    <div style="position: relative;">     
+        <div class="wmd-container">
+            <div id="wmd-button-bar" class="wmd-button-bar"></div>
+            <textarea id="wmd-input" class="wmd-input" name="post-text" cols="92" rows="15" tabindex="101" data-min-length=""></textarea>
+        </div>
+    </div>
+
+    <div class="fl" style="margin-top: 8px; height:24px;">&nbsp;</div>
+    <div id="draft-saved" class="draft-saved community-option fl" style="margin-top: 8px; height:24px; display:none;">draft saved</div>
+
+    <div id="draft-discarded" class="draft-discarded community-option fl" style="margin-top: 8px; height:24px; display:none;">draft discarded</div>
+
+
+
+    <div id="wmd-preview" class="wmd-preview"></div>
+    <div></div>
+    <div class="edit-block">
+        <input id="fkey" name="fkey" type="hidden" value="06a29bf8bf181d0fb8763602eeebdc12">
+        <input id="author" name="author" type="text">
+    </div>
+
+
+
+</div>
+							<div style="position: relative;">
+								
+								            <div class="form-item dno new-post-login">
+        
+                <div class="new-login-form">
+                    <div class="new-login-left">
+                        <h3>Sign up or <a id="login-link" href="/users/login?ssrc=question_page&returnurl=http%3a%2f%2fstackoverflow.com%2fquestions%2f4178175%2fwhat-are-aggregates-and-pods-and-how-why-are-they-special%23new-answer">log in</a></h3>
+                        <script>
+                            StackExchange.ready(function () {
+                                StackExchange.helpers.onClickDraftSave('#login-link');
+                            });
+                        </script>
+                        <div class="preferred-login google-login">
+                            <p><span class="icon"></span><span>Sign up using Google</span></p>
+                        </div>
+                        <div class="preferred-login facebook-login">
+                            <p><span class="icon"></span><span>Sign up using Facebook</span></p>
+                        </div>
+                        <div class="preferred-login stackexchange-login">
+                            <p><span class="icon"></span><span>Sign up using Email and Password</span></p>
+                        </div>
+                    </div>
+                    <input type="hidden" name="manual-openid" class="manual-openid" />
+                    <input type="hidden" name="use-facebook" class="use-facebook" value="false" />
+                    <input type="hidden" name="use-google" class="use-google" value="false" />
+                    <input type="button" class="submit-openid" value="Submit" style="display:none" />
+                    <div class="new-login-right">
+                                <h3>Post as a guest</h3>
+    <div class="form-item">
+        <table>
+        <tr>
+                    <td class="vm">
+                <div>
+                    <label for="display-name">Name</label>
+                    <input id="display-name" name="display-name" type="text" size="30" maxlength="30" value="" tabindex="105">
+                </div>
+                <div>
+                    <label for="m-address">Email</label>
+                    <input id="m-address" name="m-address" type="email" size="30" maxlength="100" value="" tabindex="106" placeholder="required, but never shown" />
+                </div>
+            </td>
+        </tr>
+        </table>
+    </div>
+
+                    </div>
+                </div>
+            </div>
+            <script>
+                StackExchange.ready(
+                    function () {
+                        StackExchange.openid.initPostLogin('.new-post-login', 'http%3a%2f%2fstackoverflow.com%2fquestions%2f4178175%2fwhat-are-aggregates-and-pods-and-how-why-are-they-special%23new-answer', 'question_page');
+                    }
+                );
+            </script>
+            <noscript>
+                        <h3>Post as a guest</h3>
+    <div class="form-item">
+        <table>
+        <tr>
+                    <td class="vm">
+                <div>
+                    <label for="display-name">Name</label>
+                    <input id="display-name" name="display-name" type="text" size="30" maxlength="30" value="" tabindex="105">
+                </div>
+                <div>
+                    <label for="m-address">Email</label>
+                    <input id="m-address" name="m-address" type="email" size="30" maxlength="100" value="" tabindex="106" placeholder="required, but never shown" />
+                </div>
+            </td>
+        </tr>
+        </table>
+    </div>
+
+            </noscript>
+
+							</div>
+           
+															<div class="form-submit cbt">
+									<input id="submit-button" type="submit" value="Post Your Answer" tabindex="110">
+									<a href="#" class="btn-clear discard-answer dno">discard</a>
+
+<p class="privacy-policy-agreement">
+By posting your answer, you agree to the <a href='http://stackexchange.com/legal/privacy-policy' target='_blank'>privacy policy</a> and <a href='http://stackexchange.com/legal/terms-of-service' target='_blank'>terms of service</a>.</p>
+<input type="hidden" name="legalLinksShown" value="1" />								</div>
+						</form>
+
+
+
+						<h2 class="bottom-notice" data-loc="1">
+Not the answer you&#39;re looking for?							Browse other questions tagged <a href="/questions/tagged/c%2b%2b" class="post-tag" title="show questions tagged &#39;c++&#39;" rel="tag">c++</a> <a href="/questions/tagged/aggregate" class="post-tag" title="show questions tagged &#39;aggregate&#39;" rel="tag">aggregate</a> <a href="/questions/tagged/c%2b%2b-faq" class="post-tag" title="show questions tagged &#39;c++-faq&#39;" rel="tag">c++-faq</a> <a href="/questions/tagged/pod" class="post-tag" title="show questions tagged &#39;pod&#39;" rel="tag">pod</a> <a href="/questions/tagged/c%2b%2b11" class="post-tag" title="show questions tagged &#39;c++11&#39;" rel="tag">c++11</a>  or <a href="/questions/ask">ask your own question</a>.						</h2>
+			</div>
+		</div>
+				<div id="sidebar" class="show-votes">
+						    <div class="module question-stats">
+			        <table id="qinfo">
+			            <tr>
+			                <td>
+			                    <p class="label-key">asked</p>
+			                </td>
+			                <td style="padding-left: 10px">
+			                    <p class="label-key" title="2010-11-14 15:35:50Z"><b>5 years ago</b></p>
+			                </td>
+			            </tr>
+			            <tr>
+			                <td>
+			                    <p class="label-key">viewed</p>
+			                </td>
+
+			                <td style="padding-left: 10px">
+			                    <p class="label-key">
+			                        <b>71466 times</b>
+			                    </p>
+			                </td>
+			            </tr>
+			                <tr>
+			                    <td>
+			                        <p class="label-key">active</p>
+			                    </td>
+			                    <td style="padding-left: 10px">
+			                        <p class="label-key"><b><a href="?lastactivity" class="lastactivity-link" title="2015-08-16 16:18:24Z">10 months ago</a></b></p>
+			                    </td>
+			                </tr>
+			        </table>
+			    </div>
+						
+			<script>
+                var ados = ados || {}; ados.run = ados.run || [];
+                ados.run.push(function () { ados_add_placement(22,8277,"adzerk930918946",[5,17,2221]).setZone(45); });
+            </script>
+            <div class="everyonelovesstackoverflow" id="adzerk930918946">
+            </div>
+        <div id="hireme">
+            <script>
+;"use strict";(function(n){function it(n,i,r){var u=t.createElement("script"),e="onreadystatechange",o="onload",f="readyState",s=!1;u.async=!0;u.src=n;typeof i=="function"&&(u[o]=u[e]=function(){s||u[f]&&u[f]!=="loaded"&&u[f]!=="complete"||(s=!0,typeof i=="function"&&i(u),u[o]=u[e]=null,r&&u.parentNode.removeChild(u))});ft.appendChild(u)}function rt(n){var i=t.createElement("link");i.type="text/css";i.rel="stylesheet";i.href=n;et.appendChild(i)}function ct(){var n=i.StackExchange,t="options",r="user";return n&&n[t]&&n[t][r]&&n[t][r].accountId}function lt(n){var t,i;return n=ot(r.hash?r.hash.substr(1):"",n||{}),t=n.ac||n.accountId||ct(),t&&(n.ac=t),n.tags||(i=tt(),i.length>0&&(n.tags=i.join(";"))),n.host=r.host.replace(/\.internal$/,""),n}function at(n,t,i,r){var c=h(n);if(c===null)return function(){};var e=null,f=null,l=u(),a=function a(){g(c)?(s(e),r(!1,u()-l)):f=o(a,t)};return f=o(a,t),i!==undefined&&(e=o(function(){s(f);r(!0,u()-l)},i)),function(){s(f);s(e)}}function vt(n){var f=r.hash.indexOf("large=1")!==-1,e=r.hash.indexOf("small=1")!==-1,s=y(),t,u;t=e?!1:f||!s||n;var h=t?1:2,c=a(["hireme","clc-sb"],v),i=[h+"="+c],o=a(["careers1","clc-tlb"],v);return o&&i.push("5="+o),u=a(["careers3","clc-mlb"],v),u&&i.push("6="+u),i.join("&")}function ut(n,t){var e=!!h("#careersadsdoublehigh"),c=k({},f,{zones:f.zones||vt(e)}),r=lt(c),o;n&&(r.azt=1);t&&(r.lw=t);typeof i.innerWidth=="number"&&(r.bw=i.innerWidth);b&&(r.ver=b);o=p()-(e+0);o>0&&(r.az="1");var a=st(r,["zones","ip","ac","eng","prov","tags","theme","at","remote","seed","lw","azt","sysadmin","bw","nocpm","creative","jobview","cpview","ver","host","exp","fallback","cp","az","jc","job"]),s=w+"?"+a;l=u();it(s)}function yt(n){function h(){f.forEach(rt);e.forEach(function(n){return pt(n,t[n],s,o)});typeof i.clc_after_load=="function"&&i.clc_after_load()}var t=n.cr,r=n.h,f=n.st,e=Object.keys(t),o=l?u()-l:0,s="//"+r+"/ct";h()}function pt(n,t,i,r){var s=t.cl,c=t.cn,f=t.an,l=t.tr,o=(s||[]).join(" "),u=h("#"+n);u&&(o&&(u.className+=" "+o),u.innerHTML=c.replace("&pt=0","&pt="+(r||0)),u.onmousedown=function(n){for(var t=n.target,r,o,s;t.tagName!=="A"&&t!==u;)t=t.parentNode;t!==u&&(/(^|\s+)clc-non-ad(\s+|$)/.test(t.className)||(r=[],f&&r.push("an="+f),o=[].filter.call(t.attributes,function(n){return/^data-/.test(n.name)}),o.length>0&&o.forEach(function(n){var t=n.name.replace(/^data-/,"");r.push(e(t)+"="+e(n.value))}),r.push("tr="+l),s="",r.length>0&&(s="?"+r.join("&")),t.href=i+s))})}function wt(n){var i=t.createElement("a");return i.href=n,i.host}function bt(){var i,n;y()?(n=at("#sidebar "+c,20,i,ut),o(function(){var r=h(c),i;g(r)||(r.parentNode.removeChild(r),typeof n=="function"&&n(),i=t.createElement("img"),i.src="//"+wt(w)+"/to.gif",i.style.display="none",t.body.appendChild(i))},2e3)):ut()}var w=n.u,f=n.o,b=n.c,y,p;f=f||{};var k=Object.assign||function(n){for(var i,r,t=1;t<arguments.length;t++){i=arguments[t];for(r in i)Object.prototype.hasOwnProperty.call(i,r)&&(n[r]=i[r])}return n},i=window,r=i.location,e=i.encodeURIComponent,d=i.decodeURIComponent,t=i.document,ft=t.body,et=t.getElementsByTagName("head")[0],o=i.setTimeout,s=i.clearTimeout,c="[id^=adzerk].everyonelovesstackoverflow",l=0,u=function(){return(new Date).getTime()},ot=function(n,t){return n.split(/\&/g).reduce(function(n,t){var i=t.split("=");return n[d(i[0])]=d(i[1]),n},t||{})},st=function(n,t){return Object.keys(n).filter(function(n){return t.indexOf(n)!==-1}).map(function(t){return e(t)+"="+e(n[t])}).join("&")},g=function(n){return n.innerHTML.replace(/\s+$/g,"")},nt=t.querySelectorAll.bind(t),h=t.querySelector.bind(t),ht=t.getElementById.bind(t),a=function(n,t){return n.filter(t)[0]},tt=function(){return[].map.call(nt(".post-taglist .post-tag"),function(n){return n.textContent})},v=function(n){return!!ht(n)};y=function(){return p()>0};p=function(){return nt(c).length};i.clc=k(window.clc||{},{init:yt,load:bt,ls:it,as:rt,tags:tt});window.clc_init&&window.clc_init.forEach&&window.clc_init.forEach(function(n){return n()})}).call(null, {"c":"9de12d7","u":"//clc.stackoverflow.com/p.js"});"use strict";var allowedHosts=["stackoverflow.com","serverfault.com"];(allowedHosts[0]==="*"||allowedHosts.indexOf(location.hostname)!==-1)&&window.clc.load();            </script>
+        </div>
+			  
+    
+            <div class="module sidebar-linked">
+	<h4 id="h-linked">Linked</h4>
+	<div class="linked" data-tracker="lq=1">
+<div class="spacer">
+	<a href="/q/17931917" title="Vote score (upvotes - downvotes)">
+		<div class="answer-votes answered-accepted default">1</div>
+	</a>
+	<a href="/questions/17931917/why-uniform-initialization-works-without-explicit-constructor" class="question-hyperlink">Why uniform initialization works without explicit constructor</a>
+</div><div class="spacer">
+	<a href="/q/5289631" title="Vote score (upvotes - downvotes)">
+		<div class="answer-votes  default">0</div>
+	</a>
+	<a href="/questions/5289631/whats-the-non-aggregate-type-in-c" class="question-hyperlink">What&#39;s the non-aggregate type in [c++]?</a>
+</div><div class="spacer">
+	<a href="/q/12228698" title="Vote score (upvotes - downvotes)">
+		<div class="answer-votes  default">0</div>
+	</a>
+	<a href="/questions/12228698/constructor-requirements-in-c11-for-pod" class="question-hyperlink">Constructor requirements in C++11 for POD</a>
+</div><div class="spacer">
+	<a href="/q/4172722" title="Vote score (upvotes - downvotes)">
+		<div class="answer-votes answered-accepted extra-large">1315</div>
+	</a>
+	<a href="/questions/4172722/what-is-the-rule-of-three" class="question-hyperlink">What is The Rule of Three?</a>
+</div><div class="spacer">
+	<a href="/q/3279543" title="Vote score (upvotes - downvotes)">
+		<div class="answer-votes answered-accepted extra-large">1160</div>
+	</a>
+	<a href="/questions/3279543/what-is-the-copy-and-swap-idiom" class="question-hyperlink">What is the copy-and-swap idiom?</a>
+</div><div class="spacer">
+	<a href="/q/4176328" title="Vote score (upvotes - downvotes)">
+		<div class="answer-votes answered-accepted large">702</div>
+	</a>
+	<a href="/questions/4176328/undefined-behavior-and-sequence-points" class="question-hyperlink">Undefined behavior and sequence points</a>
+</div><div class="spacer">
+	<a href="/q/146452" title="Vote score (upvotes - downvotes)">
+		<div class="answer-votes answered-accepted large">542</div>
+	</a>
+	<a href="/questions/146452/what-are-pod-types-in-c" class="question-hyperlink">What are POD types in C++?</a>
+</div><div class="spacer">
+	<a href="/q/6687107" title="Vote score (upvotes - downvotes)">
+		<div class="answer-votes answered-accepted default">28</div>
+	</a>
+	<a href="/questions/6687107/difference-between-stdpair-and-stdtuple-with-only-two-members" class="question-hyperlink">Difference between std::pair and std::tuple with only two members?</a>
+</div><div class="spacer">
+	<a href="/q/16420357" title="Vote score (upvotes - downvotes)">
+		<div class="answer-votes answered-accepted default">26</div>
+	</a>
+	<a href="/questions/16420357/c-fastest-way-to-clear-or-erase-a-vector" class="question-hyperlink">C++ fastest way to clear or erase a vector</a>
+</div><div class="spacer">
+	<a href="/q/4203010" title="Vote score (upvotes - downvotes)">
+		<div class="answer-votes answered-accepted default">34</div>
+	</a>
+	<a href="/questions/4203010/how-to-initialize-member-struct-in-initializer-list-of-c-class" class="question-hyperlink">How to initialize member-struct in initializer list of C++ class?</a>
+</div>					<div class="spacer more">
+				<a href="/questions/linked/4178175">see more linked questions…</a>
+			</div>
+	</div>
+</div>
+
+				<div class="module sidebar-related">
+					<h4 id="h-related">Related</h4>
+                    <div class="related js-gps-related-questions" data-tracker="rq=1">
+                        <div class="spacer">
+<a href="/q/57483" title="Vote score (upvotes - downvotes)">
+    <div class="answer-votes extra-large">1640
+    </div>
+</a><a href="/questions/57483/what-are-the-differences-between-a-pointer-variable-and-a-reference-variable-in" class="question-hyperlink">What are the differences between a pointer variable and a reference variable in C++?</a>
+</div>
+<div class="spacer">
+<a href="/q/106508" title="Vote score (upvotes - downvotes)">
+    <div class="answer-votes answered-accepted large">837
+    </div>
+</a><a href="/questions/106508/what-is-a-smart-pointer-and-when-should-i-use-one" class="question-hyperlink">What is a smart pointer and when should I use one?</a>
+</div>
+<div class="spacer">
+<a href="/q/121162" title="Vote score (upvotes - downvotes)">
+    <div class="answer-votes answered-accepted extra-large">1570
+    </div>
+</a><a href="/questions/121162/what-does-the-explicit-keyword-in-c-mean" class="question-hyperlink">What does the explicit keyword in C++ mean?</a>
+</div>
+<div class="spacer">
+<a href="/q/146452" title="Vote score (upvotes - downvotes)">
+    <div class="answer-votes answered-accepted large">542
+    </div>
+</a><a href="/questions/146452/what-are-pod-types-in-c" class="question-hyperlink">What are POD types in C++?</a>
+</div>
+<div class="spacer">
+<a href="/q/3106110" title="Vote score (upvotes - downvotes)">
+    <div class="answer-votes answered-accepted large">856
+    </div>
+</a><a href="/questions/3106110/what-are-move-semantics" class="question-hyperlink">What are move semantics?</a>
+</div>
+<div class="spacer">
+<a href="/q/3279543" title="Vote score (upvotes - downvotes)">
+    <div class="answer-votes answered-accepted extra-large">1160
+    </div>
+</a><a href="/questions/3279543/what-is-the-copy-and-swap-idiom" class="question-hyperlink">What is the copy-and-swap idiom?</a>
+</div>
+<div class="spacer">
+<a href="/q/3601602" title="Vote score (upvotes - downvotes)">
+    <div class="answer-votes large">751
+    </div>
+</a><a href="/questions/3601602/what-are-rvalues-lvalues-xvalues-glvalues-and-prvalues" class="question-hyperlink">What are rvalues, lvalues, xvalues, glvalues, and prvalues?</a>
+</div>
+<div class="spacer">
+<a href="/q/6319146" title="Vote score (upvotes - downvotes)">
+    <div class="answer-votes answered-accepted extra-large">1026
+    </div>
+</a><a href="/questions/6319146/c11-introduced-a-standardized-memory-model-what-does-it-mean-and-how-is-it-g" class="question-hyperlink">C++11 introduced a standardized memory model. What does it mean? And how is it going to affect C++ programming?</a>
+</div>
+<div class="spacer">
+<a href="/q/7627098" title="Vote score (upvotes - downvotes)">
+    <div class="answer-votes answered-accepted large">743
+    </div>
+</a><a href="/questions/7627098/what-is-a-lambda-expression-in-c11" class="question-hyperlink">What is a lambda expression in C++11?</a>
+</div>
+<div class="spacer">
+<a href="/q/11227809" title="Vote score (upvotes - downvotes)">
+    <div class="answer-votes answered-accepted extra-large">14869
+    </div>
+</a><a href="/questions/11227809/why-is-processing-a-sorted-array-faster-than-an-unsorted-array" class="question-hyperlink">Why is processing a sorted array faster than an unsorted array?</a>
+</div>
+
+                    </div>
+				</div>
+            
+<div id="hot-network-questions" class="module">
+    <h4>
+        <a href="//stackexchange.com/questions?tab=hot" 
+           class="js-gps-track" 
+           data-gps-track="posts_hot_network.click({ item_type:1, location:11 })">
+            Hot Network Questions
+        </a>
+    </h4>
+    <ul>
+            <li >
+                <div class="favicon favicon-gaming" title="Arqade"></div><a href="http://gaming.stackexchange.com/questions/270888/when-should-i-let-my-teammates-die" class="js-gps-track" data-gps-track="site.switch({ item_type:11, target_site:41 }); posts_hot_network.click({ item_type:2, location:11 })">
+                    When should I let my teammates die?
+                </a>
+
+            </li>
+            <li >
+                <div class="favicon favicon-ethereum" title="Ethereum Stack Exchange"></div><a href="http://ethereum.stackexchange.com/questions/6415/eli5-how-does-a-merkle-patricia-trie-tree-work" class="js-gps-track" data-gps-track="site.switch({ item_type:11, target_site:642 }); posts_hot_network.click({ item_type:2, location:11 })">
+                    ELI5 How does a Merkle-Patricia-trie tree work?
+                </a>
+
+            </li>
+            <li >
+                <div class="favicon favicon-puzzling" title="Puzzling Stack Exchange"></div><a href="http://puzzling.stackexchange.com/questions/36468/five-letter-words-at-cross-purposes" class="js-gps-track" data-gps-track="site.switch({ item_type:11, target_site:559 }); posts_hot_network.click({ item_type:2, location:11 })">
+                    Five letter words at cross purposes
+                </a>
+
+            </li>
+            <li >
+                <div class="favicon favicon-workplace" title="The Workplace Stack Exchange"></div><a href="http://workplace.stackexchange.com/questions/70256/firing-an-incompetent-subordinate-in-relatively-far-in-the-future-when-to-tell" class="js-gps-track" data-gps-track="site.switch({ item_type:11, target_site:423 }); posts_hot_network.click({ item_type:2, location:11 })">
+                    Firing an incompetent subordinate in relatively far in the future: when to tell him?
+                </a>
+
+            </li>
+            <li >
+                <div class="favicon favicon-scifi" title="Science Fiction &amp; Fantasy Stack Exchange"></div><a href="http://scifi.stackexchange.com/questions/132557/why-did-harry-tell-snapes-secret-to-everyone" class="js-gps-track" data-gps-track="site.switch({ item_type:11, target_site:186 }); posts_hot_network.click({ item_type:2, location:11 })">
+                    Why did Harry tell Snape&#39;s secret to everyone?
+                </a>
+
+            </li>
+            <li class="dno js-hidden">
+                <div class="favicon favicon-workplace" title="The Workplace Stack Exchange"></div><a href="http://workplace.stackexchange.com/questions/70094/staying-focused-during-automatic-processes-its-compiling" class="js-gps-track" data-gps-track="site.switch({ item_type:11, target_site:423 }); posts_hot_network.click({ item_type:2, location:11 })">
+                    Staying focused during automatic processes, &quot;It&#39;s compiling&quot;
+                </a>
+
+            </li>
+            <li class="dno js-hidden">
+                <div class="favicon favicon-puzzling" title="Puzzling Stack Exchange"></div><a href="http://puzzling.stackexchange.com/questions/36459/the-3-keys-of-the-past" class="js-gps-track" data-gps-track="site.switch({ item_type:11, target_site:559 }); posts_hot_network.click({ item_type:2, location:11 })">
+                    The 3 keys of the past
+                </a>
+
+            </li>
+            <li class="dno js-hidden">
+                <div class="favicon favicon-money" title="Personal Finance &amp; Money Stack Exchange"></div><a href="http://money.stackexchange.com/questions/66311/i-cosigned-for-a-friend-who-is-not-paying-the-payment" class="js-gps-track" data-gps-track="site.switch({ item_type:11, target_site:93 }); posts_hot_network.click({ item_type:2, location:11 })">
+                    I cosigned for a friend who is not paying the payment
+                </a>
+
+            </li>
+            <li class="dno js-hidden">
+                <div class="favicon favicon-unix" title="Unix &amp; Linux Stack Exchange"></div><a href="http://unix.stackexchange.com/questions/291404/why-does-bashs-source-not-need-the-execution-bit" class="js-gps-track" data-gps-track="site.switch({ item_type:11, target_site:106 }); posts_hot_network.click({ item_type:2, location:11 })">
+                    Why does Bash&#39;s source not need the execution bit?
+                </a>
+
+            </li>
+            <li class="dno js-hidden">
+                <div class="favicon favicon-crypto" title="Cryptography Stack Exchange"></div><a href="http://crypto.stackexchange.com/questions/37224/importance-of-round-complexity-in-determining-the-efficiency-of-an-mpc-protocol" class="js-gps-track" data-gps-track="site.switch({ item_type:11, target_site:281 }); posts_hot_network.click({ item_type:2, location:11 })">
+                    Importance of round complexity in determining the efficiency of an MPC protocol
+                </a>
+
+            </li>
+            <li class="dno js-hidden">
+                <div class="favicon favicon-tex" title="TeX - LaTeX Stack Exchange"></div><a href="http://tex.stackexchange.com/questions/316046/centering-a-big-pmatrix" class="js-gps-track" data-gps-track="site.switch({ item_type:11, target_site:85 }); posts_hot_network.click({ item_type:2, location:11 })">
+                    Centering a big pmatrix
+                </a>
+
+            </li>
+            <li class="dno js-hidden">
+                <div class="favicon favicon-unix" title="Unix &amp; Linux Stack Exchange"></div><a href="http://unix.stackexchange.com/questions/291357/changed-owner-of-etc-folder-cant-use-sudo-anymore" class="js-gps-track" data-gps-track="site.switch({ item_type:11, target_site:106 }); posts_hot_network.click({ item_type:2, location:11 })">
+                    Changed owner of /etc folder, can&#39;t use sudo anymore
+                </a>
+
+            </li>
+            <li class="dno js-hidden">
+                <div class="favicon favicon-webmasters" title="Webmasters Stack Exchange"></div><a href="http://webmasters.stackexchange.com/questions/95535/is-there-an-alternative-to-htaccess" class="js-gps-track" data-gps-track="site.switch({ item_type:11, target_site:45 }); posts_hot_network.click({ item_type:2, location:11 })">
+                    Is there an alternative to .htaccess?
+                </a>
+
+            </li>
+            <li class="dno js-hidden">
+                <div class="favicon favicon-mathematica" title="Mathematica Stack Exchange"></div><a href="http://mathematica.stackexchange.com/questions/118992/how-can-mathematica-be-used-to-create-images-like-these" class="js-gps-track" data-gps-track="site.switch({ item_type:11, target_site:387 }); posts_hot_network.click({ item_type:2, location:11 })">
+                    How can Mathematica be used to create Images like these?
+                </a>
+
+            </li>
+            <li class="dno js-hidden">
+                <div class="favicon favicon-security" title="Information Security Stack Exchange"></div><a href="http://security.stackexchange.com/questions/127802/is-the-injection-in-a-nosql-database-architecture-also-called-sql-injection" class="js-gps-track" data-gps-track="site.switch({ item_type:11, target_site:162 }); posts_hot_network.click({ item_type:2, location:11 })">
+                    Is the injection in a NoSQL database architecture also called SQL injection?
+                </a>
+
+            </li>
+            <li class="dno js-hidden">
+                <div class="favicon favicon-electronics" title="Electrical Engineering Stack Exchange"></div><a href="http://electronics.stackexchange.com/questions/242163/why-are-the-edison-screws-allowed-to-be-used-they-seem-unsafe-why-are-they-des" class="js-gps-track" data-gps-track="site.switch({ item_type:11, target_site:135 }); posts_hot_network.click({ item_type:2, location:11 })">
+                    Why are the Edison screws allowed to be used? they seem unsafe. Why are they designed that way?
+                </a>
+
+            </li>
+            <li class="dno js-hidden">
+                <div class="favicon favicon-serverfault" title="Server Fault"></div><a href="http://serverfault.com/questions/785534/what-are-the-implications-of-converting-all-my-groups-to-universal-groups" class="js-gps-track" data-gps-track="site.switch({ item_type:11, target_site:2 }); posts_hot_network.click({ item_type:2, location:11 })">
+                    What are the implications of converting all my groups to universal groups?
+                </a>
+
+            </li>
+            <li class="dno js-hidden">
+                <div class="favicon favicon-gardening" title="Gardening &amp; Landscaping Stack Exchange"></div><a href="http://gardening.stackexchange.com/questions/26775/how-to-remedy-lead-in-soil" class="js-gps-track" data-gps-track="site.switch({ item_type:11, target_site:269 }); posts_hot_network.click({ item_type:2, location:11 })">
+                    How to remedy lead in soil?
+                </a>
+
+            </li>
+            <li class="dno js-hidden">
+                <div class="favicon favicon-photo" title="Photography Stack Exchange"></div><a href="http://photo.stackexchange.com/questions/79478/why-are-dslr-lenses-measured-in-f-stops-instead-of-t-stops" class="js-gps-track" data-gps-track="site.switch({ item_type:11, target_site:61 }); posts_hot_network.click({ item_type:2, location:11 })">
+                    Why are DSLR lenses measured in F stops instead of T stops?
+                </a>
+
+            </li>
+            <li class="dno js-hidden">
+                <div class="favicon favicon-math" title="Mathematics Stack Exchange"></div><a href="http://math.stackexchange.com/questions/1835798/q25-from-amc-2012" class="js-gps-track" data-gps-track="site.switch({ item_type:11, target_site:69 }); posts_hot_network.click({ item_type:2, location:11 })">
+                    Q25 from AMC 2012
+                </a>
+
+            </li>
+            <li class="dno js-hidden">
+                <div class="favicon favicon-workplace" title="The Workplace Stack Exchange"></div><a href="http://workplace.stackexchange.com/questions/70246/what-are-the-ways-to-get-into-a-field-without-a-degree-in-that-field" class="js-gps-track" data-gps-track="site.switch({ item_type:11, target_site:423 }); posts_hot_network.click({ item_type:2, location:11 })">
+                    What are the ways to get into a field without a degree in that field?
+                </a>
+
+            </li>
+            <li class="dno js-hidden">
+                <div class="favicon favicon-gaming" title="Arqade"></div><a href="http://gaming.stackexchange.com/questions/270942/why-does-minecraft-show-this-crash-report-about-blockentity-when-i-try-to-log" class="js-gps-track" data-gps-track="site.switch({ item_type:11, target_site:41 }); posts_hot_network.click({ item_type:2, location:11 })">
+                    Why does Minecraft show this crash report about &#39;BlockEntity&#39; when I try to log into certain servers?
+                </a>
+
+            </li>
+            <li class="dno js-hidden">
+                <div class="favicon favicon-history" title="History Stack Exchange"></div><a href="http://history.stackexchange.com/questions/30459/lost-battles-under-which-conditions-does-the-losing-party-actively-commemorate" class="js-gps-track" data-gps-track="site.switch({ item_type:11, target_site:324 }); posts_hot_network.click({ item_type:2, location:11 })">
+                    Lost battles - under which conditions does the losing party actively commemorate a battle?
+                </a>
+
+            </li>
+            <li class="dno js-hidden">
+                <div class="favicon favicon-english" title="English Language &amp; Usage Stack Exchange"></div><a href="http://english.stackexchange.com/questions/333500/idiom-for-a-person-who-is-above-any-question" class="js-gps-track" data-gps-track="site.switch({ item_type:11, target_site:97 }); posts_hot_network.click({ item_type:2, location:11 })">
+                    Idiom for a person who is above any question
+                </a>
+
+            </li>
+    </ul>
+
+        <a href="#" 
+           class="show-more js-show-more js-gps-track" 
+           data-gps-track="posts_hot_network.click({ item_type:3, location:11 })">
+            more hot questions
+        </a>
+</div>
+		</div>
+	
+<div id="feed-link">
+    <div id="feed-link-text">
+        <a href="/feeds/question/4178175" title="feed of this question and its answers">
+            <span class="feed-icon"></span>question feed
+        </a>
+    </div>
+</div>	<script>
+StackExchange.ready(function(){$.get('/posts/4178175/ivc/5476');});
+</script>
+<noscript>
+    <div><img src="/posts/4178175/ivc/5476" class="dno" alt="" width="0" height="0"></div>
+</noscript><div style="display:none" id="prettify-lang">lang-cpp</div></div>
+
+
+        </div>
+    </div>
+    <div id="footer" class="categories">
+        <div class="footerwrap">            
+            <div id="footer-menu">
+                <div class="top-footer-links">
+                    <a href="http://stackoverflow.com/company/about">about us</a>
+                        <a href="/tour">tour</a>
+                    <a href="/help">help</a>
+                    <a href="http://blog.stackoverflow.com?blb=1">blog</a>
+                        <a href="http://chat.stackoverflow.com">chat</a>
+                    <a href="http://data.stackexchange.com">data</a>
+                    <a href="http://stackexchange.com/legal">legal</a>
+                    <a href="http://stackexchange.com/legal/privacy-policy">privacy policy</a>
+                    <a href="http://stackoverflow.com/company/work-here">work here</a>
+                    <a href="http://stackexchange.com/mediakit">advertising info</a>
+
+                    <a onclick='StackExchange.switchMobile("on")'>mobile</a>
+                    <b><a href="/contact">contact us</a></b>
+                        <b><a href="http://meta.stackoverflow.com">feedback</a></b>
+                    
+                </div>
+                <div id="footer-sites">
+                    <table>
+    <tr>
+            <th colspan=3>
+                Technology
+            </th>
+            <th >
+                Life / Arts
+            </th>
+            <th >
+                Culture / Recreation
+            </th>
+            <th >
+                Science
+            </th>
+            <th >
+                Other
+            </th>
+    </tr>
+    <tr>
+            <td>
+                <ol>
+                        <li><a href="//stackoverflow.com" title="professional and enthusiast programmers">Stack Overflow</a></li>
+                        <li><a href="//serverfault.com" title="system and network administrators">Server Fault</a></li>
+                        <li><a href="//superuser.com" title="computer enthusiasts and power users">Super User</a></li>
+                        <li><a href="//webapps.stackexchange.com" title="power users of web applications">Web Applications</a></li>
+                        <li><a href="//askubuntu.com" title="Ubuntu users and developers">Ask Ubuntu</a></li>
+                        <li><a href="//webmasters.stackexchange.com" title="pro webmasters">Webmasters</a></li>
+                        <li><a href="//gamedev.stackexchange.com" title="professional and independent game developers">Game Development</a></li>
+                        <li><a href="//tex.stackexchange.com" title="users of TeX, LaTeX, ConTeXt, and related typesetting systems">TeX - LaTeX</a></li>
+                            </ol></td><td><ol>
+                        <li><a href="//programmers.stackexchange.com" title="professional programmers interested in conceptual questions about software development">Programmers</a></li>
+                        <li><a href="//unix.stackexchange.com" title="users of Linux, FreeBSD and other Un*x-like operating systems">Unix &amp; Linux</a></li>
+                        <li><a href="//apple.stackexchange.com" title="power users of Apple hardware and software">Ask Different (Apple)</a></li>
+                        <li><a href="//wordpress.stackexchange.com" title="WordPress developers and administrators">WordPress Development</a></li>
+                        <li><a href="//gis.stackexchange.com" title="cartographers, geographers and GIS professionals">Geographic Information Systems</a></li>
+                        <li><a href="//electronics.stackexchange.com" title="electronics and electrical engineering professionals, students, and enthusiasts">Electrical Engineering</a></li>
+                        <li><a href="//android.stackexchange.com" title="enthusiasts and power users of the Android operating system">Android Enthusiasts</a></li>
+                        <li><a href="//security.stackexchange.com" title="information security professionals">Information Security</a></li>
+                            </ol></td><td><ol>
+                        <li><a href="//dba.stackexchange.com" title="database professionals who wish to improve their database skills and learn from others in the community">Database Administrators</a></li>
+                        <li><a href="//drupal.stackexchange.com" title="Drupal developers and administrators">Drupal Answers</a></li>
+                        <li><a href="//sharepoint.stackexchange.com" title="SharePoint enthusiasts">SharePoint</a></li>
+                        <li><a href="//ux.stackexchange.com" title="user experience researchers and experts">User Experience</a></li>
+                        <li><a href="//mathematica.stackexchange.com" title="users of Mathematica">Mathematica</a></li>
+                        <li><a href="//salesforce.stackexchange.com" title="Salesforce administrators, implementation experts, developers and anybody in-between">Salesforce</a></li>
+                        <li><a href="//expressionengine.stackexchange.com" title="administrators, end users, developers and designers for ExpressionEngine&#174; CMS">ExpressionEngine&#174; Answers</a></li>
+                    
+                        <li>
+                            <a href="http://stackexchange.com/sites#technology" class="more">
+                                more (13)
+                            </a>
+                        </li>
+                </ol>
+            </td>
+            <td>
+                <ol>
+                        <li><a href="//photo.stackexchange.com" title="professional, enthusiast and amateur photographers">Photography</a></li>
+                        <li><a href="//scifi.stackexchange.com" title="science fiction and fantasy enthusiasts">Science Fiction &amp; Fantasy</a></li>
+                        <li><a href="//graphicdesign.stackexchange.com" title="Graphic Design professionals, students, and enthusiasts">Graphic Design</a></li>
+                        <li><a href="//movies.stackexchange.com" title="movie and tv enthusiasts">Movies &amp; TV</a></li>
+                        <li><a href="//cooking.stackexchange.com" title="professional and amateur chefs">Seasoned Advice (cooking)</a></li>
+                        <li><a href="//diy.stackexchange.com" title="contractors and serious DIYers">Home Improvement</a></li>
+                        <li><a href="//money.stackexchange.com" title="people who want to be financially literate">Personal Finance &amp; Money</a></li>
+                        <li><a href="//academia.stackexchange.com" title="academics and those enrolled in higher education">Academia</a></li>
+                    
+                        <li>
+                            <a href="http://stackexchange.com/sites#lifearts" class="more">
+                                more (9)
+                            </a>
+                        </li>
+                </ol>
+            </td>
+            <td>
+                <ol>
+                        <li><a href="//english.stackexchange.com" title="linguists, etymologists, and serious English language enthusiasts">English Language &amp; Usage</a></li>
+                        <li><a href="//skeptics.stackexchange.com" title="scientific skepticism">Skeptics</a></li>
+                        <li><a href="//judaism.stackexchange.com" title="those who base their lives on Jewish law and tradition and anyone interested in learning more">Mi Yodeya (Judaism)</a></li>
+                        <li><a href="//travel.stackexchange.com" title="road warriors and seasoned travelers">Travel</a></li>
+                        <li><a href="//christianity.stackexchange.com" title="committed Christians, experts in Christianity and those interested in learning more">Christianity</a></li>
+                        <li><a href="//gaming.stackexchange.com" title="passionate videogamers on all platforms">Arqade (gaming)</a></li>
+                        <li><a href="//bicycles.stackexchange.com" title="people who build and repair bicycles, people who train cycling, or commute on bicycles">Bicycles</a></li>
+                        <li><a href="//rpg.stackexchange.com" title="gamemasters and players of tabletop, paper-and-pencil role-playing games">Role-playing Games</a></li>
+                    
+                        <li>
+                            <a href="http://stackexchange.com/sites#culturerecreation" class="more">
+                                more (21)
+                            </a>
+                        </li>
+                </ol>
+            </td>
+            <td>
+                <ol>
+                        <li><a href="//math.stackexchange.com" title="people studying math at any level and professionals in related fields">Mathematics</a></li>
+                        <li><a href="//stats.stackexchange.com" title="people interested in statistics, machine learning, data analysis, data mining, and data visualization">Cross Validated (stats)</a></li>
+                        <li><a href="//cstheory.stackexchange.com" title="theoretical computer scientists and researchers in related fields">Theoretical Computer Science</a></li>
+                        <li><a href="//physics.stackexchange.com" title="active researchers, academics and students of physics">Physics</a></li>
+                        <li><a href="//mathoverflow.net" title="professional mathematicians">MathOverflow</a></li>
+                        <li><a href="//chemistry.stackexchange.com" title="scientists, academics, teachers and students">Chemistry</a></li>
+                        <li><a href="//biology.stackexchange.com" title="biology researchers, academics, and students">Biology</a></li>
+                    
+                        <li>
+                            <a href="http://stackexchange.com/sites#science" class="more">
+                                more (5)
+                            </a>
+                        </li>
+                </ol>
+            </td>
+            <td>
+                <ol>
+                        <li><a href="//stackapps.com" title="apps, scripts, and development with the Stack Exchange API">Stack Apps</a></li>
+                        <li><a href="//meta.stackexchange.com" title="meta-discussion of the Stack Exchange family of Q&amp;A websites">Meta Stack Exchange</a></li>
+                        <li><a href="//area51.stackexchange.com" title="proposing new sites in the Stack Exchange network">Area 51</a></li>
+                        <li><a href="//careers.stackoverflow.com">Stack Overflow Careers</a></li>
+                    
+                </ol>
+            </td>
+    </tr>
+</table>
+                </div>
+            </div>
+            <div id="copyright">
+                site design / logo &#169; 2016 Stack Exchange Inc; user contributions licensed under <a href="https://creativecommons.org/licenses/by-sa/3.0/" rel="license">cc by-sa 3.0</a> 
+                with <a href="http://blog.stackoverflow.com/2009/06/attribution-required/" rel="license">attribution required</a>
+            </div>
+            <div id="svnrev">
+                rev 2016.6.22.3695
+            </div>
+                </div>
+    </div>
+    <noscript>
+        <div id="noscript-warning">Stack Overflow works best with JavaScript enabled<img src="http://pixel.quantserve.com/pixel/p-c1rF4kxgLUzNc.gif" alt="" class="dno"></div>
+    </noscript>
+<script>var p = "http", d = "static"; if (document.location.protocol == "https:") { p += "s"; d = "engine"; } var z = document.createElement("script"); z.type = "text/javascript"; z.async = true; z.src = p + "://" + d + ".adzerk.net/ados.js"; var s = document.getElementsByTagName("script")[0]; s.parentNode.insertBefore(z, s);</script>
+<script>
+    var ados = ados || {};
+    ados.run = ados.run || [];
+    
+    
+        
+        ados.run.push(function () {
+                setTimeout(function () { $("#adzerk-user-match").remove(); }, window.AUMIframeDone ? 0 : 2000);
+                ados_setKeywords('c%2b%2b,aggregate,c%2b%2b-faq,pod,c%2b%2b11');; ados_load();
+        });   
+        
+</script>
+
+    <script>
+        (function (i, s, o, g, r, a, m) {
+            i['GoogleAnalyticsObject'] = r; i[r] = i[r] || function () { (i[r].q = i[r].q || []).push(arguments) }, i[r].l = 1 * new Date(); a = s.createElement(o),
+            m = s.getElementsByTagName(o)[0]; a.async = 1; a.src = g; m.parentNode.insertBefore(a, m);
+        })(window, document, 'script', 'https://www.google-analytics.com/analytics.js', 'ga');
+        ga('create', 'UA-5620270-1');
+                        ga('set', 'dimension2', '|c++|aggregate|c++-faq|pod|c++11|');         ga('send', 'pageview');
+        var _qevents = _qevents || [],
+            _comscore = _comscore || [];
+        (function () {
+            var ssl='https:'==document.location.protocol,
+                s=document.getElementsByTagName('script')[0],
+                qc=document.createElement('script');
+                qc.async = true;
+                qc.src = (ssl ? 'https://secure' : 'http://edge') + '.quantserve.com/quant.js';
+                s.parentNode.insertBefore(qc, s);
+                _qevents.push({ qacct: "p-c1rF4kxgLUzNc" });
+                            var sc=document.createElement('script');
+                sc.async=true;
+                sc.src=(ssl?'https://sb':'http://b') + '.scorecardresearch.com/beacon.js';
+                s.parentNode.insertBefore(sc, s);
+                _comscore.push({ c1: "2", c2: "17440561" });
+        })();
+                
+    </script>
+        
+    
+    </body>
+</html>

@@ -1,0 +1,24 @@
+
+yourCodeFail()
+compilation error
+
+yourCodeTrickySolution()
+Bar() ctor. 
+Foo(const Bar& b) ctor.
+Foo::blah() method.
+
+yourCodeCopyCtor()
+Bar() ctor. 
+Foo(const Bar& b) ctor.
+Foo::blah() method.
+
+yourCodeImplicitCtor()
+Bar() ctor. 
+Foo(const Bar& b) ctor.
+Foo::blah() method.
+
+yourCodeBestSolution()
+Bar() ctor. 
+Foo(const Bar& b) ctor.
+Foo::blah() method.
+

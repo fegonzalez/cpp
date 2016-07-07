@@ -1,0 +1,5081 @@
+# ==============================================================================
+# SUMMARY (following the order in [1_1])
+# ==============================================================================
+
+# 0 The (C++) standard
+#
+
+# 1 General
+#
+#   1.1 Scope
+#   1.7 The C++ memory model
+#   1.8 The C++ object model
+#   1.9 Program execution
+#   1.10 Multi-threaded executions and data races
+
+
+# todo 2 Lexical conventions
+#
+# 2.1 Separate translation
+# 2.2 Phases of translation
+
+# todo 3 Basic concepts
+#
+#   3.9 Types
+#       3.9.1 Fundamental types
+# 	3.9.2 Compound types
+# 	3.9.3 CV-qualifiers
+#       3.9.4 Types not defined in the standard
+#             3.9.4.1 TrivialType
+#             3.9.4.2 StandardLayoutType
+#             3.9.4.3 PODType
+
+
+# todo 4 Standard conversions
+#
+
+# todo 5 Expressions
+#
+
+
+# todo 6 Statements
+#
+#   6.5 Iteration statements
+
+
+# todo 7 Declarations
+#
+
+
+# todo 8 Declarators
+#
+#   8.3 Meaning of declarators
+#
+#	8.3.3 Pointers to members
+#
+#
+#   8.5 Initializers
+#
+#	8.5.0 Initialiation before C++11	
+#	
+#	8.5.1 Aggregates
+#
+#	8.5.2 Character arrays
+#
+#	8.5.3 References
+#	      8.5.3.1 Uses of references
+#	      8.5.3.2 Issues on using references
+#	      8.5.3.3 Defining (binding) references to objects
+#	      8.5.3.4 References as functions parameters
+#	      8.5.3.5 functions returning references
+#       \todo Rvalue References [3_1].13.6.1.  (see examples at [4_2_0])
+#
+#	8.5.4 List-initialization (or braced-init-list)
+#
+#	8.5.5 Class Member Initialization (or In-Class Initializers)
+
+
+# todo 9 Classes
+#
+
+
+# todo 10 Derived classes
+#
+#   10.3 Virtual functions
+#   	10.3.1 Calling virtual member functions vs calling non-virtual members
+# 	10.3.2 virtual table & virtual pointer: resolving dynamic binding
+#
+#	10.3.10 Virtual functions FAQ   \todo
+
+
+# 11 Member access control
+#
+#   11.1 Access specifiers
+#   11.2 Accessibility of base classes and base class members
+#   11.3 Friends
+#   11.4 Protected member access
+#   11.5 Access to virtual functions
+#   11.6 Multiple access
+#   11.7 Nested classes
+
+
+# todo 12 Special member functions
+#
+#   12.1 Constructors
+#   	12.1.1 Trivial Constructors
+# 	12.1.2 Non-Trivial Constructors
+# 	      a) Default constructor
+# 	      b) Explicit Constructors
+#	      c) Constructors of Built-in Types (char, int, ...)
+# 	      d) Member Initialization Lists
+# 	      e) Copy constructor 
+#
+# todo	12.1.3 Initialization order
+#
+#	      \todo [C++11] Delegating Constructors [3_1] 7.5.2., p 378
+#       \todo [C++11] constexpr Constructors [3_1] 7.5.6. Literal Classes, p 387
+#	      	      			     [1_1] 7.1.5
+# 	      \todo [3_1] 15.7 Constructors and Copy Control (p. 768),
+# 	      \todo [3_1] 18.1.3 Function try Blocks and Constructors (p. 953),
+# 	      \todo [3_1] Chapter 13. (p. 615)
+#
+#	12.1.4 Constructors FAQ
+# 	      FAQ return-by-value
+# 	      FAQ The “static initialization order fiasco”
+#
+#   todo 12.4 Destructors 
+#   	12.4.1 Destruction order
+#
+#   todo 12.5 Free store
+#
+#   todo 12.6 initialization
+#
+#   todo 12.7 Construction and destruction
+#
+#   12.8 Copying and moving class objects
+#       12.8.1 copy-constructor & assignment-operator
+
+
+# todo 13 Overloading
+#
+# 13.5 Overloaded operators
+#      13.5.1 Unary operators
+#      13.5.2 Binary operators
+#      13.5.3 operator= assignment operator
+#      13.5.4 operator()  function call, or call operator
+#      13.5.5 operator[]  Subscripting 
+#      13.5.6 operator->  Class member access
+#      13.5.7 operator++  operator--  Increment and decrement
+#      13.5.8 User-defined literals
+#
+# 13.6 Built-in operators
+
+# todo 14 Templates
+
+# todo 15 Exception handling
+
+# todo 16 Preprocessing directives
+#
+#   16.2 Source file inclusion
+
+
+# todo 17 Library introduction
+
+# todo 18 ... to 30: libraries
+
+# todo 27 Input/output library
+
+# todo 29 Atomic operations library
+
+# ... todo 30 Thread sup port library
+
+
+
+# Appendix A - Advanced concepts
+#
+# A.1 Reference and Value Semantics
+
+
+
+# Appendix B - Debug, memory, ...
+#
+# B.1 memory analysis - valgrind 
+
+
+# Appendix D - Compilation, Linkage, ...
+#
+# C.0. Compiling and Executing Our Program
+# C.1. 'gcc' versus 'g++'  Compilation
+# C.2. File naming
+# C.3. Name mangling: C & C++ compatibility
+# C.4. Compilation options
+# C.5. Linkage
+# C.6. C++11 compilation options  [6]
+
+
+# Appendix K - Code examples (./code_examples)
+#
+# Compilation, Linkage, ...
+# io_first_look
+# iteration statements
+# references (lvalue references)
+# constructors
+
+
+# Appendix S - New Features 
+#
+# S.1 New Features in C++11
+# S.2 New Features in C++14
+
+# Appendix T - Defined Terms
+
+# Appendix W - Remarkable Warnings
+
+# Appendix Y - Non-C++ concepts
+
+# Appendix Z - References
+
+
+# ==============================================================================
+
+
+# ==============================================================================
+# 0 The (C++) standard
+# ==============================================================================
+
+a) This document is updated to the C++ standard document [1_1]:
+
+  - n4582.pdf : November 2014 working draft (free).
+    	      	This working draft contains the C++14 standard plus
+    	      	minor editorial changes.
+
+b) All c++11 concepts are included into c++14
+
+c) Using the proper c++ version in your programs:
+
+   Makefile support must be added to CXXFLAGS  compilation flags+
+
+   # c++14 support: CXXFLAGS += -std=c++14
+   #
+   # c++11 support: CXXFLAGS += -std=c++11
+   #
+   # C++98 support_ otherwise
+
+
+# ==============================================================================
+# # 1 General
+# ==============================================================================
+
+# 1.1 Scope
+
+- C++ is a general purpose programming language based on the C programming lang.
+
+
+# 1.7 The C++ memory model
+
+1) The byte
+
+- The fundamental storage unit in the C++ memory model is the byte.
+
+- The memory available to a C++ program consists of one or more sequences of
+  contiguous bytes.
+
+- Every byte has a unique address.
+
+- byte size = IMPLEMENTATION-DEFINED
+
+  WARNING a C++ byte does not exactly means 8-bits:
+
+  A byte is at least large enough to contain any member of the basic
+  execution character set (2.3) and the eight-bit code units of the
+  Unicode UTF-8 encoding form.
+
+  A byte is composed of a contiguous sequence of bits, THE NUMBER of
+  which IS IMPLEMENTATION-DEFINED.
+
+3) A memory location
+
+   A MEMORY LOCATION IS either an object of scalar type or a maximal
+   sequence of adjacent bit-fields all having nonzero width.
+
+   Two or more threads of execution (1.10) can access separate memory
+   locations without interfering with each other.
+
+   mem address != mem location: a mem. location occupies one or more mem. addr.
+
+4) Bit fields and memory locations
+
+   - A bit-field and an adjacent non-bit-field are in separate memory locations.
+
+   - The same is applicable tot two bit-fields, if one is declared
+     inside a nested struct declaration and the other is not,
+
+   - or if the two are separated by a zero-length bit-field declaration,
+
+   - or if they are separated by a non-bit-field declaration.
+
+   It is not safe to concurrently update two bit-fields in the same struct
+   if all fields between them are also bit-fields of non-zero width.
+
+   Example: 
+
+   struct
+   {
+    char a;    // field
+    int b:5,   // bit-field
+    c:11,      // bit-field
+    :0,	       //  zero-length bit-field declaration
+    d:8;       // bit-field
+    struct {int ee:8;} e; // nested bit-field declaration
+   }
+
+   Result: 'a', 'd', and 'e.ee' are each separate memory locations.
+   	   'b' and 'c' together constitute the fourth memory location.
+
+
+# 1.8 The C++ object model
+
+1) An object is a region of storage. [ Note: A function is not an object,
+   regardless of whether or not it occupies storage in the way that objects do.]
+
+- Object creation ways:
+  	 by a definition (3.1)
+  	 by a new-expression (5.3.4)
+  	 by the implementation (temporary object - 12.2) when needed.
+
+- The properties of an object are determined when the object is created.
+
+- An object can have a name (Clause 3).
+
+- An object has a storage duration (3.7 - static, thread, automatic, dynamic)
+  which influences its lifetime (3.8).
+
+- An object has a type (3.9): the type with which the object is created.
+
+- Some objects are polymorphic (10.3); the implementation generates
+  information associated with each such object that makes it possible
+  to determine that object’s type during program execution.
+
+- For other objects, the interpretation of the values found therein is
+  determined by the type of the expressions (Clause 5) used to access them.
+
+2) Subobjects & Complete Objects.
+
+   - Objects can contain other objects, called subobjects: member
+     subobject (9.2), base class subobject (10), or an array element.
+
+   - An object that is not a subobject of any other object is called a
+     complete object.
+
+4) Most derived class (type), and Most derived object
+
+   - Most derived class: if a complete object, a data member subobject,
+     or an array element subobject is of class type, its type is considered
+     the most derived class, to distinguish it from the class type of any
+     base class subobject.
+
+   - Most derived object: an object of a most derived class type
+     	  	  	  or of a non-class type.
+
+   # e.g.
+
+   class base {};
+   class derived : base {};
+   class base2 {};
+   class mostderived : derived, base2 {};
+   mostderived md; // most derived class is: type mostderived
+   	       	   // most derived object: md
+   int number;	   // mdc: not applicable to a non-class type
+   	       	   // mdo: number
+
+   "md::derived"   // The subobject derived within md is a base class subobject,
+   		   // thus its type is not a most derived class,
+   		   // thus it is not a most derived object.
+
+5) Object storage:
+
+   - Unless it is a bit-field (9.6), a most derived object shall have
+     a non-zero size and shall occupy one or more bytes of storage.
+
+   - Base class subobjects may have zero size.
+
+   - An object of trivially copyable or standard-layout type (3.9.4.2)
+     shall occupy contiguous bytes of storage.
+
+6) Unless an object is a bit-field or a base class subobject of zero size,
+   the address of that object is the address of the first byte it occupies.
+
+
+# 1.9 Program execution
+
+My_note.- this chapter marks the rules to compiler makers.
+	  Read [1_1] for details.
+
+- The semantic descriptions in this International Standard define a
+  parameterized nondeterministic abstract machine.
+
+- “as-if” rule: conforming implementations (of the standard) are
+  required to emulate (only) the observable behavior of the abstract
+  machine => an implementation is free to disregard any requirement of
+  this International Standard as long as the result is as if the
+  requirement had been obeyed.
+
+
+# 1.10 Multi-threaded executions and data races
+
+My_note.- Most of this chapter is oriented to compiler builders.
+	  Read [1_1] for complete details of threads in C++.
+	  
+
+1) A thread of execution is a single flow of control within a program, [...]
+
+   Every thread in a program can potentially access every object and
+   function in a program.
+
+   An object with automatic or thread storage duration (3.7) is associated
+   with one specific thread, and can be accessed by a different thread only
+   indirectly through a pointer or reference (3.9.2).
+
+   The execution of the entire program consists of an execution of all
+   of its threads.
+
+   Under a freestanding implementation, it is implementation-defined
+   whether a program can have more than one thread of execution.
+
+2) A signal handler that is executed as a result of a call to the
+   raise function belongs to the same thread of execution as the call
+   to the raise function. Otherwise it is unspecified which thread of
+   execution contains a signal handler invocation.
+
+6) Two expression evaluations conflict if one of them modifies a
+   memory location (1.7) and the other one reads or modifies the same
+   memory location.
+
+7) The Atomic operations library (29) defines a number of atomic
+   operations and operations on mutexes (30) that are specially
+   identified as synchronization operations.
+
+23) Two actions are potentially concurrent if
+    (23.1) — they are performed by different threads, or
+    (23.2) — they are unsequenced, and at least one is performed by a
+    	     signal handler.
+
+    - Data race: The execution of a program contains a data race if it
+    contains two potentially concurrent conflicting actions, at least
+    one of which is not atomic, and neither happens before the other,
+    except for the special case for signal handlers described below.
+
+    - Any such data race results in undefined behavior.
+
+
+
+# ==============================================================================
+# 2 Lexical conventions
+# ==============================================================================
+
+# 2.1 Separate translation
+
+  \brief: separate translation = one object-file per translation unit,
+  	  and/or per instantiation unit.
+
+
+1) translation units and instantiation units
+
+   Note.- both of them are created by the compiler upon compilation time.
+
+a) Translation unit = source file + included headers + included sources
+   	       	      - source lines skipped by any of the conditional
+		      	inclusion preprocessing directives.
+
+   Note: A C++ program need not all be translated at the same time.
+
+b) Instantiation units
+
+Definitions:
+
+Note: These are similar to translated translation units, but contain
+no references to uninstantiated templates and no template definitions. [1_1]
+
+Instantiation units are separate files where template instantiations
+encountered by the compiler in a TU are stored, so that each template
+instantiation is compiled only once per program. [6_3]
+
+My-def: Units created by the compiler to store the template-code actually
+	INSTANTIATED in any of the translation units.
+
+	# e.g.
+	// sources
+	a.h: with template functions 1,2,3
+	b.h: with template functions 4,5.6
+	main.cpp: uses 1 and 5
+	// compilation
+	The compiler ignores 2,3,4,6 and store 1 & 6 in a separate file "x".
+	The file "x" is an instantiation unit.
+	Then the compiler compiles "x".
+
+
+2) Previously translated translation units and instantiation units can
+   be preserved individually or in libraries.
+
+The separate translation units of a program communicate (3.5) by (for
+example) calls to functions whose identifiers have external linkage,
+manipulation of objects whose identifiers have external linkage, or
+manipulation of data files.
+
+Translation units can be separately translated and then later linked
+to produce an executable program (3.5).
+
+
+# 2.2 Phases of translation
+
+My_note.- Most of this chapter is oriented to compiler builders.
+	  Read [1_1] for complete details of threads in C++.
+
+Steps to compialtion & linking. Ignored (see note above)
+
+
+My_note.- Single Compilation Unit (SCU) [6_3]
+
+Single Compilation Unit (SCU) is a technique for the C and C++
+languages, which reduces serial compilation time and allows the
+compiler to perform certain program optimizations even when the
+compiler itself is lacking support for whole program optimization.
+
+The SCU technique uses pre-processor directives to "glue" different
+translation units together at compile time rather than at link
+time. This reduces the overall build time, due to eliminating the
+duplication, but increases the incremental build time.
+
+Example
+
+For example, if you have the source files foo.cpp and bar.cpp, they
+can be placed in a Single Compilation Unit as follows:
+
+  #include "foo.cpp"
+  #include "bar.cpp"
+
+Suppose foo.cpp and bar.cpp are:
+
+  //foo.cpp
+  #include <iostream> // A large, standard header
+  #include "bar.h"    // Declaration of function 'bar'
+  int main() { bar(); }
+
+  //bar.cpp
+  #include <iostream> // The same large, standard header
+  void bar() { ... }
+
+Now the standard header file (iostream) is compiled only once, and function bar
+may be inlined into function main, despite being from another module.
+
+
+
+aki lo dejo: standard.pdf
+
+# ==============================================================================
+# 3 Basic concepts
+# ==============================================================================
+
+# 3.9 Types
+
+FACT_1 Each variable in C++ has a type.
+
+
+# 3.9.1 Fundamental types
+
+
+- Arithmetic types: integral and floating types.
+
+- Scalar types:
+
+  Arithmetic types,
+  enumeration types,
+  pointer types,
+  pointer to member types (3.9.2),
+  std::nullptr_t,
+  and cv-qualified versions of these types (3.9.3)
+
+  ... are collectively called scalar types.
+
+
+# 3.9.2 Compound types
+
+
+# 3.9.3 CV-qualifiers
+
+# a) volatile Qualifier [3_1].19.8.3.
+
+WARNING
+The precise meaning of volatile is inherently machine dependent and
+can be understood only by reading the compiler documentation. Programs
+that use volatile usually must be changed when they are moved to new
+machines or compilers.
+
+NOTICE
+An object should be declared volatile when its value might be changed
+in ways outside the control or detection of the program.  (i.e. a
+program might contain a variable updated by the system clock.)
+
+- The volatile keyword is a directive to the compiler that it should
+  not perform optimizations on such objects.
+
+- A type can be both const and volatile
+
+- A class can define member functions as volatile. Only volatile
+  member functions may be called on volatile objects.
+
+  (e.g.) [k5]
+  volatile int v;      // v is a volatile int
+  int *volatile vip;   // vip is a volatile pointer to int
+  volatile int *ivp;   // ivp is a pointer to volatile int
+  volatile int *volatile vivp; // vivp is a volatile pointer to volatile int
+  ivp = &v; 	           // ok
+  vivp = &v; 	           // ok
+  volatile int & vref = v; // ok
+  int *ip = &v;            // error: must use a pointer to volatile
+
+
+- Synthesized Copy/Move & assigment operator Does Not Apply to volatile Objects:
+
+  So the programmer must define its own versions:
+  
+    class Foo {
+    public:
+     Foo(const volatile Foo&); // copy from a volatile object
+
+     // assign from a volatile object to a NONVOLATILE object
+     Foo& operator=(volatile const Foo&);
+
+     // assign from a volatile object to a VOLATILE object
+     Foo& operator=(volatile const Foo&) volatile;
+    };
+
+
+  WARNING
+  A deeper question is whether it makes any sense to copy a volatile object.
+
+
+# b) const Qualifier
+
+
+
+# ------------------------------------------------------------------------------
+# 3.9.4 Types not defined in the standard
+# ------------------------------------------------------------------------------
+
+WARNING (TrivialType, StandardLayoutType, PODType)
+"Note, that the standard doesn't define a named requirement or concept with this
+name. This is a type category defined by the core language. It is included here
+as concept only for consistency."
+
+
+# 3.9.4.1 TrivialType
+
+[http://en.cppreference.com/w/cpp/concept/TrivialType]
+
+a) definition
+
+   Specifies that a type is trivial type.
+
+b) Requirements
+
+b1) TriviallyCopyable 
+
+b2) Has one or more default constructors, all of which are either
+    trivial or deleted, and at least one of which is not deleted.
+
+c) See also
+
+is_trivial (C++11): checks if a type is trivial (class template)
+is_trivially_copyable (C++17)
+
+
+# 3.9.4.2 StandardLayoutType [4_6_6] [4_6_3]
+
+a) definition
+
+Specifies that a type is standard layout type. Standard layout types are useful
+for communicating with code written in other programming languages.
+
+b) Requirements
+
+   See [4_6_6] [4_6_3]
+
+c) See also [k8503]
+
+   is_standard_layout (C++11): checks if a type is standard-layout type
+		      	       (class template)
+
+
+# 3.9.4.3 PODType
+
+PODType (Plain Old Data), or PDS (Passive data structure) [4_6_1] [k8503]
+
+a) definition
+
+The idea of a POD is to capture basically two distinct properties:
+1. It supports static initialization, and
+2. Compiling a POD in C++ gives the same memory layout as a struct compiled in C
+
+Specifies that the type is POD (Plain Old Data) type. This means
+the type is compatible with the types used in the C programming
+language, can be manipulated using C library functions: it can be
+created with std::malloc, it can be copied with std::memmove, etc,
+and can be exchanged with C libraries directly, in its binary form.
+
+
+b) Requirements
+
+   Either:
+
+b1) a scalar type;
+
+b2) a class type (class or struct or union) that is: 
+
+- (until C++11)
+  an aggregate type;
+  has no non-static members that are non-POD;
+  has no members of reference type;
+  has no user-defined copy constructor;
+  has no user-defined destructor; 
+
+- (since C++11)
+  a trivial type;
+  a standard layout type;
+  has no non-static members that are non-POD; 
+
+b3) an array of such type. 
+
+
+c) is_pod (since C++11) 
+
+   #include <type_traits>
+   template< class T >
+     constexpr bool is_pod_v = is_pod<T>::value;
+
+d) Examples [k8503]:
+
+  struct base0 { int b01, b02; };
+  // is_trivial:         true
+  // is_standard_layout: true
+  // is_pod:             true
+
+  struct base1 { int b1, b2 = 42; }; // b=42 => copy constructor => non-trivial
+  // is_trivial:         false
+  // is_standard_layout: true
+  // is_pod:             false // non-trivial
+
+  struct base2
+  {
+    base2() : b3(42) {} // user-defined constructor => non-trivial
+    int b3;   	     	//                          => non-aggregate
+  };
+  // is_trivial:         false
+  // is_standard_layout: true
+  // is_pod:             false // non-trivial
+
+  struct derived_from_trivial
+  : base0
+  { int dft; };
+
+  // is_trivial:         true  
+  // is_standard_layout: false // non-s data members in diff. classes (C++14)
+		       	       // base classes with non-s data members (C++11)
+  // is_pod:             false // non-standard_layout
+
+
+  struct derived //!\warning derivation, causes is_standard_layout == false
+  :  base1 // public derivation from an aggregate
+  { int d; };
+  // is_trivial:         false // derivated from a non-trivial
+  // is_standard_layout: false // same as derived_from_trivial
+  // is_pod:             false // non-trivial, non-standard_layout
+
+
+# ==============================================================================
+# 6 Statements
+# ==============================================================================
+
+# 6.5 iteration statements [3_1].page37
+
+  a) while
+
+  b) for
+
+  c) if
+
+  d) Reading an Unknown Number of Inputs (read until end-of-file)   [k4]
+
+     while (std::cin >> value)  // EOF == false
+        ...
+
+WARNING Entering an End-of-File from the Keyboard:
+	Unix: control-d
+	Win:  control-z
+
+
+
+# ==============================================================================
+# 8 Declarators
+# ==============================================================================
+
+- A declarator declares a single variable, function, or type, within a
+  declaration.
+
+  # (e.g.) some examples:
+  
+  T D1;                // single declaration
+  T D1, D2, ... Dn;    // multiple declaration
+  T D1, *D2;           // mixing noptr-declarator with ptr-declarator
+  T D1 = some-T-value; // initializer (8.5)
+
+
+- A declaration with several declarators is usually equivalent to the
+  corresponding sequence of declarations each with a single declarator:
+
+  T D1, D2, ... Dn;    // is usually equivalent to
+  T D1; TD2; ... T Dn;
+
+Exception structs:
+  struct S ... ;
+  S S, T; // declare two instances of struct S
+which is not equivalent to:
+  struct S ... ;
+  S S;
+  S T; // error: "S S" caused an ambiguity
+
+Exception auto:
+  auto i = 1, j = 2.0; // error: deduced types for i and j do not match
+  auto i = 1;   // OK: i deduced to have type int
+  auto j = 2.0; // OK: j deduced to have type double
+
+
+# ------------------------------------------------------------------------------
+# 8.3 Meaning of declarators
+# ------------------------------------------------------------------------------
+
+# 8.3.3 Pointers to members
+
+Example:
+
+  struct X
+  {
+   void f(int);
+   int a;
+   int b;
+   void g(int);
+  };
+  
+  struct Y;
+  
+  //declarations:
+
+  int X::* pmi = &X::a;         // pointer to a member of X of type int
+  
+  void (X::* pmf)(int) = &X::f; // pointer to a member of X of type void(int)
+
+  double X::* pmd;  // pointer to a member of X of type double
+  	      	    // well-formed even though X has no members of type double
+  char Y::* pmc;    // pointer to a member of Y of type char
+       	    	    // well-formed even though Y is an incomplete type.
+
+  // uses of pmi and pmf
+  X obj;
+  obj.*pmi = 7;  // assing 7 to the integer member 'a' of obj
+  pmi = &X::b;
+  obj.*pmi = 10; // assing 10 to 'b'
+  (obj.*pmf)(7); // call X::f with the argument 7
+  pmf = &X::g;
+  (obj.*pmf)(7); // call X::g with the argument 7
+
+
+WARNING
+A pointer to member shall not point to a static member of a class (9.4),
+a member with reference type, or “cv void”.
+
+WARNING
+The type “pointer to member” is distinct from the type “pointer”.
+
+WARNING
+There is no “reference-to-member” type in C++.
+
+
+# ------------------------------------------------------------------------------
+# 8.5 Initializers
+# ------------------------------------------------------------------------------
+
+A declarator can specify an initial value for the identifier being declared.
+
+  # (e.g.) 
+  T D1 = some-T-value;
+  int sum = 0, value =2, *ptr = 0;   	   
+  double price = 109.99, discount = price * 0.16; 
+
+WARNING
+Initialization is not assignment. Initialization happens when a variable is
+given a value when it is created. Assignment obliterates an object’s current
+value and replaces that value with a new one. (i.e. copy-ctor vs operator=)
+
+
+# 8.5.0 Initialiation before C++11  [4_5_1]
+
+a) C++03 Initialization 
+
+not_1) Initialization of fundamental types:
+
+   int n = 0, n2(0);         /* (1)  obj = value  OR  obj(value)  */ 
+
+
+not_2) Initialization of data members in a class and objects
+
+   struct S
+   {
+      explicit S(int n, int m) : a(n), b(m){}   /* (2)  mem-init */ 
+    private:
+      int a, b;
+   };
+   S s(0,1);   /* (3)  object initializers enclosed in parentheses */
+   S s={0,1};  /* (4)  compilation error */
+
+
+not_3) Initialization of aggregates (arrays / structs / string literals)
+
+Agregate init. requires braces '{}' ...
+  int c1[2]={0,2};       /* (5) arrays */    
+  struct S { int a,b; };
+  S s={0,1};             /* (6) structs  */
+
+... with the exception of string literals:
+  char c2[]="message";                           /* (7) string literals */
+  char c3[]={'m','e','s','s','a','g','e','\0'};  /* (8) string literals*/
+
+
+WARNING
+Note (4) vs (6) => struct init. != class init.
+
+
+# b) C++03 Initialization: Arbitrary Restrictions and Loopholes [4_5_1]
+
+- inability to initialize member arrays:
+
+  class C
+  {
+    int x[100];
+    C();        //no proper way to initialize x
+  };
+
+
+- inability to initialize a dynamically allocated POD array (T.POD) [4_6_3]:
+
+  char *buff=new char[1024]; //no proper way to initialize the elements of buff
+
+
+- no easy way to initialize the elements of a Standard Library container.
+
+  i.e For instance, to initialize a vector of strings, you'd normally
+  use a sequence of push_back() calls:
+
+  vector <string> vs;
+  vs.push_back("alpha"); ... ; vs.push_back("beta");
+
+
+# 8.5.1 Aggregates [1_1] [4_6_5] [4_6_4]
+
+0) For what it is used for?
+
+They are are simple & clear data structures (opposite to abstract data types)
+=> they are used to create higher-level structures.
+=> they are used for a more effective data use.
+
+Advantages:
+- Easy data structure.
+- Public access.
+- Special (easy) initialization syntax:  i.e. Data val3 = {0, "A", 3};
+
+
+1) Explanation
+
+WARNING
+The conditions to be an "aggregate type" differs in the different
+versions of C++: 98, 2011, 2014, 2017.
+
+An aggregate is one of the following types: 
+- array type
+- class type (typically, struct or union), that has:
+
+(1.1) — no user-provided constructors (12.1),
+        including those inherited from public bases,
+	(explicitly defaulted or deleted constructors are allowed) (since C++11)
+
+(1.2) — no private or protected non-static data members,
+
+(1.3) — no virtual functions (10.3), and
+
+(1.4) — no virtual, private, or protected base classes (10.1).
+
+WARNING (only C++2011)
+(1.5) It has no default member initializers (only C++2011)
+      i.e. struct SS {int a = 0; int s = 2;}; // ok since C++14, error in C++11 
+
+=> thus, all the data members are known and public, and can/MUST be
+   initialized by the user of the aggregate
+
+
+2) The elements of an aggregate are:
+
+(2.1) — for an array, the array elements in increasing subscript order, or
+
+(2.2) — for a class, the direct base classes in declaration order
+      	followed by the direct members in declaration order.
+
+
+3) Initialization
+
+- Syntax:
+
+  T object = {arg1, arg2, ...};
+  T object {arg1, arg2, ...};    (since C++11)
+
+
+- Example: C++14 aggregate class definition [k8502]
+
+    struct Data14
+    // : protected SomeClass // error: no virtual, private, or protected bases
+    {
+     // Data14() {} //error: no user-provided constructors
+
+     Data14() = default;  // ok: not defined by the user
+     int i;
+     static int si;       // ok: static not considered a member to init
+     int :17;             // ok: anonymous bit-field not considered a member
+     int j;
+     // virtual void f() {} // error: no virtual member functions
+
+     // private:
+     // int member; //error: no private or protected non-static data members
+
+     int public_non_virtual_member_function();  // ok
+	  
+     private:
+     int private_non_virtual_member_function();  // ok
+     static int static_member; // ok
+    };
+
+    Data14 val1 = {0, 1};     // ok: complete initialization of aggr. class
+    	      	    	      // i = 0; j = 1
+    Data14 val2 = {0};        // ok: j = int{}, that is, j = 0
+    Data14 val3 = {0, 1, 3};  // error: too many elements
+
+
+- Notes [4_6_5]
+
+Note.- An aggregate array or an aggregate class may contain elements
+       of a class type with a user-provided constructor
+
+Note.- Until C++11, narrowing conversions were permitted in aggregate
+       initialization, but they are no longer allowed.
+       # e.g. narrowing conversion (from double to int):
+       int ai[] = { 1, 2.0 }; // error since C++11, okay before C++11
+
+Note.- Until C++14, the direct-initialization form "T a {args..}" did
+       not permit brace elision:
+       # e.g. brace elision
+       int ar2d1[2][2] = {{1, 2}, {3, 4}}; // fully-braced array: ok since C++11
+       int ar2d2[2][2] = {1, 2, 3, 4};     // brace elision: error in C++11
+       
+       WARNING A test has been made that contradicts this statement [k8502]:
+       compiler version: g++ (Debian 4.9.2-10) 4.9.2
+       compiler flag: -std=c++11
+       result: brace elision in C++11 works without errors.
+
+
+# 8.5.2 Character arrays [4_6_5]
+
+1) Arrays of character types (char, signed char, unsigned char,
+   char16_t, char32_t, wchar_t) can be initialized from an appropriate
+   string literal, optionally enclosed in braces.
+
+2) There shall not be more initializers than there are array elements.
+
+   char a[] = "abc";
+   // equivalent to char a[4] = {'a', 'b', 'c', '\0'};
+
+   unsigned char b[3] = "abc"; // ill-formed: no space for required final '\0'
+   unsigned char b[5]{"abc"};  // ok: equivalent to {'a', 'b', 'c', '\0', '\0'};
+ 
+   wchar_t c[] = {L"кошка"}; // optional braces (using '=')
+   // equivalent to wchar_t c[6] = {L'к', L'о', L'ш', L'к', L'а', L'\0'};
+
+
+WARNING
+In C, character array of size one less than the size of the string
+literal may be initialized from a string literal; the resulting array
+is not null-terminated. This is not allowed in C++.
+
+
+# ------------------------------------------------------------------------------
+# 8.5.3 References
+# ------------------------------------------------------------------------------
+
+
+BRIEF   A reference is an ALIAS to an object (referent): not a pointer to, nor a
+	copy of, but the object itself. And it is to be used exactly as
+	the object itself:
+
+	[const] Type & reference = referent;
+
+	(e.g.) int int_var = 100;
+  	       int &ref1 = int_var;
+
+
+WARNING A reference is not an object, is an ALIAS to an already existing object
+
+WARNING Do not mistake a memory reference to a variable (ref1), with the
+	address of the variable (&int_var)
+
+
+FACT_1 When we define a reference, instead of copying the
+       initializer’s value, we BIND the reference to its initializer.
+
+
+FACT_2 Once initialized, a reference remains bound to its initial
+       object => use the reference is equivalent to use the initial object.
+
+       assert(ref1 == int_var);
+       assert(&ref1 == &int_var);
+  
+   ... , BUT with the weight (memory size) similar to a pointer instead of the
+       	 referent type.
+
+
+FACT_3 There is no way to rebind a reference to refer to a different object.
+
+       &ref1 = another_var;  => compilation error:
+       	       		     	lvalue required as left operand of assignment
+
+
+FACT_4 Because there is no way to rebind, references MUST be initialized.
+
+       int &ref2;    	     => compilation error:
+       		     	     	'ref2' declared as reference but not initialized
+
+
+
+FACT_5 Because references are not objects, we MAY NOT define a
+       reference to a reference.
+
+       int &ref3 = ref1; 
+
+       => OK: This is not a reference to a reference, but a reference
+       	      to a variable, because 'ref1' is already an alias to int_var.
+
+
+FACT_6 New in C++: the ability to truly (genuinely) pass references. [4_2_2]
+       (References only exists in C++, there simply are no references in C)
+
+
+FACT_7 a previously-valid reference only becomes invalid in two cases: [4_2_3]
+
+    - released local objects: If it refers to an object with automatic
+      allocation which goes out of scope,
+    
+    - heap (new-delete) object released: If it refers to an object
+      inside a block of dynamic memory which has been freed.
+
+
+FACT_8 The initializer can be omitted for a reference only in a
+       parameter declaration ( 8.3.5 ), in the declaration of a
+       function return type, in the declaration of a class member
+       within its class definition ( 9.2 ), and where the extern
+       specifier is explicitly used. [4_2_0]
+
+
+
+WARNING A reference must refer to an object, not a dereferenced null
+	pointer [4_2_1]
+
+	It means this is illegal (C++ standard, says it’s illegal, it
+	doesn't matter what a particular compiler do):
+
+    	T* p = NULL;
+    	T &r = *p;      // illegal
+	std::cout << r; // runtime error:  segmentation fault
+
+
+INFO It is unspecified whether or not a reference requires storage [1_1]
+
+
+INFO The direct reason references were introduced in C++ was to
+     support operator overloading. [4_2_1]
+
+     void f1(const complex* x, const complex* y) // without references
+     {
+          complex z = *x+*y;  // ugly
+     	  // ...
+     }
+
+     void f2(const complex& x, const complex& y) // with references
+     {
+          complex z = x+y;    // better
+     	  // ...
+     }   
+
+
+INFO Why is 'this' not a reference?  [4_2_1]
+
+(note.- 'this' is a pointer)
+Because this was introduced into C++ (really into C with Classes)
+before references were added. Also, Stroustrup chose this to follow
+Simula usage, rather than the (later) Smalltalk use of self.
+
+
+INFO Should I use call-by-value or call-by-reference?  [4_2_1]
+
+(Note: This FAQ needs to be updated for C++11.)
+
+  That depends on what you are trying to achieve:
+
+1. If you want to change the object passed: call by reference or use a pointer:
+   e.g., void f(X&); or void f(X*);.
+    
+2. If you don’t want to change the object passed and it is big, call by
+   const reference; e.g., void f(const X&);.
+
+3. Otherwise, call by value; e.g. void f(X);.
+
+
+
+# 8.5.3.1 Uses of references [4_2_1]
+
+FAQ) When should I use references, and when should I use pointers?
+
+     "Use references when you can, and pointers when you have to."
+
+     REFERENCES are usually preferred over pointers WHENEVER YOU DON’T
+     NEED “RESEATING”.
+
+     This usually means that references are most useful in a class’s
+     public interface. REFERENCES typically appear ON THE SKIN of an
+     object, and POINTERS on the INSIDE:
+
+     Rule: public interface => use references.
+   	   private section => use pointers.
+
+
+     The exception to the above is where a function’s parameter or
+     return value needs a “sentinel” reference — a reference that does
+     not refer to an object. This is usually best done by
+     returning/taking a pointer, and giving the NULL pointer this
+     special significance (references must always alias objects, not a
+     dereferenced null pointer).
+     
+
+a) Pass-by-reference
+
+   HINT Passing by reference avoid copy_construction-destruction.
+   
+
+   a1) Passing large objects to functions without cost:  'const T&'
+
+     	void f_fast(const BigObject& x) { /* ... */ }
+
+
+   a2) Passing of parameters used for output: "T &"
+
+       WARNING as in case (a1), no copy/destroy, and then no cost occurs [k5] 
+
+       void swap(int& i, int& j)
+       {
+	int tmp = i; i = j; j = tmp;
+       }
+       
+       int main()
+       {
+        int x, y;
+	swap(x,y);
+       }
+
+
+b) Using functions as lvalues: "return T & function/method"
+
+   Returning a reference allows function calls to be assigned to
+   (i.e. operator[] in classes):
+
+
+    class Array {
+    public:
+      int size() const;
+      float& operator[] (int index);
+      // ...
+    };
+    
+    int main()
+    {
+      Array a;
+      for (int i = 0; i < a.size(); ++i)
+        a[i] = 7;    // This line invokes Array::operator[](int)
+      // ...
+    }
+
+   
+c) Method chaining: "object.method1().method2()"
+
+   + The most common use is iostream: x << y << .. << z
+
+   + A less common use: "the Named Parameter Idiom." [4_7_6]
+
+     (e.g.) File f = OpenFile("foo.txt")
+			.readonly()
+			.createIfNotExist()
+
+	    class File { ...   File & readonly(); ... };
+
+   
+d) Using references as data members
+
+   BEST_PRACTICE member objects should be by value (see [note-3])
+
+   See Dangers of using references as data members (8.5.3.2.b)
+   
+
+e) To state that something is just a reference
+
+   References are also useful in wrapper objects and functors--i.e. in
+   intermediate objects that logically contact no members but only
+   references to them.
+
+   (e.g.)
+
+   class User_Filter
+   {
+     public:
+     
+       Functor (std::list<User> const& lst) : stop_list(lst) { }
+       
+       bool operator()(User const& u) const { return stop_list.exists(u); }
+
+     private:
+       std::list<User> const& stop_list;
+   };
+
+   find_if(x.begin(),x.end(),User_Filter(user_list));
+
+   Goal: checking at compilation: compile error if you don't
+   	 initialize a reference in constructor of such an object.
+
+
+f) Other uses
+
+   i.e. Using a reference to function as a function parameter [k5]
+
+   i.e. See the solution to: FAQ How do I prevent the “static
+   	initialization order fiasco”?
+
+
+# 8.5.3.2 Issues on using references
+
+a) Dangers of giving acccess to data members via references:
+
+    e.g.
+
+    class Whatever
+    {
+     T& First() { return the_first; }
+    
+    private:
+    T the_first;
+    };
+
+
+i. Encapsulation is breached: you leak an implementation detail, which
+   means that you can no longer alter your class internals as you wish
+   ('T the_first' must always be preserved in order to preserve the
+   reference to it promised by 'First()')
+
+ii. Invariant are no longer sustainable (in case of non-const
+    reference): anybody may access and modify the attribute referred
+    to at will, thus you cannot "monitor" its changes.
+
+iii. Lifetime issues: it's easy to keep a reference or pointer to the
+     attribute after the original object they belong to ceased to
+     exist. This is of course undefined behavior.
+
+
+- A solution to (ii):   const T& First() const;
+
+- There are cases where these issues are not problems, but the way you
+  need it to be: i.e. stl's vector class:
+
+  std::vector<t>::operator[] breaks (i) and (ii), and may break (iii):
+  
+  breaking-i) As you will always want to have the positions of the
+  vector: no problem.
+  
+  breaking-ii) You want to provide an easy and intuitive way to set
+  values: "v[i] = 4"
+
+  breaking-iii) This could happen if the vector if re-sized, but it
+  will be protected inside the operator[] function: if(position>size)
+  ...
+
+
+b) Dangers of using references as data members [4_2_4]
+
+i. Invariant are no longer sustainable (See ii above), due to the referent.
+
+ii. Lifetime issues (See iii above), due to the referent.
+
+iii. Object reseating: impossible real object re-assignation (deep copy)
+     Note.- The compiler will not generate the copy assignment operator=().
+
+iv. Copy operations will cause implicit modifications in the referent.
+
+v. Unit testing: references can't be changed to different test values.
+
+
+	(e.g.) #include <string> [k5]
+
+       	struct Foo
+       	{
+	  std::string& m;
+       	  Foo(std::string& s):m(s){}
+	  Foo & operator=(const Foo& src)  // MUST be defined by the programer
+	  {  
+      	    if(this != &src)
+	    {
+		// &text = &src.text;  // iii: compilation error
+		text = src.text;
+	    }
+      	    return *this;
+	  }
+        };
+
+       	void f()
+        {
+	  std::string s1("I am s1");
+	  std::string s2("I am s2");
+	  Foo foo_s1(a); 
+	  Foo foo_s2(b);
+	  foo_s2 = foo_s1;       // iv. s2 implicitly modified! (I am s1)
+	  s2 = "Still  I'am s2"; // i.  foo_s2 implicitly modified!
+
+	  // Lifetime issues: referent ceased to exist.
+	  std::string * s3 = new std::string("I am temporary.");
+	  Foo foo_s3(*s3);
+	  delete(s3); s3=0; // ii. foo_s3 reference to a released referent.
+        }
+
+
+FACT_9 If an object must be re-assignable, references cannot be used
+       as data members.
+
+BEST_PRACTICE member objects should be by value (see [note-3])
+
+
+8.5.3.3 Defining (binding) references to objects [k5]
+
+a) Ordinary definitions
+
+"Ordinarily, we can bind a reference or a pointer ONLY to an object
+that has the SAME TYPE as the corresponding reference or pointer
+([3_1] 2.3.1, and [3_1] 2.3.2) or to a type that involves an ACCEPTABLE const
+conversion ([3_1] 4.11.2)."  [note-1] ; [3_1] 15.2.3.
+
+
+a1) Reference to an object of the same type
+
+    int int_var = 100, &ref1 = int_var;
+
+    (e.g) int funcX() { return 42 ; };  
+    	  int (&ref_funcx)() = funcX;	// reference to function
+
+
+a2) Using a reference as an initializer to another reference => OK
+
+    int &ref3 = ref1;          // HERE: 'ref1' is actually the variable int_var
+    assert(&ref3 == &int_var);
+
+
+a3) const reference to an lvalue-constant (a particular case of a1) => OK
+
+    const int int_const = 55;
+    const int &ref4 = int_const;
+
+
+a4) Reference as data member
+
+    WARNING It must be initialized in the initializer list
+
+    (e.g) Correct initialization
+    
+    class Rclass {
+     public:
+     Rclass(int &a):the_ref(a) {}  // OK
+     private:
+     int & the_ref;
+    };
+
+
+    (e.g) Initialization error
+
+    class Rclass {
+     public:
+
+     // No init. => Compilation error: uninitialized reference member in ‘int&’
+     Rclass(int &a){}
+     
+     // No init., but assignation instead
+     // => Compilation error: uninitialized reference member in ‘int&’
+     Rclass(int &a) {the_ref = a;} 
+
+     private:
+      int & the_ref; // Compiler note: ‘the_ref’ should be initialized
+   };
+
+
+a5) Pointer references (references to pointers)
+
+    void ptr_incr(int* &i) { i++; }
+
+    int main() {
+      int* i = 0;
+      cout << "i (addr) = " << i << endl;
+      ptr_incr((i);
+      cout << "i (addr)= " << i << endl;  // the pointer is incremented,
+      	      	 	      	   	  // not what it points to.
+    } 
+
+
+a6) Array references
+
+    int array[3] = {1, 2, 3};
+    int (&rarray)[3] = array; // 'rarray' refers to the array 'array'
+    assert(rarray==array);
+    rarray[1] = 22;
+    assert(rarray==array);
+
+
+b) Definition exceptions 
+
+b1) Classes related by inheritance
+
+    "We can bind a pointer or reference to a base-class type, to an object
+    of a type derived from the base class."   [3_1].15.2.3. (page743)
+
+    class BaseClass{};
+    class DerivedClass: public BaseClass {};
+
+    DerivedClass do1;
+    BaseClass &ref5 = do1
+
+
+b2) Const reference to a non-const object of the same type, or to a
+    type that involves an ACCEPTABLE const conversion [3_1].4.11.2
+
+    # (e.g) same type
+    int int_var=0;
+    const int &ref6 = int_var; // REF6 refers to int_var
+
+
+    # (e.g) const conversion from literal 
+    const int &ref7 = 7;     // ref7 refers to TEMPORARY with value 7
+    const int &ref7 = { 7 }; // the same with  c++11 list-initialization
+
+
+    # (e.g) const conversion from a different type
+    double dval = 3.14;
+    const int &ref62 = dval; // ref62 refers to TEMPORARY with value 3
+    	      	       	     // NOT to the original variable [note-4]
+    // demo				 
+    assert(&dval != &ref62);
+    std::clog << &dval << std::endl;  // 0x7ffdb16abe18
+    std::clog << &ref62 << std::endl; // 0x7ffdb16abe40 (different address)
+    std::cout << dval << std::endl;   // 3.14
+    std::cout << ref62 << std::endl;  // 3
+    dval*=7.0; 
+    std::cout << dval << std::endl;   // 21.98
+    std::cout << ref62 << std::endl;  // 3 : the value hasn't change
+
+
+    # (e.g) 
+    double g() { return 9.81 }
+    const int &ref = g();	      // ref refers to temporary with value 9
+
+
+[note-4] Explanation: [4_2_0], sentence (5.2.2.2)
+
+R rvar;
+T &tref = rvar;       // error: 
+const T &tref = rvar; // HERE: three things happens:
+
+1. Implicit conversion from R to T performed by the compiler.
+
+2. The resulting temporary T-variable can only be bound to a
+   const reference 'const T&'
+
+3. The lifetime of the temporary variable is extended to match
+   that of the reference it is bound to.
+
+Thus: the reference is not made on the original R variable =>
+      'tref' and 'rvar' are not bind at all
+
+
+FACT_10 In all cases except the last ones (i.e., creating and
+	initializing a temporary from the initializer expression), the
+	reference is said to bind directly to the initializer
+	expression. [4_2_0]
+
+
+
+b3) A reference declared as extern does not require initialization (see FACT_8)
+
+    extern const int &ref71; // Declaration at base.h
+    const int &ref71 = 22;   // Definition at refs_lib.cpp
+    std::cout << ref71;      // Use at main.cpp
+
+
+c) Invalid definitions
+
+c1) (non-const) reference to a literal 
+
+    "[...] a reference may be bound only to an object, not to a
+    literal or to the result of a more general expression"  [3_1].2.3.1 (page84)
+
+
+    "Otherwise, the reference shall be an lvalue reference to a
+    NON-VOLATILE CONST type ... ,
+    or the reference shall be an rvalue reference." [4_2_0], sentence (5.2)
+
+    # (e.g.)
+    double& rd2 = 2.0; //(compiler) error: not an lvalue and reference not const
+
+    # (e.g.) 
+    double getd() { return 2.0; }
+    double& rd2 = getd(); // error: not an lvalue and reference not const
+
+
+c2) (non-const) reference to a different type  [4_2_0], sentence (5.2)
+
+    # (e.g.)
+    int i = 2;
+    double& rd3 = i;        // error: type mismatch and reference not const
+
+    # (e.g.) 
+    const int ic = 55;
+    int &ref10 = ic;        // error: type mismatch (int - const int)
+    	       	 	    // and reference not const
+    
+    # (e.g.) : 
+    int i = 2;
+    int &ref11 = &i;        // error: type mismatch (int - int*)
+    	       	 	    // and reference not const
+
+
+c3) A reference must refer to an object, not a dereferenced null pointer.
+
+    int* pnull = NULL;
+    int &ref101 = *pnull;  // illegal: compilation OK ...
+    std::cout << ref101;   => runtime error:  segmentation fault
+
+
+
+d) Definitions using the volatile Qualifier
+
+  \brief Unique valid cases:  [const] volatile T & = volatile T
+
+  # (e.g.) : 
+  volatile int vi = 1;
+  volatile int & vref = vi;		// ok: vref refers to vi
+  assert(&vref==&vi);
+
+
+  # (e.g.) : 
+  const volatile int & cvref = vi;	// ok: vref refers to vi
+  assert(&cvref==&vi);
+
+
+
+  \brief Exceptions of using the volatile Qualifier
+
+  # (e.g.) : 
+  const volatile int cvi = 1;
+  const int& r2 = cvi;			// error: type qualifiers dropped
+  assert(r2==cvi);
+
+  # (e.g.) : 
+  const volatile int & cvref = 77;	// error: type qualifiers dropped
+
+  # (e.g.) : 
+  double dval = 3.14;
+  const volatile int & cvref = dval;	// error: type qualifiers dropped
+  
+
+8.5.3.4 References as functions parameters [k5]
+
+
+NOTICE Passing an object to a function's reference parameter is
+       equivalent to define a reference to an object:
+
+    (e.g. defining a reference to an object)
+    int int_var=0;
+    const int &ref = int_var; # explicit definition
+
+
+    (e.g. passing an object to a function's reference parameter)
+    f(const int &ref) {...}
+    f(int_var);                # implicit definition: &ref = int_var 
+       					   
+
+... so the cases 'a1' ... 'c3' have the same result when calling
+    functions (see [k5] examples)
+
+
+
+8.5.3.5 functions returning references
+ 
+a) Returning references to local variables.
+
+a1) Returning a local variable.
+
+   (e.g.)
+   
+   int& f()
+   {
+     int local_obj=4;
+     return local_obj; => compilation warning here
+   }
+   int &ref12 = f();
+
+
+- Expected: undefined returned value (disaster): local variables are
+  	    stored into stack memory => memory released at function end.
+
+- Obtained:
+  Compilation: warning: "reference to local variable ‘local_obj’ returned"
+  Returned value: undefined (as expected)
+
+- Solution: never do this.
+
+
+a2) Returning a reference to a local variable
+
+   (e.g.)
+   
+   int& f2()
+   { int local_obj=4;
+   int &local_ref = local_obj;
+   return local_ref;
+   }
+   int &ref13 = f2();   => compilation OK
+       	      		=> returned value = undefined value (i.e. -1013474526)
+
+
+- Expected: undefined returned value (disaster): local variables are
+  	    stored into stack memory => memory released at function end.
+
+- Obtained:
+
+  Compilation: OK
+  
+     This case is, by definition of memory reference, equivalent to
+     case 'a' BUT the compiler dose not rise a warning and accepts the
+     code instead.
+
+  Returned value: undefined (as expected)
+
+- Solution: never do this.
+
+
+a3) Returning a static local variable
+
+   (e.g.)
+   
+   int& fstatic()
+   {
+    static int x =144;
+    return x;
+   }
+
+   int &ref14 = fstatic();
+
+
+- Expected: valid returned value: STATIC local variables are stored
+  	    into stack memory => never released until the end of the program.
+
+- Obtained: the expected.
+
+- Solution: tricky unusual use (but valid)
+
+
+# ------------------------------------------------------------------------------
+# 8.5.4 List-initialization (or braced-init-list) [C++11] 
+# ------------------------------------------------------------------------------
+
+- References: [4_5_1] [4_5_2] [3_1].2.2.1 
+- Examples: [k8501]
+
+1) Initializer-list
+
+Introducing a UNIVERSAL initialization notation that applies to every type:
+   
+(1.1) — as the initializer in a variable definition (8.5)
+
+      	int a {1};
+	string s{"hello"};
+  	string s2{s};      //copy construction
+	std::map<std::string,int> anim =  // stl containers
+	   { {"bear",4}, {"cassowary",2}, {"tiger",7} };
+
+(1.2) — as the initializer in a new-expression (5.3.4)
+
+      	double *pd= new double [3] {0.5, 1.2, 12.99}; // dynamic POD array
+	
+(1.3) — in a return statement (6.6.3)
+
+      	std::pair<std::string,int> f(const char* p, int x) {
+          return {p,x};  // return statement
+      	}
+	
+(1.4) — as a for-range-initializer (6.5)
+
+	for (int x : {-1, -2, -3};) 
+
+(1.5) — as a function argument (5.2.2)
+
+       f( {"Nicholas", 7} ); // pass list of two elements
+
+(1.6) — as a subscript (5.2.1)
+
+(1.7) — as an argument to a constructor invocation (8.5, 5.2.3)
+
+      	x = double{1}; // explicitly construct a double
+	
+(1.8) — as an initializer for a non-static data member (9.2)
+        
+        class C {
+     	    int x[4]{}; // four ints init to zero
+	  ...
+
+(1.9) — in a mem-initializer (12.6.2)
+
+      	  ... 
+	  public:
+            C(): x{0,1,2,3}  // mem-init
+	    {std::cout << "C()" << std:: endl;}  
+        };
+
+(1.10) — on the right-hand side of an assignment (5.18)
+
+
+a) Default initialization "{}"
+
+  POD types: usually means initialization to binary zeros.
+  non-POD types: default initialization means default construction.
+
+  int n{};      // zero initialization: n is initialized to 0
+  int *p{}; 	// initialized to nullptr
+  double d{}; 	// initialized to 0.0
+  char s[12]{}; // all 12 chars are initialized to '\0'
+  string s{}; 	// same as: string s;
+  char *p=new char [5]{}; // all five chars are initialized to '\0'
+
+
+WARNING narrowing conversion
+In List-initialization of built-in types narrowing conversion is not
+allowed => compiler error: i.e. int ii = {2.0}; // error: narrows
+
+
+2) initializer-list (sequence) constructor [k8501]
+
+An object of type std::initializer_list<T> is a lightweight proxy
+object that provides access to an array of objects of type const T.
+
+a) What is it used for?
+
+   A std::initializer_list object is automatically constructed when:
+
+
+a1) a braced-init-list is bound to auto, including in a ranged for loop
+
+    for (int x : {-1, -2, -3}) // the rule for auto makes this ranged-for work
+    	std::cout << x << ' ';
+
+
+a2) a braced-init-list is used in list-initialization, including
+     function-call list initialization and assignment expressions.
+
+- Typically Used to IMPLICITLY INITIALIZE STL CONTAINERS through a sequence of
+  values. For example:
+
+    vector<int> vi {1,2,3,4,5,6};
+    map<string, string> stars { {"Superman", "+1 (212) 545-7890"},
+    			        {"Batman", "+1 (212) 545-0987"} };
+
+- It also can be used in user defined types too. See example bellow.
+
+ 
+b) How it works?
+
+- Detail: Read [4_5_1] [4_5_2]
+
+  WARNING
+  Although superficially this new syntax seems identical to the
+  brace-init notation we discussed earlier, behind the scenes it's a
+  different story. C++11 furnishes every STL container with a new
+  constructor type called a sequence constructor.
+
+- Brief:
+
+   (1) std containers or user defined classes, have a constructor
+   that accepts an std::initializer_list<T> argument.
+
+   (2) the user initialize an object via list-initialization.
+
+   (3) the compiler calls the constructor defined in (1) and creates &
+       initializes the object.
+
+
+   # Example with a user defined type.- [4_5_2]
+
+   template <class T>
+   struct S
+   {
+      std::vector<T> v;
+
+      // (1) constructor 
+      S(std::initializer_list<T> l) : v(l)
+      {
+       std::cout << "constructed with a " << l.size() << "-element list\n";
+      }
+
+      // ...
+   };
+
+   int main()
+   {
+      S<int> s = {1, 2, 3, 4, 5}; // (2) copy list-initialization
+      	       	     	      	  // (3) Here, the compiler calls
+				  // S(std::initializer_list<T> l)
+   }
+
+
+   # Another, Example with a user defined type.- [4_5_2]
+
+   template <typename T>
+   void templated_fn(T) {}
+
+  //templated_fn({1, 2, 3}); // error: "{1, 2, 3}" is not an expression,
+                             // it has no type, and so T cannot be deduced
+  templated_fn<std::initializer_list<int>>({1, 2, 3}); // OK
+  templated_fn<std::vector<int>>({1, 2, 3});           // also OK  
+
+
+# ------------------------------------------------------------------------------
+# 8.5.5 Class Member Initialization (or In-Class Initializers)
+# ------------------------------------------------------------------------------
+
+- We can supply an In-Class Initializer to initialize a data member.
+
+- Members without an initializer are default initialized ([3_1] 2.2.1, p. 72).
+
+
+a) Using class member initialization [k8501]
+
+  # e.g. 
+  class C
+  {
+    string s="abc";     //class member initializers ...
+    double d=0;
+    char * p {nullptr};
+    int y[5] {1,2,3,4};
+    int x=7;
+    
+  public:
+    C();
+  };
+
+WARNING
+Regardless of the initialization form used, the compiler conceptually
+transforms every class member initializer into a corresponding mem-init.
+
+Thus, class C above is semantically equivalent to the following class:
+
+  # e.g. 
+  class C
+  {
+    string s;
+    double d;
+    char * p;
+    int y[5];
+
+  public:
+   C() : s("abc"), d(0.0), p(nullptr), y{1,2,3,4} {} }
+
+
+b) Class member initializer vs mem-init
+
+If the same data member has both a class member initializer and a
+mem-init in the constructor, the latter (mem-init) takes precedence.
+
+  # e.g. 
+  class CC
+  {
+   int x=7; // class member initializer
+   C();     //x is initialized to 7 when the default ctor is invoked
+   C(int y) : x(y) {} //overrides the class member initializer
+  };
+  C c;      //c.x = 7
+  C c2(5);  //c.x = 5
+
+
+# ==============================================================================
+# 9 Classes
+# ==============================================================================
+
+
+# In C++ we define our own data types by defining a class:
+
+   class (or struct) : [public|protected|private] base-specifier-list{
+   	 [declarations]
+   } [variable-definitions];
+
+
+   # i.e   struct Sales_data { /* ... */ } accum, trans, *salesptr;
+
+
+
+# Introducing Classes [3_1].1.5
+
+- To use a class we need to know three things:
+  • What is its name?     (i.e. Sales_item) 
+  • Where is it defined?  (i.e. sales_item.h)
+  • What operations does it support?
+
+- Every class defines a type = the name of then class
+
+
+  class ClassExample {
+  
+    // [...]	// WARNING can have no content
+
+  }; //!\warning semicolon required
+  
+
+
+
+# ==============================================================================
+# 10 Derived classes
+# ==============================================================================
+
+# 10.3 Virtual functions
+
+1) Virtual functions support dynamic binding and object-oriented programming.
+
+FACT_1 A class that declares or inherits a virtual function is called
+       a polymorphic class.
+
+
+# 10.3.1 Calling virtual member functions vs calling non-virtual member funcs.
+
+Non-virtual member functions are resolved statically (at compile-time)
+BASED ON the TYPE of the POINTER (or reference) TO THE OBJECT. This is
+called “static binding.”
+
+Virtual member functions are resolved dynamically (at run-time),
+BASED ON the TYPE of the OBJECT, not the type of the ptr/ref to that object.
+This is called “dynamic binding.” [4_11_1] [k14]
+
+
+- Applying member access rules:
+    
+Member access control rules (public/privete/protected) for a member
+function are checked based on the type of the pointer, regardless if
+the function id virtual or not. Thus, dynamic/static binding and
+access rules are two different and complementary concepts. (11.5) [k14]
+
+      # (e.g.)
+      class Shape{...};
+      class Circle: public Shape{...};
+      Circle my_circle;
+      Shape * shape1 = &my_circle; // static binding: type Shape.
+                                   // dynamic binding: type Circle
+				   // member access rules:  type Shape.
+      Circle * circle1 = &my_circle; // all bindings & access rules: Circle
+
+
+- How is the 'virtual' qualifier inherited?
+
+The "virtual" qualifier is not required in the derived classes:
+
+Once a class declares a member function (i.e. draw) as virtual, then
+all its derived classes, and all the derived classes of the derived
+classes, and all ..., are also polymorphic classes (10.3, FACT_1),
+whose (draw) method is virtual.
+
+
+     # e.g. [k14]
+
+     class Shape {
+     public:
+      virtual void draw() const;
+     }
+
+     class Circle : public Shape{
+     public:
+      void draw() const; // here: "virtual" is not necessary, already specified
+      	   	  	 // at Shape
+     }
+
+     class SolidCircle : public Circle 
+     {
+     public:
+      void draw() const; // "virtual" function inherited 
+     }
+
+
+# 10.3.2 virtual table & virtual pointer: resolving dynamic binding [4_11_2]
+
+Most compilers use some variant of the following technique:
+If the object has one or more virtual functions, the compiler puts a
+hidden pointer in the object called a “virtual-pointer” or “v-pointer.”
+This v-pointer points to a global table called the “virtual-table” or “v-table.”
+
+
+a) v-table (one per class)
+
+- The compiler creates exactly one v-table for each class that has at least one
+  virtual function.
+
+- The v-table is stored into STATIC memory somewhere (hidden static data-member)
+
+- The v-table has one entry per each virtual function of the class.
+  Each entry has a pointer to the correspondent virtual function.
+  Note.- Each pointer typically fits (hardware dependent) into one
+  machine word of memory space.
+
+- Many (not all) compilers define this table while compiling the .cpp unit
+  that defines the class first non-inline virtual function.
+
+
+b) v_pointer  (one per object)
+
+- The compiler creates exactly one v-pointer for each object that has
+  at least one virtual function (hidden data-member)
+  
+  WARNING For a class hierarchy, the v-pointer is only added to the
+  	  base class, then it is inherited by all the derived classes.
+
+- The v-pointer points to the class (static) v-table data-member.
+
+- Note.- The v-pointer pointer typically also fits into one machine
+  word of memory space (hardware dependent).
+
+ 
+c) Dynamic binding process
+
+- During a dispatch of a virtual function, the run-time system follows
+  the object’s v-pointer to the class’s v-table, then follows the
+  appropriate slot in the v-table to the method code.
+
+- The space-cost overhead of the above technique is nominal, thus O(1):
+  an extra pointer per (polymorphic) object, plus an extra pointer per method.
+
+- The time-cost overhead is also fairly nominal (O(1))
+
+  Normal function call: one call 
+
+  Virtual function call = fetch (get v-pointer) +
+  	  	   	  fetch (get method address from v-table) +
+			  function call
+			= 2 loads + a call
+
+  (Note: the above discussion is simplified considerably, since it
+  doesn’t account for extra structural things like multiple
+  inheritance, virtual inheritance, RTTI, etc., nor does it account
+  for space/speed issues such as page faults, calling a function via a
+  pointer-to-function, etc)
+  
+
+d) Detailed construction process:
+
+   (Base class)
+
+- Step #1: the compiler builds the static v-table for class Base.
+
+- Step #2: the compiler adds the v-pointer to each object of class Base.
+
+- Step #3: the compiler initializes this->__vptr within each
+       	   constructor init-list. The idea is to cause each object’s
+       	   v-pointer to point at its class’s v-table.
+  WARNING	   
+  The C++ standard commands the initialization of the v-pointer after
+  all the base classes has been defined, but it doesn't specifies
+  exactly where from this point, thus it is compiler-implementation
+  dependant. [4_7_8] [k13]
+
+
+   (Derived class)
+
+- Step #1: repeat step #1 for the derived class:
+       	   The compiler builds the static v-table for class Derived,
+       	   keeping the same function-pointers as in Base::__vtable but
+       	   replacing those slots that correspond to overrides.
+
+- Step #2: nothing to do; v-pointer is inherited from Base.
+
+- Step #3: repeat step #3 for the derived class.
+       	   (This is not a second v-pointer; it’s the same v-pointer
+       	   that was defined in the base class)
+
+
+
+  # e.g. base class
+
+  // v-functions: let's pretend 'FunctionPtr' is a generic pointer to a
+  //              generic member function.
+  //
+  // v-table: let’s pretend its technical name is 'Base::__vtable'
+  //
+  // v-pointer: let’s pretend its technical name is '__vptr'
+  
+
+    //!\file base.h
+  
+    // Your original C++ source code
+    class Base {
+    public:
+      virtual arbitrary_return_type virt0( /*...arbitrary params...*/ );
+      virtual arbitrary_return_type virt1( /*...arbitrary params...*/ );
+      virtual arbitrary_return_type virt2( /*...arbitrary params...*/ );
+      virtual arbitrary_return_type virt3( /*...arbitrary params...*/ );
+      virtual arbitrary_return_type virt4( /*...arbitrary params...*/ );
+      // ...
+
+ 
+    // Step #1
+    // Pseudo-code (not C++,not C) for a static table declared by the compiler
+    //
+    public:   
+      static FunctionPtr __vtable[5];  // static data-member,
+    	   	       		       // consuming just 5 words of memory
+
+
+    // Step #2
+    // Supplied by the compiler, hidden from the programmer
+    //
+    public:
+      FunctionPtr* __vptr;
+
+
+    }; //endof_Base
+
+
+
+    //!\file base.cpp  
+
+    // Step #1
+    //
+    // Pseudo-code for init. the static table defined within file base.cpp
+    //
+    FunctionPtr Base::__vtable[5] =
+    { &Base::virt0, &Base::virt1, &Base::virt2, &Base::virt3, &Base::virt4 };
+
+
+    // Step #3
+    //
+    Base::Base( /*...arbitrary params...*/ )
+    :
+     __vptr(&Base::__vtable[0])  // Supplied by the compiler,
+     			  	 // hidden from the programmer
+     // ...
+    {
+      // warning: __vptr already defined => base virtual members can be called
+      
+      // ...
+    }
+
+
+  # e.g. derived class
+  
+  // let's pretend class Der doesn’t add any new virtuals.
+
+  class Der : public Base
+  {
+    // HERE: inherited virtual function override
+      virtual arbitrary_return_type virt0( /*...arbitrary params...*/ );
+      virtual arbitrary_return_type virt1( /*...arbitrary params...*/ );
+      virtual arbitrary_return_type virt2( /*...arbitrary params...*/ );
+      // ...
+
+
+    // Step #1
+    //
+    public:   
+      static FunctionPtr __vtable[5];  // static data-member, let's pretend
+      	     		 	       // Der doesn’t add any new virtuals.
+      
+    }; //endof_Der
+
+
+
+    //!\file derived.cpp  
+
+    // Step #1
+    
+    FunctionPtr Der::__vtable[5] = {
+      &Der::virt0, &Der::virt1, &Der::virt2,    // Inherited override
+      &Base::virt3, &Base::virt4                // Inherited as-is
+    };
+
+
+    // Step #3
+    
+    Der::Der( /*...arbitrary params...*/ )
+    :
+    // 1) note.- construction of virtual base classes (only for the constructor
+       	  of the most derived class)
+    
+    // 2) note.- construction of direct base classes
+
+    // 3) Step #3 code, Supplied by the compiler.
+     __vptr(&Der::__vtable[0])
+    
+    // 4) note.- construction of non-static data members      
+    {
+      // warning: __vptr already defined => der. virtual members can be called
+      
+      // 5) ctor. body
+    }
+
+
+  # e.g. How the compiler implements a call to a virtual function:
+
+    // Your original C++ code
+    void mycode(Base* p)
+    {
+      p->virt3(); // cost ¢ O(1): one function call
+    }
+
+    The compiler has no idea whether this is going to call Base::virt3() or
+    Der::virt3() or perhaps the virt3() method of another derived class that
+    doesn’t even exist yet. It only knows for sure that you are calling virt3()
+    which happens to be the function in slot #3 of the v-table.
+    It rewrites that call into something like this:
+
+    // Pseudo-code that the compiler generates from your C++
+    void mycode(Base* p)
+    {
+      p->__vptr[3](p); // cost ¢ O(1): fetch + fetch + call 
+    }
+
+
+e) Conclusions:
+
+- Objects of classes with virtual functions have only a small
+  space-overhead compared to those that don’t have virtual functions.
+
+- Calling a virtual function is fast — almost as fast as calling a
+  non-virtual function.
+
+- You don’t get any additional per-call overhead no matter how deep
+  the inheritance gets. You could have 10 levels of inheritance, but
+  there is no “chaining” — it’s always the same — fetch, fetch, call.
+
+  Caveat: I’ve intentionally ignored multiple inheritance, virtual
+  inheritance and RTTI. Depending on the compiler, these can make
+  things a little more complicated. [4_11_2]
+  
+
+# 10.3.10 Virtual functions FAQ  \todo [4_11_1]
+
+
+# ==============================================================================
+# 11 Member access control
+# ==============================================================================
+
+A member of a class can be
+
+(1.1) — private; that is, its name can be used only
+      	by members and friends of the class in which it is declared.
+
+(1.2) — protected; that is, its name can be used only
+      	by members and friends of the class in which it is declared,
+	by classes derived from that class, and by their friends (see 11.4).
+
+(1.3) — public; its name can be used anywhere without access restriction.
+
+
+    class X
+    {
+        int a; // X::a is private by default
+    };
+
+    struct S
+    {
+	int a; // S::a is public by default
+    };
+
+
+# 11.1 Access specifiers
+
+Member declarations can be labeled by an access-specifier: public, private,
+or protected.
+
+     struct S
+     {
+	int a; // S::a is public by default: struct used
+     protected:
+	int b; // S::b is protected
+     private:
+	int c; // S::c is private
+     public:
+	int d; // S::d is public
+     };
+
+
+# 11.2 Accessibility of base classes and base class members [k1101]
+
+   class Derived : [public|private|protected] Base {---};
+
+   Where "[public|private|protected]" is the derivation access specifier.
+
+1) Access types:
+
+- The derivation access specifier has no effect on whether members
+  (and friends) of a derived class may access the members of its own
+  direct base class...
+
+- ... The purpose of the derivation access specifier is to control the
+  access that users of the derived class—including other classes
+  derived from the derived class—have to the members inherited from the base:
+
+a) class B : public A { ... };  // A is a public base of B
+
+   A access type	 B access type (of A members)
+   public           ->   public
+   protected	    ->   protected
+   private	    ->      - 
+
+b) class B : protected A { ... };  // A is a protected base of B
+
+   A access type	 B access type (of A members)
+   public           ->   protected
+   protected	    ->   protected
+   private	    ->      - 
+
+c) class B : private A { ... };  // A is a private base of B
+
+   A access type	 B access type (of A members)
+   public           ->   private
+   protected	    ->   private
+   private	    ->      -
+   
+
+d) Example:
+
+   class Base
+   {
+   public:
+     void pub_mem(); // public member
+   protected:
+     int prot_mem; // protected member
+   private:
+     char priv_mem; // private member
+   };
+
+
+   // Access to the derived classes & their friends
+
+   struct Pub_Derv : public Base
+   {
+     /******************************************************************/
+     /*!\note The IMPLICIT derived code would be something like this:  */
+     /******************************************************************/
+     public:
+       void pub_mem(){};
+     protected:
+       int prot_mem;
+     /******************************************************************/
+
+     // Pub_Derv code     
+     public:
+     int f() {return prot_mem;}    // ok: prot_mem is accesible 
+     char g() { return priv_mem; } // error: private members are inaccessible
+     	      	       		   // to derived classes
+   };
+
+
+   struct Priv_Derv : private Base
+   {
+     /******************************************************************/
+     /*!\note The IMPLICIT derived code would be something like this:  */
+     /******************************************************************/
+     private:
+       void pub_mem();
+       int prot_mem;
+     /******************************************************************/
+
+     // Priv_Derv code
+     int f() {return prot_mem;} // ok: private derivation doesn't affect access
+     char g() { return priv_mem; } // error: private members are inaccessible
+     	      	       		   // to derived classes
+   };
+
+   // Access to the users of the derived classes:
+   Pub_Derv d1; // members inherited from Base are public
+   Priv_Derv d2; // members inherited from Base are private
+   d1.pub_mem(); // ok: pub_mem is public in the derived class
+   d2.pub_mem(); // error: pub_mem is private in the derived class
+
+
+2) In the absence of an access-specifier for a base class:
+
+  - public is assumed when THE DERIVED CLASS is defined with the key 'struct'
+  - private is assumed for 'class'.
+
+  (e.g.)
+  class B { /* ... */ };
+  // equivalent definitions:
+  class D1 : private B { /* ... */ }; 
+  class D3 : B { /* ... */ };         // B private by default
+
+  // equivalent definitions:
+  struct D4 : public B { /* ... */ }; 
+  struct D6 : B { /* ... */ };         // B public by default
+
+
+BEST_PRACTICE
+A privately derived class should specify private explicitly rather than rely on
+the default.
+
+
+3) Note: A member of a private base class might be inaccessible as an
+   inherited member name, but accessible directly. Same for pointer
+   conversions and explicit casts.
+
+   class B {
+   public:
+     int mi; // non-static member
+     static int si; // static member
+   };
+   class D : private B { };
+   class DD : public D{
+      void f();
+   };
+
+   void DD::f() {
+     mi = 3; // error: mi is private in D
+     si = 3; // error: si is private in D
+     ::B b;
+     b.mi = 3; // OK ( b.mi is different from this->mi)
+     b.si = 3; // OK ( b.si is different from this->si)
+     ::B::si = 3; // OK
+     ::B* bp1 = this; // error: B is a private base class
+     ::B* bp2 = (::B*)this; // OK with cast
+     bp2->mi = 3; // OK: access through a pointer to B.
+   }
+
+
+4) Exempting Individual Members [3_1].15.5
+
+Sometimes we need to change the access level of a name that a derived class
+inherits. We can do so by providing a using declaration
+
+    # e.g. [k1101]
+    
+    class Base {
+    public:
+      std::size_t size() const { return n; }
+    protected:
+      std::size_t n;
+    private:
+      char priv_mem; // private member
+    };
+
+    class Derived : private Base { // note: private inheritance
+    public:
+      using Base::size; // changing the access: accesible to users of Derived
+    protected:
+      using Base::n;    // changing the access: accesible to derived classes
+
+      using priv_mem; // error: private in base
+    };
+
+
+WARNING
+A derived class may provide a using declaration only for names it is
+permitted to access, thus not private members of the base.
+
+
+# 11.3 Friends
+
+- Friend DECLARATIONS may appear only inside a class definition. [3_1]
+
+- A friend of a class is a function or class that is given permission
+  to use the private and protected member names from the class.
+
+- The meaning of the friend declaration is the same whether the friend
+  declaration appears in the private, protected or public (9.2)
+  portion of the class member-specification.
+
+- Friendship is neither inherited nor transitive (a friend of a friend).
+
+- A member function of a class X can be a friend of a class Y.
+
+  class Y {
+    friend char* X::foo(int);
+    friend X::X(char);        // constructors can be friends
+    friend X::~X();           // destructors can be friends
+  };
+
+WARNING
+Many compilers do not enforce the rule that friend functions must be
+declared outside the class before they can be used. But it is a good
+idea to provide separate declarations for friends. [3_1].7.2.1
+
+
+# 11.4 Protected member access 
+
+An additional access check beyond those described earlier in Clause 11
+is applied when a non-static data member or non-static member function
+is a protected member of its naming class:
+
+A derived class member or friend may access the protected members of
+the base class only through a derived object. ([3_1] 15.5, p. 756)
+
+
+  # e.g. [k1101]
+
+  class Base {
+  protected:
+    int prot_mem; // protected member
+  };
+  
+  class Sneaky : public Base {
+    friend void clobber(Sneaky&); // ok: can access Sneaky::prot_mem
+    friend void clobber(Base&);   // error: can't access Base::prot_mem
+    int j; // j is private by default
+  };
+
+
+# 11.5 Access to virtual functions [k14]
+
+1) The access rules (11) for a virtual function are determined by its
+   declaration and are not affected by the rules (10.3.1.FAQ1) for a
+   function that later overrides it.
+
+   class B {
+   public:
+     virtual int f();  
+   };
+
+   class D : public B {
+   private:
+     int f();
+   };
+
+2) Access is checked at the call point using the type of the expression used to
+   denote the object for which the member function is called.
+   
+   The access of the member function in the class in which it was defined is
+   in general not known.
+
+
+   void main()
+   {
+    D d;
+
+    B* pb = &d; // access as B
+    D* pd = &d; // access as D
+
+    pb->f(); // ok: B::f() public  => access is checked at the call point,
+    	     // D::f() is invoked  => dynamic binding
+	     
+    pd->f(); // error: D::f() is private
+   }
+
+
+# 11.6 Multiple access
+
+1) If a name can be reached by several paths through a multiple inheritance
+   graph, the access is that of the path that gives most access. [ Example:
+
+   class W { public: void f(); };
+   class A : private virtual W { };
+   class B : public virtual W { };
+   class C : public A, public B
+   {
+     void f() { W::f(); } // OK: public access through B
+   };
+
+
+# 11.7 Nested classes [k1101]
+
+A nested class is a member and as such has the same access rights as any other
+member. The members of an enclosing class have no special access to the INNER
+members of a nested class; the usual access rules (11) shall be obeyed [note-5].
+
+  Example:
+
+  class E {
+
+    friend void ff();
+  
+    int x;
+
+    class B { };
+
+    class I {
+      B b; // OK: E::I can access E::B
+      int y;
+      void f(E* p, int i)
+      {
+        p->x = i; // OK: E::I can access E::x
+      }
+    };
+  
+   int g(I* p)
+   {
+    return p->y; // error: I::y is private
+   }
+  };
+
+
+[note-5] Thus, B & I has complete access to E members, but E's members access to
+the interior of B & I follows the general rules (public, protected, private)
+
+
+# ==============================================================================
+# 12 Special member functions
+# ==============================================================================
+
+- default constructor (12.1)
+- copy constructor (12.8)
+- copy assignment operator (12.8)
+- move constructor (12.8)
+- move assignment operator (12.8)
+- destructor (12.4)
+
+  class ClassExample {
+
+    // [...]	// WARNING can have no content
+
+  //!\warning: synthetised member function are  declared here, at the closing }
+  };
+
+
+WARNING
+Programs may explicitly refer to implicitly-declared special member functions.
+
+  struct A { }; // implicitly declared A::operator=
+  A::operator=(s); // well formed
+
+
+# ------------------------------------------------------------------------------
+# 12.1 Constructors
+# ------------------------------------------------------------------------------
+
+FACT_1 What every constructor MUST assure:
+
+ 1. Initialize virtual base classes.
+ 
+ 2. Initialize direct base classes.
+
+ 3. Initialize the v-pointer for each polymorphic object.
+
+ 4. Initialize embedded data members.
+
+
+FACT_2
+The compiler (synthesized functions) performs only the initialization
+operations that are required by the implementation, not the
+programmer, to construct an object:
+
+ - Synthesized functions make basic copies (bitcopy) only.
+ - Data members are not initialized.
+ - Dynamic (Heap) memory is not created [4_8_1].
+
+The reasons are Performance and Compatibility with C.
+       
+
+ - Consequences:
+
+   [C++98] The resultant data members have an indeterminate (UNDEFINED)
+ 	   value once the object has been constructed.
+
+   [C++11] in-class initializers (8.5.5) and default-initialize (8.5.5),
+	   can provide a well defined initial status if they were defined
+	   by the programmer.
+
+
+ WARNING
+ The memory allocated by a new expression in the constructor is not
+ part of the object’s space. It doesn’t matter how much memory your
+ new expression allocates, sizeof (*this) remains fixed.
+
+
+# 12.1.1 Trivial Constructors [4_7_1]
+
+  The fact that a constructor is considered trivial means that neither
+  the programmer nor the compiler generates code (DEFINE) for it.
+
+
+   e.g. class Empty {};
+
+   e.g. struct Person       # all data members are public
+   	{
+	  char name[20];
+	  int age;
+	};
+
+
+ Question: Why Does The Compiler Implicitly DECLARE Trivial Constructors If They
+	   Are Never Defined? [4_7_2]
+
+ A: For code simplification
+
+    Implicit DECLARATIONS have a contractual role. Each implicit
+    declaration is like an article in a contract that states how a
+    certain class may be used.
+
+    Without the implicit declarations mechanism, programmers would
+    have to go through every class and struct, manually adding
+    declarations of every member function that’s needed for
+    instantiating, copy-constructing, assigning and destroying objects.
+
+
+
+# 12.1.2 Non-trivial constructors
+
+\brief A class MUST have a non-trivial constructor to accomplish FACT_1.
+
+
+\detail A class MUST have a non-trivial ctor. in the following cases [4_7_2]:
+
+i) Classes with virtual member functions.
+
+   The non-trivial constructor must initialize the correct 'v-pointer'
+   address of each polymorphic object.
+
+ii) Classes with some direct Base classes with non-trivial constructor(s).
+
+iii) Classes with (non-static) data members with non-trivial constructor(s).
+
+iii) Classes with some virtual base class (Virtual inheritance) [4_10_1]
+
+    The presence of a virtual base class necessitates a non-trivial
+    constructor to ensure that only one virtual subobject is present
+    in every derived object. Therefore, if a class has any virtual
+    base class(es), its constructor must be non-trivial.
+
+
+# a) Default constructor
+
+     - A default constructor is one that can be invoked without any arguments,
+       thus a constructor that supplies default arguments for all its parameters
+       also defines the default constructor: e.g. C(int a=0)
+
+     - It can be created by the user or by the compiler (synthesized def. ctor.)
+
+       # (e.g.)
+
+       Class C {  C(int i=5); // can be called with no args }
+
+       C obj1;   // ok: default constructor of class C is invoked
+
+       C obj2(); // error: this declares a function (common mistake).
+
+
+# a.1) Synthesized constructor for a class (or struct)  [k8]
+
+    The one automatically & implicitly created by C++ iff ...
+
+      	- If there is no user-declared constructor for a class (or struct)
+
+      	- And if the class doesn't contain const or reference data members.
+
+	- And if all its base classes have a default constructor. [k8]
+
+	- And if all its data members have a default constructor. [k8]
+
+    ... the implementation needs (MUST have) that definition.
+ 
+
+- [C++11] "default" / "delete" declaration/definition [4_7_4]
+
+  default: Ask the compiler to create the synthesized default
+  	   constructor (even if another constructors already exists)
+
+    	   class Fred() // declaration body
+	   {
+	    Fred() = default; // here: synthesized & inlined
+	   };
+
+
+    	   // At class definition: synthesized, but not inlined by default
+	   Fred::Fred() = default
+	   { ...  }
+
+
+  delete: Forbid the compiler to create the synthetised constructor:
+
+    	  class Fred()
+    	  {
+     	   Fred() = delete; 
+    	  };
+
+
+- [C++11] "default" initialization process [4_7_4]
+
+    • If there is an in-class initializer (8.5.5), use it to init the member.
+
+    • Otherwise, default-initialize (8.5.5) - ([3_1] 2.2.1, p. 72) the member.
+
+    WARNING
+    Classes that have members of built-in or compound type usually
+    should rely on the synthesized default constructor only if all
+    such members have in-class initializers.
+
+
+# b) Explicit Constructors [4_7_1]
+
+  Non-default constructors are further divided into two subcategories:
+
+  i) Those that take multiple arguments.
+
+  ii) Implicit conversion operators (converting constructors [4_7_5]):
+
+     A non explicit constructor that take a single argument and
+     thus operate as conversion operator from the constructor’s
+     parameter type to the class type.
+
+     MyString s = "xyzzy"; // to allow this kind of construction expressions
+
+        # (e.g.)  [k6]
+        class Counter {
+ 	public:
+  	  Counter(std::string s);  // implicit conversion
+	  operator std::string();  // implicit operator 
+        };
+
+	std::string s1 = "I am s1";
+  	Counter c1(s1);  // ok: implicit conversion
+	Counter c2 = s1; // ok: implicit conversion
+	s1 = c1;         // ok: implicitly calls Counter::operator string()
+
+
+     	WARNING Only One Class-Type Conversion Is Allowed by the compiler:
+		// error: requires two user-defined conversions:
+		// (1) convert "a literal" to a string
+		// (2) convert that (temporary) string to Counter
+	void set(const Counter& src);
+     	c1.set(s1);          // ok: implicit conversion
+	c1.set("a literal"); // error: no known conversion
+
+
+	WARNING
+	The compiler can not perform an implicit conversion for a
+	non-const reference because it can't be temporary, (it has no sense):
+	void copyme(Counter& src);
+	c1.copyme(s1); // error: no known conversion from "string" to Counter&
+
+
+     - The "Implicit conversion" situation [k6]: 
+
+       class Date
+       {
+         public:
+	  Date(); // default ctor; no arguments required 
+  	  Date(time_t t); // extracts date from a time_t value  (*P)
+       };
+
+       main()
+       {
+        Date p = NULL; // Compilation OK because it fits (*P)
+       }
+
+
+     PROBLEM:
+     The compiler executes an implicit conversion from long (NULL's
+     type) to time_t. The problem here is that the implicit conversion
+     (taking place behind the programmer's back) switches off the
+     compiler's static type checking.
+
+     SOLUTION:     
+     The 'explicit' keyword: constructors declared explicit will refuse (the
+     compiler will refuse) to perform such implicit conversions:
+     
+       class Date
+       {
+         public:
+         //...
+         explicit Date(time_t t); // no implicit conversions
+       };
+
+       time_t t;
+       Date d1(t);  // ok: direct initialization [4_7_5] [k6]
+       Date d1 = t; // error: cannot use the copy form of initialization
+       	       	    //        with an explicit constructor
+
+
+INFO
+Why is not 'explicit' the default behaviour of C++ constructors?
+Because the problem was detected after the definition of the language, and
+several software requiring implicit conversions would have be affected.
+
+
+BEST_PRACTICE
+As a rule, every constructor that takes a single argument, including
+constructors that take multiple arguments with default values should
+be explicit (i.e. std::vector(size_t)), unless you have a good reason
+to allow implicit conversions.
+
+
+# c) Constructors of Built-in Types (char, int, ...)
+
+   char c = char();       // equivalent to: char c = char(0);
+   char c = char('a');
+   double d =double(3.3)  // equivalent to: double d = 3.3;
+   int *pi = new int(6);
+
+
+# d) Member Initialization Lists [4_7_1]
+
+     aka constructor initializer list, mem-initializers, mem-list, mem-init
+
+     Cellphone (long n)
+     : number(n)          // mem-list: initialization
+     { ... }              // constructor body: assignation
+
+   - Def: ([3_1], Defined Terms, p 395)
+
+   - The members are initialized BEFORE the body of the constructor is executed.
+
+   - The order of the initialization list has to match the order of
+     declarations within the class: Immediate base classes (left to right),
+     then member objects (top to bottom).
+
+   - Class members that are not initialized in the initializer list
+     are implicitly initialized using the same process as is used by
+     the synthesized default constructor (Since C++11: in-class
+     initializer or default initialized.)
+
+     BEST_PRACTICE
+     Constructors should not override in-class initializers except to use
+     a different initial value.
+     If you can’t use in-class initializers (before C++11), each constructor
+     should explicitly initialize every member of built-in type.
+
+  
+# d1) Mem-list vs initialization into the constructor body
+
+     i) Equivalent cases (the compiler expands the same code):
+
+       	Ctors. with built-in/intrinsic type data members received in the ctor.
+       
+	# (e.g.): 
+       	Cellphone (long n) : number(n), {}  // equivalent expanded code
+       	Cellphone (long n) { number = n; }  
+	  
+
+     ii) Mandatory mem-initialization because these initializations
+    	 must be completed before the constructor's execution:
+
+    	 - Initialization of const members.
+	 - Initialization of reference members.
+	 - Passing args. to a constructor of a base class or an embedded obj.
+
+
+     iii) Cases where the use of mem-list improve the performance
+     	  (due to the elimination of creation and subsequent
+     	  destruction of temporary objects)
+
+	 (e.g.) Fred::Fred() : x(whatever) { } // mem-init
+	 
+	 If typeof(whatever) == typeof(x), the result of the whatever
+	 expression is constructed directly inside x by the compiler
+
+
+	 (e.g.) Fred::Fred() { x = whatever; }  // assignation
+	 
+	 First, the compiler CREATES a temporary object to store 'whatever'.
+	 Then, this temporary object is passed into 'x' assignment operator.
+	 Finally, the compiler DESTROY the temporary object at the ';'.
+
+	 Note.- there’s another source of inefficiency when using
+	 assignment in a constructor: the member object will get fully
+	 constructed by its default constructor, and this might, for
+	 example, allocate some default amount of memory or open some
+	 default file. All this work could be for naught if the
+	 whatever expression and/or assignment operator causes the
+	 object to close that file and/or release that memory (e.g.,
+	 if the default constructor didn’t allocate a large enough
+	 pool of memory or if it opened the wrong file). [4_7_6]
+
+
+d2) Mem-list, Conclussions:
+
+    BEST_PRACTICE
+    Due to the performance difference, mem-list should be always used.
+
+    EXCEPTIONS [4_7_6]
+    (use common sense: if it’s cheaper, better, faster, etc. to not use them)
+    i.e. when your class has two constructors that need to initialize the
+    	 this object’s data members in different orders.
+    i.e. Or it might happen when two data members are self-referential.
+    i.e. when you need to do an if…throw test on a variable prior to using
+    	 that variable to initialize one of your this members.
+    i.e. etcetera
+
+    BEST_PRACTICE
+    Do not use a member object to init another member in the mem-list.
+    It is ok inside the body, because all the members have been already init.
+
+    FAQ  What if one member object has to be init using another member object?
+
+    	 >>> Comment the declaration of the effected data members
+	     with //ORDER DEPENDENCY
+
+       	     class MyString {
+              public:
+  	       MyString(const char* s);
+	  
+              protected:
+               uint  len_;  // ORDER DEPENDENCY  // here, order dep. is critical
+               char* data_; // ORDER DEPENDENCY
+             };
+
+             MyString::MyString(const char* s): len_(std::strlen(s)),
+      			       	     	        data_(new char[len_ + 1u])
+             { std::memcpy(data_, s, len_ + 1u);}
+
+
+ e) Copy constructor 
+
+    Constructor that creates & initializes a new object as a copy of
+    another existing object of the same type.
+
+    The copy constructor is applied implicitly to pass objects to or
+    from a function by value.
+
+    If we do not provide the copy constructor, the compiler
+    synthesizes one for us.
+
+    Detailed description (12.8)
+    
+
+ f) CV-qualifiers on constructors  \todo test me
+
+    - const and volatile semantics (7.1.6.1) are not applied on an
+      object under construction. They come into effect when the
+      constructor for the most derived object (1.8) ends.
+
+    - During the construction of a const object, if the value of the
+      object or any of its subobjects is accessed through a glvalue
+      that is not obtained, directly or indirectly, from the
+      constructor’s this pointer, the value of the object or subobject
+      thus obtained is unspecified. [ Example:
+
+      struct C;
+      void no_opt(C*);
+
+      struct C {
+        int c;
+        C() : c(0) { no_opt(this); }
+      };
+
+      const C cobj;
+      
+      void no_opt(C* cptr) // Accessed DURING the construction of a C object.
+      {
+       int i = cobj.c * 100; // value of cobj.c is unspecified
+       cptr->c = 1;
+       cout << cobj.c * 100 // value of cobj.c is unspecified
+      }
+
+
+# 12.1.3 Initialization order 
+
+GOAL to accomplish FACT_1, for both Synthesized & User defined ctors. [4_7_3]
+
+In a non-delegating constructor [C++11], the initialization proceeds
+in the following order [4_7_7] [k12]:
+
+(1) VIRTUAL BASE CLASSES are initialized in depth-first left-to-right
+    order in the derived class base-specifier-list.
+    Note.- Only for the constructor of the most derived class (1.8).
+
+(2) DIRECT BASE CLASSES left to right in the derived class base-specifier-list,
+    (regardless of the order of the mem-initializers).
+
+    - Synthesized: init mem-list, before the execution of the body.
+    - User-defined: init mem-list (best-practice), or ctor. body.
+
+
+WARNING v-pointer initialization here (10.3.2)
+Before this point, calling a member function is undefined [4_7_8] [k13], so
+from this point, the v-pointer may be defined. 
+
+
+(3) Non-static data members in the order they were declared (top to bottom)
+    (regardless of the order of the mem-initializers).
+
+    - Synthesized: init mem-list, before the execution of the body.
+    - User-defined: init mem-list (best-practice), or ctor. body.
+
+
+(4) constructor body
+
+User-written code in the constructor body
+
+WARNING
+Assignation inside the constructor body is not the same as
+initialization (i.e. references data members must be initialized)
+
+WARNING Catching exceptions inside the constructor:
+    try{
+         construction;
+    }catch(...)
+    {
+	release any-heap-data-member already created;
+    	throws or handle;
+    }
+
+
+... Finally, The object itself is created: *this completed
+		   
+
+    # (e.g.).- Construction of an object of type C [k12]
+  
+    class D(){ ... };
+
+    class A(){ ... };
+
+    class B : public A { ... };
+    
+    class C : public B
+    {
+    public:
+      // here: user-defined or synthesized constructors
+
+    private:
+      D embed;
+    }
+    
+    int main()
+    {
+      C c_obj;
+    }
+
+    // output:
+    // create A::A()
+    // create B::B()
+    // create D::D()  // embed
+    // create C::C()
+    // destroy C::~C()
+    // destroy D::~D()
+    // destroy B::~B()
+    // destroy A::~A()
+
+
+
+# \todo [C++11] Delegating Constructors [3_1] 7.5.2., p 378
+
+# \todo [C++11] constexpr Constructors [3_1] 7.5.6. Literal Classes, p 387
+
+# \todo [3_1] 15.7 Constructors and Copy Control (p. 768),
+
+# \todo [3_1] 18.1.3 Function try Blocks and Constructors (p. 953),
+
+# \todo [3_1] Chapter 13. (p. 615)
+
+# \todo [C++11] [1_1] 12.6.3 Initialization by inherited constructor
+
+
+# 12.1.4 Constructors FAQ [4_7_6]
+
+FAQ Can one constructor of a class call another constructor of the
+    same class to initialize the this object?
+
+    >> Before C++11: No.
+
+       Foo::Foo(char x)
+       {
+        Foo(x, 0); // warning: the call to Foo(char, int)
+                   // actually creates a temporary Foo object.
+       }
+
+   >> Since C++11:  Yes. See Delegating Constructors [3_1] 7.5.2., p 378
+
+
+FAQ Which constructor gets called when I create an array of T objects?
+
+    >>> The defaults constructor (array-size times)
+    	(e.g.) T a[10]; // Calls the default constructor of T 10 times
+
+    >>> Exception: using std::vector: lets you decide to use any ctor.
+
+
+FAQ Should you use the this pointer in the constructor?
+
+    >>> Not recommended (the object is not fully formed yet)
+
+    Note.- Here is something that never works: the {body} of a
+    constructor cannot get down to a derived class by calling a
+    virtual member function that is overridden in the derived
+    class... because your object is not yet of that derived class.
+
+
+    Note.- Member functions (including virtual member functions, 10.3)
+    can be called for an object under construction but doing it
+    before all the mem-initializers for base classes have completed,
+    the result of the operation is undefined. [4_7_8]
+
+
+
+FAQ What is the “Named Constructor Idiom”?
+
+    >>> A technique that provides more intuitive and/or safer
+        construction operations for users of your class:
+
+    You declare all the class’s constructors in the private or protected
+    sections, and provide public static "named" methods that return an object.
+
+
+    # (e.g.) 
+    class Point {
+    public:
+      Point(float x, float y);     // Rectangular coordinates
+      Point(float r, float a);     // Polar coordinates (radius and angle)
+      // ERROR: Overload is Ambiguous: Point::Point(float,float)
+    };
+    int main()
+    {
+      Point p = Point(5.7, 1.2);   // Ambiguous: Which coordinate system?
+    }
+
+    /* Solution using the “Named Constructor Idiom” */
+
+    class Point {
+     public:
+       static Point rectangular(float x, float y);      // Rectangular coord's
+       static Point polar(float radius, float angle);   // Polar coordinates
+       // These static methods are the so-called "named constructors"
+
+     private: // or protected:
+      Point(float x, float y);     // Rectangular coordinates
+      float x_, y_;
+   };
+   
+   inline Point Point::polar(float radius, float angle)
+   { return Point(radius*std::cos(angle), radius*std::sin(angle)); }
+
+   int main()
+   {
+    Point p1 = Point::rectangular(5.7, 1.2);   // Obviously rectangular
+    Point p2 = Point::polar(5.7, 1.2);         // Obviously polar
+   }
+
+
+    HINT
+    The Named Constructor Idiom can also be used to make sure
+    your objects are always created via new. [4_111_1]
+
+
+    NOTE the Named Constructor Idiom, at least as implemented above,
+    is just as fast as directly calling a constructor — modern
+    compilers will not make any extra copies of your object.
+    
+
+
+FAQ Does return-by-value mean extra copies and extra overhead?
+
+    >>> Not necessarily: all(?) commercial-grade C++ compilers
+        implement return-by-value in a way that lets them eliminate
+        the overhead, at least in simple cases. (details in [4_7_6])
+
+	Note.- we talk about this type of operations:
+	Foo rbv() {return Foo(42, 73);}  // returns a new value
+	Foo x = rbv();  // return-value of rbv() goes into x (with optimization)
+	Foo x; x= rbv(); // here: the optimization has been prevented
+
+
+
+FAQ What about returning a local variable by value?
+
+    >>> Your compiler might optimize away the local variable
+        completely (i.e. GNU C++ (g++) since at least version 3.3.3)
+
+	Caveat: this optimization can be applied only when all the
+		function’s return statements return the same local variable.
+
+	Note.- we talk about this type of operations:
+	Foo rbv()
+	{ Foo y(42, 73); // local variable created ...
+	  return y;}     // ... and returned
+	Foo x = rbv();   // here: optimization
+	Foo x; x= rbv(); // here: non-optimization
+
+
+FAQ static member data initialization & linkage
+
+    >>> Static data members must be explicitly defined IN EXACTLY ONE
+        compilation unit.
+
+    // Fred.h
+    class Fred {
+       // ...
+     private:
+      static int j_;   // general case: declares static data member Fred::j_
+      // ...
+      // exception: [4_7_6]#static-const-with-initializers
+      static const int maximum = 42; //static const of integral or enum types
+    };
+
+    // Fred.cpp
+    #include "Fred.h"
+    int Fred::j_ = some_expression_evaluating_to_an_int; // general case def.
+
+
+
+FAQ The “static initialization order fiasco”?
+
+    >>> A subtle way to crash your program.
+
+    This the well known problem of initializing two GLOBAL (static)
+    variables, which (even could) exist in separate source files, when
+    one of them depends on the other to be initialized: 50%-50% chance
+    of dying.
+
+    WARNING It affects any type of object, even built-in/intrinsic types. [k9]
+
+    WARNING
+    Unfortunately it’s very hard to detect — the errors often occur
+    before main() begins [k9]
+
+    WARNING
+    This fiasco DOES NOT IMPLIES compilation or linking errors.    
+    This fiasco implies run-time undefined behaviour/errors/crashes:
+    when the non-constructed value is used, the compiler gives to it
+    an undefined (compiler dependent) value [k9].
+
+
+    # Problem example [k9]:
+    
+    int x = f();  // global x initialization depends on y => fiasco
+    int y = g();
+
+    int f()
+    {                // HERE 'x' depends on non-constructed 'y', 
+     return 3*y + 7; // y has a default undefined value (i.e. 0) => fiasco
+    }
+
+    int g() { return 5; }
+
+
+FAQ How do I prevent the “static initialization order fiasco”?  
+
+    >>> Use the "Construct On First Use Idiom": 
+
+    The basic idea of the Construct On First Use Idiom is to wrap your
+    static object inside a function.
+
+    # One valid solution: replace the global objects with a
+      global function that returns the object by reference. Example [k9]:
+
+    int& y();  // forward declaration
+
+    int & x_sol()
+    {
+     // depends on y_sol, that will be initialized when called inside 'new'
+      static int* ans = new int(3 * y_sol() + 7);      
+      return *ans;
+    }
+
+    int & y_sol()
+    {
+     static int* ans = new int(INITIAL_Y_VALUE);
+     return *ans;
+    }
+    
+    main()
+    {
+     std::cout<< x_sol()<< std::flush; // here: init both globals without fiasco
+     std::cout<< y_sol()<< std::flush; // y_sol already created
+    }
+
+
+    # Solution downside.- (intentionally) memory leak:
+    The static objects are never destructed: If the object has a
+    non-trivial destructor with important side effects, such as
+    writing to a file or some other non-volatile action, then you need more.
+
+
+FAQ How do I prevent the “static initialization order fiasco” for my
+    static data members?
+
+    Use the "Construct MEMBERS On First Use Idiom" variant:
+
+    # Problem example:
+    
+    class X {
+     private:
+      static Fred x_; // potential fiasco: X obj used (someone calls
+      	    	      // some X method), before Fred obj get constructed.
+    };
+
+    # Solution:
+
+    // declaration (file.h)
+    private:
+     static Fred& x(); // member constructed on first use
+
+    // definition (file.cpp)
+    Fred& X::x()
+    {
+     static Fred* ans = new Fred();
+     return *ans;
+    }
+
+
+
+FAQ What is a technique to guarantee both static initialization and
+    static deinitialization?
+
+    Nifty Counter Idiom [4_7_6]
+    
+
+FAQ What is the “Named Parameter Idiom”?
+
+    It’s a fairly useful way to exploit method chaining.
+
+    (e.g.) File f = OpenFile("foo.txt")
+           	    .readonly()
+           	    .createIfNotExist()
+
+
+
+FAQ Why am I getting an error after declaring a Foo object via Foo x(Bar())?    
+
+    WHY?
+    The compiler thinks that you are declaring a function called 'x':
+    1.- When the compiler sees Foo x(Bar()), it thinks that the Bar() part
+    	is declaring a non-member function that returns a Bar object,
+    2.- so it thinks you are declaring the existence of a function called x
+    	that returns a Foo and that takes as a single parameter of type
+	“non-member function that takes nothing and returns a Bar.”
+
+
+    # BEST_PRACTICE [C++11]: is to use uniform initialization, which replaces
+    # 	   	     the () around the Bar() call with {} instead. [k10]
+
+      Foo x{Bar()};  // C++11 required
+
+
+    # Pre-C++11 solutions [k10]
+    
+    - SUPERTRICKY Extra pair of ()s around the Bar() part: Foo x((Bar()));
+      // Test [k10]: calling Implicit conversion ctor.: "Foo(const Bar& b)"
+      
+    - To use = in your declaration: Foo x = Foo(Bar());
+      // Theory: calling the Foo copy-constructor
+      // Test [k10]: actually calling Implicit conversion ctor. too.
+
+    - To use an Implicit conversion operator from Bar to Foo: Foo x = Bar();
+      // Test [k10]: calling Implicit conversion ctor.: "Foo(const Bar& b)"
+
+
+
+# ------------------------------------------------------------------------------
+# 12.4 Destructors  \todo
+# ------------------------------------------------------------------------------
+
+# 12.4.1 Destruction order [k12]
+
+The destructor operates inversely to the constructors:
+
+(1) Executes the function body:
+    Typically, the destructor frees resources an object allocated
+    during its lifetime.
+
+(2) The members are (implicitly) destroyed
+
+    (Implicit) invocation of the (nontrivial) destructors of the
+    embedded object's, in reverse order from the order in which they
+    were initialized.
+
+    WARNING
+    The implicit destruction of a member of built-in pointer type does
+    not delete the object to which that pointer points => explicitly
+    release this pointers on step1.
+
+
+WARNING v-pointer initialization here (10.3.2)
+Before this point, calling a member function is undefined [4_7_8] [k13], so
+from this point, the v-pointer may be defined. 
+
+
+(3) The base classes are (implicitly) destroyed
+
+    (Implicit) invocation of the (nontrivial) destructor of each base class.
+
+
+b) The Synthesized Destructor
+
+If no destructor is defined, the compiler will invoke a def Synthesized version.
+Problem: the function body of the synthesized destructor is empty =>
+no resources released.
+
+
+BEST_PRACTICE Follow 'The Rule of Three' (12.8)
+
+
+
+# \todo Complete this topic with other info fromt the web, i.e. informit.
+
+
+
+# ------------------------------------------------------------------------------
+# 12.8 Copying and moving class objects [3_1].13
+# ------------------------------------------------------------------------------
+
+A class object can be copied or moved in two ways:
+
+i) by initialization (12.1, 8.5), including for function argument
+   passing (5.2.2) and for function value return (6.6.3): implemented
+   by a copy/move constructor.
+
+ii) by assignment (5.18): impl. by copy/move assignment operator (13.5.3).
+
+
+HINT 'The Rule of Three' (aka the Law of The Big Three or The Big Three)
+
+  \todo [c++11] rule of five [1_1].12 Special member functions
+
+  "If a class explicitly defines one of the following it should
+  probably explicitly define all three: destructor, copy-constructor,
+  assignment operator"
+
+
+WARNING If no copy-constructor (operator=) is defined, the compiler
+	will provide a default synthesized version.
+	
+	Problem: Synthesized functions make basic copies (bitcopy) only,
+	neither initialization nor dynamic memory creation. [4_8_1] 
+
+
+# 12.8.1 copy-constructor & assignment-operator
+
+a) When is invoked the copy-constructor ?
+
+   For Construction of a new object: iff the destination object does
+   not exists yet.
+   In these cases there's no memory to release [note-2].
+
+   (e.g. explicit copy construction)
+   
+   (1) T y;
+   (2) T z(y);  // HERE: calling the copy-constructor
+   (3) T x = y; // HERE: calling the copy-constructor
+       	     	// warning: here 'x=y' doesn't involves operator=() to be used,
+		// because 'x' does not yet exists.
+
+
+   (e.g. implicit copy construction: after calling a function by value) [k5]
+   
+   void f(T b) // HERE: calling the copy-constructor to create a temporary obj.
+   {
+	...
+   } // HERE: calling the destructor fot the temporary object
+
+
+WARNING [note-2]
+Never try to release embedded data members in the copy-constructor
+because they were not created yet (delete(undefined_addr) => run-time error).
+
+
+b) When is invoked  the 'assignment-operator' ?
+ 
+   For assignment of new value to an existing object (memory release required).
+
+   (4) T x, y;  // HERE object x created
+   (5) x = y;   // HERE: operator= is invoked: the different with (3) is that
+      	     	// object x was already created at (4)
+
+
+c) Example of copy-constructor 
+
+   class Passbyref{
+    public:
+     Passbyref(int newval = 0):the_value(newval), dummy_data(new DummyData()) {}
+     ~Passbyref() {  release();  }
+
+    /* COPY-CONSTRUCTOR */
+
+    Passbyref(const Passbyref & src):
+    the_value(0), dummy_data(0) //see [note-2]
+    {
+     if(this != &src) // 1) Avoid self-copy
+     {
+       // 2) copy new values
+       the_value = src.the_value;
+       dummy_data = new DummyData();
+     }
+    }  
+
+
+d) Example of assignment-operator
+
+    /* ASSIGNMENT-OPERATOR */
+
+    Passbyref& operator=(const Passbyref & src)
+    {
+     if(this != &src) // 1) Avoid self-copy
+     {
+       release();      // 2) release old memory
+
+       // 3) create new memory & copy new values
+       the_value = src.the_value; dummy_data = new DummyData();
+     }
+     return *this;     // 4) return self
+    }
+
+   private:
+    int the_value;
+    DummyData *dummy_data;
+    void release() { delete dummy_data; dummy_data=0; }
+  };
+
+
+e) HINT how to prevent pass-by-value of any class objects:
+
+   [C++11] delete: Forbid the compiler to create the synthetised constructor:
+
+    	   class Fred(){
+     	     Fred() = delete; 
+    	   };
+
+
+   [C++98] just DECLARE a private copy-constructor (operator=). You
+   	   don’t even need to create a definition, unless one of your
+   	   member functions or a friend function needs to perform a
+   	   pass-by-value.
+
+
+f) Conclusions:
+
+BEST_PRACTICE
+Define an explicit copy-constructor (operator=) only if it is necessary
+(synthesized code use to be more efficient due to compiler optimization)
+
+
+BEST_PRACTICE
+Use Member Initialization Lists in the copy-constructor ([k5].Passbyref) .
+
+
+
+# ==============================================================================
+# 13 Overloading
+# ==============================================================================
+
+1) Two declarations in the same scope that declare the same name but with
+   different types are called overloaded declarations.
+   Only function and function template declarations can be overloaded;
+   variable and type declarations cannot be overloaded.
+
+   double abs(double); 
+   int abs(int);       // ok: overloading of a function named 'abs'
+   int abs; // error: variable can't be overload
+
+2) Overload resolution process
+   abs(1);   // calls abs(int);
+   abs(1.0); // calls abs(double);
+
+
+# 13.5 Overloaded operators 
+
+FACTS ([3_1] 14.1):
+
+- Operators that can not be overloaded   ::   .*   .   ?:
+
+- We can overload only existing operators and cannot invent new operator symbols
+
+- Four symbols (+, -, *, and &) serve as both unary and binary operators.
+  The number of parameters determines which operator is being defined.
+
+- An overloaded operator has the same precedence and associativity as
+  the corresponding built-in operator.
+
+- BEST_PRACTICES
+  Ordinarily, the comma, address-of, logical AND, and logical OR
+  operators should not be overloaded. (because they guarantee the
+  order in which operands are evaluated)
+  Note.- The standard says (1.9 Program execution): "Overloaded	operators are 
+  never assumed to be associative or commutative."
+
+
+
+# 13.5.1 Unary operators
+
+- non-static member functions with no parameters:  x.operator@()
+- non member function with one parameter:  operator@(x)
+
+
+# 13.5.2 Binary operators
+
+- non-static member functions with one parameter:  x.operator@(y)
+- non member function with two parameters:  operator@(x,y)
+
+
+# 13.5.3 operator= assignment operator
+
+- An assignment operator shall be implemented by a non-static member
+  function with exactly one parameter.
+
+
+# 13.5.4 operator()  function call, or call operator
+
+- A pair of parentheses “()” following a function name.
+- The operator causes a function to be invoked.
+- non-static member function with an arbitrary number of parameters.
+- It can have default arguments.
+
+  class Fred
+  {
+    int f(int a, char b);
+  };
+
+
+# 13.5.5 operator[]  Subscripting 
+
+- operator[] shall be a non-static member function with exactly one parameter.
+
+- Syntax: postfix-expression [ expr-or-braced-init-list ]
+   
+   # e.g.
+   struct X
+   {
+     Z operator[](std::initializer_list<int>);
+   };
+   X x;
+   x[{1,2,3}] = 7; // OK: meaning x.operator[]({1,2,3})
+   int a[10];
+   a[{1,2,3}] = 7; // error: built-in subscript operator
+
+
+# 13.5.6 operator->  Class member access
+
+- shall be a non-static member function taking no parameters.
+
+- Syntax: postfix-expression -> templateopt id-expression
+  	  postfix-expression -> pseudo-destructor-name
+
+- x->m is interpreted as (x.operator->())->m
+
+
+# 13.5.7 operator++ and operator--  Increment and decrement
+
+  struct X
+  {
+   X& operator++(); // prefix ++a
+   X operator++(int); // postfix a++
+  };
+
+  struct Y { };
+  Y& operator++(Y&); // prefix ++b
+  Y operator++(Y&, int); // postfix b++
+  
+  void f(X a, Y b)
+  {
+   ++a; // equivalent to the explicit call:  a.operator++();
+   a++; // eq. to:  a.operator++(0);
+   ++b; // eq. to: operator++(b);
+   b++; // eq. to: operator++(b, 0);
+  }
+
+
+# 13.5.8 User-defined literals ??
+
+\todo explanation and uses are needed
+
+standard examples:
+
+void operator "" _km(long double); // OK
+float operator ""_e(const char*); // OK
+float operator ""E(const char*); // error: reserved literal suffix
+double operator""_Bq(long double); // OK
+double operator"" _Bq(long double); // uses the reserved identifier _Bq (2.10)
+float operator " " B(const char*); // error: non-empty string-literal
+extern "C" void operator "" _m(long double); // error: C language linkage
+
+
+# 13.6 Built-in operators
+
+  Operator, such as ( + = .), defined by the language.
+  Almost all the built-in operators can be overloaded by the user (13.5)
+
+
+
+# ==============================================================================
+# 16 Preprocessing directives
+# ==============================================================================
+
+# 16.2 Source file inclusion
+
+1) A "#include" directive shall identify a header OR SOURCE file that can be
+   processed by the implementation.
+
+2) # include < h-char-sequence> new-line
+
+   - Header search: in a sequence of implementation-defined places.
+   - Replacement of that directive by the entire contents of the header. 
+
+3) # include " q-char-sequence" new-line
+
+   - Header search: the source between "", in an
+     implementation-defined manner (usually by relative path)
+   - Replacement of that directive by the entire contents of the header.
+   
+   WARNING
+   On search failure: the directive is reprocessed as if it read #include <..>
+   # include < h-char-sequence> new-line
+
+4) # include pp-tokens new-line
+
+  pp-tokens are processed as a macro. If the directive resulting after
+  all replacements does not match one of the two previous forms, the
+  behavior is UNDEFINED.
+
+  (e.g.)
+  
+  #if VERSION == 1
+  #define INCFILE "vers1.h"
+  #elif VERSION == 2
+  #define INCFILE "vers2.h" // and so on
+  #else
+  #define INCFILE "versN.h"
+  #endif
+  
+  #include INCFILE
+
+7) In general programmers should use the < > form for headers provided
+   with the implementation, and the " " form for sources outside the
+   control of the implementation.
+
+
+
+# ==============================================================================
+# 27 Input/output library
+# ==============================================================================
+
+# 27.0 A First Look at Input/ Output [3_1].page30
+
+a) The library
+
+C++ IO = iostream library: part of the std library that defines the IO classes.
+
+#include <iostream>
+
+- istream: input stream
+- ostream: output stream
+
+
+HINT Use '#include <iosfwd>' (iostream declarations only) In a header
+     file to improve compilation time.
+
+
+b) streams functions
+
+- Always two arguments: (std::stream &, [const] object & )
+
+- Always return a reference to the stream object
+
+WARNING always pass a NON-CONST reference to the stream as the first argument
+
+
+- ostream
+
+    //!\warning 2ND ARGUMENT SHOULD be CONST
+    std::ostream& operator<<(std::ostream &, const T &);
+
+
+- istream
+
+  //!\warning 2nd argument MUST NOT be CONST because it is to be modified
+  std::istream& operator>>(std::istream &, T &);
+
+
+c) Standard Input and Output Objects  [k3]
+
+
+WARNING Syntax always:  stream STREAM_OPERATOR variable ';'
+
+
+- cin (standard input)
+
+      int retval = 0;
+      std::cin >> retval;    // TRICK flow of info: input  --->>  program
+
+- cout (standard output):
+
+      std::cout << retval;   // TRICK flow of info: output <<---  program
+
+- cerr (standard error)
+
+- clog
+
+
+INFO std::endl, also flushes the buffer (no need for std::flush) 
+
+
+
+# ==============================================================================
+# Appendix A - Advanced concepts
+# ==============================================================================
+
+# ------------------------------------------------------------------------------
+# A.1 Reference and Value Semantics  [4_4_1] 
+# ------------------------------------------------------------------------------
+
+FACT_1 There are three cases when you have an actual object as opposed
+       to a pointer to an object:
+
+       i) local objects
+
+       ii) global/static objects,
+
+       iii) composition: fully contained member objects in a class
+       	    (the most important)
+       	    
+
+FACT_2 Pros of value semantics: speed (one copy but several accesses)
+
+
+FAQ Data members: Should I normally use Composition or Pointers  [4_4_1] 
+
+>> Your should NORMALLY use composition
+
+>> Exception examples: “wrapper” objects; also the N-to-1-uses-a
+   relationship needs something like a pointer/reference)
+
+
+- "The 3 performance hits": there are three reasons why “composition”
+  has better performance than pointers to freestore-allocated member objects:
+
+   1) Extra layer of indirection every time you need to access the member object
+
+      Cost: "small potatoes"
+
+   2) Extra freestore allocations (new in constructor, delete in destructor)
+
+      Cost: can be an issue when there are many allocations.
+      
+   3) Extra dynamic binding (comes from having a pointer rather than an object.)
+
+      Cost: great
+
+
+FAQ What are relative costs of the 3 performance hits [4_4_1] 
+
+>> (See 1-2-3 above)
+
+Whenever the C++ compiler can know an object’s class =>
+=> virtual function calls can be statically bound: allows inlining =>
+=> Inlining allows zillions optimization opportunities
+
+WARNING Thus fully-contained member objects allow significant
+	optimizations that wouldn’t be possible under the “member
+	objects-by-pointer” approach. This is the main reason that
+	languages which enforce reference-semantics have “inherent”
+	performance challenges.
+
+
+FAQ  Are “inline virtual” member functions ever actually “inlined”? [4_4_1] 
+
+>> Occasionally...
+
+   ... when the compiler knows the “exact class” of the object which
+   is the target of the virtual function call:
+
+   i.e. local object, a global/static object, or a fully contained
+   object inside a composite;
+
+   i.e. sometimes happen even with a pointer or reference => when it
+   is clear the actual type of the object (see example at [4_4_1]
+
+
+WARNING The difference between inlining and non-inlining (up to 25X
+	speed degradation), is normally much more significant than the
+	difference between a regular function call and a virtual
+	function call.
+
+
+
+FAQ Sounds like I should never use reference semantics, right?  [4_4_1] 
+
+>> Wrong.
+
+(i) Therefore C++ gives us an ideal situation: we choose reference
+   semantics for objects that need unique identity ("problem space
+   objects") or that are too large to copy, and we can choose value
+   semantics for the others ("solution space objects").
+
+(ii) Generally, objects that are part of an inheritance hierarchy
+    should be passed by reference or by pointer.
+
+
+>> By (i) & (2): Unless compelling reasons are given to the contrary,
+   member objects should be by value and parameters should be by
+   reference. [note-3]
+
+
+\todo FAQ  What is value and/or reference semantics, and which is best in C++?
+\todo FAQ  What is “virtual data,” and how-can / why-would I use it in C++?
+\todo FAQ  What’s the difference between virtual data and dynamic data?
+
+
+# ==============================================================================
+# Appendix B - Debug, memory, ...
+# ==============================================================================
+
+# B.1 memory analysis 
+
+# valgrind tool
+
+  valgrind [valgrind-options] [your-program] [your-program-options]
+
+  (i.e.)  valgrind --leak-check=yes ./a.out
+
+
+TOOL SELECTION OPTIONS
+       The single most important option.
+
+       --tool=<toolname> [default: memcheck]
+           Run the Valgrind tool called toolname, e.g. memcheck, cachegrind,
+           callgrind, helgrind, drd, massif, lackey, none, exp-sgcheck,
+           exp-bbv, exp-dhat, etc.
+
+
+
+# ==============================================================================
+# Appendix C - Compilation, Linkage, ...
+# ==============================================================================
+
+
+# C.0. Compiling and Executing Our Program [3_1].page28
+
+- Naming convention (required by the compiler): .cc, .cxx, .cpp, .cp, and .C.
+
+- Compilation command:
+
+  > g++ file.cpp              # (1 step) compiler generates EXECUTABLE "a.out"
+  
+  > g++ -c file.cpp           # compile but not run the linker (file.o)
+    g++ file.o                # ... and link ("a.out" generated)
+
+
+// WARNING a main() function is required to generate an executable.
+
+
+- Value returned by main. Check error status
+
+  # No error (0)
+  >> echo $?
+     0
+
+  # Error code (!=0)
+  >> echo $?
+     98      # i.e. 98
+
+
+WARNING Linking: if any of these options is used (-c, -S, -E), then
+	the linker is not run, otherwise gcc & g++ always run the
+	linker.
+
+
+# C.1. 'gcc' versus 'g++'  Compilation [2_1]
+
+
+CODE_EXAMPLES  [k1]
+
+
+INFO 'gcc' refers generically to the complete suite of tools (c, c++,
+     ADA, ... compilers), and also to the C compiler. 
+
+
+HINT
+  - g++: compile & link both C++ & C sources (as C++ code)
+
+  - gcc: does not (explicitly) link C++ sources 
+
+
+a) gcc: C compiler
+
+INFO gcc will also compiles C++ source files (ALWAYS AS C++ CODE),
+     BUT it will not link in the C++ library automatically.
+
+     To compile & link C++ code with gcc: explicitly call to the C++
+     standard library '-lstdc++' (link std c++)
+
+     (i.e.) gcc c++_code.cpp -lstdc++
+     
+
+b) g++: C++ compiler
+
+  g++ Compile & link C++ code (automatically includes the C++ library)
+
+
+INFO g++ treats ‘.c’, ‘.h’ and ‘.i’ files as C++ source files instead
+     of C source files unless -x is used
+
+INFO g++ is also useful when precompiling a C header file with a '.h'
+     extension for use in C++ compilations.
+
+HINT How to compile C source code as actual C code with g++: using the
+     '-x c' option (i.e. g++ -x c c_code.c)
+
+HINT Compilation of multiple formats in one line: -xc & -xc++ options
+     g++ -c -x c dummy_c_code.c -x c++ dummy_c++_code.cpp
+
+
+WARNING g++ does not links C code as actual C code, gcc must be used
+	to the linkage instead
+
+	(i.e.compiled & linked as C code)
+	g++ -x c -c c_code.c       // OK (compiled as C code)
+	gcc c_code.o               // OK (linked as C code)
+
+	(i.e. linked as C++ code)
+	g++ -x c -c c_code.c       // OK (compiled as C code)
+  	g++ c_code.o               // OK (linked as C++ code)
+
+
+WARNING Depending on the release of the GNU compiler you are using,
+	you may need to specify -std=c++0x to turn on C++11 support.
+
+
+WARNING C++11 support:
+-std=c++11   (plain C++11 standard)
+-std=gnu++11 (gnu extentions violating the standard are enabled)
+
+
+WARNING C++14 support  \todo
+
+
+# C.2. File naming
+
+CODE_EXAMPLES  [k2]
+
+a) Source file names
+
+   - Usually (depending on the file system), ends with a suffix. The
+     suffix tells the system that the file is a C++ program.
+
+   - Different compilers use different suffix conventions; the most
+     common include .cc, .cxx, .cpp, .cp, and .C.
+
+
+WARNING Compilers actually DO CARE about the form of source file names:
+	[k2].test_source_suffix.cpp
+
+	(e.g.) g++ test_source_suffix 
+	       test_source_suffix: file not recognized:
+	       No se reconoce el formato del fichero
+	(e.g.) g++ test_source_suffix.any
+	       test_source_suffix.any: file not recognized:
+
+
+b) Header file names
+
+   - Usually have a suffix '.h', but some PROGRAMMERS use '.H', '.hpp', '.hxx'
+
+   - The standard library headers typically have no suffix at all.
+
+
+WARNING Compilers usually DON’T care about the form of header file
+	names, but IDEs sometimes do. [k2].test_header_suffix.cpp
+
+
+# C.3. Name mangling: C & C++ compatibility
+
+- The C++ compiler performs what is known as name-mangling - the names
+  that appear in your code are not the same ones as your linker sees.
+
+
+a) Using C functions in a C++ file [4_1]
+
+  // myfile.cpp
+  extern "C" int libfun();    // C function in your library
+
+  // or do it for a whole header file:
+
+  extern "C" {
+  #include "mylibdefs.h"      // defs for your C library functions
+  }
+
+
+b) Making a C-header file itself work in both languages and correctly
+   declare its functions as C-like to C++ [4_1]
+
+     - In the header file:
+
+     #ifdef __cplusplus
+     extern "C" {
+     #endif
+
+     [ C code here ]
+     
+     #ifdef __cplusplus
+     }
+     #endif
+
+
+     - In a source C++ file 
+
+     extern "C" {
+     #include "customlibrary.h"
+     }
+
+
+     - In a source C file
+
+     #include "customlibrary.h"
+
+
+
+# C.4. Compilation options (see man gcc)
+
+  -c   // compile but not run the linker (file.o)
+
+       gcc -c file.cpp
+
+
+  -o file  // Place output in file file.
+     	   //
+	   // This applies to whatever sort of output is being
+	   //produced, whether it be an executable file, an object
+	   //file, an assembler file or preprocessed C code.
+
+      gcc -o file dummy_c_code.c 
+
+
+  -v  // verbose
+
+
+  -E   // Stop after the preprocessing stage; do not run the compiler proper.
+  
+
+  -S  // Stop after the stage of compilation proper; do not assemble.      
+
+
+# C.5. Linkage
+
+WARNING linkage error "undefined reference to ..."
+
+Causes:
+
+a) Using gcc instead of g++ compiler.
+
+
+b) Not providing all the ".gcc" files to the linker
+
+   - How to detect this:
+
+     Try g++ *.cpp. Is this works then this error is the problem.
+
+
+   - (e.g) code_examples/B1_memory_references/Makefile
+
+     ERROR:
+
+     OBJS=refs_lib.o
+     all:$(MAIN)
+     $(MAIN):$(MAIN).o $(OBJS)
+
+     > make all
+
+     g++ -o references_test references_test.o
+
+   references_test.o: En la función `main':
+   references_test.cpp:(.text+0xe2): undefined reference to `ftest1_ref_as_fnparam(int&)' 
+   collect2: error: ld returned 1 exit status
+
+
+     Solution:
+   
+     $(MAIN):$(MAIN).o $(OBJS) 
+
+     > make all
+     g++ -o references_test references_test.o refs_lib.o
+
+     Now 'refs_lib.o' is passed to the linker
+
+
+c) Some functions has been declared (some '.h' file), but not defined
+   in its correspond '.cpp' file.
+   
+
+
+WARNING linkage error " multiple definitions of ..." [k11]
+
+Causes:
+
+a) Global variable declared [and defined] in a ".h" file that is
+   included by two or more other files:
+
+   After compile those source files, the global variable will be
+   defined in all of the object files, so the linker will complain
+   about multiple definitions.
+
+
+   (e.g.) // header.h
+   	  #ifndef _HEADER_H
+	  #define _HEADER_H
+
+	  int my_global_var;
+
+	  #endif
+
+
+	  // a.cpp
+	  #include "header.h"
+
+	  // b.cpp
+	  #include "header.h"
+
+
+Solution: define as a constant instead -> no longer defined in any of
+	  the includer files
+
+   (e.g.) // header.h
+   	  const int my_global_var = 27;
+
+
+Solution: declare the variable as 'extern' (in one or many header
+	  files), and then define the variable in one and only one of
+	  the source files.
+
+	  'extern' keyword tells the compiler that the variable is
+	  defined somewhere else. So, no new global object entries
+	  will be written to the object files.
+
+   (e.g.) // header.h
+
+   	  #ifndef _HEADER_H
+	  #define _HEADER_H
+
+	  extern int my_global_var;
+
+	  #endif
+
+
+	  /* ... Then, to avoid 'undefined symbol error', declare the
+	     variable in one of the sources. */
+
+	  // a.cpp
+	  #include "header.h"
+
+	  int my_global_var;
+
+
+	  /* --- Now  b.cpp will obtain the value of 'my_global_var' via
+	     the 'extern' variable. */
+
+	  /*!\warning anyway, if b.cpp is compiled before a.cpp first, then
+	  'my_global_var' will not be defined => AVOID global vars. */
+
+
+
+# C.6. C++11 compilation options  [6]
+
+[-Wc++11-compat] 
+
+   Warn about C++ constructs whose meaning differs between ISO C++
+   1998 and ISO C++ 2011, e.g., identifiers in ISO C++ 1998 that are
+   keywords in ISO C++ 2011. This warning turns on -Wnarrowing and is
+   enabled by -Wall.
+
+   Note.- enabled by -Wall
+
+
+[-Wmissing-field-initializers]
+
+   Warn if a structure's initializer has some fields missing. For example, the
+   following code causes such a warning, because x.h is implicitly zero:
+
+          struct s { int f, g, h; };
+          struct s x = { 3, 4 };
+
+   Note.- enabled by -Wextra
+
+   Note.- To get other -Wextra warnings without this one, use:
+   	  -Wextra -Wno-missing-field-initializers
+
+
+[-Wzero-as-null-pointer-constant] (C++ and Objective-C++ only)
+
+    Warn when a literal ‘0’ is used as null pointer constant. This can
+    be useful to facilitate the conversion to nullptr in C++11.
+
+
+
+# ==============================================================================
+# Appendix K - Code examples (./code_examples)
+# ==============================================================================
+
+# Compilation, Linkage, "./code_examples/compilation_linkage
+
+  [k1] 'gcc' versus 'g++' compilation - "gcc_vs_c++"
+
+  [k2] File naming - "file_naming"
+
+  [k11] multiple definitions of... linkage error - "linkage/multiple_definitions_error"
+
+
+# io_first_look  "./code_examples/io_first_look/"
+
+  [k3] cin & cout - basic_io_example.cpp
+
+
+# iteration statements  "./code_examples/statements/iteration_statements"
+
+  [k4]
+  read until EOF -  read_until_eof.cpp
+
+
+# references (lvalue references: &)
+
+  [k5] using references - "./code_examples/references"
+
+
+# constructors "./code_examples/constructors"
+
+  [k6] implicit conversors & explicit constructors - "./explicit_constructor"
+
+  [k8] default_ctor - "./default_ctor/main.cpp"
+
+  [k9] the "static initialization order" fiasco - "./static_init_order_fiasco"
+
+  [k10] The "Foo x(Bar())" tricky problem - "./tricky_foo_bar"
+
+  [k12] construction_order - "./ctor_order/good_init_test.cpp"
+
+  [k13] undef. construction_order - "./ctor_order/bad_order/undef_init_test.cpp"
+
+
+# Virtual functions - "./virtual_functions"
+
+  [k14] virtual_vs_nonvirtual_test - virtual_vs_nonvirtual_test.cpp
+
+
+#  11 member access control - "./11_member_access_control"
+
+  [k1101] virtual_vs_nonvirtual_test - virtual_vs_nonvirtual_test.cpp
+
+
+# initializers "./code_examples//initializers"
+
+  [k8501] cpp98 vs cpp11 init - "./cpp98" &  "./cpp11"
+
+  [k8502] aggregates - "./aggregates/aggregates_test.cpp"
+
+  [k8503] pods - "./aggregates/pods/pod_test.cpp"
+
+
+# ==============================================================================
+# Appendix S - New Features 
+# ==============================================================================
+
+# S.1 New Features in C++11
+
+  - In-Class Initializers (8.5.5)
+
+
+# S.1 New Features in C++14
+
+
+
+# ==============================================================================
+# Appendix T - Defined Terms
+# ==============================================================================
+
+Note. In the terms defined in this chapter, the quote "this
+      International Standard" refers to The C++ standard document ([1_1])
+
+
+A
+
+
+B
+
+- bit-field 
+
+  Class member with a integral type that specifies the number of bits
+  to allocate to the member. Bit-fields defined in consecutive order
+  in the class are, if possible, compacted into a common integral value.
+
+  # e.g.
+  struct { 
+    int b:5;  // bit-field of size 5
+  }
+
+
+- (primitive) built-in type
+
+  Type, such as int, defined by the language.
+
+
+- built-in operator
+
+  Operator, such as ( + = .), defined by the language.
+  Almost all the built-in operators can be overloaded by the user (13.5)
+
+
+C
+
+- C++ Standards
+
+  Old C++:	C++98, C++03
+  Modern C++: 	C++11, C++14, ...
+
+
+- The "Construct On First Use Idiom" 
+
+Technique used to prevent the static initialization order fiasco. [4_7_6]
+
+
+D
+
+- Dereferencing
+
+The dereference unary operator or indirection operator ("*").  It
+operates on a pointer variable, and returns an l-value equivalent to
+the value at the pointer address. This is called "dereferencing" the
+pointer.
+
+	int x = 10;
+	int *p = &i;
+	*p = 1; // dereferencing p => equivalent to "x=1"
+
+
+- dynamic type
+
+<glvalue> type of the most derived object (for pointers and references)
+<prvalue> static type of the prvalue expression
+
+E
+
+- extern
+ 
+This keyword tells the compiler that and object (variable, function,
+..), declared in a header file, is defined somewhere else. So the
+compiler will not write the object definition in any of the object files
+that include the header, then avoiding 'multiple definitions' linkage
+error. [k5]
+
+
+I
+
+- ill-formed program
+
+program that is not well-formed (see well-formed program bellow).
+
+
+M
+
+- manipulator
+
+Object, such as std::endl, that when read or written “manipulates” the
+stream itself.
+
+
+- mutable
+
+Applies to non-static class members of non-reference non-const type
+and specifies that the member does not affect the externally visible
+state of the class.  Mutable members of const classes are modifiable.
+
+
+N
+
+- The “Named Constructor Idiom”?
+
+Technique that provides more intuitive and/or safer construction
+operations for users of your class.
+
+- Narrow character types
+
+Plain char, signed char, and unsigned char are three distinct types,
+collectively called narrow character types.
+
+
+O
+
+- Object
+
+A region of memory that has a type. A variable is an object that has a name.
+
+
+P
+
+-  POD (Plain Old Data). (3.9.4.1), [4_6_1] [k8503]
+
+
+Q
+
+-  Qualification
+
+Using the "::" as qualifier. 
+
+  # e.g.
+  class B { int i; }
+  B::i = 7;  // qualified id 'i'
+  i = 7;  // un-qualified id 'i'
+
+
+S
+
+- standard library
+
+Collection of types and functions that every C++ compiler must support.
+
+
+- string literal 
+
+  Sequence of zero or more characters enclosed in double quotes
+  i.e. "a string literal"
+
+
+- Synthesized class methods
+
+Compiler-generated methods automatically (implicitly) defined by the
+compiler when the programmer doesn't: default constructor, Copy/Move &
+assignment operators.
+
+
+- The “static initialization order fiasco”?
+
+This the well known problem of initializing two GLOBAL (static)
+variables, which exist in separate source files, when one of them
+depends on the other to be initialized.
+
+
+- static type
+
+type of an expression (3.9) resulting from analysis of the program
+without considering execution semantics 
+[ Note: The static type of an expression depends only on the form of
+the program in which the expression appears, and does not change while
+the program is executing. —end note ]
+
+
+U
+
+- undefined behavior
+
+behavior for which this International Standard imposes no requirements
+[ Note: Undefined behavior may be expected when this International
+Standard omits any explicit definition of behavior or when a program
+uses an erroneous construct or erroneous data. Permissible undefined
+behavior ranges from ignoring the situation completely with
+unpredictable results, to behaving during translation or program
+execution in a documented manner characteristic of the environment
+(with or without the issuance of a diagnostic message), to terminating
+a translation or execution (with the issuance of a diagnostic
+message).  Many erroneous program constructs do not engender undefined
+behavior; they are required to be diagnosed.  —end note ]
+
+
+- unspecified behavior
+
+behavior, for a well-formed program construct and correct data, that
+depends on the implementation.
+[ Note: The implementation is not required to document which behavior
+occurs. The range of possible behaviors is usually delineated by this
+International Standard. —end note ]
+
+
+W
+
+- well-formed program
+
+C++ program constructed according to the syntax rules, diagnosable semantic 
+rules, and the one-definition rule (3.2).
+Note.- No compilation errors do not imply well-formed (run-time errors).
+
+
+
+
+# ==============================================================================
+# Appendix W - Remarkable Warnings
+# ==============================================================================
+
+WARNING_1: a const variable can be indirectly modified by a pointer,
+	   as in the following example:
+
+	 const int my_age = 32;
+	 *(int*)&my_age = 35;
+
+	 TODO to be confirmed as a test result (gcc file.c) was: core dumped
+
+
+WARNING_2 Compilers usually DON’T care about the form of header file names,
+	  but IDEs sometimes do. [k2].test_header_suffix.cpp
+
+
+WARNING_3 Compilers actually DO CARE about the form of source file names:
+	  (e.g.) g++ test_source_suffix 
+	         test_source_suffix: file not recognized:
+
+
+WARNING_4 linkage error "undefined reference to ..."
+	  a) Using gcc instead of g++ compiler.
+	  b) Not providing all the ".gcc" files to the linker
+	  c) Some functions has been declared but not defined.
+
+
+WARNING_5 public/private/protected are compile-time only. Once your
+	  application gets compiled, private fields sit next to public
+	  fields and there is no protection against modification.
+
+	 TODO to be confirmed (http://stackoverflow.com/questions/4706788/why-can-i-expose-private-members-when-i-return-a-reference-from-a-public-member)
+
+
+
+# ==============================================================================
+# Appendix Y - Non-C++ concepts
+# ==============================================================================
+
+# Y.1 Memory address  [7_1]
+
+# Word size versus address size
+
+a) word size = number of (binary {0,1}) digits that a CPU can process
+  at one time (i.e. 32, 64 bits)
+
+  A word size is characteristic to a given computer architecture
+  (register size, etc)
+
+b) address size: number of memory locations.  
+
+  total memory available = 2 exp address-size
+
+  - For a computer, the address size can be equal, larger or smaller
+    than the word size.
+
+  - If equal, one memory address to be efficiently stored in one word    
+    e.g. 32-bit computer can address 2**32 = 4GB 
+    
+
+
+       
+
+
+
+# ==============================================================================
+# Appendix Z - References
+# ==============================================================================
+
+
+# ------------------------------------------------------------------------------
+
+[1] C++ documents
+
+[1_1] The C++ standard - https://isocpp.org/std/the-standard
+
+      Current standard working draft -
+      	      "./doc_references/the_standard/current_standard/*.pdf"
+
+
+[1_2] Resource index (compilers, books, ...) - https://isocpp.org/get-started
+
+# ------------------------------------------------------------------------------
+
+[2] tools (compilers, debuggers, ...)
+
+[2_1] gcc - https://gcc.gnu.org/onlinedocs/gcc/Invoking-GCC.html
+
+[2_2] gimple: static analysis of C++ - http://www.gimpel.com/html/index.htm
+
+# ------------------------------------------------------------------------------
+
+[3] books
+
+
+    Level 1
+
+[3_1] primer - C++ Primer, 5th Edition.pdf
+      	       http://www.informit.com/title/032174113 (examples source code)
+	       WARNING: page number divergence book/pdf: pdf_page# ~= book#
+
+
+    Level 2
+
+[3_101] modern - Effective Modern C++.pdf
+
+[3_102] templates- C++ Templates, The Complete Guide
+
+
+
+    C++11 C++14 (see [1_2])
+
+[3_201] What’s new” in 10 minutes
+
+[3_202] What’s new” in depth - 
+
+
+
+    Reference books
+
+[4_301] The C++ Programming Language
+
+[4_302] The C++ Standard Library: A Tutorial and Reference
+
+
+# ------------------------------------------------------------------------------
+
+[4] C++ Concepts
+
+
+[4_1] name mangling - http://stackoverflow.com/questions/1068129/c-library-not-linking-using-gcc-g
+
+
+[4_2] C++ references
+
+      [4_2_0] References at the C++ standard doc. - [1_1].8.5.3
+      
+      [4_2_1] ISO C++ faq - https://isocpp.org/wiki/faq/references  (*)
+
+      [4_2_2] The difference between “pass by reference” in C and in C++? -
+	http://stackoverflow.com/questions/13654138/what-exactly-is-the-difference-between-pass-by-reference-in-c-and-in-c/13654139#13654139
+
+      [4_2_3] wikipedia - https://en.wikipedia.org/wiki/Reference_%28C%2B%2B%29
+
+      [4_2_4] dangers of references as data members - http://stackoverflow.com/questions/892133/should-i-prefer-pointers-or-references-in-member-data
+
+
+[4_3] C++ pointers
+
+      [4_3_1] Pointers to members - see [4_8_1] 
+
+
+
+[4_4] Reference and Value Semantics
+
+      [4_4_1] Reference and Value Semantics - https://isocpp.org/wiki/faq/value-vs-ref-semantics  (*)
+
+
+
+[4_5] Initialization
+
+      [4_5_1] New C++11 Initialization Forms - http://www.informit.com/articles/article.aspx?p=1852519
+
+      [4_5_2] std::initializer_list - http://en.cppreference.com/w/cpp/utility/initializer_list
+
+
+[4_6] Aggregates, PODs, TrivialType, and StandardLayoutType
+
+      [4_6_1] C++ concepts: PODType - http://en.cppreference.com/w/cpp/concept/PODType
+
+      [4_6_2] Passive data structure @ wikipedia - https://en.wikipedia.org/wiki/Passive_data_structure
+
+      [4_6_3] What are Aggregates and PODs - http://stackoverflow.com/questions/4178175/what-are-aggregates-and-pods-and-how-why-are-they-special (*)
+
+      [4_6_4] Aggregate Classes  - [3_1] 7.5.5, p. 387
+      
+      [4_6_5] Aggregate initialization - http://en.cppreference.com/w/cpp/language/aggregate_initialization  (*)
+
+      [4_6_6] StandardLayoutType - http://en.cppreference.com/w/cpp/concept/StandardLayoutType  (*)
+
+
+
+[4_7] Constructors
+
+      [4_7_1] Informit Constructors -
+      http://www.informit.com/guides/content.aspx?g=cplusplus&seqNum=15
+
+      [4_7_2] Informit Constructors FAQ- http://www.informit.com/guides/content.aspx?g=cplusplus&seqNum=364
+
+      [4_7_3] Multiple Inheritance: Construction and Destruction Order - http://www.informit.com/guides/content.aspx?g=cplusplus&seqNum=169
+
+      [4_7_4] Synthesized Default Constructor at Primer - [3_1] 7.1.4 (p. 342)
+
+      [4_7_5] Implicit Class-Type Conversions - [3_1] 7.5.4. (p 382)
+
+      [4_7_6] ISO ctors. FAQ - https://isocpp.org/wiki/faq/ctors  (*)
+
+      [4_7_7] constructor's initialization order - [1_1], 12.6.2, paragraph 13
+
+      [4_7_8] ctor. order of member functions - [1_1], 12.6.2
+      	      Initializing bases and members, paragraph 16
+
+
+[4_8] Copying and moving class objects
+
+      [4_8_1] Bitcopy versus initialization - http://www.drbio.cornell.edu/pl47/programming/TICPP-2nd-ed-Vol-one-html/Chapter11.html
+
+
+
+[4_9] destructors
+
+      [4_9_1] ISO dtors. FAQ - https://isocpp.org/wiki/faq/dtors  (*)
+
+
+
+[4_10] multiple inheritance (virtual inheritance)
+
+      [4_10_1] what is a virtual base class? - http://stackoverflow.com/questions/21558/in-c-what-is-a-virtual-base-class
+
+      [4_10_2] ISO C++  Inheritance — Multiple and Virtual Inheritance - https://isocpp.org/wiki/faq/multiple-inheritance
+
+      [4_10_3] Virtual inheritance @ Wikipedia - https://en.wikipedia.org/wiki/Virtual_inheritance
+
+      [4_10_4] Multiple Inheritance: Construction and Destruction Order - http://www.informit.com/guides/content.aspx?g=cplusplus&seqNum=169
+
+      code example: [1_1] 12.6.2. 14
+      code example: [1_1] 12.7. 4
+
+
+[4_11] Virtual functions
+
+      [4_11_1] ISO FAQ - https://isocpp.org/wiki/faq/virtual-functions  (*)
+
+      [4_11_2] v-table & v-pointer implementation & use -               (*)
+      	       https://isocpp.org/wiki/faq/virtual-functions#dyn-binding 
+	       https://isocpp.org/wiki/faq/virtual-functions#dyn-binding2
+
+
+[4_100] Containers
+
+  [4_100_1] ISO containers FAQ - https://isocpp.org/wiki/faq/containers (*)
+
+  	    FACT Arrays are evil !!
+
+[4_111] Memory Management
+
+  [4_111_1] ISO Containers FAQ - https://isocpp.org/wiki/faq/freestore-mgmt (*)
+
+# ------------------------------------------------------------------------------
+
+[5] Teacher index
+
+[5_1] Joseph Mansfield - http://stackoverflow.com/users/150634/joseph-mansfield
+
+# ------------------------------------------------------------------------------
+
+[6] C++ compilation model
+
+[6_1] compiler - linker options   (*)
+
+  [6_1_1] debug options -
+  	  https://gcc.gnu.org/onlinedocs/gcc/Debugging-Options.html
+
+  [6_1_2] optimize options -
+  	  https://gcc.gnu.org/onlinedocs/gcc/Optimize-Options.html
+
+  [6_1_3] warning options -
+  https://gcc.gnu.org/onlinedocs/gcc/Warning-Options.html
+
+  [6_1_4] link options - https://gcc.gnu.org/onlinedocs/gcc/Link-Options.html
+
+[6_2] Instatntiation units - http://stackoverflow.com/questions/19971744/whats-the-meaning-of-instantiation-unit-in-c11-standard
+
+[6_3] Single Compilation Unit (SCU) -
+      https://en.wikipedia.org/wiki/Single_Compilation_Unit
+
+# ------------------------------------------------------------------------------
+
+[7] Non-C++ concepts
+
+[7_1] Memory_address - https://en.wikipedia.org/wiki/Memory_address
+
+
+# ------------------------------------------------------------------------------
+
+# (*) local copy exists at ./doc_references
+
+
+# ==============================================================================
+
+
+

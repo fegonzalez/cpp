@@ -1,0 +1,20 @@
+/*\file test_source_suffix
+
+  - Checking "c++.howto", A.2. File naming: Compilers actually do care
+    about the form of the source file.
+
+    Test: g++ test_source_suffix
+    Expected: test_source_suffix: file not recognized
+    Obtained: the expected result.
+  
+ */
+
+#include <iostream>  // cout 
+
+int main()
+{
+  const std::string ERR_MSG = "WARNING Compilers actually do care about the form of the source file. \nWARNING Compilers usually do not care about the form of header file names, but IDEs sometimes do.";
+
+  std::cout << ERR_MSG << std::endl;
+  return 0;
+}

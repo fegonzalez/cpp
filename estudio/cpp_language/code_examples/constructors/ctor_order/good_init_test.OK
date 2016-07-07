@@ -1,0 +1,22 @@
+
+ ctor_order test (c++ standard 12.6.2)
+create A::A()
+create D::D()
+create B::B()
+create D::D()
+create D::D()
+create C::C()
+C::print()
+embed_in_c =  22
+num =  33
+*ptr2d =  44
+ B::print()
+(undefined) int_within_b =  
+(default -1) d_within_b =  -1
+
+destroy C::~C()
+destroy D::~D()
+destroy D::~D()
+destroy B::~B()
+destroy D::~D()
+destroy A::~A()

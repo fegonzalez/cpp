@@ -1,0 +1,77 @@
+# To run this makefile on your files, type:
+#
+# make -f Makefile.1 [target]
+
+CXX=g++
+CXXFLAGS=-Wall
+LDFLAGS=
+SOURCES=references_test.cpp refs_lib.cpp
+OBJS=references_test.o refs_lib.o
+# LIBS    = "-lncurses -lm -lsdl"
+HEADERS=refs_lib.h
+EXEC=references_test
+
+RM=rm -f
+CORE_DUMPS=core.*
+TRASH= $(OBJS) $(EXEC).last_diff $(EXEC) $(EXEC).o $(CORE_DUMPS) a.out *.*~ *~ 
+
+
+#
+# public targets: all runtest successtest difftest
+#
+# default target = all
+
+all: $(EXEC)
+
+
+runtest:all
+	@echo 'Building target: $@'
+	./$(EXEC)
+	@echo ''
+	@echo 'Finished building: $@'
+
+
+  
+successtest:all
+	@echo 'Building target: $@'
+	./$(EXEC) > $(EXEC).OK
+	@echo ''
+	@echo 'Finished building: $@'
+
+
+difftest:all
+	@echo 'Building target: $@'
+	./$(EXEC) > $(EXEC).last_diff
+	diff -s $(EXEC).last_diff $(EXEC).OK
+	@echo ''
+	@echo 'Finished building: $@'
+
+
+# private targets: all runtest successtest difftest
+
+$(EXEC):$(OBJS)
+	@ echo 'Building target: $@'
+
+	$(CXX) $(LDFLAGS) $(CXXFLAGS) $(INCLUDES) -o $@ $^ $(LIBS)
+
+	@echo 'Finished building: $@'
+
+
+# explicit rules
+
+references_test.o:references_test.cpp $(OBJS) $(HEADERS)
+	@echo 'Building target: $@'
+	$(CXX) $(CXXFLAGS) $(INCLUDES) -c $(EXEC).cpp
+
+refs_lib.o:refs_lib.cpp	$(HEADERS)
+	@echo 'Building target: $@'
+	$(CXX) $(CXXFLAGS) $(INCLUDES) -c refs_lib.cpp
+
+
+
+#
+# phony targets
+#
+
+clean:
+	clear; $(RM) $(TRASH); ls -l

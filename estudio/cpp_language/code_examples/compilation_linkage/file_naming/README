@@ -1,0 +1,28 @@
+Testing "c++.howto" A.2. File naming
+
+
+1) Testing good use cases
+
+TEST good source suffix & usual header suffix
+
+     g++ test_source_suffix.cpp
+
+
+TEST unusual header suffix and non-header suffix
+
+     g++ test_header_suffix.cpp
+
+
+2) Testing bad use cases
+
+TEST no source suffix
+
+     g++ test_source_suffix 
+	       test_source_suffix: file not recognized:
+	       No se reconoce el formato del fichero
+
+
+TEST bad source suffix
+
+     g++ test_source_suffix.any
+     	 test_source_suffix.any: file not recognized: No se reconoce el formato

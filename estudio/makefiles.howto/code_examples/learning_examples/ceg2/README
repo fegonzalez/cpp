@@ -1,0 +1,15 @@
+# eg2: local makefile with implicit (pattern) rules & explicit header
+#      dependency resolution
+
+
+- explicit rules                                  YES
+
+- implicit rules	       	     		  YES
+
+- non-local HEADER				  YES
+
+- (explicit) header dependency resolution	  YES
+
+- Substitution References	     		  YES todo
+
+- Static Pattern vs Implicit Rules   		  YES todo

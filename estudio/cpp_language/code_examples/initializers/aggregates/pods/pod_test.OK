@@ -1,0 +1,31 @@
+
+Test [k8503] Pods.
+true
+false
+false
+
+void is_test()
+
+is_trivial ?
+true
+false
+false
+true
+false
+
+is_standard_layout ?
+true
+true
+true
+false
+false
+
+is_pod ?
+true
+false
+false
+false
+false
+
+0 42 0
+

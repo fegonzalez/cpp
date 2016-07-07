@@ -1,0 +1,26 @@
+\test "good_init_test.cpp"
+\test "bad_order/undef_test.cpp"
+
+
+//------------------------------------------------------------------------------
+
+\test "good_init_test.cpp"
+
+      construction (initialization) order. Correct order.
+
+
+//------------------------------------------------------------------------------
+
+\test "bad_order/undef_test.cpp"
+
+       Test tried: 
+
+       Calling virtual member function before v-pointer is defined: 
+       Expected: compile error 
+       Obtained: ok (compiler dependent -> maybe this can figure it out.
+
+      \test 2: mem-init-list after direct base classes: OK
+
+      \test 3: constructor body: OK
+
+//------------------------------------------------------------------------------

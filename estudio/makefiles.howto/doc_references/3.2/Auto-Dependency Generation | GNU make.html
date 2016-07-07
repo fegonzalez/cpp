@@ -1,0 +1,658 @@
+<!DOCTYPE html>
+<!--[if IE 7]>
+<html class="ie ie7" lang="en-US">
+<![endif]-->
+<!--[if IE 8]>
+<html class="ie ie8" lang="en-US">
+<![endif]-->
+<!--[if !(IE 7) & !(IE 8)]><!-->
+<html lang="en-US"><!--<![endif]--><head>
+<meta http-equiv="content-type" content="text/html; charset=UTF-8">
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width">
+<title>Auto-Dependency Generation | GNU make</title>
+<link rel="profile" href="http://gmpg.org/xfn/11">
+<link rel="pingback" href="http://make.mad-scientist.net/xmlrpc.php">
+<!--[if lt IE 9]>
+<script src="http://make.mad-scientist.net/wp-content/themes/twentytwelve/js/html5.js" type="text/javascript"></script>
+<![endif]-->
+<!-- Jetpack Site Verification Tags -->
+<meta name="google-site-verification" content="dbobFJJsW_-Rf6VLqx51zB9Wm7nvgSznPXxkux9Hx_M">
+<link rel="alternate" type="application/rss+xml" title="GNU make » Feed" href="http://make.mad-scientist.net/feed/">
+<link rel="alternate" type="application/rss+xml" title="GNU make » Comments Feed" href="http://make.mad-scientist.net/comments/feed/">
+<link rel="alternate" type="application/rss+xml" title="GNU make » Auto-Dependency Generation Comments Feed" href="http://make.mad-scientist.net/papers/advanced-auto-dependency-generation/feed/">
+		<script type="text/javascript">
+			window._wpemojiSettings = {"baseUrl":"https:\/\/s.w.org\/images\/core\/emoji\/72x72\/","ext":".png","source":{"concatemoji":"http:\/\/make.mad-scientist.net\/wp-includes\/js\/wp-emoji-release.min.js?ver=4.4.2"}};
+			!function(a,b,c){function d(a){var c,d=b.createElement("canvas"),e=d.getContext&&d.getContext("2d"),f=String.fromCharCode;return e&&e.fillText?(e.textBaseline="top",e.font="600 32px Arial","flag"===a?(e.fillText(f(55356,56806,55356,56826),0,0),d.toDataURL().length>3e3):"diversity"===a?(e.fillText(f(55356,57221),0,0),c=e.getImageData(16,16,1,1).data.toString(),e.fillText(f(55356,57221,55356,57343),0,0),c!==e.getImageData(16,16,1,1).data.toString()):("simple"===a?e.fillText(f(55357,56835),0,0):e.fillText(f(55356,57135),0,0),0!==e.getImageData(16,16,1,1).data[0])):!1}function e(a){var c=b.createElement("script");c.src=a,c.type="text/javascript",b.getElementsByTagName("head")[0].appendChild(c)}var f,g;c.supports={simple:d("simple"),flag:d("flag"),unicode8:d("unicode8"),diversity:d("diversity")},c.DOMReady=!1,c.readyCallback=function(){c.DOMReady=!0},c.supports.simple&&c.supports.flag&&c.supports.unicode8&&c.supports.diversity||(g=function(){c.readyCallback()},b.addEventListener?(b.addEventListener("DOMContentLoaded",g,!1),a.addEventListener("load",g,!1)):(a.attachEvent("onload",g),b.attachEvent("onreadystatechange",function(){"complete"===b.readyState&&c.readyCallback()})),f=c.source||{},f.concatemoji?e(f.concatemoji):f.wpemoji&&f.twemoji&&(e(f.twemoji),e(f.wpemoji)))}(window,document,window._wpemojiSettings);
+		</script><script type="text/javascript" src="Auto-Dependency%20Generation%20%7C%20GNU%20make_files/wp-emoji-release.js"></script>
+		<style type="text/css">
+img.wp-smiley,
+img.emoji {
+	display: inline !important;
+	border: none !important;
+	box-shadow: none !important;
+	height: 1em !important;
+	width: 1em !important;
+	margin: 0 .07em !important;
+	vertical-align: -0.1em !important;
+	background: none !important;
+	padding: 0 !important;
+}
+</style>
+<link rel="stylesheet" id="twentytwelve-fonts-css" href="Auto-Dependency%20Generation%20%7C%20GNU%20make_files/css.css" type="text/css" media="all">
+<link rel="stylesheet" id="twentytwelve-style-css" href="Auto-Dependency%20Generation%20%7C%20GNU%20make_files/style.css" type="text/css" media="all">
+<!--[if lt IE 9]>
+<link rel='stylesheet' id='twentytwelve-ie-css'  href='http://make.mad-scientist.net/wp-content/themes/twentytwelve/css/ie.css?ver=20121010' type='text/css' media='all' />
+<![endif]-->
+<link rel="stylesheet" id="parent-style-css" href="Auto-Dependency%20Generation%20%7C%20GNU%20make_files/style_002.css" type="text/css" media="all">
+<link rel="stylesheet" id="child-style-css" href="Auto-Dependency%20Generation%20%7C%20GNU%20make_files/style.css" type="text/css" media="all">
+<link rel="stylesheet" id="jetpack_css-css" href="Auto-Dependency%20Generation%20%7C%20GNU%20make_files/jetpack.css" type="text/css" media="all">
+<script type="text/javascript" src="Auto-Dependency%20Generation%20%7C%20GNU%20make_files/jquery.js"></script>
+<script type="text/javascript" src="Auto-Dependency%20Generation%20%7C%20GNU%20make_files/jquery-migrate.js"></script>
+<link rel="https://api.w.org/" href="http://make.mad-scientist.net/wp-json/">
+<link rel="EditURI" type="application/rsd+xml" title="RSD" href="http://make.mad-scientist.net/xmlrpc.php?rsd">
+<link rel="wlwmanifest" type="application/wlwmanifest+xml" href="http://make.mad-scientist.net/wp-includes/wlwmanifest.xml"> 
+<meta name="generator" content="WordPress 4.4.2">
+<link rel="canonical" href="http://make.mad-scientist.net/papers/advanced-auto-dependency-generation/">
+<link rel="shortlink" href="http://wp.me/P5hQIx-X">
+<link rel="alternate" type="application/json+oembed" href="http://make.mad-scientist.net/wp-json/oembed/1.0/embed?url=http%3A%2F%2Fmake.mad-scientist.net%2Fpapers%2Fadvanced-auto-dependency-generation%2F">
+<link rel="alternate" type="text/xml+oembed" href="http://make.mad-scientist.net/wp-json/oembed/1.0/embed?url=http%3A%2F%2Fmake.mad-scientist.net%2Fpapers%2Fadvanced-auto-dependency-generation%2F&amp;format=xml">
+
+<link rel="dns-prefetch" href="http://i0.wp.com/">
+<link rel="dns-prefetch" href="http://i1.wp.com/">
+<link rel="dns-prefetch" href="http://i2.wp.com/">
+<style type="text/css">img#wpstats{display:none}</style>		<style type="text/css">.recentcomments a{display:inline !important;padding:0 !important;margin:0 !important;}</style>
+		<style type="text/css" id="custom-background-css">
+body.custom-background { background-color: #e5ebff; }
+</style>
+
+<!-- Jetpack Open Graph Tags -->
+<meta property="og:type" content="article">
+<meta property="og:title" content="Auto-Dependency Generation">
+<meta property="og:url" content="http://make.mad-scientist.net/papers/advanced-auto-dependency-generation/">
+<meta property="og:description" content="One of the most important, and yet potentially frustrating, tasks that is required to allow any make-based build environment to function properly is the correct listing of dependencies in the makef…">
+<meta property="article:published_time" content="2000-06-23T22:16:52+00:00">
+<meta property="article:modified_time" content="2016-01-04T08:07:53+00:00">
+<meta property="og:site_name" content="GNU make">
+<meta property="og:image" content="https://s0.wp.com/i/blank.jpg">
+<meta property="og:locale" content="en_US">
+<meta name="twitter:card" content="summary">
+<link rel="stylesheet" type="text/css" id="gravatar-card-css" href="Auto-Dependency%20Generation%20%7C%20GNU%20make_files/hovercard.css"><link rel="stylesheet" type="text/css" id="gravatar-card-services-css" href="Auto-Dependency%20Generation%20%7C%20GNU%20make_files/services.css"></head>
+
+<body class="page page-id-59 page-child parent-pageid-82 page-template-default custom-background custom-font-enabled single-author">
+<div id="page" class="hfeed site">
+	<header id="masthead" class="site-header" role="banner">
+		<hgroup>
+			<div class="site-logo">
+				<img src="Auto-Dependency%20Generation%20%7C%20GNU%20make_files/gnu-head-sm.png" alt="[GNU] " height="120" width="122">
+			</div>
+			<div class="site-titlebox" style="left:122px">
+				<h1 class="site-title"><a href="http://make.mad-scientist.net/" title="GNU make" rel="home">GNU make</a></h1>
+				<div class="site-description">A Program for Directing Recompilation</div>
+			</div>
+			<div style="clear:both;"></div>
+		</hgroup>
+
+		<nav id="site-navigation" class="main-navigation" role="navigation">
+			<button class="menu-toggle">Menu</button>
+			<a class="assistive-text" href="#content" title="Skip to content">Skip to content</a>
+			<div class="menu-white-papers-container"><ul id="menu-white-papers" class="nav-menu"><li id="menu-item-33" class="menu-item menu-item-type-post_type menu-item-object-page menu-item-33"><a href="http://make.mad-scientist.net/">HOME</a></li>
+<li id="menu-item-84" class="menu-item menu-item-type-post_type menu-item-object-page current-page-ancestor current-menu-ancestor current-menu-parent current-page-parent current_page_parent current_page_ancestor menu-item-has-children menu-item-84"><a href="http://make.mad-scientist.net/papers/">Papers</a>
+<ul class="sub-menu">
+	<li id="menu-item-24" class="menu-item menu-item-type-post_type menu-item-object-page menu-item-24"><a href="http://make.mad-scientist.net/papers/rules-of-makefiles/">Rules of Makefiles</a></li>
+	<li id="menu-item-31" class="menu-item menu-item-type-post_type menu-item-object-page menu-item-31"><a href="http://make.mad-scientist.net/papers/how-not-to-use-vpath/">How Not to Use VPATH</a></li>
+	<li id="menu-item-58" class="menu-item menu-item-type-post_type menu-item-object-page menu-item-58"><a href="http://make.mad-scientist.net/papers/multi-architecture-builds/">Multi-Architecture Builds</a></li>
+	<li id="menu-item-66" class="menu-item menu-item-type-post_type menu-item-object-page current-menu-item page_item page-item-59 current_page_item menu-item-66"><a href="http://make.mad-scientist.net/papers/advanced-auto-dependency-generation/">Auto-Dependency Generation</a></li>
+	<li id="menu-item-75" class="menu-item menu-item-type-post_type menu-item-object-page menu-item-75"><a href="http://make.mad-scientist.net/papers/jobserver-implementation/">Jobserver Implementation</a></li>
+</ul>
+</li>
+<li id="menu-item-109" class="menu-item menu-item-type-post_type menu-item-object-page menu-item-109"><a href="http://make.mad-scientist.net/posts/">Musings</a></li>
+<li id="menu-item-40" class="menu-item menu-item-type-post_type menu-item-object-page menu-item-has-children menu-item-40"><a href="http://make.mad-scientist.net/about/">About</a>
+<ul class="sub-menu">
+	<li id="menu-item-44" class="menu-item menu-item-type-post_type menu-item-object-page menu-item-44"><a href="http://make.mad-scientist.net/about/comments/">Comments</a></li>
+</ul>
+</li>
+</ul></div>		</nav><!-- #site-navigation -->
+
+			</header><!-- #masthead -->
+
+	<div id="main" class="wrapper">
+
+	<div id="primary" class="site-content">
+		<div id="content" role="main">
+
+							
+	<article id="post-59" class="post-59 page type-page status-publish hentry">
+		<header class="entry-header">
+												<h1 class="entry-title">Auto-Dependency Generation</h1>
+<p style="margin-top: 1em;"><small>June 23rd, 2000&nbsp;&nbsp;&nbsp;&nbsp;(updated January 4th, 2016)</small></p>
+		</header>
+
+		<div class="entry-content">
+			<blockquote>
+<hr noshade="noshade">
+<p>One of the most important, and yet potentially frustrating, tasks that is required to allow any <code>make</code>-based build environment to function properly is the correct listing of dependencies in the makefile.</p>
+<p>This document describes a very useful method for having <code>make</code> itself create and maintain these dependencies completely automatically.</p>
+<p>The basics of the advanced method below were invented by Tom Tromey <a href="mailto:tromey@cygnus.com">&lt;tromey@cygnus.com&gt;</a>, I merely wrote it down here. Credits for the method go to him; problems with the explanation belong to me.</p>
+<hr noshade="noshade">
+</blockquote>
+<ul>
+<li><a href="#tldr">TL;DR: The GCC Solution</a></li>
+<li><a href="#traditional">Traditional <code>make depend</code> Method</a></li>
+<li><a href="#include">The GNU make <code>include</code> Directive</a></li>
+<li><a href="#basic">Basic Auto-Dependencies</a></li>
+<li><a href="#advanced">Advanced Auto-Dependencies</a>
+<ul>
+<li><a href="#noreexec">Avoiding Re-exec of <code>make</code></a></li>
+<li><a href="#norule">Avoiding “No rule to make target …” Errors</a></li>
+<li><a href="#depdelete">Handling Deleted Dependecy Files</a></li>
+</ul>
+</li>
+<li><a href="#output">Placement of Output Files</a></li>
+<li><a href="#makedep">Defining <code>MAKEDEPEND</code></a>
+<ul>
+<li><a href="#cpp"><code>MAKEDEPEND = /usr/lib/cpp</code></a></li>
+<li><a href="#makedepend"><code>MAKEDEPEND = makedepend</code></a></li>
+<li><a href="#gcc"><code>MAKEDEPEND = gcc -M</code></a></li>
+</ul>
+</li>
+<li><a href="#combine">Combining Compilation and Dependency Generation</a></li>
+<li><a href="#nonc">Dependencies For Non-C Files</a></li>
+</ul>
+<p>All <code>make</code> programs must know, with great accuracy, what 
+files a particular target is dependent on in order to ensure that it is 
+rebuilt when (and only when) necessary.</p>
+<p>Keeping this list up-to-date by hand is not only tedious, but quite 
+error prone. Most systems of any size prefer to provide automated tools 
+for extracting this information. The traditional tool was the <code>makedepend</code>
+ program, which reads C source files and generates a list of the header 
+files in a target-dependency format suitable for inclusion in (or 
+appending to) a makefile.</p>
+<p>The modern solution, for those using suitably enlightened compilers 
+or preprocessors (such as GCC), is to have the compiler or preprocessor 
+generate this information.</p>
+<p>The purpose of this paper isn’t primarily to discuss ways in which 
+this dependency information can be obtained, although this is covered. 
+Rather, it describes some useful ways to combine the invocation and 
+output of these tools with GNU <code>make</code> to ensure that dependency information is always accurate and up-to-date, as seamlessly (and efficiently) as possible.</p>
+<p>These methods rely on features provided by GNU <code>make</code>. It 
+may be possible to modify them to work with other versions of make; 
+that’s left as an exercise to the reader. However, before undertaking 
+that exercise please review <a href="http://make.mad-scientist.net/papers/rules-of-makefiles#rule1">Paul’s First Rule of Makefiles</a> :).<a name="tldr"></a></p>
+<h2>TL;DR: The GCC Solution</h2>
+<p>For those who are impatient, here’s a complete best-practice 
+solution. This solution requires support from your compiler: it assumes 
+you are using <a href="https://gcc.gnu.org/">GCC</a> as your compiler 
+(or a compiler which provides preprocessor flags compatible with GCC). 
+If your compiler doesn’t meet this criteria, keep reading for 
+alternatives.</p>
+<p>Add this to your makefile environment (the sections in blue are the 
+changes to the built-in content provided by GNU make). Of course you can
+ omit pattern rules which don’t fit your environment (or add new ones as
+ needed):</p>
+<pre><span style="color: blue;">DEPDIR := .d
+$(shell mkdir -p $(DEPDIR) &gt;/dev/null)
+DEPFLAGS = -MT $@ -MMD -MP -MF $(DEPDIR)/$*.Td</span>
+
+COMPILE.c = $(CC) <span style="color: blue;">$(DEPFLAGS)</span> $(CFLAGS) $(CPPFLAGS) $(TARGET_ARCH) -c
+COMPILE.cc = $(CXX) <span style="color: blue;">$(DEPFLAGS)</span> $(CXXFLAGS) $(CPPFLAGS) $(TARGET_ARCH) -c
+<span style="color: blue;">POSTCOMPILE = mv -f $(DEPDIR)/$*.Td $(DEPDIR)/$*.d</span>
+
+<span style="color: blue;">%.o : %.c</span>
+%.o : %.c <span style="color: blue;">$(DEPDIR)/%.d</span>
+        $(COMPILE.c) $(OUTPUT_OPTION) $&lt;
+        <span style="color: blue;">$(POSTCOMPILE)</span>
+
+<span style="color: blue;">%.o : %.cc</span>
+%.o : %.cc <span style="color: blue;">$(DEPDIR)/%.d</span>
+        $(COMPILE.cc) $(OUTPUT_OPTION) $&lt;
+        <span style="color: blue;">$(POSTCOMPILE)</span>
+
+<span style="color: blue;">%.o : %.cxx</span>
+%.o : %.cxx <span style="color: blue;">$(DEPDIR)/%.d</span>
+        $(COMPILE.cc) $(OUTPUT_OPTION) $&lt;
+        <span style="color: blue;">$(POSTCOMPILE)</span>
+
+<span style="color: blue;">$(DEPDIR)/%.d: ;</span>
+<span style="color: blue;">.PRECIOUS: $(DEPDIR)/%.d</span>
+
+<span style="color: blue;">-include $(patsubst %,$(DEPDIR)/%.d,$(basename $(SRCS)))</span>
+</pre>
+<p>Be aware that the <code>include</code> line must come <i>after</i> 
+the initial, default target; otherwise the included dependency files 
+will abscond with your default target setting. It’s fine to add this to 
+the very end of your makefile (or, keep it in a separate makefile and 
+include it).</p>
+<p>Also, this assumes the <code>SRCS</code> variable contains all the source files (not header files) you want to track dependencies for.</p>
+<p>If you just want to understand what these changes mean, <a href="#combine">jump to the description</a>. If you want a deeper understanding of how this works, and to learn some interesting things about GNU <code>make</code>, keep reading.<a name="traditional"></a></p>
+<h2>Traditional <tt>make depend</tt> Method</h2>
+<p>The time-honored method of handling dependency generation is to provide a special target in your makefiles, typically <code>depend</code>,
+ which can be invoked to create dependency information. The command for 
+this target will invoke some kind of dependency tracking tool on all the
+ relevant files in the directory, which will generate makefile-formatted
+ dependency information.</p>
+<p>If your version of make supports <code>include</code> you can 
+redirect this to a file and simply include the file. If not, this 
+usually also involves some shell hackery to append the list of 
+dependencies generated to the end of the makefile itself.</p>
+<p>Although it’s simple, there are serious problems with this method. 
+First and foremost is that dependencies are only rebuilt when the user 
+explicitly requests it; if the user doesn’t run <code>make depend</code> regularly they could become badly out-of-date and <code>make</code> will not properly rebuild targets. Thus, we cannot say this is seamless and accurate.</p>
+<p>A secondary problem is that it is inefficient to run <code>make depend</code>,
+ particularly after the first time. Since it modifies makefiles, you 
+typically must do it as a separate build step, which means an extra 
+invocation of every make in every subdirectory, etc., in addition to the
+ overhead of the dependency-generation tool itself. Also, it rechecks 
+every file’s dependencies, even those which haven’t changed.</p>
+<p>So, we’ll see how we can do better.<a name="include"></a></p>
+<h2>The GNU make <tt>include</tt> Directive</h2>
+<p>Most versions of <code>make</code> support some sort of <code>include</code> directive (and indeed, <code>include</code>
+ is required by the latest POSIX specification). Unsurprisingly, this 
+allows one makefile to include other makefiles, as if they had been 
+entered there.</p>
+<p>One can immediately see how this would be useful, simply to avoid 
+appending dependency information to a makefile as in the step above. 
+However, there is a more <a href="http://make.mad-scientist.net/constructed-include-files/">interesting capability</a> in GNU <code>make</code>‘s handling of <code>include</code>: just as with the normal makefile, GNU <code>make</code> will attempt to <i>rebuild</i> the included makefile. If it is successfully rebuilt, GNU <code>make</code> will re-execute itself to read the new version.</p>
+<p>This auto-rebuild feature can be harnessed to avoid requiring a separate <code>make depend</code>
+ step: if you list all the source files as prerequisites to the file 
+containing dependency information, then include that file into your 
+makefile, it will be rebuilt every time a source file changed. As a 
+result, the dependency information will always be up-to-date and the 
+user doesn’t need to run <code>make depend</code> explicitly.</p>
+<p>Of course, this means dependency information is recalculated for <em>all</em> files every time <em>any</em> file changes, which is unfortunate. We can still do better than this.</p>
+<p>For a detailed description of GNU <code>make</code>‘s automatic rebuild feature, see the GNU make User’s Manual, section “<cite>How Makefiles Are Remade</cite>”.<a name="basic"></a></p>
+<h2>Basic Auto-Dependencies</h2>
+<p>The GNU <code>make</code> User’s Manual describes one way of handling auto-dependencies in section <a href="http://www.gnu.org/software/make/manual/html_node/Automatic-Prerequisites.html"><cite>Generating Dependencies Automatically</cite></a>.</p>
+<p>In this method, a separate dependency file is created for each source file (in our examples we’ll use a <code>.d</code>
+ suffix on the base filename). This file contains a rule for the target 
+that is created from that source file, listing the generated 
+prerequisites of the target.</p>
+<p>These dependency files are then all included by the makefile. An 
+implicit rule is provided that describes how the dependency files are to
+ be created. In short, something like this:</p>
+<pre>SRCS = foo.c bar.c <i>...</i>
+
+%.d : %.c
+        $(MAKEDEPEND)
+        @sed 's/\($*\)\.o[ :]*/\1.o $@ : /g' &lt; $*.Td &gt; $@; \
+           rm -f $*.Td; [ -s $@ ] || rm -f $@
+
+include $(SRCS:.c=.d)
+</pre>
+<p>In these examples I’ll simply use variables such as <code>$(MAKEDEPEND)</code>
+ to stand for whatever method you choose for creating dependency files. 
+Some possible values for this variable are described below.</p>
+<p>In this case, the output is written to a temporary file and 
+post-processed. The post-processing changes the normal target 
+specification:</p>
+<pre>foo.o: foo.c foo.h bar.h baz.h
+</pre>
+<p>to also contain the <code>.d</code> file itself, like this:</p>
+<pre>foo.o foo.d: foo.c foo.h bar.h baz.h
+</pre>
+<p>Whenever GNU <code>make</code> reads this makefile, before it does anything else it will try to rebuild the included makefiles, in this case the <code>.d</code> files. We have a rule to build them, and we have a list of prerequisites which is the same as the list for the <code>.o</code> file itself. So, if any file changes that would cause the original target to appear out-of-date, it will also cause the <code>.d</code> file to be rebuilt.</p>
+<p>Thus, when any source file or included file changes, <code>make</code> will rebuild the <code>.d</code>
+ file(s), re-execute itself to read in the new makefiles, then continue 
+with builds as usual, now with an updated and accurate dependency list.</p>
+<p>Here we solve the two problems with the earlier solutions. First, the
+ user doesn’t have to do anything special to ensure accurate dependency 
+lists; <code>make</code> will take care of it. Second, we are only 
+updating dependency lists for those file which have actually changed, 
+not all the files in the directory.</p>
+<p>We have three new problems with this method, however. The first is 
+still efficiency. Although we only re-examine changed files we still 
+will re-exec <code>make</code> if anything changes, which could be slow for large build systems.</p>
+<p>The second problem is merely annoying: when you add a new file or build for the first time, no <code>.d</code> file will exist. When <code>make</code> tries to include it and discovers it doesn’t exist, it will generate a warning. GNU <code>make</code> will then proceed to rebuild the <code>.d</code> file and re-invoke itself, so this is not fatal; nevertheless it’s annoying.</p>
+<p>The third problem is more serious: if you remove or rename a prerequisite file (say a C <code>.h</code> file), <code>make</code> will stop with a fatal error, complaining that the target doesn’t exist:</p>
+<pre>make: *** No rule to make target 'bar.h', needed by 'foo.d'.  Stop.
+</pre>
+<p>This is because the <code>.d</code> file has a dependency on a file <code>make</code> can’t find. It can’t rebuild the <code>.d</code> file until all the prerequisites are there, and it won’t realize it doesn’t need the prerequisite until it rebuilds the <code>.d</code> file. Catch-22.</p>
+<p>The only solution here is to go in by hand and remove any <code>.d</code>
+ file that refers to the missing file–typically it’s simpler to remove 
+all of them than try to find the proper ones. You can even create a <code>clean-deps</code> target or similar to do it automatically (investigate the <code>MAKECMDGOALS</code> variable to see how you can write this target while still avoiding the rebuild attempt on the <code>.d</code>
+ files). This is annoying to be sure, but given that files aren’t 
+removed or renamed all that often in a typical environment perhaps it’s 
+not fatal.<a name="advanced"></a></p>
+<h2>Advanced Auto-Dependencies</h2>
+<p>The basis for the method described here was engineered by Tom Tromey <a href="mailto:tromey@cygnus.com">&lt;tromey@cygnus.com&gt;</a>, who used it as the standard dependency generation method for the <a href="http://www.gnu.org/">FSF’s</a> <a href="http://www.gnu.org/software/automake/automake.html">automake</a> tool. I’ve made some changes to allow it to fit into a more generic build environment.<a name="noreexec"></a></p>
+<h3>Avoiding Re-exec of <code>make</code></h3>
+<p>Let’s address the first problem above: the re-invocation of <code>make</code>. If you think about it, this re-invocation is really not necessary. Since we know <i>some</i>
+ prerequisite of the target changed, we must rebuild the target; having a
+ more up-to-date list won’t affect that decision. What we really need is
+ to ensure that the prerequisite list is up-to-date for the <em>next</em> invocation of make, when we need to decide whether to update it again.</p>
+<p>Since we don’t need the up-to-date prerequisite list in this build, 
+we can actually avoid re-invoking make at all: we can simply have the 
+prerequisite list built <em>at the same time</em> as the target is 
+rebuilt. In other words, we can change the build rule for our target to 
+add in commands to update the dependency file. Also, in this case we 
+must be very careful that we <em>don’t</em> provide rules to build the dependencies automatically: if we do <code>make</code> will still try to rebuild them and re-exec: we don’t want that.</p>
+<p>Now that we don’t care about dependency files that don’t exist, 
+solving the second problem (superfluous warnings) is easy: we can just 
+use GNU <code>make</code>‘s <code>-include</code> statement so that dependency files which don’t exist won’t cause an error.</p>
+<p>Let’s take a look at an example so far:</p>
+<pre>SRCS = foo.c bar.c <i>...</i>
+
+%.o : %.c
+        @$(MAKEDEPEND)
+        $(COMPILE.c) -o $@ $&lt;
+
+-include $(SRCS:.c=.P)
+</pre>
+<p><a name="norule"></a></p>
+<h3>Avoiding “No rule to make target …” Errors</h3>
+<p>This one is a little trickier. However, it turns out we can convince <code>make</code>
+ to not fail merely by mentioning the file explicitly as a target in the
+ makefile. If a target exists, but has no commands (either implicit or 
+explicit) or prerequisites, then make simply always considers it 
+up-to-date. That’s the normal case, and it behaves as we’d expect.</p>
+<p>In the case where the above error occurs, the target<br>
+<em>doesn’t</em> exist. According to the GNU <code>make</code> User’s<br>
+Manual section <a href="http://www.gnu.org/software/make/manual/html_node/Force-Targets.html"><cite>Rules without Recipes or Prerequisites</cite></a>:</p>
+<blockquote><p>If a rule has no prerequisites or recipe, and the target 
+of the rule is a nonexistent file, then `make’ imagines this target to 
+have been updated whenever its rule is run. This implies that all 
+targets depending on this one will always have their recipes run.</p></blockquote>
+<p>Perfect. It ensures <code>make</code> won’t throw an error since it 
+knows how to handle that non-existent file, and it ensures that any file
+ depending on that target is rebuilt, which is exactly what we want.</p>
+<p>So, all we need to do is post-process the original dependency file 
+and turn all the prerequisites into targets with no commands or 
+prerequisites. Something like <a name="toof1"></a>this <a href="#foot1">[1]</a>:</p>
+<pre>SRCS = foo.c bar.c <i>...</i>
+
+%.o : %.c
+        @$(MAKEDEPEND); \
+          cp $*.Td $*.d; \
+          sed -e 's/#.*//' -e 's/^[^:]*: *//' -e 's/ *\\$$//' \
+              -e '/^$$/ d' -e 's/$$/ :/' &lt; $*.Td &gt;&gt; $*.d; \
+          rm -f $*.Td
+        $(COMPILE.c) -o $@ $&lt;
+
+-include $(SRCS:.c=.d)
+</pre>
+<p>Briefly, this creates a <code>.d</code> file with the original 
+prerequisites list, then adds targets to it by taking each line, 
+removing any existing target information and any line continuation (<code>\</code>) characters, then adding a target separator (<code>:</code>) to the end. This works with the values for <code>MAKEDEPEND</code> I suggest below; it’s possible you will need to modify the translation for other dependency generators you might use.<a name="depdelete"></a></p>
+<h3>Handling Deleted Dependency Files</h3>
+<p>There is one remaining issue with this configuration: if a user 
+happens to delete dependency files without modifying any of the source 
+files, <code>make</code> will not notice anything amiss and will not 
+recreate the dependency files until it decides to rebuild the 
+corresponding object file for some other reason. In the meantime <code>make</code>
+ will be missing dependency information for those targets (so, for 
+example, modifying a header file without changing the source file will 
+not cause the object file to be rebuilt).</p>
+<p>The problem is slightly complex because we do <em>not</em> want the dependency files to be considered “real” targets: if they are then when we use <code>include</code> to include them, <code>make</code> will rebuild them then re-exec itself. This isn’t the end of the world, but it’s overhead we’d prefer to do without.</p>
+<p>The automake method doesn’t address this problem. In the past I’ve 
+suggested a “just don’t do that” solution, combined with placing 
+dependency files <a href="#output">in a separate directory</a> to make it difficult to accidentally delete them.</p>
+<p>However, <a href="mailto:meribold@gmail.com">Lukas Waymann</a> suggested a tidy solution: add the dependency file as a <em>prerequisite</em> to the target, and create an empty recipe for it:</p>
+<pre>SRCS = foo.c bar.c <i>...</i>
+
+%.o : %.c %.d
+        @$(MAKEDEPEND); \
+          cp $*.Td $*.d; \
+          sed -e 's/#.*//' -e 's/^[^:]*: *//' -e 's/ *\\$$//' \
+              -e '/^$$/ d' -e 's/$$/ :/' &lt; $*.Td &gt;&gt; $*.d; \
+          rm -f $*.Td
+        $(COMPILE.c) -o $@ $&lt;
+
+%.d: ;
+
+-include $(SRCS:.c=.d)
+</pre>
+<p>This solves the problem nicely: when <code>make</code> checks the 
+target it will see the dependency file as a prerequisite and try to 
+build that. If it exists nothing will be done since there’s no 
+prerequisites for the dependency file. If it doesn’t exist, it will be 
+marked out of date since it has an empty recipe, which will force the 
+object target to be rebuilt (creating a new dependency file).</p>
+<p>When <code>make</code> is trying to rebuild included files it will 
+find the implicit rule for the dependency and use it. However since the 
+rule doesn’t update the target file, no included file was updated and <code>make</code> will not re-execute itself.<a name="output"></a></p>
+<h2>Placement of Output Files</h2>
+<p>You may decide you don’t like all those <code>.d</code> files 
+cluttering up your source directory. You can easily have your makefile 
+put them somewhere else. Here’s an example of doing that for the 
+advanced method; you can extrapolate to the other methods:</p>
+<pre>DEPDIR = .deps
+df = $(DEPDIR)/$(*F)
+
+SRCS = foo.c bar.c <i>...</i>
+
+%.o : %.c
+        @$(MAKEDEPEND); \
+          cp $(df).Td $(df).d; \
+          sed -e 's/#.*//' -e 's/^[^:]*: *//' -e 's/ *\\$$//' \
+              -e '/^$$/ d' -e 's/$$/ :/' &lt; $(df).Td &gt;&gt; $(df).d; \
+          rm -f $(df).Td
+        $(COMPILE.c) -o $@ $&lt;
+
+-include $(SRCS:%.c=$(DEPDIR)/%.d)
+</pre>
+<p>Replace any references to <code>$*.Td</code> in the <code>MAKEDEPEND</code> script with <code>$(df).Td</code>.<a name="makedep"></a></p>
+<h2>Defining <tt>MAKEDEPEND</tt></h2>
+<p>Here I’ll discuss some possible ways to define the <code>MAKEDEPEND</code> variable I’ve blithely been using above. These definitions create output files named <code>.Td</code> (temporary dependency), since we typically need to perform some post-processing on them before they are put into use.<a name="cpp"></a></p>
+<h3><tt>MAKEDEPEND = /usr/lib/cpp</tt></h3>
+<p>The most basic way to generate dependencies is by using the C 
+preprocessor itself. This requires a bit of knowledge about the output 
+format of your preprocessor–luckily most UNIX preprocessors have similar
+ output for our purposes. In order to preserve line number information 
+for the compiler’s error messages and debugging information, the output 
+of the preprocessor must provide line number and <em>filename</em> information for each jump to an <code>#include</code> file and each return from one. These lines can be used to figure out what files were included.</p>
+<p>Most UNIX preprocessors insert special lines in the output with this format:</p>
+<pre># lineno "<var>filename</var>" <var>extra</var>
+</pre>
+<p>All we care about is the <code><var>filename</var></code> value. If your preprocessor generates output like the above, a definition like this for <code>MAKEDEPEND</code> should work:</p>
+<pre>MAKEDEPEND = $(CPP) $(CPPFLAGS) $&lt; \
+               | sed -n 's/^\# *[0-9][0-9]* *"\([^"]*\)".*/$*.o: \1/p' \
+               | sort | uniq &gt; $*.Td
+</pre>
+<p>If you’re using the advanced method, you can replace the <code>$*.o</code> in the <code>sed</code> script with <code>$@</code>. If you have a modern version of <code>sort</code>, you can also replace <code>sort | uniq</code> with just <code>sort -u</code>.</p>
+<p>And, of course, if you go this route you might as well combine the 
+post-processing involved with the method you’re using right into this 
+script.<a name="makedepend"></a></p>
+<h3><tt>MAKEDEPEND = makedepend</tt></h3>
+<p>The X Windowing System source tree comes with a program called <code>makedepend</code>. This program examines C source and header files and generates <code>make</code>
+ dependency lines. It’s geared towards adding those dependencies to the 
+bottom of an existing makefile, so to use it the way we want we need to 
+be a little tricky. For example, some versions fail if the output file 
+doesn’t already exist.</p>
+<p>This definition should suffice:</p>
+<pre>MAKEDEPEND = touch $*.Td &amp;&amp; makedepend $(CPPFLAGS) -f $*.Td $&lt;
+</pre>
+<p><a name="gcc"></a></p>
+<h3><tt>MAKEDEPEND = gcc -M</tt></h3>
+<p>The <a href="https://gcc.gnu.org/">GNU Compiler Collection</a> contains a C preprocessor that can generate <code>make</code> dependency files. This definition should suffice:</p>
+<pre>MAKEDEPEND = gcc -M $(CPPFLAGS) -o $*.Td $&lt;
+</pre>
+<p>However, if you’re using GCC you might as well continue on to the next section for a simpler and faster alternative.<a name="combine"></a></p>
+<h2>Combining Compilation and Dependency Generation</h2>
+<p>If you’re using GCC (or a compiler which provides equivalent options) you can save yourself a lot of time during the build by <em>combining</em>
+ the dependency generation and the object file generation into a single 
+command, because the compiler has the ability to output the dependency 
+information as a side-effect of the compilation. Here is an example 
+implementation, copied from the <em>TL;DR</em> section at the top of this page:</p>
+<pre><span style="color: blue;">DEPDIR = .d
+$(shell mkdir -p $(DEPDIR) &gt;/dev/null)
+DEPFLAGS = -MT $@ -MMD -MP -MF $(DEPDIR)/$*.Td</span>
+
+COMPILE.c = $(CC) <span style="color: blue;">$(DEPFLAGS)</span> $(CFLAGS) $(CPPFLAGS) $(TARGET_ARCH) -c
+COMPILE.cc = $(CXX) <span style="color: blue;">$(DEPFLAGS)</span> $(CXXFLAGS) $(CPPFLAGS) $(TARGET_ARCH) -c
+<span style="color: blue;">POSTCOMPILE = mv -f $(DEPDIR)/$*.Td $(DEPDIR)/$*.d</span>
+
+<span style="color: blue;">%.o : %.c</span>
+%.o : %.c <span style="color: blue;">$(DEPDIR)/%.d</span>
+        $(COMPILE.c) $(OUTPUT_OPTION) $&lt;
+        <span style="color: blue;">$(POSTCOMPILE)</span>
+
+<span style="color: blue;">%.o : %.cc</span>
+%.o : %.cc <span style="color: blue;">$(DEPDIR)/%.d</span>
+        $(COMPILE.cc) $(OUTPUT_OPTION) $&lt;
+        <span style="color: blue;">$(POSTCOMPILE)</span>
+
+<span style="color: blue;">%.o : %.cxx</span>
+%.o : %.cxx <span style="color: blue;">$(DEPDIR)/%.d</span>
+        $(COMPILE.cc) $(OUTPUT_OPTION) $&lt;
+        <span style="color: blue;">$(POSTCOMPILE)</span>
+
+<span style="color: blue;">$(DEPDIR)/%.d: ;</span>
+<span style="color: blue;">.PRECIOUS: $(DEPDIR)/%.d</span>
+
+<span style="color: blue;">-include $(patsubst %,$(DEPDIR)/%.d,$(basename $(SRCS)))</span>
+</pre>
+<p>Let’s go over this:</p>
+<dl>
+<dt><code>DEPDIR = ...</code></dt>
+<dd>This implementation places dependency files into a subdirectory named <code>.d</code>.</dd>
+<dt><code>$(shell mkdir -p $(DEPDIR) &gt;/dev/null)</code></dt>
+<dd>Unfortunately GCC will not create subdirectories, so this line ensures that the <code>DEPDIR</code> directory always exists.</dd>
+<dt><code>DEPFLAGS = ...</code></dt>
+<dd>These are the special GCC-specific flags which convince the compiler
+ to generate the dependency file. Full descriptions can be found in <a href="https://gcc.gnu.org/onlinedocs/">the GCC manual</a> section <a href="https://gcc.gnu.org/onlinedocs/gcc-5.2.0/gcc/Preprocessor-Options.html">Options Controlling the Preprocessor</a>:<p></p>
+<dl>
+<dt><code>-MT $@</code></dt>
+<dd>Set the name of the target in the generated dependency file.</dd>
+<dt><code>-MMD</code></dt>
+<dd>Generate dependency information as a side-effect of compilation, not
+ instead of compilation. This version omits system headers from the 
+generated dependencies: if you prefer to preserve system headers as 
+prerequisites, use <code>-MD</code>.</dd>
+<dt><code>-MP</code></dt>
+<dd>Adds a target for each prerequisite in the list, to avoid errors when deleting files.</dd>
+<dt><code>-MF $(DEPDIR)/$*.Td</code></dt>
+<dd>Write the generated dependency file to a temporary location <code>$(DEPDIR)/$*.Td</code>.</dd>
+</dl>
+</dd>
+<dt><code>POSTCOMPILE = ...</code></dt>
+<dd>Rename the generated temporary dependency file to the real 
+dependency file. We do this in a separate step so that failures during 
+the compilation won’t leave a corrupted dependency file.</dd>
+<dt><code>%.o : %.c</code></dt>
+<dd>Delete the built-in rules for building object files from <code>.c</code> files, so that our rule is used instead.  Do the same for the other built-in rules.</dd>
+<dt><code>... $(DEPDIR)/%.d</code></dt>
+<dd>Declare the generated dependency file as a prerequisite of the target, so that if it’s missing the target will be rebuilt.</dd>
+<dt><code>$(DEPDIR)/%.d: ;</code></dt>
+<dd>Create a pattern rule with an empty recipe, so that <code>make</code> won’t fail if the dependency file doesn’t exist.</dd>
+<dt><code>.PRECIOUS: $(DEPDIR)/%.d</code></dt>
+<dd>Mark the dependency files precious to <code>make</code>, so they won’t be automatically deleted as intermediate files.</dd>
+<dt><code>-include ...</code></dt>
+<dd>Include the dependency files that exist: translate each file listed in <code>SRCS</code> into its dependency file.  Use <code>-include</code> to avoid failing on non-existent files.</dd>
+</dl>
+<p><a name="nonc"></a></p>
+<h2>Dependencies For Non-C Files</h2>
+<p>In general you need some way of producing dependency files in order 
+to use these methods. If you’re working with files that aren’t C files 
+you’ll need to discover or write your own method. Anything that 
+generates make dependency files will do. This usually isn’t too 
+difficult.</p>
+<p>An interesting idea has been proposed by Han-Wen Nienhuys <a href="mailto:hanwen@cs.uu.nl">&lt;hanwen@cs.uu.nl&gt;</a> and he has a small “proof of concept” <a href="http://make.mad-scientist.net/gendep-0.1.tar.gz">implementation</a>, although it currently only works on Linux. He suggests using the <code>LD_PRELOAD</code> environment to insert special shared library that contains a replacement for the <code>open</code>(2) system call. This version of <code>open()</code> would actually write out <code>make</code>
+ dependency information for every file the commands read during 
+operation. This would give you completely reliable dependency 
+information for every kind of command without needing any special 
+dependency extraction tools at all. In his proof-of-concept 
+implementation you can control the output file and exclude some kinds of
+ files (shared libraries, maybe) via environment variables.</p>
+<hr noshade="noshade">
+<table>
+<tbody>
+<tr>
+<td valign="top"><a href="#toof1">[1]</a></td>
+<td>Note I have modified the post-processing <code>sed</code> scripts here from what Tom uses in automake, in order to allow various styles of <code>MAKEDEPEND</code> output to work.</td>
+</tr>
+</tbody>
+</table>
+					</div><!-- .entry-content -->
+		<footer class="entry-meta">
+					</footer><!-- .entry-meta -->
+	</article><!-- #post -->
+				
+<div id="comments" class="comments-area">
+
+	
+	
+					<div id="respond" class="comment-respond">
+			<h3 id="reply-title" class="comment-reply-title">Leave a Reply <small><a rel="nofollow" id="cancel-comment-reply-link" href="http://make.mad-scientist.net/papers/advanced-auto-dependency-generation/#respond" style="display:none;">Cancel reply</a></small></h3>				<form action="http://make.mad-scientist.net/wp-comments-post.php" method="post" id="commentform" class="comment-form">
+					<p class="comment-notes"><span id="email-notes">Your email address will not be published.</span> Required fields are marked <span class="required">*</span></p><p class="comment-form-comment"><label for="comment">Comment</label> <textarea id="comment" name="comment" cols="45" rows="8" aria-required="true" required="required"></textarea></p><p class="comment-form-author"><label for="author">Name <span class="required">*</span></label> <input id="author" name="author" size="30" aria-required="true" required="required" type="text"></p>
+<p class="comment-form-email"><label for="email">Email <span class="required">*</span></label> <input id="email" name="email" size="30" aria-describedby="email-notes" aria-required="true" required="required" type="text"></p>
+<p class="comment-form-url"><label for="url">Website</label> <input id="url" name="url" size="30" type="text"></p>
+<p class="form-submit"><input name="submit" id="submit" class="submit" value="Post Comment" type="submit"> <input name="comment_post_ID" value="59" id="comment_post_ID" type="hidden">
+<input name="comment_parent" id="comment_parent" value="0" type="hidden">
+</p><p style="display: none;"><input id="akismet_comment_nonce" name="akismet_comment_nonce" value="7c8bc84147" type="hidden"></p><p class="comment-subscription-form"><input name="subscribe_comments" id="subscribe_comments" value="subscribe" style="width: auto; -moz-appearance: checkbox; -webkit-appearance: checkbox;" type="checkbox"> <label class="subscribe-label" id="subscribe-label" for="subscribe_comments">Notify me of follow-up comments by email.</label></p><p class="comment-subscription-form"><input name="subscribe_blog" id="subscribe_blog" value="subscribe" style="width: auto; -moz-appearance: checkbox; -webkit-appearance: checkbox;" type="checkbox"> <label class="subscribe-label" id="subscribe-blog-label" for="subscribe_blog">Notify me of new posts by email.</label></p><p style="display: none;"></p>				<input id="ak_js" name="ak_js" value="1456864470992" type="hidden"></form>
+					</div><!-- #respond -->
+		
+</div><!-- #comments .comments-area -->			
+		</div><!-- #content -->
+	</div><!-- #primary -->
+
+
+			<div id="secondary" class="widget-area" role="complementary">
+			<aside id="search-2" class="widget widget_search"><form role="search" method="get" id="searchform" class="searchform" action="http://make.mad-scientist.net/">
+				<div>
+					<label class="screen-reader-text" for="s">Search for:</label>
+					<input name="s" id="s" type="text">
+					<input id="searchsubmit" value="Search" type="submit">
+				</div>
+			</form></aside>		<aside id="recent-posts-2" class="widget widget_recent_entries">		<h3 class="widget-title">Recent Posts</h3>		<ul>
+					<li>
+				<a href="http://make.mad-scientist.net/the-eval-function/">Metaprogramming Make VI — The eval Function</a>
+							<span class="post-date">2014-11-30</span>
+						</li>
+					<li>
+				<a href="http://make.mad-scientist.net/constructed-include-files/">Metaprogramming Make V — Constructed Include Files</a>
+							<span class="post-date">2014-11-23</span>
+						</li>
+					<li>
+				<a href="http://make.mad-scientist.net/secondary-expansion/">Metaprogramming Make IV — Secondary Expansion</a>
+							<span class="post-date">2014-11-16</span>
+						</li>
+					<li>
+				<a href="http://make.mad-scientist.net/constructed-macro-names/">Metaprogramming Make III — Constructed Macro Names</a>
+							<span class="post-date">2014-11-09</span>
+						</li>
+					<li>
+				<a href="http://make.mad-scientist.net/recursive-expansion/">Metaprogramming Make II — Recursive Expansion</a>
+							<span class="post-date">2014-11-08</span>
+						</li>
+				</ul>
+		</aside>		<aside id="recent-comments-2" class="widget widget_recent_comments"><h3 class="widget-title">Recent Comments</h3><ul id="recentcomments"></ul></aside><aside id="archives-2" class="widget widget_archive"><h3 class="widget-title">Archives</h3>		<ul>
+			<li><a href="http://make.mad-scientist.net/2014/11/">November 2014</a></li>
+		</ul>
+		</aside><aside id="meta-2" class="widget widget_meta"><h3 class="widget-title">Meta</h3>			<ul>
+						<li><a href="http://make.mad-scientist.net/wp-login.php">Log in</a></li>
+			<li><a href="http://make.mad-scientist.net/feed/">Entries <abbr title="Really Simple Syndication">RSS</abbr></a></li>
+			<li><a href="http://make.mad-scientist.net/comments/feed/">Comments <abbr title="Really Simple Syndication">RSS</abbr></a></li>
+			<li><a href="https://wordpress.org/" title="Powered by WordPress, state-of-the-art semantic personal publishing platform.">WordPress.org</a></li>			</ul>
+			</aside>		</div><!-- #secondary -->
+		</div><!-- #main .wrapper -->
+	<footer id="colophon" role="contentinfo">
+		<div class="site-info">
+			Copyright © 1997-2016 <a href="http://mad-scientist.net/">Paul D. Smith</a> · Verbatim copying and distribution is permitted in any medium, provided this notice is preserved.
+		</div><!-- .site-info -->
+	</footer><!-- #colophon -->
+</div><!-- #page -->
+
+	<div style="display:none">
+	</div>
+<script type="text/javascript" src="Auto-Dependency%20Generation%20%7C%20GNU%20make_files/form.js"></script>
+<script type="text/javascript" src="Auto-Dependency%20Generation%20%7C%20GNU%20make_files/photon.js"></script>
+<script type="text/javascript" src="Auto-Dependency%20Generation%20%7C%20GNU%20make_files/devicepx-jetpack.js"></script>
+<script type="text/javascript" src="Auto-Dependency%20Generation%20%7C%20GNU%20make_files/gprofiles.js"></script>
+<script type="text/javascript">
+/* <![CDATA[ */
+var WPGroHo = {"my_hash":""};
+/* ]]> */
+</script>
+<script type="text/javascript" src="Auto-Dependency%20Generation%20%7C%20GNU%20make_files/wpgroho.js"></script>
+<script type="text/javascript" src="Auto-Dependency%20Generation%20%7C%20GNU%20make_files/comment-reply.js"></script>
+<script type="text/javascript" src="Auto-Dependency%20Generation%20%7C%20GNU%20make_files/navigation.js"></script>
+<script type="text/javascript" src="Auto-Dependency%20Generation%20%7C%20GNU%20make_files/wp-embed.js"></script>
+<script type="text/javascript" src="Auto-Dependency%20Generation%20%7C%20GNU%20make_files/e-201609.js" async="" defer="defer"></script>
+<script type="text/javascript">
+	_stq = window._stq || [];
+	_stq.push([ 'view', {v:'ext',j:'1:3.9.1',blog:'78135905',post:'59',tz:'-5',srv:'make.mad-scientist.net'} ]);
+	_stq.push([ 'clickTrackerInit', '78135905', '59' ]);
+</script>
+
+
+<img id="wpstats" src="Auto-Dependency%20Generation%20%7C%20GNU%20make_files/g.gif"></body></html>

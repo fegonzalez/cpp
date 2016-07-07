@@ -1,0 +1,17 @@
+# eg2: simple makefile for little programs
+
+
+# HAVE
+
+- implicit pattern-rules
+
+- additional prerequisites (headers) dependency 
+
+- VPATH
+
+
+# NOT HAVE
+
+- Recursive Makefiles
+
+- Auto-dependency

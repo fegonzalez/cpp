@@ -1,0 +1,317 @@
+
+################################################################################
+
+# make -f Makefile.2 [target]
+
+
+# doc references:
+#
+# [1] makefile.howto
+
+################################################################################
+# Main statements
+################################################################################
+#
+# [1].4.11
+#
+# WARNING There can ONLY be ONE RECIPE to be executed for a file. If
+# 	more than one rule gives a recipe for the same file, make uses
+# 	the last one given and prints an error message.
+#
+#
+# WARNING If none of the explicit rules for a target has a recipe, then
+# 	make searches for an applicable implicit rule to find one (See 10.)
+#
+#
+# INFO All the prerequisites mentioned in all the rules are merged into
+#      one list of prerequisites for the target
+#
+##############
+#
+# [1].# 10.1 Using Implicit Rules
+#
+# WARNING Implicit rules only can supply source files (i.e. .c) as prerequisites
+#
+# WARNING Implicit rules will not supply additional prerequisites
+# 	(i.e. header files)
+#
+##############
+#
+# 10.5.3 Automatic Variables
+#
+# $@  The file name of the target of the rule.
+#
+# $<  The name of the first prerequisite.
+#
+# $^  The names of all the prerequisites.
+#
+# $?  The names of all the prerequisites that are newer than the target.
+#
+################################################################################
+
+
+
+################################################################################
+# Makefile Begins
+################################################################################
+
+################################################################################
+# Setting Makefile Conventions
+################################################################################
+
+
+SHELL := /bin/sh
+
+# set source dir
+srcdir := .
+
+
+# clear & set suffuxes for implicit rules
+.SUFFIXES:
+.SUFFIXES: .cpp .o
+
+
+################################################################################
+# Predefined variables
+################################################################################
+
+# INFO Default variable values:
+#
+# - Compiling C++ programs
+#
+# %.o: %.cpp
+# 	$(CXX) -c $(CXXFLAGS) $(CPPFLAGS) $<  -o $@
+#
+# CXX=g++
+# CPPFLAGS =
+# CXXFLAGS =
+#
+# 
+# - Linking a single object file
+#
+# ‘$(CC) $(LDFLAGS) n.o $(LOADLIBES) $(LDLIBS)’.
+# CC = cc
+# LDFLAGS =
+# LOADLIBES= #obsolete, use LDLIBS instead
+# LDLIBS=
+#    cc $(EXEC).o  -o $(EXEC) => invalid for C++ : used $(EXEC) bellow instead
+
+
+
+
+## 1) setting the type of the makefile (debug | release)
+
+#-- DO-CHANGE-HERE : comment this line to have a release-Makefile
+debug_mode := 1
+
+
+## 2) Select project files & paths: VPATH, vpath, sources, objects, headers, ...
+
+SOURCES := $(wildcard *.cpp)
+OBJS := $(SOURCES:%.cpp=%.o)
+# OBJS := $(patsubst %.cpp, %.o, $(SOURCES))
+
+#-- DO-CHANGE-HERE
+# main source file name: i.e. main for main.cpp
+EXEC := main
+
+#-- DO-CHANGE-HERE:  header files & paths
+COMMON_HEADERS := common_header.h
+A_NON_COMMON_HEADER := non_common_header.h
+
+# WARNING to avoid differences between vpath & -I
+INCLUDE_DIRECTORIES += $(srcdir)/header
+
+
+# allow 'make' to find files in directories other than 'srcdir'
+#-- DO-CHANGE-HERE
+VPATH := $(INCLUDE_DIRECTORIES)
+#vpath := 
+
+
+
+## 3) Compilation & Linkage
+
+WARNING_FLAGS = -Wall -Wextra
+DEBUG_FLAGS = -g
+OPTIM_FLAGS = -O
+INCLUDE_FLAGS = $(addprefix -I ,$(INCLUDE_DIRECTORIES))
+
+# Compiling C++ programs
+CXX := g++
+# preprocessor flags: CPPFLAGS
+CPPFLAGS =
+# compilation flags: optional flags (CXXFLAGS) + required flags
+CXXFLAGS = 
+required_cxxflags += $(INCLUDE_FLAGS)
+
+# Linking #-- DO-CHANGE-HERE
+#
+# LDFLAGS: flags (i.e -g), and library paths (i.e. -L path-lib)
+LDFLAGS =
+# LDLIBS:  library names: (i.e. LDIBS="-lncurses -lm -lsdl")
+LDLIBS =
+
+ifdef debug_mode
+CXXFLAGS += $(WARNING_FLAGS)
+CXXFLAGS += $(DEBUG_FLAGS)
+LDFLAGS += $(DEBUG_FLAGS)
+else
+CXXFLAGS += $(WARNING_FLAGS)
+CXXFLAGS += $(OPTIM_FLAGS)
+LDFLAGS += $(OPTIM_FLAGS)
+endif
+
+all_cxxflags = $(required_cxxflags) $(CXXFLAGS)
+
+
+#===============================================================================
+# Other non-predef variables
+#===============================================================================
+
+# RM=rm -f
+RM.CORES := $(wildcard core.*)
+RM.EXEC := $(EXEC) a.out
+RM.SAVES :=  $(wildcard *.*~ ) $(wildcard *~)
+RM.OTHER_STUFF := $(wildcard *.h.gch)
+#-- DO-CHANGE-HERE
+#RM.OTHER_STUFF +=
+RM.TRASH = $(RM.CORES) $(RM.EXEC) $(RM.SAVES) $(OBJS) $(RM.OTHER_STUFF)
+
+
+
+
+#===============================================================================
+# public targets: all ...
+#
+# default target = all
+#===============================================================================
+
+.PHONY: all
+
+all: $(EXEC)
+
+
+
+#===============================================================================
+# Compilation & linking via implicit (pattern) rules
+#===============================================================================
+
+
+# implicit rules (Pattern rules)
+#
+#
+# WARNING If all '%.o: ' rules are comment, then the default implicit
+# 	  rule is executed by make
+#
+# PROBLEM: Implicit rules only can supply source files (i.e. .c) as
+# 	   prerequisites. [1].10.1
+#	   => additional prerequisites (${COMMON_HEADERS}) not supplied
+#
+# SOLUTION: use explicit recipes as is shown bellow.
+#
+
+
+# Note.- VPATH required to tell make where to find the header files
+
+
+#------------------
+# 1) linking
+#------------------
+
+$(EXEC):$(OBJS)
+	@echo ''
+	@echo 'Building target: $@'
+	@echo 'LDFLAGS: $(LDFLAGS)'
+	@echo 'LDLIBS: $(LDLIBS)'
+	@echo 'CPPFLAGS: $(CPPFLAGS)'
+	@echo 'CXXFLAGS: $(CXXFLAGS)'
+	$(CXX) $(LDFLAGS) -o $@ $^ $(LDLIBS)
+	@echo 'Finished building: $@'
+	@echo 'SHELL: $(SHELL)'
+	@echo '.SUFFIXES: $(.SUFFIXES)'
+	@echo 'srcdir: $(srcdir)'
+
+
+
+#------------------
+# 2) compilation
+#------------------
+
+#-- DO-CHANGE-HERE
+#
+# a) Only-dependency rules: to detect changes in headers
+
+main.o: $(A_NON_COMMON_HEADER) 
+
+# WARNING This doesn't work ...
+#
+# %.o: $(COMMON_HEADERS)  # ... ERROR: changes not detected
+#
+# %.o: %.cpp
+# 	$(CXX) -c $(CXXFLAGS) $(CPPFLAGS) $<  -o $@ 
+
+
+# WARNING These two forms work and are equivalent:
+#
+# i) one step
+#
+# %.o: %.cpp $(COMMON_HEADERS)
+# 	$(CXX) -c $(CXXFLAGS) $(CPPFLAGS) $<  -o $@ 
+#
+# ii) two steps
+#
+# $(OBJS): $(COMMON_HEADERS)
+#
+# %.o: %.cpp
+# 	$(CXX) -c $(CXXFLAGS) $(CPPFLAGS) $<  -o $@ 
+
+
+
+# Another step forward, applying 4.12.2 Static Pattern Rules versus Implicit R.
+
+$(OBJS): %.o: $(COMMON_HEADERS)
+
+
+# b) recipe rules
+
+$(OBJS): %.o: %.cpp
+	@echo ''
+	@echo 'Building target: $@'
+	$(CXX) -c $(all_cxxflags) $(CPPFLAGS) $<  -o $@ 
+
+
+#-------------------------------------------------------------------------------
+
+# INFO Obsolete Old-Fashioned Suffix Rules
+#
+# '.cpp.o' equivalent to '%o:%cpp'
+#
+# '.cpp.o:$(COMMON_HEADERS)' not equivalent to '%.o: %.cpp $(COMMON_HEADERS)'
+#
+#
+# .cpp.o:
+# 	@echo 'Obsolete Old-Fashioned Suffix Rules'
+# 	@echo 'Building target: $@'
+# 	$(CXX) $(CPPFLAGS) $(CXXFLAGS) -c  -o $@  $<
+#
+#
+# WARNING add. prerequisites are ignored in suffix rules ([1].10.7.b warnings)
+#
+# .cpp.o:$(COMMON_HEADERS)  # changes in headers are ignored
+# 	@echo 'Obsolete Old-Fashioned Suffix Rules'
+# 	@echo 'Building target: $@'
+# 	$(CXX) $(CPPFLAGS) $(CXXFLAGS) -c  -o $@  $<
+
+
+
+################################################################################
+# phony targets
+################################################################################
+
+.PHONY : clean
+
+clean:
+	@echo 'SOURCES; $(SOURCES)'
+	@echo 'OBJS; $(OBJS)'
+	clear; $(RM) $(RM.TRASH); ls -l

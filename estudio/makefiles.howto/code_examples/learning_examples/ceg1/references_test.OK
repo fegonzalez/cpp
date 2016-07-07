@@ -1,0 +1,15 @@
+
+#----------------------------------------------------------
+1) Test type 1. Testing references as functions parameters 
+#----------------------------------------------------------
+
+TEST_1_1 passing a constant: ftest1_ref_as_fnparam(7): compilation error.
+
+TEST_1_2 passing a & to a const.: ftest1_ref_as_fnparam(&7): compilation error.
+
+TEST_1_3 passing a variable: ftest1_ref_as_fnparam(T_var): OK. Inside the function, used as a reference to the var, and can be persistently modified inside.
+
+ftest1_ref_as_fnparam(T& obj)
+initial obj value = << obj
+final obj value = 102
+Returned obj value = 102

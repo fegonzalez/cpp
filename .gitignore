@@ -1,0 +1,39 @@
+# when not working try this to update the ignored files
+# git rm -r --cached .
+# git add .
+# git commit -m "fixed untracked files"
+
+
+
+*~
+*.*~
+*.zip
+*.tar.gz
+
+# html
+*_files/*
+
+
+
+# videos
+*.mp4
+*.srt
+
+# c++ stuff
+*.o
+a.out
+
+#saves
+save_old_estudio/*
+remote_c++_lib
+
+#ferlib
+
+#estudio
+#doc
+estudio/cpp_language/doc_references/the_standard
+estudio/cpp_language/doc_references/standard.pdf
+estudio/cpp_language/doc_references/primer/*
+
+#code
+

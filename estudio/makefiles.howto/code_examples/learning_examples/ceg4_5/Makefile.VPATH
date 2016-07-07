@@ -1,0 +1,86 @@
+# Test: Makefile.VPATH: testing "4.5.1 General search: VPATH variable"
+#
+# References: [4.2] vpath & headers -
+# http://www.cmcrossroads.com/article/basics-vpath-and-vpath
+#
+# make -f Makefile.VPATH [target]
+
+
+################################################################################
+# variables
+################################################################################
+
+CXX=g++
+CXXFLAGS=-Wall
+LDFLAGS=
+INCLUDES = refs_lib.h
+SOURCES = refs_lib.cpp references_test.cpp
+OBJS=$(SOURCES:.cpp=.o)
+EXEC=references_test
+# LIBS="-lncurses -lm -lsdl"
+LIBS=
+
+################################################################################
+# required for make to find both refs_lib.cpp & refs_lib.h files
+#
+
+INCLUDE_DIRECTORIES = include  # WARNING to avoid differences between vpath & -I
+
+# step: do 'make' find the sources and the headers
+VPATH = sources:$(INCLUDE_DIRECTORIES)
+
+# step: do the compiler find the headers
+CXX_FLAGS_INCLUDES = $(addprefix -I ,$(INCLUDE_DIRECTORIES))
+CXXFLAGS += $(CXX_FLAGS_INCLUDES)
+
+################################################################################
+
+RM=rm -f
+CORE_DUMPS=core.*
+TEST_DEPS = *.last_diff
+TRASH=  $(EXEC) $(TEST_DEPS) *.o  *.h.gch  a.out *.*~ *~  $(CORE_DUMPS) 
+
+
+
+find_files = $(wildcard $(dir)/*)
+dirs := include sources
+files := $(foreach dir,$(dirs),$(find_files))
+
+
+dummy_for_each:
+	@echo $(files)
+
+
+################################################################################
+# public targets
+################################################################################
+
+.PHONY : all
+
+all: $(EXEC)
+
+
+################################################################################
+# private targets
+################################################################################
+
+$(EXEC):$(OBJS)
+	@echo 'Building target: $@'
+
+	$(CXX) $(LDFLAGS) $(CXXFLAGS)  $^ $(LIBS) -o $@
+
+	@echo 'Finished building: $@'
+
+
+.cpp.o:
+	@echo 'Building target: $@'
+	$(CXX) -c $(CXXFLAGS)  $<
+
+#
+# phony targets
+#
+
+.PHONY : clean
+
+clean:
+	clear; $(RM) $(TRASH); ls -l

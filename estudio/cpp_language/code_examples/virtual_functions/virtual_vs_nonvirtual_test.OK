@@ -1,0 +1,67 @@
+
+
+>> test virtual functions vs non-virtual functions
+
+test shape1->only_for_cycle(): compile error: ‘class Shape’ has no member named ‘only_for_cycle’
+
+test shape1->draw(): ok 
+virtual Circle::draw()
+
+test shape1->move(): ok 
+Shape::move()
+
+test circle1->move(): ok 
+new-method Circle::move()
+
+test shape1->resize(): ok 
+Shape::resize()
+
+test circle1->resize(): ok 
+new-method  virtual Circle::resize()
+
+test circle1->Shape::resize(): ok 
+Shape::resize()
+
+test Applying member access rules
+
+test shape1->check_member_access_rules(): ok 
+virtual Circle::check_member_access_rules()
+
+test error: ‘virtual void Circle::check_member_access_rules() const’ is private 
+
+test deep method inheritance
+
+ a) virtual functions:
+
+test shape2->draw(): ok 
+virtual SolidCircle::draw()
+
+test circle2->draw(): ok 
+virtual SolidCircle::draw()
+
+test solidcircle1.draw(): ok 
+virtual SolidCircle::draw()
+
+test shape2->check_member_access_rules(): ok 
+virtual SolidCircle::check_member_access_rules()
+
+test circle2->check_member_access_rules(): error
+test error: ‘virtual void Circle::check_member_access_rules() const’ is private 
+
+test solidcircle1.check_member_access_rules(): ok 
+virtual SolidCircle::check_member_access_rules()
+
+ b) non-virtual functions:
+
+test shape2->move(): expected Shape::move() ok
+Shape::move()
+
+test circle2->move(): expected Circle::move() ok
+new-method Circle::move()
+
+test shape2->resize(): expected Shape::resize() ok
+Shape::resize()
+
+test circle2->resize():  SolidCircle::resize() ok
+virtual SolidCircle::resize()
+

@@ -1,0 +1,41 @@
+
+>> cpp98_init()
+
+ Suma total = 4
+
+s
+
+g
+
+>> cpp11_brace_init()
+C(): x[3]=3
+
+ Suma total = 1
+
+ s2 = hello
+
+ Suma double total = 0.5
+4
+
+>> cpp11_class_member_init()
+abc;0;;2;7
+
+>> cpp11_stl_initializer_list()
+1 2 3 4 5 6 
+Batman: +1 (212) 545-0987
+Superman: +1 (212) 545-7890
+
+
+>> cpp11_user_defined_initializer_list()
+
+Test a2) a braced-init-list is used in list-initialization
+constructed with a 5-element list
+The vector size is now 5 ints:
+The vector size is now 8 ints:
+
+Test a1) a braced-init-list is bound to auto,  including in a ranged for loop:
+1 2 3 4 5 6 7 8 
+Range-for over brace-init-list: 
+-1 -2 -3 
+The list bound to auto has size() = 3
+

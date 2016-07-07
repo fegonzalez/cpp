@@ -1,0 +1,8 @@
+# eg1: basic makefile for a local directory with explicit rules and
+#      header references.
+
+
+- explicit rules      	             YES
+
+- Header dependency resolution 	     YES
+ 

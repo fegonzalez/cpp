@@ -1,0 +1,6 @@
+#ifndef TEST_HEADER
+#define TEST_HEADER
+
+  const std::string ERR_MSG_NOHEADER = "WARNING Compilers usually do not care about the form of header file names, but IDEs sometimes do. (e.g. header without suffix";
+
+#endif

@@ -1,0 +1,6 @@
+#ifndef TEST_HEADER_ANY_DUMMY_SUFFIX
+#define TEST_HEADER_ANY_DUMMY_SUFFIX
+
+  const std::string ERR_MSG_NONUSUAL_HEADER = "WARNING Compilers usually do not care about the form of header file names, but IDEs sometimes do. (e.g. not usual header suffix)";
+
+#endif

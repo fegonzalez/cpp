@@ -1,0 +1,21 @@
+# eg2: simple unitary-test makefile
+#
+#      = simple_1 makefile + test targets (runtest, successtest, difftest
+
+
+# HAVE
+
+- runtest, successtest, difftest
+
+- implicit pattern-rules
+
+- additional prerequisites (headers) dependency 
+
+- VPATH
+
+
+# NOT HAVE
+
+- Recursive Makefiles
+
+- Auto-dependency

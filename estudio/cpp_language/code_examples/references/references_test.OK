@@ -1,0 +1,259 @@
+
+#----------------------------------------------------------
+1) Test: 2.3.1.3 Defining (binding) references to objects.
+#----------------------------------------------------------
+
+a) Ordinary binding
+
+a1) Reference to an object of the same type=> OK
+int int_var = 100;
+int &ref1 = int_var;
+
+a1) A reference to function: 
+int (&ref_funcx)(int) = ref2func;
+
+a1) A reference to function as a function parameter: 
+void usef( void (&f)(int) )  { f(42); }
+void f_as_param( int x ) {cout << "result = " << x}
+result = 42
+
+a2) Using a reference as an initializer to another reference => OK
+int &ref3 = ref1;
+
+a3) const reference to an lvalue-constant => OK
+const int int_const=55;
+const int &ref4 = int_const;
+
+a4) Initialization of references as data members.
+Compilation error: uninitialized reference member
+Rclass(int &a) {}             // no init.
+Rclass(int &a) {the_ref = a;} // no init, but assignation
+Correct initialization: Rclass(int &a):the_ref(a) {}
+
+a5) Pointer references: the pointer is incremented, not what it points to.
+before increment: ptr_referent (addr)= 0
+after  increment: ptr_referent (addr)= 0x4
+
+a6) Array references
+1 1
+2 2
+3 3
+1 1
+22 22
+3 3
+
+b) Binding exceptions
+
+b1) Classes related by inheritance => OK
+DerivedClass do1;
+BaseClass & ref5 = do1
+
+b2) Const reference to a non-const object of the same type, 
+    or to a type that involves an ACCEPTABLE const conversion
+
+(e.g.) same type => OK
+
+(e.g.) const conversion from literal => OK
+const int &ref7 = 7; // ref7 refers to TEMPORARY with value 7
+
+(e.g) const conversion from a different type (const R &ref = T;)
+double dval = 3.14;
+const int &ref62 = dval; // ref62 refers to TEMPORARY with value 3
+3.14
+3
+21.98
+3
+
+(e.g) const conversion from a different type
+double gravity() {return 9.81;}
+const int &ref621 = g(); // ref621 refers to TEMPORARY with value 9
+
+b4) A reference declared as extern does not require initialization: 
+extern const int &ref71; // Declaration at base.h
+const int &ref71 = 22;   // Definition at refs_lib.cpp
+std::cout << ref71;      // Use: at main.cpp
+
+c) Invalid bindings
+
+c1) (Non const) Reference to a literal
+int &ref8 = 7;   OR   int &ref8 = get_int_var();  
+compilation error: "invalid initialization of non-const reference of type ‘int&’ from an rvalue of type ‘int’"
+
+c2) Reference to a different type:
+double dval = 3.14;
+int &ref9 = dval;
+compilation error: "invalid initialization of reference of type ‘int&’ from expression of type ‘double’"
+
+c2.2) conversion from const to nonconst reference (a particular case of c2)
+WARNING Neither 'a1' nor 'b2' cases
+const int int_const = 55;
+int &ref10 = int_const;
+compilation error: "invalid initialization of reference of type ‘int&’ from expression of type ‘const int’"
+
+c2.3) reference to a ptr./ mem.address of the same type (a particular case of c2)
+int int_var=0;
+int &ref11 = int_var;
+compilation error: "invalid initialization of non-const reference of type ‘int&’ from an rvalue of type ‘int*’"
+
+c3) A reference must refer to an object, not a dereferenced null pointer. It is (C++) illegal:
+ int* pnull=NULL; int &ref101 = *pnull; // => Compilation OK
+cout << ref101;  => but runtime error: (segmentation fault)
+
+#----------------------------------------------------------
+2) Test: 2.3.1.4 Memory references as functions parameters
+
+ NOTICE Passing an object to a function's reference 
+ parameter is equivalent to define a reference to an object.
+
+#----------------------------------------------------------
+
+a) Ordinary binding
+
+a1) Reference to an object of the same type=> OK
+void finput(int &param);
+param value = 100
+void finput(const int &param)
+param value = 55
+
+a2) Using a reference as an initializer to another reference => OK
+void finput(int &param);
+param value = 100
+void finput(const int &param)
+param value = 55
+
+a3) const reference to an lvalue-constant => OK
+void finput(const int &param)
+param value = 55
+
+b) Binding exceptions
+
+b1) Classes related by inheritance => OK
+void finput(BaseClass &)
+
+void finput(const BaseClass &param)
+
+b2) CONST reference to a non-const id=> OK
+
+b2.1) const conversion to the same data type: const T & = T
+void const_finput(const int& param)
+param value = 100
+
+b2.2) const conversion to a different but 'acceptable' type: 
+const_finput(const int &) <- double dval = 3.14
+void const_finput(const int& param)
+param value = 3
+
+b3) CONST reference to a literal => OK
+void finput(const int &param)
+param value = 7
+
+c) Invalid bindings
+
+c1) (Non const) Reference to a literal
+nonconst_finput(7);
+compilation error: "invalid initialization of non-const reference of type ‘int&’ from an rvalue of type ‘int’"
+
+c2) Reference to a different type:
+//double dval = 3.14; void nonconst_finput(int &param)
+nonconst_finput(dval)
+compilation error: "invalid initialization of reference of type ‘int&’ from expression of type ‘double’"
+
+c3) conversion from const to nonconst reference (a particular case of c2)
+WARNING Neither 'a1' nor 'b2' cases
+const int int_const = 55; void nonconst_finput(int &param)
+nonconst_finput(int_const);;
+compilation error: "invalid initialization of reference of type ‘int&’ from expression of type ‘const int’"
+
+c4) reference to a ptr./ mem.address of the same type (a particular case of c2)
+nonconst_finput(&int_var);
+compilation error: "invalid initialization of non-const reference of type ‘int&’ from an rvalue of type ‘int*’"
+
+#----------------------------------------------------------
+3) Test: 2.3.1.5 functions returning memory references
+#----------------------------------------------------------
+
+a) Returning references to local variables.
+
+a1) Returning a local variable.
+compilation warning: reference to local variable ‘local_obj’ returned
+INSIDE: int& f_return_local_var()
+INSIDE: local variable value = 5
+returned value = undefined value (i.e. -1013474526) = 
+
+a2) Return a reference to a local variable.
+WARNING compilation OK.
+WARNING undefined result
+INSIDE: int& f_return_local_ref()
+INSIDE: local variable value = 5
+INSIDE: local ref value = 5
+returned value = undefined value (i.e. -1013474526) = 
+
+a3) Returning a static local variable
+INSIDE: int& fstatic()
+INSIDE: local variable value = 144
+returned value = 144
+
+#----------------------------------------------------------
+4) Test: Pass by reference vs pass by copy: 
+#----------------------------------------------------------
+
+
+>> Create Passbyref(): 
+
+4.2) By reference: no copy at all. 
+
+void incr_passbyref (int a, Passbyref &b) 
+
+void incr_passbyref (int a, Passbyref &b) 
+
+
+4.2) By copy: the copy constructor is (implicitly) invoked
+
+--------- Before calling 'incr_by_value': 
+
+>> Create Passbyref(const Passbyref&) 
+
+void incr_by_value (int a, Passbyref b)
+
+>> Destroy ~Passbyref(): 
+
+--------- After calling 'incr_by_value': 
+
+#----------------------------------------------------------
+4) Test: issues of references as data members.
+#----------------------------------------------------------
+
+WARNING If the objects must be reassignable (copyable), 
+        references cannot be used as data members.
+
+foo_s1 (I am s1) ; s1 (I am s1)
+foo_s2 (I am s2) ; s2 (I am s2)
+
+Executing: foo_s2 = foo_s1;
+foo_s1 (I am s1) ; s1 (I am s1)
+foo_s2 (I am s1) ; s2 (I am s1) => s2 implicitly modified!
+
+Executing: s2 = "Still  I'am s2";
+foo_s2 (Still  I'am s2) ; s2 (Still  I'am s2) => foo_s2 implicitly modified!
+
+Danger: Lifetime issues: referent ceased to exist.
+foo_s3 : I am temporary.
+Executing: delete(s3); s3=0;
+HERE: using the reference will cause Segmentation Fault
+
+#----------------------------------------------------------
+d) Definitions using the volatile Qualifier: 
+
+#----------------------------------------------------------
+
+Valid case: volatile T & = volatile T
+1
+1
+
+Valid case: const volatile T & = volatile T
+1
+
+Invalid case: anything else.
+
+
+>> Destroy ~Passbyref(): 

@@ -1,0 +1,1646 @@
+<!DOCTYPE html>
+<html itemscope="" itemtype="http://schema.org/QAPage"><head>
+<meta http-equiv="content-type" content="text/html; charset=UTF-8">
+
+<title>c - compile headers dependencies with makefile - Stack Overflow</title>
+    <link rel="shortcut icon" href="http://cdn.sstatic.net/stackoverflow/img/favicon.ico?v=4f32ecc8f43d">
+    <link rel="apple-touch-icon image_src" href="http://cdn.sstatic.net/stackoverflow/img/apple-touch-icon.png?v=c78bd457575a">
+    <link rel="search" type="application/opensearchdescription+xml" title="Stack Overflow" href="http://stackoverflow.com/opensearch.xml">
+    <meta name="twitter:card" content="summary">
+    <meta name="twitter:domain" content="stackoverflow.com">
+    <meta property="og:type" content="website">    
+    <meta property="og:image" itemprop="image primaryImageOfPage" content="http://cdn.sstatic.net/stackoverflow/img/apple-touch-icon@2.png?v=73d79a89bded&amp;a">
+    <meta name="twitter:title" property="og:title" itemprop="title name" content="compile headers dependencies with makefile">
+    <meta name="twitter:description" property="og:description" itemprop="description" content="I am programming an UDP client server application in the C programming language; I want to automatically compile 2 sources files and 3 header files whenever the dependencies change so I decided to ...">
+    <meta property="og:url" content="http://stackoverflow.com/questions/15857837/compile-headers-dependencies-with-makefile">
+    <link rel="canonical" href="http://stackoverflow.com/questions/15857837/compile-headers-dependencies-with-makefile">
+
+    
+    
+    <script src="c%20-%20compile%20headers%20dependencies%20with%20makefile%20-%20Stack%20Overflow_files/ados.js" async="" type="text/javascript"></script><script src="c%20-%20compile%20headers%20dependencies%20with%20makefile%20-%20Stack%20Overflow_files/quant.js" async=""></script><script src="c%20-%20compile%20headers%20dependencies%20with%20makefile%20-%20Stack%20Overflow_files/beacon.js" async=""></script><script src="c%20-%20compile%20headers%20dependencies%20with%20makefile%20-%20Stack%20Overflow_files/analytics.js" async=""></script><script src="c%20-%20compile%20headers%20dependencies%20with%20makefile%20-%20Stack%20Overflow_files/ados_002.js" async="" type="text/javascript"></script><script src="c%20-%20compile%20headers%20dependencies%20with%20makefile%20-%20Stack%20Overflow_files/jquery.js"></script>
+    <script src="c%20-%20compile%20headers%20dependencies%20with%20makefile%20-%20Stack%20Overflow_files/stub.js"></script>
+    <link rel="stylesheet" type="text/css" href="c%20-%20compile%20headers%20dependencies%20with%20makefile%20-%20Stack%20Overflow_files/all.css">
+
+            <link rel="alternate" type="application/atom+xml" title="Feed for question 'compile headers dependencies with makefile'" href="http://stackoverflow.com/feeds/question/15857837">
+            <meta name="twitter:app:country" content="US">
+            <meta name="twitter:app:name:iphone" content="Stack Exchange iOS">
+            <meta name="twitter:app:id:iphone" content="871299723">
+            <meta name="twitter:app:url:iphone" content="se-zaphod://stackoverflow.com/questions/15857837/compile-headers-dependencies-with-makefile">
+            <meta name="twitter:app:name:ipad" content="Stack Exchange iOS">
+            <meta name="twitter:app:id:ipad" content="871299723">
+            <meta name="twitter:app:url:ipad" content="se-zaphod://stackoverflow.com/questions/15857837/compile-headers-dependencies-with-makefile">
+            <meta name="twitter:app:name:googleplay" content="Stack Exchange Android">
+            <meta name="twitter:app:url:googleplay" content="http://stackoverflow.com/questions/15857837/compile-headers-dependencies-with-makefile">
+            <meta name="twitter:app:id:googleplay" content="com.stackexchange.marvin">
+        <script>
+        
+            StackExchange.ready(function () {
+                    
+                    StackExchange.using("snippets", function () {
+                        StackExchange.snippets.initSnippetRenderer();
+                    });
+                    
+
+                StackExchange.using("postValidation", function () {
+                    StackExchange.postValidation.initOnBlurAndSubmit($('#post-form'), 2, 'answer');
+                });
+
+                
+                StackExchange.question.init({showAnswerHelp:true,totalCommentCount:1,shownCommentCount:1,highlightColor:'#F4A83D',backgroundColor:'#FFF',questionId:15857837});
+
+                styleCode();
+
+                    StackExchange.realtime.subscribeToQuestion('1', '15857837');
+                                                                    StackExchange.using("gps", function () { StackExchange.gps.trackOutboundClicks('#content', '.post-text'); });
+
+            });
+        </script>
+
+
+    <script>
+        StackExchange.init({"locale":"en","stackAuthUrl":"https://stackauth.com","serverTime":1457034793,"networkMetaHostname":"meta.stackexchange.com","routeName":"Questions/Show","styleCode":true,"enableUserHovercards":true,"snippets":{"enabled":true,"domain":"stacksnippets.net"},"site":{"name":"Stack Overflow","description":"Q&A for professional and enthusiast programmers","isNoticesTabEnabled":true,"recaptchaPublicKey":"6LdchgIAAAAAAJwGpIzRQSOFaO0pU6s44Xt8aTwc","recaptchaAudioLang":"en","enableNewTagCreationWarning":true,"insertSpaceAfterNameTabCompletion":false,"id":1,"enableSocialMediaInSharePopup":true},"user":{"fkey":"9f58b3d0e2aa98222df77255a280dbd4","rep":0,"isAnonymous":true,"isAnonymousNetworkWide":true}});
+        StackExchange.using.setCacheBreakers({"js/prettify-full.en.js":"64d75a77a3ad","js/moderator.en.js":"481e310df8f0","js/full-anon.en.js":"783a97a6d415","js/full.en.js":"5bea3b02ce2e","js/wmd.en.js":"10ca315ef90e","js/third-party/jquery.autocomplete.min.js":"e5f01e97f7c3","js/third-party/jquery.autocomplete.min.en.js":"","js/mobile.en.js":"52aabd47bbed","js/help.en.js":"f9152eb55343","js/tageditor.en.js":"9bc8200f3664","js/tageditornew.en.js":"5f0279f1055c","js/inline-tag-editing.en.js":"de80429b1816","js/revisions.en.js":"82fcdf5bb6de","js/review.en.js":"3cdee9c0bd3e","js/tagsuggestions.en.js":"7dfec0d2a2d7","js/post-validation.en.js":"86405be13f61","js/explore-qlist.en.js":"e71f14781288","js/events.en.js":"e03957382a43","js/keyboard-shortcuts.en.js":"851f5e088575","js/external-editor.en.js":"594a217926d8","js/external-editor.en.js":"594a217926d8","js/snippet-javascript.en.js":"9d60ae7a3bc2","js/snippet-javascript-codemirror.en.js":"dbc8f46e7944"});
+        StackExchange.using("gps", function() {
+             StackExchange.gps.init(true);
+        });
+    </script>
+    
+        <script>
+            StackExchange.ready(function () {
+                $('#nav-tour').click(function () {
+                    StackExchange.using("gps", function() {
+                        StackExchange.gps.track("aboutpage.click", { aboutclick_location: "headermain" }, true);
+                    });
+                });
+            });
+        </script>
+    
+    
+<script src="c%20-%20compile%20headers%20dependencies%20with%20makefile%20-%20Stack%20Overflow_files/full-anon.js" async=""></script><script src="c%20-%20compile%20headers%20dependencies%20with%20makefile%20-%20Stack%20Overflow_files/snippet-javascript.js" async=""></script><script src="c%20-%20compile%20headers%20dependencies%20with%20makefile%20-%20Stack%20Overflow_files/post-validation.js" async=""></script><script src="c%20-%20compile%20headers%20dependencies%20with%20makefile%20-%20Stack%20Overflow_files/prettify-full.js" async=""></script><script src="c%20-%20compile%20headers%20dependencies%20with%20makefile%20-%20Stack%20Overflow_files/external-editor.js" async=""></script><script src="c%20-%20compile%20headers%20dependencies%20with%20makefile%20-%20Stack%20Overflow_files/adFeedback.js" type="text/javascript"></script><link href="c%20-%20compile%20headers%20dependencies%20with%20makefile%20-%20Stack%20Overflow_files/adFeedback.css" rel="stylesheet"><link href="c%20-%20compile%20headers%20dependencies%20with%20makefile%20-%20Stack%20Overflow_files/jobs.css" rel="stylesheet" type="text/css"></head>
+<body class="question-page new-topbar">
+    <noscript><div id="noscript-padding"></div></noscript>
+    
+        <script>(function () { var old = $.fn.contents; $.fn.contents = function () { try { return old.apply(this, arguments); } catch (e) { return $([]); } } })()</script>
+        
+
+
+
+
+    <div id="notify-container"></div>
+    <div id="overlay-header"></div>
+    <div id="custom-header"></div>
+
+
+
+
+
+<div class="topbar">
+    <div class="topbar-wrapper">
+
+        <div class="js-topbar-dialog-corral">
+
+
+<div class="topbar-dialog siteSwitcher-dialog dno">
+    <div class="header">
+        <h3><a href="http://stackoverflow.com/">current community</a></h3>
+    </div>
+    <div class="modal-content current-site-container">
+        <ul class="current-site">
+                <li>
+                        <div class="related-links">
+                    <a href="http://chat.stackoverflow.com/" class="js-gps-track" data-gps-track="site_switcher.click({ item_type:6 })">chat</a>
+            </div>
+
+
+
+
+    <a href="http://stackoverflow.com/" class="current-site-link site-link js-gps-track" data-id="1" data-gps-track="
+        site_switcher.click({ item_type:3 })">
+        <div class="site-icon favicon favicon-stackoverflow" title="Stack Overflow"></div>
+        Stack Overflow
+    </a>
+
+                </li>
+                <li class="related-site">
+                        <div class="L-shaped-icon-container">
+        <span class="L-shaped-icon"></span>
+    </div>
+
+                    
+
+
+
+    <a href="http://meta.stackoverflow.com/" class="site-link js-gps-track" data-id="552" data-gps-track="
+            site.switch({ target_site:552, item_type:3 }),
+        site_switcher.click({ item_type:4 })">
+        <div class="site-icon favicon favicon-stackoverflowmeta" title="Meta Stack Overflow"></div>
+        Meta Stack Overflow
+    </a>
+
+                </li>
+                            <li class="related-site">
+                        <div class="L-shaped-icon-container">
+        <span class="L-shaped-icon"></span>
+    </div>
+
+                    <a class="site-link js-gps-track" href="http://careers.stackoverflow.com/?utm_source=stackoverflow.com&amp;utm_medium=site-ui&amp;utm_campaign=multicollider" data-gps-track="site_switcher.click({ item_type:9 })">
+                        <div class="site-icon favicon favicon-careers" title="Stack Overflow Careers"></div>
+                        Stack Overflow Careers
+                    </a>
+                </li>
+        </ul>
+    </div>
+    
+    <div class="header" id="your-communities-header">
+        <h3>
+your communities        </h3>
+            
+    </div>
+    <div class="modal-content" id="your-communities-section">
+            
+            <div class="call-to-login">
+<a href="https://stackoverflow.com/users/signup?ssrc=site_switcher&amp;returnurl=http%3a%2f%2fstackoverflow.com%2fquestions%2f15857837%2fcompile-headers-dependencies-with-makefile" class="login-link js-gps-track" data-gps-track="site_switcher.click({ item_type:10 })">Sign up</a> or <a href="https://stackoverflow.com/users/login?ssrc=site_switcher&amp;returnurl=http%3a%2f%2fstackoverflow.com%2fquestions%2f15857837%2fcompile-headers-dependencies-with-makefile" class="login-link js-gps-track" data-gps-track="site_switcher.click({ item_type:11 })">log in</a> to customize your list.
+            </div>
+    </div>
+    
+    <div class="header">
+        <h3><a href="http://stackexchange.com/sites">more stack exchange communities</a></h3>
+        <a href="http://blog.stackoverflow.com/" class="fr">company blog</a>
+    </div>
+    <div class="modal-content">
+            <div class="child-content"></div>
+    </div>
+</div>
+        </div>
+
+        <div class="network-items">
+
+            <a href="http://stackexchange.com/" class="topbar-icon icon-site-switcher yes-hover js-site-switcher-button js-gps-track" data-gps-track="site_switcher.show" title="A list of all 153 Stack Exchange sites">
+                <span class="hidden-text">Stack Exchange</span>
+            </a>
+
+    <a href="#" class="topbar-icon icon-inbox yes-hover js-inbox-button" title="Recent inbox messages">
+        <span class="hidden-text">Inbox</span>
+        <span class="unread-count" style="display:none"></span>
+    </a>
+    <a href="#" class="topbar-icon icon-achievements yes-hover js-achievements-button" data-unread-class="" title="Recent achievements: reputation, badges, and privileges earned">
+        <span class="hidden-text">Reputation and Badges</span>
+        <span class="unread-count" style="display:none">
+            
+        </span>
+    </a>
+        </div>
+
+        <div class="topbar-links">
+
+                <div class="links-container">
+                <span class="topbar-menu-links">
+                                    <a href="https://stackoverflow.com/users/signup?ssrc=head&amp;returnurl=http%3a%2f%2fstackoverflow.com%2fquestions%2f15857837%2fcompile-headers-dependencies-with-makefile" class="login-link">sign up</a>
+                                <a href="https://stackoverflow.com/users/login?ssrc=head&amp;returnurl=http%3a%2f%2fstackoverflow.com%2fquestions%2f15857837%2fcompile-headers-dependencies-with-makefile" class="login-link">log in</a>
+
+                        <a href="http://stackoverflow.com/tour">tour</a>
+                            <a href="#" class="icon-help js-help-button" title="Help Center and other resources">
+        help
+        <span class="triangle"></span>
+    </a>
+    <div class="topbar-dialog help-dialog js-help-dialog dno">
+        <div class="modal-content">
+            <ul>
+                                    <li>
+                        <a href="http://stackoverflow.com/tour" class="js-gps-track" data-gps-track="help_popup.click({ item_type:1 })">
+                            Tour
+                            <span class="item-summary">
+                                Start here for a quick overview of the site
+                            </span>
+                        </a>
+                    </li>
+                <li>
+                    <a href="http://stackoverflow.com/help" class="js-gps-track" data-gps-track="help_popup.click({ item_type:4 })">
+                        Help Center
+                        <span class="item-summary">
+                            Detailed answers to any questions you might have
+                        </span>
+                    </a>
+                </li>
+                    <li>
+                        <a href="http://meta.stackoverflow.com/" class="js-gps-track" data-gps-track="help_popup.click({ item_type:2 })">
+                            Meta
+                            <span class="item-summary">
+                                Discuss the workings and policies of this site
+                            </span>
+                        </a>
+                    </li>
+                <li>
+                    <a href="http://stackoverflow.com/company/about" class="js-gps-track" data-gps-track="help_popup.click({ item_type:6 })">
+                        About Us
+                        <span class="item-summary">
+                            Learn more about Stack Overflow the company
+                        </span>
+                    </a>
+                </li>
+                <li>
+                    <a href="https://business.stackoverflow.com/?ref=topbar_help" class="js-gps-track" data-gps-track="help_popup.click({ item_type:7 })">
+                        Business
+                        <span class="item-summary">
+                            Learn more about hiring developers or posting ads with us
+                        </span>
+                    </a>
+                </li>
+            </ul>
+        </div>
+    </div>
+
+                    </span>
+                </div>
+
+            <div class="search-container">
+                <form id="search" action="/search" method="get" autocomplete="off">
+                    <input name="q" placeholder="Search Q&amp;A" tabindex="1" autocomplete="off" maxlength="240" type="text">
+                </form>
+            </div>
+
+        </div>
+    </div>
+</div>
+    <script>
+        StackExchange.ready(function() { StackExchange.topbar.init(); });
+    </script>
+
+    <div class="container">
+        <div id="header">
+            <br class="cbt">
+            <div id="hlogo">
+                <a href="http://stackoverflow.com/">
+                    Stack Overflow
+                </a>
+            </div>
+            <div id="hmenus">
+                <div class="nav mainnavs">
+                    <ul>
+                        <li class="youarehere"><a id="nav-questions" href="http://stackoverflow.com/questions">Questions</a></li>
+                            <li><a id="nav-jobs" href="http://stackoverflow.com/jobs">Jobs</a></li>
+                        <li><a id="nav-tags" href="http://stackoverflow.com/tags">Tags</a></li>
+                        <li><a id="nav-users" href="http://stackoverflow.com/users">Users</a></li>
+                        <li><a id="nav-badges" href="http://stackoverflow.com/help/badges">Badges</a></li>
+                                            </ul>
+                </div>
+                <div class="nav askquestion">
+                    <ul>
+                        <li>
+                            <a id="nav-askquestion" href="http://stackoverflow.com/questions/ask">Ask Question</a>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+        
+
+
+
+        <div id="content" class="snippet-hidden">
+            
+
+<div itemscope="" itemtype="http://schema.org/Question">
+    <link itemprop="image" href="http://cdn.sstatic.net/stackoverflow/img/apple-touch-icon.png?v=c78bd457575a">
+
+<div id="herobox">
+    <div id="hero-content">
+            <div id="close"><a title="click to minimize">_</a></div>
+        <div id="blurb">
+            Stack Overflow is a community of 4.7 million programmers, just like you, helping each other.
+            <br>
+                <br>Join them; it only takes a minute:<br>
+            <br>
+            <a href="http://stackoverflow.com/users/signup?ssrc=hero&amp;returnurl=http%3a%2f%2fstackoverflow.com%2fquestions%2f15857837%2fcompile-headers-dependencies-with-makefile" id="tell-me-more" class="button">Sign up</a>
+        </div>
+        <div id="desc">
+            <b>Join the Stack Overflow community to:</b>
+            <ol id="hiw">
+                <li id="q">Ask programming questions
+                </li>
+                <li id="an">Answer and help your peers
+                </li>
+                <li id="b">Get recognized for your expertise
+                </li>
+            </ol>
+        </div>
+        <div style="clear: both"></div>
+    </div>
+    <script>
+        StackExchange.ready(function () {
+
+            var location = 0;
+            if ($("body").hasClass("questions-page")) {
+                location = 1;;
+            } else if ($("body").hasClass("question-page")) {
+                location = 1;;
+            } else if ($("body").hasClass("faq-page")) {
+                location = 5;;
+            } else if ($("body").hasClass("home-page")) {
+                location = 3;;
+            }
+
+            $('#tell-me-more').click(function () {
+                StackExchange.using("gps", function () {
+                    StackExchange.gps.track("hero.action", { hero_action_type: 'cta', location: location }, true);
+                });
+            });
+            $('#herobox #close').click(function () {
+                StackExchange.using("gps", function () {
+                    StackExchange.gps.track("hero.action", { hero_action_type: "minimize", location: location }, true);
+                });
+                $.cookie("hero", "mini", { path: "/", expires: 365 });
+                $.ajax({
+                    url: "/hero-mini",
+                    success: function (data) {
+                        $("#herobox").fadeOut("fast", function () {
+                            $("#herobox").replaceWith(data);
+                            $("#herobox-mini").fadeIn("fast");
+                        });
+                    }
+                });
+                return false;
+            });
+        });
+
+    </script>
+</div>
+			<div id="question-header">
+                <h1 itemprop="name"><a href="http://stackoverflow.com/questions/15857837/compile-headers-dependencies-with-makefile" class="question-hyperlink">compile headers dependencies with makefile</a></h1>
+		</div>
+			<div id="mainbar">
+
+			
+
+<div class="question" data-questionid="15857837" id="question">
+
+    <script>
+                var ados = ados || {}; ados.run = ados.run || [];
+                ados.run.push(function () { ados_add_placement(22,8277,"adzerk1743469827",4).setZone(43); });
+            </script>
+            <div class="everyonelovesstackoverflow adzerk-vote" id="adzerk1743469827"><a href="http://engine.adzerk.net/r?e=eyJhdiI6NDE0LCJhdCI6NCwiYnQiOjAsImNtIjozMjI1MTQsImNoIjoxMTc4LCJjayI6e30sImNyIjoxMjY5MTg0LCJkaSI6IjZkNjI5NTkyMjhjYTRhNzI5MzIwNmE4YTZkYTNmM2I3IiwiZG0iOjEsImZjIjoxMzY3OTM3LCJmbCI6ODY0MjI1LCJpcCI6IjkzLjE1Ni43NS4xMiIsImt3IjoiYyxnY2MsbWFrZWZpbGUsZ251IiwibnciOjIyLCJwYyI6MCwiZWMiOjAsInByIjoxNjA0LCJydCI6MSwic3QiOjgyNzcsInVrIjoidWUxLTFkYTM4MDRjYmQyMzQ1OGU5YjllYjczYTg1Zjc4ODkyIiwiem4iOjQzLCJ0cyI6MTQ1NzAzNDc5NTYzMywiYmYiOnRydWUsInBuIjoiYWR6ZXJrMTc0MzQ2OTgyNyIsInVyIjoiaHR0cDovL3N0YWNrb3ZlcmZsb3cuY29tL2pvYnMvcmVtb3RlP3V0bV9zb3VyY2U9c3RhY2tvdmVyZmxvdy5jb20mdXRtX21lZGl1bT1hZCZ1dG1fY2FtcGFpZ249Y2FuZGlkYXRlcy13ZmgmdXRtX2NvbnRlbnQ9bGItd2ZoLWtpZC13b3JrLW9uLXdvcmsifQ&amp;s=fnC72uzCZfGl6JABXKlWXsiT380" rel="nofollow" target="_blank" title=""><img src="c%20-%20compile%20headers%20dependencies%20with%20makefile%20-%20Stack%20Overflow_files/ca0f847878fc4be5bac353194231ef81.png" title="" alt="" border="0" height="90" width="728"></a><div class="adzerk-vote-controls" style="display: none;"><div class="adzerk-vote-option adzerk-vote-up"><div class="adzerk-vote-icon"></div></div><div class="adzerk-vote-option adzerk-vote-down"><div class="adzerk-vote-icon"></div></div></div><div class="adzerk-vote-survey" style="display:none;"><form><span>No problem. We won't show you that ad again. Why didn't you like it?</span><ul><li><label><input value="12" name="downvoteReason" type="radio">Uninteresting</label></li><li><label><input value="13" name="downvoteReason" type="radio">Misleading</label></li><li><label><input value="14" name="downvoteReason" type="radio">Offensive</label></li><li><label><input value="15" name="downvoteReason" type="radio">Repetitive</label></li><li><label><input value="16" name="downvoteReason" type="radio">Other</label></li></ul><a href="#" class="adzerk-vote-cancel">Oops! I didn't mean to do this.</a></form></div><img src="c%20-%20compile%20headers%20dependencies%20with%20makefile%20-%20Stack%20Overflow_files/i_003.gif" style="position:absolute;" border="0" height="0px" width="0px"></div>    <table>
+        <tbody><tr>
+            <td class="votecell">
+                
+
+<div class="vote">
+        <input name="_id_" value="15857837" type="hidden">
+        <a class="vote-up-off" title="This question shows research effort; it is useful and clear">up vote</a>
+        <span itemprop="upvoteCount" class="vote-count-post ">3</span>
+        <a class="vote-down-off" title="This question does not show any research effort; it is unclear or not useful">down vote</a>
+
+        <a class="star-off" href="#" title="This is a favorite question (click again to undo)">favorite</a>
+        <div class="favoritecount"><b>1</b></div>
+
+
+</div>
+
+            </td>
+            
+<td class="postcell">
+<div>
+    <div class="post-text" itemprop="text">
+
+<p>I am programming an UDP client server application in the C 
+programming language; I want to automatically compile 2 sources files 
+and 3 header files whenever the dependencies change so I decided to use 
+the make utility.</p>
+
+<p>The makefile target is called <strong>"edit"</strong> :</p>
+
+<pre style="" class="lang-c prettyprint prettyprinted"><code><span class="pln">    edit </span><span class="pun">:</span><span class="pln"> server_UDP</span><span class="pun">.</span><span class="pln">o  client_UDP</span><span class="pun">.</span><span class="pln">o \
+            gcc </span><span class="pun">-</span><span class="pln">o edit server_UDP</span><span class="pun">.</span><span class="pln">o  client_UDP</span><span class="pun">.</span><span class="pln">o \
+
+
+    client_UDP</span><span class="pun">.</span><span class="pln">o </span><span class="pun">:</span><span class="pln"> client_UDP</span><span class="pun">.</span><span class="pln">c cliHeader_UDP</span><span class="pun">.</span><span class="pln">h  wrapHeader</span><span class="pun">.</span><span class="pln">h
+            gcc </span><span class="pun">-</span><span class="pln">c client_UDP</span><span class="pun">.</span><span class="pln">c
+
+    server_UDP</span><span class="pun">.</span><span class="pln">o </span><span class="pun">:</span><span class="pln"> server_UDP</span><span class="pun">.</span><span class="pln">c servHeader_UDP</span><span class="pun">.</span><span class="pln">h  wrapHeader</span><span class="pun">.</span><span class="pln">h
+            gcc </span><span class="pun">-</span><span class="pln">c  server_UDP</span><span class="pun">.</span><span class="pln">c</span></code></pre>
+
+<p>It doesn't trigger a recompile when I change a few lines of code in wrapHeader.h.</p>
+
+<p>How do to I modify the edit makefile rule(s) when there is a change in wrapHeader.h to recompile server_UDP and client_UDP ?</p>
+
+<p><strong>**note</strong> : wrapHeader.h is the main header</p>
+
+<p><strong>cliHeader_UDP.h : include "wrapHeader.h"</strong> </p>
+
+<p><strong>servHeader_UDP.h  : include "wrapHeader.h"</strong></p>
+    </div>
+    <div class="post-taglist">
+        <a href="http://stackoverflow.com/questions/tagged/c" class="post-tag js-gps-track" title="show questions tagged 'c'" rel="tag">c</a> <a href="http://stackoverflow.com/questions/tagged/gcc" class="post-tag js-gps-track" title="show questions tagged 'gcc'" rel="tag">gcc</a> <a href="http://stackoverflow.com/questions/tagged/makefile" class="post-tag js-gps-track" title="show questions tagged 'makefile'" rel="tag">makefile</a> <a href="http://stackoverflow.com/questions/tagged/gnu" class="post-tag js-gps-track" title="show questions tagged 'gnu'" rel="tag">gnu</a> 
+    </div>
+    <table class="fw">
+    <tbody><tr>
+    <td class="vt">
+<div class="post-menu"><a href="http://stackoverflow.com/q/15857837" title="short permalink to this question" class="short-link" id="link-post-15857837">share</a><span class="lsep">|</span><a href="http://stackoverflow.com/posts/15857837/edit" class="suggest-edit-post" title="">improve this question</a></div>        
+    </td>
+    <td class="post-signature" align="right">
+<div class="user-info ">
+    <div class="user-action-time">
+        <a href="http://stackoverflow.com/posts/15857837/revisions" title="show all edits to this post">edited <span title="2014-07-07 18:33:31Z" class="relativetime">Jul 7 '14 at 18:33</span></a>
+    </div>
+    <div class="user-gravatar32">
+        <a href="http://stackoverflow.com/users/1339447/michaelangelo"><div class="gravatar-wrapper-32"><img src="c%20-%20compile%20headers%20dependencies%20with%20makefile%20-%20Stack%20Overflow_files/ccbdb55dff435e5e156b8007c170204e.png" alt="" height="32" width="32"></div></a>
+    </div>
+    <div class="user-details">
+        <a href="http://stackoverflow.com/users/1339447/michaelangelo">Michaelangelo</a>
+        <div class="-flair">
+            <span class="reputation-score" title="reputation score " dir="ltr">761</span><span title="6 silver badges"><span class="badge2"></span><span class="badgecount">6</span></span><span title="13 bronze badges"><span class="badge3"></span><span class="badgecount">13</span></span>
+        </div>
+    </div>
+</div>    </td>
+    <td class="post-signature owner">
+        <div class="user-info ">
+    <div class="user-action-time">
+        asked <span title="2013-04-07 01:15:53Z" class="relativetime">Apr 7 '13 at 1:15</span>
+    </div>
+    <div class="user-gravatar32">
+        <a href="http://stackoverflow.com/users/2103930/zak"><div class="gravatar-wrapper-32"><img src="c%20-%20compile%20headers%20dependencies%20with%20makefile%20-%20Stack%20Overflow_files/6ac909822c374621db1efabac488abf7.png" alt="" height="32" width="32"></div></a>
+    </div>
+    <div class="user-details">
+        <a href="http://stackoverflow.com/users/2103930/zak">zak</a>
+        <div class="-flair">
+            <span class="reputation-score" title="reputation score " dir="ltr">44</span><span title="3 silver badges"><span class="badge2"></span><span class="badgecount">3</span></span><span title="13 bronze badges"><span class="badge3"></span><span class="badgecount">13</span></span>
+        </div>
+    </div>
+</div>
+    </td>
+    </tr>
+    </tbody></table>
+</div>
+</td>
+        </tr>
+                
+<tr>
+    <td class="votecell"></td>
+    <td>
+	    <div id="comments-15857837" class="comments ">
+		    <table>
+                <tbody data-remaining-comments-count="0" data-canpost="false" data-cansee="true" data-comments-unavailable="false" data-addlink-disabled="true">
+
+
+
+    <tr id="comment-22569741" class="comment ">
+        <td class="comment-actions">
+            <table>
+                <tbody>
+                    <tr>
+                        <td class=" comment-score">
+                                <span title="number of 'useful comment' votes received" class="cool">1</span>
+                        </td>
+                        <td>
+                                &nbsp;
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+        </td>
+        <td class="comment-text">
+            <div style="display: block;" class="comment-body">
+                <span class="comment-copy">Both <code>gcc</code> and Gnu <code>make</code> have a <i>fantastic</i> feature set that, when setup to work in concert with each other, will do precisely what you're looking for. The <code>gcc -MM</code> compiler switch will <i>almost</i> generate a <code>make</code>-compatible
+ target that for you. For information about how this is done, and some 
+sample code to try out, see the online docs of gnu make <a href="http://www.gnu.org/software/make/manual/html_node/index.html" rel="nofollow">at this website</a>, with specific attention paid to <a href="http://www.gnu.org/software/make/manual/html_node/Automatic-Prerequisites.html#Automatic-Prerequisites" rel="nofollow">this section</a>.</span>
+                    –&nbsp;<a href="http://stackoverflow.com/users/1322972/whozcraig" title="39597 reputation" class="comment-user">WhozCraig</a>
+                <span class="comment-date" dir="ltr"><a class="comment-link" href="#comment22569741_15857837"><span title="2013-04-07 01:28:55Z" class="relativetime-clean">Apr 7 '13 at 1:28</span></a></span>
+                                                                            </div>
+                    </td>
+    </tr>
+                </tbody>
+		    </table>
+	    </div>
+
+        <div id="comments-link-15857837" data-rep="50" data-anon="true">
+
+                <a class="js-add-link comments-link disabled-link " title="Use comments to ask for more information or suggest improvements. Avoid answering questions in comments.">add a comment</a><span class="js-link-separator dno">&nbsp;|&nbsp;</span>
+            <a class="js-show-link comments-link dno" title="expand to show all comments on this post" href="#" onclick=""></a>
+        </div>         
+    </td>
+</tr>        </tbody></table>
+</div>
+
+			<div id="answers">
+
+				<a name="tab-top"></a>
+				<div id="answers-header">
+					<div class="subheader answers-subheader">
+						<h2>
+								2 Answers
+                                <span style="display:none;" itemprop="answerCount">2</span>
+						</h2>
+						<div>
+							<div id="tabs">
+        <a href="http://stackoverflow.com/questions/15857837/compile-headers-dependencies-with-makefile?answertab=active#tab-top" data-nav-xhref="" title="Answers with the latest activity first" data-value="active">
+            active</a>
+        <a href="http://stackoverflow.com/questions/15857837/compile-headers-dependencies-with-makefile?answertab=oldest#tab-top" data-nav-xhref="" title="Answers in the order they were provided" data-value="oldest">
+            oldest</a>
+        <a class="youarehere" href="http://stackoverflow.com/questions/15857837/compile-headers-dependencies-with-makefile?answertab=votes#tab-top" data-nav-xhref="" title="Answers with the highest score first" data-value="votes">
+            votes</a>
+</div>
+						</div>
+					</div>    
+				</div>    
+
+
+
+
+  
+<a name="15857914"></a>
+<div id="answer-15857914" class="answer" data-answerid="15857914" itemscope="" itemtype="http://schema.org/Answer">
+    <table>
+        <tbody><tr>
+            <td class="votecell">
+                
+
+<div class="vote">
+        <input name="_id_" value="15857914" type="hidden">
+        <a class="vote-up-off" title="This answer is useful">up vote</a>
+        <span itemprop="upvoteCount" class="vote-count-post ">2</span>
+        <a class="vote-down-off" title="This answer is not useful">down vote</a>
+
+
+
+
+</div>
+
+            </td>
+            
+
+
+<td class="answercell">
+    <div class="post-text" itemprop="text">
+<p>I think what you want are Make dependency files.</p>
+
+<p>You can specify the compiler to generate a dependency file for you 
+with the '-MMD -MP' arguments, which create a new file with the same 
+name as the source file except with the extension *.d, in the same 
+folder as your source.</p>
+
+<p>The dependency file contains all the headers the code depends on, 
+which will lead to GNU make compiling your source file if a header it 
+uses is modified.</p>
+
+<p>An example dependency file enabled makefile:</p>
+
+<pre style="" class="lang-makefile prettyprint prettyprinted"><code><span class="com"># Makefile</span><span class="pln">
+
+CC   </span><span class="pun">:=</span><span class="pln"> gcc
+LD   </span><span class="pun">:=</span><span class="pln"> g</span><span class="pun">++</span><span class="pln">
+
+</span><span class="com"># The output executable.</span><span class="pln">
+BIN   </span><span class="pun">:=</span><span class="pln"> program
+
+</span><span class="com"># Toolchain arguments.</span><span class="pln">
+CFLAGS    </span><span class="pun">:=</span><span class="pln"> 
+CXXFLAGS  </span><span class="pun">:=</span><span class="pln"> $</span><span class="pun">(</span><span class="pln">CFLAGS</span><span class="pun">)</span><span class="pln">
+LDFLAGS   </span><span class="pun">:=</span><span class="pln"> 
+
+</span><span class="com"># Project sources.</span><span class="pln">
+C_SOURCE_FILES </span><span class="pun">:=</span><span class="pln"> mysourcefile1</span><span class="pun">.</span><span class="pln">c src</span><span class="pun">/</span><span class="pln">myothersrc</span><span class="pun">.</span><span class="pln">c
+C_OBJECT_FILES </span><span class="pun">:=</span><span class="pln"> $</span><span class="pun">(</span><span class="pln">patsubst </span><span class="pun">%.</span><span class="pln">c</span><span class="pun">,%.</span><span class="pln">o</span><span class="pun">,</span><span class="pln">$</span><span class="pun">(</span><span class="pln">C_SOURCE_FILES</span><span class="pun">))</span><span class="pln">
+
+</span><span class="com"># The dependency file names.</span><span class="pln">
+DEPS </span><span class="pun">:=</span><span class="pln"> $</span><span class="pun">(</span><span class="pln">C_OBJECT_FILES</span><span class="pun">:.</span><span class="pln">o</span><span class="pun">=.</span><span class="pln">d</span><span class="pun">)</span><span class="pln">
+
+all</span><span class="pun">:</span><span class="pln"> $</span><span class="pun">(</span><span class="pln">BIN</span><span class="pun">)</span><span class="pln">
+
+clean</span><span class="pun">:</span><span class="pln">
+    $</span><span class="pun">(</span><span class="pln">RM</span><span class="pun">)</span><span class="pln"> $</span><span class="pun">(</span><span class="pln">C_OBJECT_FILES</span><span class="pun">)</span><span class="pln"> $</span><span class="pun">(</span><span class="pln">DEPS</span><span class="pun">)</span><span class="pln"> $</span><span class="pun">(</span><span class="pln">BIN</span><span class="pun">)</span><span class="pln">
+
+rebuild</span><span class="pun">:</span><span class="pln"> clean all
+
+$</span><span class="pun">(</span><span class="pln">BIN</span><span class="pun">):</span><span class="pln"> $</span><span class="pun">(</span><span class="pln">C_OBJECT_FILES</span><span class="pun">)</span><span class="pln">
+    $</span><span class="pun">(</span><span class="pln">LD</span><span class="pun">)</span><span class="pln"> $</span><span class="pun">(</span><span class="pln">C_OBJECT_FILES</span><span class="pun">)</span><span class="pln"> $</span><span class="pun">(</span><span class="pln">LDFLAGS</span><span class="pun">)</span><span class="pln"> </span><span class="pun">-</span><span class="pln">o $@
+
+</span><span class="pun">%.</span><span class="pln">o</span><span class="pun">:</span><span class="pln"> </span><span class="pun">%.</span><span class="pln">c
+    $</span><span class="pun">(</span><span class="pln">CC</span><span class="pun">)</span><span class="pln"> </span><span class="pun">-</span><span class="pln">c </span><span class="pun">-</span><span class="pln">MMD </span><span class="pun">-</span><span class="pln">MP $</span><span class="pun">&lt;</span><span class="pln"> </span><span class="pun">-</span><span class="pln">o $@ $</span><span class="pun">(</span><span class="pln">CFLAGS</span><span class="pun">)</span><span class="pln">
+
+</span><span class="com"># Let make read the dependency files and handle them.</span><span class="pln">
+</span><span class="pun">-</span><span class="pln">include $</span><span class="pun">(</span><span class="pln">DEPS</span><span class="pun">)</span></code></pre>
+
+<p>This should work for your situation:</p>
+
+<pre style="" class="lang-c prettyprint prettyprinted"><code><span class="pln">SOURCES </span><span class="pun">:=</span><span class="pln"> server_UDP</span><span class="pun">.</span><span class="pln">c client_UDP</span><span class="pun">.</span><span class="pln">c
+OBJECTS </span><span class="pun">:=</span><span class="pln"> $</span><span class="pun">(</span><span class="pln">patsubst </span><span class="pun">%.</span><span class="pln">c</span><span class="pun">,%.</span><span class="pln">o</span><span class="pun">,</span><span class="pln">$</span><span class="pun">(</span><span class="pln">SOURCES</span><span class="pun">))</span><span class="pln">
+
+DEPS </span><span class="pun">:=</span><span class="pln"> $</span><span class="pun">(</span><span class="pln">OBJECTS</span><span class="pun">:.</span><span class="pln">o</span><span class="pun">=.</span><span class="pln">d</span><span class="pun">)</span><span class="pln">
+
+edit</span><span class="pun">:</span><span class="pln"> $</span><span class="pun">(</span><span class="pln">OBJECTS</span><span class="pun">)</span><span class="pln">
+    gcc </span><span class="pun">-</span><span class="pln">o edit $</span><span class="pun">(</span><span class="pln">OBJECTS</span><span class="pun">)</span><span class="pln">
+
+</span><span class="pun">%.</span><span class="pln">o</span><span class="pun">:</span><span class="pln"> </span><span class="pun">%.</span><span class="pln">c
+    gcc </span><span class="pun">-</span><span class="pln">c $</span><span class="pun">&lt;</span><span class="pln"> </span><span class="pun">-</span><span class="pln">o $@
+
+</span><span class="pun">-</span><span class="pln">include $</span><span class="pun">(</span><span class="pln">DEPS</span><span class="pun">)</span></code></pre>
+    </div>
+    <table class="fw">
+    <tbody><tr>
+    <td class="vt">
+<div class="post-menu"><a href="http://stackoverflow.com/a/15857914" title="short permalink to this answer" class="short-link" id="link-post-15857914">share</a><span class="lsep">|</span><a href="http://stackoverflow.com/posts/15857914/edit" class="suggest-edit-post" title="">improve this answer</a></div>                    </td>
+    <td class="post-signature" align="right">
+<div class="user-info ">
+    <div class="user-action-time">
+        <a href="http://stackoverflow.com/posts/15857914/revisions" title="show all edits to this post">edited <span title="2013-04-07 01:58:01Z" class="relativetime">Apr 7 '13 at 1:58</span></a>
+    </div>
+    <div class="user-gravatar32">
+        
+    </div>
+    <div class="user-details">
+        
+        <div class="-flair">
+            
+        </div>
+    </div>
+</div>    </td>
+            
+
+
+    <td class="post-signature" align="right">   
+       
+
+    <div class="user-info ">
+    <div class="user-action-time">
+        answered <span title="2013-04-07 01:28:24Z" class="relativetime">Apr 7 '13 at 1:28</span>
+    </div>
+    <div class="user-gravatar32">
+        <a href="http://stackoverflow.com/users/1559035/dylan"><div class="gravatar-wrapper-32"><img src="c%20-%20compile%20headers%20dependencies%20with%20makefile%20-%20Stack%20Overflow_files/e09b5c4488b680174e81aa2ab0d5fe9a.png" alt="" height="32" width="32"></div></a>
+    </div>
+    <div class="user-details">
+        <a href="http://stackoverflow.com/users/1559035/dylan">Dylan</a>
+        <div class="-flair">
+            <span class="reputation-score" title="reputation score " dir="ltr">380</span><span title="1 silver badge"><span class="badge2"></span><span class="badgecount">1</span></span><span title="9 bronze badges"><span class="badge3"></span><span class="badgecount">9</span></span>
+        </div>
+    </div>
+</div>
+    </td>
+    </tr>
+    </tbody></table>
+</td>
+        </tr>
+            
+<tr>
+    <td class="votecell"></td>
+    <td>
+	    <div id="comments-15857914" class="comments ">
+		    <table>
+                <tbody data-remaining-comments-count="2" data-canpost="false" data-cansee="true" data-comments-unavailable="false" data-addlink-disabled="true">
+
+
+
+    <tr id="comment-22569959" class="comment ">
+        <td>
+            <table>
+                <tbody>
+                    <tr>
+                        <td class=" comment-score">
+                                &nbsp;&nbsp;
+                        </td>
+                        <td>
+                                &nbsp;
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+        </td>
+        <td class="comment-text">
+            <div style="display: block;" class="comment-body">
+                <span class="comment-copy">mmmm i browsed the useful 
+links but i didnt get it clearly,because iam new to makefile utility so 
+ Dylan McKay maybe an example on my edit file how to put the code  to 
+understand more ,coz i confused ...</span>
+                    –&nbsp;<a href="http://stackoverflow.com/users/2103930/zak" title="44 reputation" class="comment-user owner">zak</a>
+                <span class="comment-date" dir="ltr"><a class="comment-link" href="#comment22569959_15857914"><span title="2013-04-07 01:53:02Z" class="relativetime-clean">Apr 7 '13 at 1:53</span></a></span>
+                    <span class="edited-yes" title="this comment was edited 1 time"></span>
+                                                                            </div>
+                    </td>
+    </tr>
+    <tr id="comment-22570005" class="comment ">
+        <td>
+            <table>
+                <tbody>
+                    <tr>
+                        <td class=" comment-score">
+                                &nbsp;&nbsp;
+                        </td>
+                        <td>
+                                &nbsp;
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+        </td>
+        <td class="comment-text">
+            <div style="display: block;" class="comment-body">
+                <span class="comment-copy">look at the bottom of the updated answer</span>
+                    –&nbsp;<a href="http://stackoverflow.com/users/1559035/dylan" title="380 reputation" class="comment-user">Dylan</a>
+                <span class="comment-date" dir="ltr"><a class="comment-link" href="#comment22570005_15857914"><span title="2013-04-07 01:58:14Z" class="relativetime-clean">Apr 7 '13 at 1:58</span></a></span>
+                                                                            </div>
+                    </td>
+    </tr>
+    <tr id="comment-22570029" class="comment ">
+        <td>
+            <table>
+                <tbody>
+                    <tr>
+                        <td class=" comment-score">
+                                &nbsp;&nbsp;
+                        </td>
+                        <td>
+                                &nbsp;
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+        </td>
+        <td class="comment-text">
+            <div style="display: block;" class="comment-body">
+                <span class="comment-copy">but i want to understand more
+ about makefile , what is patsubst and what is OBJECTS := $(patsubst 
+%.c,%.o,$(SOURCES))  DEPS := $(OBJECTS:.o=.d)</span>
+                    –&nbsp;<a href="http://stackoverflow.com/users/2103930/zak" title="44 reputation" class="comment-user owner">zak</a>
+                <span class="comment-date" dir="ltr"><a class="comment-link" href="#comment22570029_15857914"><span title="2013-04-07 02:00:11Z" class="relativetime-clean">Apr 7 '13 at 2:00</span></a></span>
+                    <span class="edited-yes" title="this comment was edited 1 time"></span>
+                                                                            </div>
+                    </td>
+    </tr>
+    <tr id="comment-22570597" class="comment ">
+        <td>
+            <table>
+                <tbody>
+                    <tr>
+                        <td class=" comment-score">
+                                &nbsp;&nbsp;
+                        </td>
+                        <td>
+                                &nbsp;
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+        </td>
+        <td class="comment-text">
+            <div style="display: block;" class="comment-body">
+                <span class="comment-copy">patsubst is a function 
+provided by GNU make that replaces a pattern with another pattern. When 
+you call $(patsubst %.c,%.o,$(SOURCES)), you are essentially replacing 
+the .c extension with .o in every file that is in the "SOURCES" variable</span>
+                    –&nbsp;<a href="http://stackoverflow.com/users/1559035/dylan" title="380 reputation" class="comment-user">Dylan</a>
+                <span class="comment-date" dir="ltr"><a class="comment-link" href="#comment22570597_15857914"><span title="2013-04-07 03:03:12Z" class="relativetime-clean">Apr 7 '13 at 3:03</span></a></span>
+                    <span class="edited-yes" title="this comment was edited 1 time"></span>
+                                                                            </div>
+                    </td>
+    </tr>
+    <tr id="comment-22570617" class="comment ">
+        <td>
+            <table>
+                <tbody>
+                    <tr>
+                        <td class=" comment-score">
+                                &nbsp;&nbsp;
+                        </td>
+                        <td>
+                                &nbsp;
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+        </td>
+        <td class="comment-text">
+            <div style="display: block;" class="comment-body">
+                <span class="comment-copy">the deps thing basically does
+ the same, in fact you could make a statement that did the same thing as
+ DEPS := $(OBJECTS:.o=.d) but with patsubst. The $(OBJECTS:.o=.d) 
+expression just replaces ".o" with ".d" in the "OBJECTS" variable</span>
+                    –&nbsp;<a href="http://stackoverflow.com/users/1559035/dylan" title="380 reputation" class="comment-user">Dylan</a>
+                <span class="comment-date" dir="ltr"><a class="comment-link" href="#comment22570617_15857914"><span title="2013-04-07 03:05:18Z" class="relativetime-clean">Apr 7 '13 at 3:05</span></a></span>
+                                                                            </div>
+                    </td>
+    </tr>
+                </tbody>
+		    </table>
+	    </div>
+
+        <div id="comments-link-15857914" data-rep="50" data-anon="true">
+
+                <a class="js-add-link comments-link  dno" title="Use comments to ask for more information or suggest improvements. Avoid comments like “+1” or “thanks”."></a><span class="js-link-separator dno">&nbsp;|&nbsp;</span>
+            <a class="js-show-link comments-link " title="expand to show all comments on this post" href="#" onclick="">show <b>2</b> more comments</a>
+        </div>         
+    </td>
+</tr>    </tbody></table>
+</div>
+<script>
+                var ados = ados || {}; ados.run = ados.run || [];
+                ados.run.push(function () { ados_add_placement(22,8277,"adzerk1941517328",4).setZone(44); });
+            </script>
+            <div class="everyonelovesstackoverflow adzerk-vote" id="adzerk1941517328"><a href="http://engine.adzerk.net/r?e=eyJhdiI6NDE0LCJhdCI6NCwiYnQiOjAsImNtIjozMjI1MTQsImNoIjoxMTc4LCJjayI6e30sImNyIjoxMjY3NTkwLCJkaSI6IjVjZjkxMGRjZGVmMjQ5OTZhNTdmZWIwMGJmNjZkMzVmIiwiZG0iOjEsImZjIjoxMzY1OTUzLCJmbCI6ODY0MjI1LCJpcCI6IjkzLjE1Ni43NS4xMiIsImt3IjoiYyxnY2MsbWFrZWZpbGUsZ251IiwibnciOjIyLCJwYyI6MCwiZWMiOjAsInByIjoxNjA0LCJydCI6MSwic3QiOjgyNzcsInVrIjoidWUxLTFkYTM4MDRjYmQyMzQ1OGU5YjllYjczYTg1Zjc4ODkyIiwiem4iOjQ0LCJ0cyI6MTQ1NzAzNDc5NTYzNSwiYmYiOnRydWUsInBuIjoiYWR6ZXJrMTk0MTUxNzMyOCIsInVyIjoiaHR0cDovL3N0YWNrb3ZlcmZsb3cuY29tL2pvYnMvcmVtb3RlP3V0bV9zb3VyY2U9c3RhY2tvdmVyZmxvdy5jb20mdXRtX21lZGl1bT1hZCZ1dG1fY2FtcGFpZ249Y2FuZGlkYXRlcy13ZmgmdXRtX2NvbnRlbnQ9bGItd2ZoLXBhamFtYXMifQ&amp;s=4Ge_aDxdzQ-D99yfLjUd2qIgKmc" rel="nofollow" target="_blank" title=""><img src="c%20-%20compile%20headers%20dependencies%20with%20makefile%20-%20Stack%20Overflow_files/1e340e02d6c4484cb02bb42c8da9778a.png" title="" alt="" border="0" height="90" width="728"></a><div class="adzerk-vote-controls" style="display:none;"><div class="adzerk-vote-option adzerk-vote-up"><div class="adzerk-vote-icon"></div></div><div class="adzerk-vote-option adzerk-vote-down"><div class="adzerk-vote-icon"></div></div></div><div class="adzerk-vote-survey" style="display:none;"><form><span>No problem. We won't show you that ad again. Why didn't you like it?</span><ul><li><label><input value="12" name="downvoteReason" type="radio">Uninteresting</label></li><li><label><input value="13" name="downvoteReason" type="radio">Misleading</label></li><li><label><input value="14" name="downvoteReason" type="radio">Offensive</label></li><li><label><input value="15" name="downvoteReason" type="radio">Repetitive</label></li><li><label><input value="16" name="downvoteReason" type="radio">Other</label></li></ul><a href="#" class="adzerk-vote-cancel">Oops! I didn't mean to do this.</a></form></div><img src="c%20-%20compile%20headers%20dependencies%20with%20makefile%20-%20Stack%20Overflow_files/i_002.gif" style="position:absolute;" border="0" height="0px" width="0px"></div>
+  
+<a name="15861357"></a>
+<div id="answer-15861357" class="answer" data-answerid="15861357" itemscope="" itemtype="http://schema.org/Answer">
+    <table>
+        <tbody><tr>
+            <td class="votecell">
+                
+
+<div class="vote">
+        <input name="_id_" value="15861357" type="hidden">
+        <a class="vote-up-off" title="This answer is useful">up vote</a>
+        <span itemprop="upvoteCount" class="vote-count-post ">0</span>
+        <a class="vote-down-off" title="This answer is not useful">down vote</a>
+
+
+
+
+</div>
+
+            </td>
+            
+
+
+<td class="answercell">
+    <div class="post-text" itemprop="text">
+<p>You did not say that edit.c includes your two specific headers, but I guess it must, if it links to the objects.</p>
+
+<p>This is exactly the scenario where <a href="http://makepp.sourceforge.net/" rel="nofollow">makepp</a> plays out one of its strengths:  If you follow the convention that for every <code>.o</code> file you need to link there is an include statement of a corresponding name (in your case that would be <code>client_UDP.h</code> &amp; <code>server_UDP.h</code>) then makepp will figure everything out itself, besides detecting the header files as dependencies.</p>
+
+<p>This even works recursively, so if you had a <code>wrapHeader.c</code> (where there is no corresponding include statement in <code>edit.c</code>), that would get automatically compiled and linked.</p>
+
+<p>So you <strong>don't need a makefile</strong>.  But if you want to avoid calling <code>makepp edit</code> everytime, then you can create a one-liner</p>
+
+<pre style="" class="lang-c prettyprint prettyprinted"><code><span class="pln">edit</span><span class="pun">:</span></code></pre>
+
+<p>You will only need to learn make syntax, if you have more complex 
+requirements. But if you do, there is no limit. Besides doing almost all
+ that GNU make can, there are lots more useful things, and you can even 
+extend your makefiles with some Perl programming.</p>
+    </div>
+    <table class="fw">
+    <tbody><tr>
+    <td class="vt">
+<div class="post-menu"><a href="http://stackoverflow.com/a/15861357" title="short permalink to this answer" class="short-link" id="link-post-15861357">share</a><span class="lsep">|</span><a href="http://stackoverflow.com/posts/15861357/edit" class="suggest-edit-post" title="">improve this answer</a></div>                    </td>
+    <td class="post-signature" align="right">
+<div class="user-info ">
+    <div class="user-action-time">
+        <a href="http://stackoverflow.com/posts/15861357/revisions" title="show all edits to this post">edited <span title="2013-04-07 10:54:59Z" class="relativetime">Apr 7 '13 at 10:54</span></a>
+    </div>
+    <div class="user-gravatar32">
+        
+    </div>
+    <div class="user-details">
+        
+        <div class="-flair">
+            
+        </div>
+    </div>
+</div>    </td>
+            
+
+
+    <td class="post-signature" align="right">   
+       
+
+    <div class="user-info ">
+    <div class="user-action-time">
+        answered <span title="2013-04-07 10:29:37Z" class="relativetime">Apr 7 '13 at 10:29</span>
+    </div>
+    <div class="user-gravatar32">
+        <a href="http://stackoverflow.com/users/1122011/daniel"><div class="gravatar-wrapper-32"><img src="c%20-%20compile%20headers%20dependencies%20with%20makefile%20-%20Stack%20Overflow_files/697c2c327f346f4a0e81f19740ce3f65.png" alt="" height="32" width="32"></div></a>
+    </div>
+    <div class="user-details">
+        <a href="http://stackoverflow.com/users/1122011/daniel">Daniel</a>
+        <div class="-flair">
+            <span class="reputation-score" title="reputation score " dir="ltr">316</span><span title="2 silver badges"><span class="badge2"></span><span class="badgecount">2</span></span><span title="10 bronze badges"><span class="badge3"></span><span class="badgecount">10</span></span>
+        </div>
+    </div>
+</div>
+    </td>
+    </tr>
+    </tbody></table>
+</td>
+        </tr>
+            
+<tr>
+    <td class="votecell"></td>
+    <td>
+	    <div id="comments-15861357" class="comments ">
+		    <table>
+                <tbody data-remaining-comments-count="0" data-canpost="false" data-cansee="true" data-comments-unavailable="false" data-addlink-disabled="true">
+
+
+
+    <tr id="comment-22576172" class="comment ">
+        <td>
+            <table>
+                <tbody>
+                    <tr>
+                        <td class=" comment-score">
+                                &nbsp;&nbsp;
+                        </td>
+                        <td>
+                                &nbsp;
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+        </td>
+        <td class="comment-text">
+            <div style="display: block;" class="comment-body">
+                <span class="comment-copy">no edit is the file for makefile commands and client_UDP and server_udp not a Headers ..... its souce codes</span>
+                    –&nbsp;<a href="http://stackoverflow.com/users/2103930/zak" title="44 reputation" class="comment-user owner">zak</a>
+                <span class="comment-date" dir="ltr"><a class="comment-link" href="#comment22576172_15861357"><span title="2013-04-07 11:18:14Z" class="relativetime-clean">Apr 7 '13 at 11:18</span></a></span>
+                                                                            </div>
+                    </td>
+    </tr>
+    <tr id="comment-22704835" class="comment ">
+        <td>
+            <table>
+                <tbody>
+                    <tr>
+                        <td class=" comment-score">
+                                &nbsp;&nbsp;
+                        </td>
+                        <td>
+                                &nbsp;
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+        </td>
+        <td class="comment-text">
+            <div style="display: block;" class="comment-body">
+                <span class="comment-copy">Sorry I don't understand what you are saying. If you want go to our <a href="http://sourceforge.net/p/makepp/discussion/" rel="nofollow">sourceforge forums</a>
+ and we can discuss more.  There you can also write in Esperanto, German
+ or French if you are more comfortable with one of those.</span>
+                    –&nbsp;<a href="http://stackoverflow.com/users/1122011/daniel" title="316 reputation" class="comment-user">Daniel</a>
+                <span class="comment-date" dir="ltr"><a class="comment-link" href="#comment22704835_15861357"><span title="2013-04-10 21:04:34Z" class="relativetime-clean">Apr 10 '13 at 21:04</span></a></span>
+                                                                            </div>
+                    </td>
+    </tr>
+                </tbody>
+		    </table>
+	    </div>
+
+        <div id="comments-link-15861357" data-rep="50" data-anon="true">
+
+                <a class="js-add-link comments-link disabled-link " title="Use comments to ask for more information or suggest improvements. Avoid comments like “+1” or “thanks”.">add a comment</a><span class="js-link-separator dno">&nbsp;|&nbsp;</span>
+            <a class="js-show-link comments-link dno" title="expand to show all comments on this post" href="#" onclick=""></a>
+        </div>         
+    </td>
+</tr>    </tbody></table>
+</div>
+									<a name="new-answer"></a>
+						<form id="post-form" action="/questions/15857837/answer/submit" method="post" class="post-form">
+						    <input id="post-id" value="15857837" type="hidden">
+                            <input id="qualityBanWarningShown" name="qualityBanWarningShown" value="false" type="hidden">
+                            <input name="referrer" value="" type="hidden">
+							<h2 class="space">Your Answer</h2>
+
+
+            <script>
+            StackExchange.ifUsing("editor", function () {
+                StackExchange.using("externalEditor", function () {
+                    StackExchange.using("snippets", function () {
+                        StackExchange.snippets.init();
+                    });
+                });
+            }, "code-snippets");
+        </script>
+    
+
+<script>
+    StackExchange.ready(function() {
+        initTagRenderer("".split(" "), "".split(" "));
+       
+        StackExchange.using("externalEditor", function() {
+                // Have to fire editor after snippets, if snippets enabled
+                if (StackExchange.options.snippets.enabled) {
+                    StackExchange.using("snippets", function() {
+                        createEditor();
+                    });
+                }
+                else {
+                    createEditor();
+                }
+            });
+
+            function createEditor() {
+                prepareEditor({
+                    heartbeatType: 'answer',
+                convertImagesToLinks: true,
+                reputationToPostImages: 10,
+                bindNavPrevention: true,
+                postfix: "",
+                    onDemand: true,
+                    discardSelector: ".discard-answer"
+                    ,immediatelyShowMarkdownHelp:true
+                    });
+                
+
+        }
+    });  
+</script>
+
+
+<div id="post-editor" class="post-editor js-post-editor">
+
+    <div style="position: relative;">     
+        <div class="wmd-container">
+            <div id="wmd-button-bar" class="wmd-button-bar"><ul id="wmd-button-row" class="wmd-button-row"><li style="left: 0px;" class="wmd-button" id="wmd-bold-button"><span style="background-position: 0px -20px;"></span></li><li style="left: 25px;" class="wmd-button" id="wmd-italic-button"><span style="background-position: -20px -20px;"></span></li><li style="left: 50px;" class="wmd-spacer" id="wmd-spacer1"><span style="background-position: -40px -20px;"></span></li><li style="left: 75px;" class="wmd-button" id="wmd-link-button"><span style="background-position: -40px -20px;"></span></li><li style="left: 100px;" class="wmd-button" id="wmd-quote-button"><span style="background-position: -60px -20px;"></span></li><li style="left: 125px;" class="wmd-button" id="wmd-code-button"><span style="background-position: -80px -20px;"></span></li><li style="left: 150px;" class="wmd-button" id="wmd-image-button"><span style="background-position: -100px -20px;"></span></li><li style="left: 175px;" class="wmd-spacer" id="wmd-spacer2"><span style="background-position: -120px -20px;"></span></li><li style="left: 200px;" class="wmd-button" id="wmd-olist-button"><span style="background-position: -120px -20px;"></span></li><li style="left: 225px;" class="wmd-button" id="wmd-ulist-button"><span style="background-position: -140px -20px;"></span></li><li style="left: 250px;" class="wmd-button" id="wmd-heading-button"><span style="background-position: -160px -20px;"></span></li><li style="left: 275px;" class="wmd-button" id="wmd-hr-button"><span style="background-position: -180px -20px;"></span></li><li style="left: 300px;" class="wmd-spacer" id="wmd-spacer3"><span style="background-position: -200px -20px;"></span></li><li style="left: 325px;" class="wmd-button" id="wmd-undo-button"><span style="background-position: -200px -20px;"></span></li><li style="left: 350px;" class="wmd-button" id="wmd-redo-button"><span style="background-position: -220px -20px;"></span></li></ul></div>
+            <textarea id="wmd-input" class="wmd-input" name="post-text" cols="92" rows="15" tabindex="101" data-min-length=""></textarea>
+        </div>
+    </div>
+
+    <div class="fl" style="margin-top: 8px; height:24px;">&nbsp;</div>
+    <div id="draft-saved" class="draft-saved community-option fl" style="margin-top: 8px; height:24px; display:none;">draft saved</div>
+
+    <div id="draft-discarded" class="draft-discarded community-option fl" style="margin-top: 8px; height:24px; display:none;">draft discarded</div>
+
+
+
+    <div id="wmd-preview" class="wmd-preview"></div>
+    <div></div>
+    <div class="edit-block">
+        <input id="fkey" name="fkey" value="9f58b3d0e2aa98222df77255a280dbd4" type="hidden">
+        <input id="author" name="author" type="text">
+    </div>
+
+
+
+</div>
+							<div style="position: relative;">
+								
+								            <div class="form-item new-post-login">
+        
+                <div class="new-login-form">
+                    <div class="new-login-left">
+                        <h3>Sign up or <a id="login-link" href="http://stackoverflow.com/users/login?ssrc=question_page&amp;returnurl=http%3a%2f%2fstackoverflow.com%2fquestions%2f15857837%2fcompile-headers-dependencies-with-makefile%23new-answer">log in</a></h3>
+                        <script>
+                            StackExchange.ready(function () {
+                                StackExchange.helpers.onClickDraftSave('#login-link');
+                            });
+                        </script>
+                        <div class="preferred-login google-login">
+                            <p><span class="icon"></span><span>Sign up using Google</span></p>
+                        </div>
+                        <div class="preferred-login facebook-login">
+                            <p><span class="icon"></span><span>Sign up using Facebook</span></p>
+                        </div>
+                        <div class="preferred-login stackexchange-login">
+                            <p><span class="icon"></span><span>Sign up using Email and Password</span></p>
+                        </div>
+                    </div>
+                    <input name="manual-openid" class="manual-openid" type="hidden">
+                    <input name="use-facebook" class="use-facebook" value="false" type="hidden">
+                    <input name="use-google" class="use-google" value="false" type="hidden">
+                    <input class="submit-openid" value="Submit" style="display:none" type="button">
+                    <div class="new-login-right">
+                                <h3>Post as a guest</h3>
+    <div class="form-item">
+        <table>
+        <tbody><tr>
+                    <td class="vm">
+                <div>
+                    <label for="display-name">Name</label>
+                    <input id="display-name" name="display-name" size="30" maxlength="30" tabindex="105" type="text">
+                </div>
+                <div>
+                    <label for="m-address">Email</label>
+                    <input id="m-address" name="m-address" size="30" maxlength="100" tabindex="106" placeholder="required, but never shown" type="email">
+                </div>
+            </td>
+        </tr>
+        </tbody></table>
+    </div>
+
+                    </div>
+                </div>
+            </div>
+            <script>
+                StackExchange.ready(
+                    function () {
+                        StackExchange.openid.initPostLogin('.new-post-login', 'http%3a%2f%2fstackoverflow.com%2fquestions%2f15857837%2fcompile-headers-dependencies-with-makefile%23new-answer', 'question_page');
+                    }
+                );
+            </script>
+            <noscript>
+                        <h3>Post as a guest</h3>
+    <div class="form-item">
+        <table>
+        <tr>
+                    <td class="vm">
+                <div>
+                    <label for="display-name">Name</label>
+                    <input id="display-name" name="display-name" type="text" size="30" maxlength="30" value="" tabindex="105">
+                </div>
+                <div>
+                    <label for="m-address">Email</label>
+                    <input id="m-address" name="m-address" type="email" size="30" maxlength="100" value="" tabindex="106" placeholder="required, but never shown" />
+                </div>
+            </td>
+        </tr>
+        </table>
+    </div>
+
+            </noscript>
+
+							</div>
+           
+															<div class="form-submit cbt">
+									<input id="submit-button" value="Post Your Answer" tabindex="110" type="submit">
+									<a href="#" class="discard-answer dno">discard</a>
+
+<p class="privacy-policy-agreement">
+By posting your answer, you agree to the <a href="http://stackexchange.com/legal/privacy-policy" target="_blank">privacy policy</a> and <a href="http://stackexchange.com/legal/terms-of-service" target="_blank">terms of service</a>.</p>
+<input name="legalLinksShown" value="1" type="hidden">								</div>
+						</form>
+
+
+
+						<h2 class="bottom-notice" data-loc="1">
+Not the answer you're looking for?							Browse other questions tagged <a href="http://stackoverflow.com/questions/tagged/c" class="post-tag" title="show questions tagged 'c'" rel="tag">c</a> <a href="http://stackoverflow.com/questions/tagged/gcc" class="post-tag" title="show questions tagged 'gcc'" rel="tag">gcc</a> <a href="http://stackoverflow.com/questions/tagged/makefile" class="post-tag" title="show questions tagged 'makefile'" rel="tag">makefile</a> <a href="http://stackoverflow.com/questions/tagged/gnu" class="post-tag" title="show questions tagged 'gnu'" rel="tag">gnu</a>  or <a href="http://stackoverflow.com/questions/ask">ask your own question</a>.						</h2>
+			</div>
+		</div>
+				<div id="sidebar" class="show-votes">
+						    <div class="module question-stats">
+			        <table id="qinfo">
+			            <tbody><tr>
+			                <td>
+			                    <p class="label-key">asked</p>
+			                </td>
+			                <td style="padding-left: 10px">
+			                    <p class="label-key" title="2013-04-07 01:15:53Z"><b>2 years ago</b></p>
+			                </td>
+			            </tr>
+			            <tr>
+			                <td>
+			                    <p class="label-key">viewed</p>
+			                </td>
+
+			                <td style="padding-left: 10px">
+			                    <p class="label-key">
+			                        <b>4233 times</b>
+			                    </p>
+			                </td>
+			            </tr>
+			                <tr>
+			                    <td>
+			                        <p class="label-key">active</p>
+			                    </td>
+			                    <td style="padding-left: 10px">
+			                        <p class="label-key"><b><a href="http://stackoverflow.com/questions/15857837/compile-headers-dependencies-with-makefile?lastactivity" class="lastactivity-link" title="2014-07-07 18:33:31Z">1 year ago</a></b></p>
+			                    </td>
+			                </tr>
+			        </tbody></table>
+			    </div>
+						
+			<script>
+                var ados = ados || {}; ados.run = ados.run || [];
+                ados.run.push(function () { ados_add_placement(22,8277,"adzerk644395064",[5,17,2221]).setZone(45); });
+            </script>
+            <div class="everyonelovesstackoverflow adzerk-vote" id="adzerk644395064"><div id="careersadsdoublehigh" style="display:none;"></div><div class="adzerk-vote-controls" style="display:none;"><div class="adzerk-vote-option adzerk-vote-up"><div class="adzerk-vote-icon"></div></div><div class="adzerk-vote-option adzerk-vote-down"><div class="adzerk-vote-icon"></div></div></div><div class="adzerk-vote-survey" style="display:none;"><form><span>No problem. We won't show you that ad again. Why didn't you like it?</span><ul><li><label><input value="12" name="downvoteReason" type="radio">Uninteresting</label></li><li><label><input value="13" name="downvoteReason" type="radio">Misleading</label></li><li><label><input value="14" name="downvoteReason" type="radio">Offensive</label></li><li><label><input value="15" name="downvoteReason" type="radio">Repetitive</label></li><li><label><input value="16" name="downvoteReason" type="radio">Other</label></li></ul><a href="#" class="adzerk-vote-cancel">Oops! I didn't mean to do this.</a></form></div><img src="c%20-%20compile%20headers%20dependencies%20with%20makefile%20-%20Stack%20Overflow_files/i.gif" style="position:absolute;" border="0" height="0px" width="0px"></div>
+        <div class=" orange looking tagged" id="hireme"><a href="http://stackoverflow.com/jobs" target="_blank" data-tz="1" data-ti="0" class="top"><span>Looking for a job?</span></a><div class="middle"><ul class="jobs"><li><a data-at="0" data-tz="3" data-ti="192118" href="http://stackoverflow.com/jobs/106203/senior-java-engineer-in-madrid-f-m-zooplus-ag-services-esp" target="_blank" title="Senior Java Engineer in Madrid (f/m) at zooplus AG Services ESP. Click to learn more.">Senior Java Engineer in Madrid (f/m)<br><div class="company">zooplus AG Services ESP</div><div class="location" title="Madrid, Spain / relocation">Madrid, Spain / relocation</div><span class="post-tag">java</span><span class="post-tag">spring-mvc</span></a></li><li><a data-at="0" data-tz="3" data-ti="210122" href="http://stackoverflow.com/jobs/110122/guardian-of-the-sw-galaxy-qa-engineer-telefonica-innovation" target="_blank" title="Guardian of the SW Galaxy! - QA Engineer at Telefonica Innovation. Click to learn more.">Guardian of the SW Galaxy! - QA Engineer<br><div class="company">Telefonica Innovation</div><div class="location" title="Barcelona, Spain">Barcelona, Spain</div><span class="post-tag">qa</span><span class="post-tag">testing</span></a></li><li><a data-at="0" data-tz="3" data-ti="193848" href="http://stackoverflow.com/jobs/107935/full-stack-web-developer-ticketbis" target="_blank" title="Full-stack Web Developer at Ticketbis. Click to learn more.">Full-stack Web Developer<br><div class="company">Ticketbis</div><div class="location" title="Bilbao, Spain / remote">Bilbao, Spain / remote</div><span class="post-tag">grails</span><span class="post-tag">java</span></a></li><li><a data-at="0" data-tz="3" data-ti="195282" href="http://stackoverflow.com/jobs/109360/test-automation-engineer-typeform" target="_blank" title="Test Automation Engineer at Typeform. Click to learn more.">Test Automation Engineer<br><div class="company">Typeform</div><div class="location" title="Barcelona, Spain / relocation">Barcelona, Spain / relocation</div><span class="post-tag">ruby</span><span class="post-tag">cucumber</span></a></li></ul></div><img class="impression" src="c%20-%20compile%20headers%20dependencies%20with%20makefile%20-%20Stack%20Overflow_files/soi.gif" style="display:none;"></div>
+			  
+    
+            <div class="module sidebar-linked">
+	<h4 id="h-linked">Linked</h4>
+	<div class="linked" data-tracker="lq=1">
+<div class="spacer">
+	<a href="http://stackoverflow.com/q/23700067?lq=1" title="Vote score (upvotes - downvotes)">
+		<div class="answer-votes answered-accepted default">2</div>
+	</a>
+	<a href="http://stackoverflow.com/questions/23700067/make-and-re-compiling-headers-with-sub-directories?lq=1" class="question-hyperlink">Make and Re-Compiling Headers with Sub-Directories</a>
+</div>			</div>
+</div>
+
+				<div class="module sidebar-related">
+					<h4 id="h-related">Related</h4>
+                    <div class="related js-gps-related-questions" data-tracker="rq=1">
+                        <div class="spacer js-gps-track">
+<a href="http://stackoverflow.com/q/297514?rq=1" title="Vote score (upvotes - downvotes)">
+    <div class="answer-votes answered-accepted default">55
+    </div>
+</a><a href="http://stackoverflow.com/questions/297514/how-can-i-have-a-makefile-automatically-rebuild-source-files-that-include-a-modi?rq=1" class="question-hyperlink">How can I have a Makefile automatically rebuild source files that include a modified header file? (In C/C++)</a>
+</div>
+<div class="spacer js-gps-track">
+<a href="http://stackoverflow.com/q/2394609?rq=1" title="Vote score (upvotes - downvotes)">
+    <div class="answer-votes answered-accepted default">45
+    </div>
+</a><a href="http://stackoverflow.com/questions/2394609/makefile-header-dependencies?rq=1" class="question-hyperlink">Makefile, header dependencies</a>
+</div>
+<div class="spacer js-gps-track">
+<a href="http://stackoverflow.com/q/9446634?rq=1" title="Vote score (upvotes - downvotes)">
+    <div class="answer-votes answered-accepted default">1
+    </div>
+</a><a href="http://stackoverflow.com/questions/9446634/makefile-vpath-not-working-for-header-files?rq=1" class="question-hyperlink">Makefile vpath not working for header files</a>
+</div>
+<div class="spacer js-gps-track">
+<a href="http://stackoverflow.com/q/15864412?rq=1" title="Vote score (upvotes - downvotes)">
+    <div class="answer-votes answered-accepted default">1
+    </div>
+</a><a href="http://stackoverflow.com/questions/15864412/makefiles-and-header-dependencies-revisited?rq=1" class="question-hyperlink">makefiles and header dependencies, revisited</a>
+</div>
+<div class="spacer js-gps-track">
+<a href="http://stackoverflow.com/q/16970377?rq=1" title="Vote score (upvotes - downvotes)">
+    <div class="answer-votes default">-1
+    </div>
+</a><a href="http://stackoverflow.com/questions/16970377/automatic-dependency-resolution-using-gnu-makefile?rq=1" class="question-hyperlink">Automatic dependency resolution using GNU Makefile</a>
+</div>
+<div class="spacer js-gps-track">
+<a href="http://stackoverflow.com/q/26382794?rq=1" title="Vote score (upvotes - downvotes)">
+    <div class="answer-votes answered-accepted default">1
+    </div>
+</a><a href="http://stackoverflow.com/questions/26382794/makefile-doesnt-rebuild-objects-on-header-modification?rq=1" class="question-hyperlink">Makefile doesn't rebuild objects on header modification</a>
+</div>
+<div class="spacer js-gps-track">
+<a href="http://stackoverflow.com/q/28987212?rq=1" title="Vote score (upvotes - downvotes)">
+    <div class="answer-votes default">-2
+    </div>
+</a><a href="http://stackoverflow.com/questions/28987212/how-to-write-a-makefile-with-target-errors?rq=1" class="question-hyperlink">How to write a makefile with target “errors”?</a>
+</div>
+<div class="spacer js-gps-track">
+<a href="http://stackoverflow.com/q/29264441?rq=1" title="Vote score (upvotes - downvotes)">
+    <div class="answer-votes answered-accepted default">2
+    </div>
+</a><a href="http://stackoverflow.com/questions/29264441/simple-compiling-using-a-makefile?rq=1" class="question-hyperlink">Simple compiling using a Makefile?</a>
+</div>
+<div class="spacer js-gps-track">
+<a href="http://stackoverflow.com/q/31085016?rq=1" title="Vote score (upvotes - downvotes)">
+    <div class="answer-votes default">0
+    </div>
+</a><a href="http://stackoverflow.com/questions/31085016/c-includes-of-includes-in-headers?rq=1" class="question-hyperlink">C includes of includes in headers</a>
+</div>
+<div class="spacer js-gps-track">
+<a href="http://stackoverflow.com/q/33972583?rq=1" title="Vote score (upvotes - downvotes)">
+    <div class="answer-votes answered-accepted default">0
+    </div>
+</a><a href="http://stackoverflow.com/questions/33972583/issues-with-makefile-in-c?rq=1" class="question-hyperlink">issues with Makefile in C</a>
+</div>
+
+                    </div>
+				</div>
+            
+<div id="hot-network-questions" class="module">
+    <h4>
+        <a href="http://stackexchange.com/questions?tab=hot" class="js-gps-track" data-gps-track="posts_hot_network.click({ item_type:1, location:11 })">
+            Hot Network Questions
+        </a>
+    </h4>
+    <ul>
+            <li>
+                <div class="favicon favicon-workplace" title="The Workplace Stack Exchange"></div><a href="http://workplace.stackexchange.com/questions/62879/provider-is-cheating-but-i-dont-want-to-disclose-how-i-found-out" class="js-gps-track" data-gps-track="site.switch({ item_type:11, target_site:423 }); posts_hot_network.click({ item_type:2, location:11 })">
+                    Provider is "cheating", but I don't want to disclose how I found out
+                </a>
+
+            </li>
+            <li>
+                <div class="favicon favicon-security" title="Information Security Stack Exchange"></div><a href="http://security.stackexchange.com/questions/116139/what-is-drown-and-why-is-it-even-possible" class="js-gps-track" data-gps-track="site.switch({ item_type:11, target_site:162 }); posts_hot_network.click({ item_type:2, location:11 })">
+                    What is DROWN and why is it even possible?
+                </a>
+
+            </li>
+            <li>
+                <div class="favicon favicon-dba" title="Database Administrators Stack Exchange"></div><a href="http://dba.stackexchange.com/questions/131179/adding-where-clause-skews-data" class="js-gps-track" data-gps-track="site.switch({ item_type:11, target_site:182 }); posts_hot_network.click({ item_type:2, location:11 })">
+                    Adding Where Clause Skews Data
+                </a>
+
+            </li>
+            <li>
+                <div class="favicon favicon-diy" title="Home Improvement Stack Exchange"></div><a href="http://diy.stackexchange.com/questions/85706/notched-exterior-stud-next-to-chimney" class="js-gps-track" data-gps-track="site.switch({ item_type:11, target_site:73 }); posts_hot_network.click({ item_type:2, location:11 })">
+                    Notched exterior stud next to chimney
+                </a>
+
+            </li>
+            <li>
+                <div class="favicon favicon-stackoverflow" title="Stack Overflow"></div><a href="http://stackoverflow.com/questions/35768738/for-loop-behaviour-in-python" class="js-gps-track" data-gps-track="site.switch({ item_type:11, target_site:1 }); posts_hot_network.click({ item_type:2, location:11 })">
+                    'For' loop behaviour in Python
+                </a>
+
+            </li>
+            <li style="display: list-item;" class="dno js-hidden">
+                <div class="favicon favicon-academia" title="Academia Stack Exchange"></div><a href="http://academia.stackexchange.com/questions/64440/is-it-true-that-phd-students-need-to-work-10-12-hours-a-day-every-day-to-be-prod" class="js-gps-track" data-gps-track="site.switch({ item_type:11, target_site:415 }); posts_hot_network.click({ item_type:2, location:11 })">
+                    Is it true that PhD students need to work 10-12 hours a day every day to be productive?
+                </a>
+
+            </li>
+            <li style="display: list-item;" class="dno js-hidden">
+                <div class="favicon favicon-serverfault" title="Server Fault"></div><a href="http://serverfault.com/questions/761247/how-is-possible-that-the-web-site-is-down-but-the-traceroute-is-ok" class="js-gps-track" data-gps-track="site.switch({ item_type:11, target_site:2 }); posts_hot_network.click({ item_type:2, location:11 })">
+                    How is possible that the web site is down but the traceroute is ok?
+                </a>
+
+            </li>
+            <li style="display: list-item;" class="dno js-hidden">
+                <div class="favicon favicon-math" title="Mathematics Stack Exchange"></div><a href="http://math.stackexchange.com/questions/1681591/does-0-x-0-imply-x-0" class="js-gps-track" data-gps-track="site.switch({ item_type:11, target_site:69 }); posts_hot_network.click({ item_type:2, location:11 })">
+                    Does 0 &lt; x &lt; 0 imply x =0?
+                </a>
+
+            </li>
+            <li style="display: list-item;" class="dno js-hidden">
+                <div class="favicon favicon-electronics" title="Electrical Engineering Stack Exchange"></div><a href="http://electronics.stackexchange.com/questions/220584/how-to-decrease-distortion-noise-of-lm386-amplifier-at-max-gain-and-volume" class="js-gps-track" data-gps-track="site.switch({ item_type:11, target_site:135 }); posts_hot_network.click({ item_type:2, location:11 })">
+                    How to decrease distortion/noise of LM386 amplifier at max gain and volume?
+                </a>
+
+            </li>
+            <li style="display: list-item;" class="dno js-hidden">
+                <div class="favicon favicon-salesforce" title="Salesforce Stack Exchange"></div><a href="http://salesforce.stackexchange.com/questions/112835/can-production-org-ids-ever-change-and-if-so-under-what-circumstances" class="js-gps-track" data-gps-track="site.switch({ item_type:11, target_site:459 }); posts_hot_network.click({ item_type:2, location:11 })">
+                    Can production org ids ever change and if so, under what circumstances?
+                </a>
+
+            </li>
+            <li style="display: list-item;" class="dno js-hidden">
+                <div class="favicon favicon-travel" title="Travel Stack Exchange"></div><a href="http://travel.stackexchange.com/questions/64553/when-should-i-book-my-hotel-if-prices-are-inflated-due-to-a-major-event" class="js-gps-track" data-gps-track="site.switch({ item_type:11, target_site:273 }); posts_hot_network.click({ item_type:2, location:11 })">
+                    When should I book my hotel if prices are inflated due to a major event?
+                </a>
+
+            </li>
+            <li style="display: list-item;" class="dno js-hidden">
+                <div class="favicon favicon-academia" title="Academia Stack Exchange"></div><a href="http://academia.stackexchange.com/questions/64488/do-reviewers-become-biased-about-research-papers-written-by-authors-of-a-previou" class="js-gps-track" data-gps-track="site.switch({ item_type:11, target_site:415 }); posts_hot_network.click({ item_type:2, location:11 })">
+                    Do reviewers become biased about research papers written by authors of a previous low quality paper?
+                </a>
+
+            </li>
+            <li style="display: list-item;" class="dno js-hidden">
+                <div class="favicon favicon-webmasters" title="Webmasters Stack Exchange"></div><a href="http://webmasters.stackexchange.com/questions/90728/using-competitors-domain-with-different-ending-to-boost-traffic" class="js-gps-track" data-gps-track="site.switch({ item_type:11, target_site:45 }); posts_hot_network.click({ item_type:2, location:11 })">
+                    Using competitors domain with different ending to boost traffic
+                </a>
+
+            </li>
+            <li style="display: list-item;" class="dno js-hidden">
+                <div class="favicon favicon-tex" title="TeX - LaTeX Stack Exchange"></div><a href="http://tex.stackexchange.com/questions/297122/amsmath-is-now-latex-amsmath-what-does-this-mean-for-me" class="js-gps-track" data-gps-track="site.switch({ item_type:11, target_site:85 }); posts_hot_network.click({ item_type:2, location:11 })">
+                    amsmath is now latex-amsmath: what does this mean for me?
+                </a>
+
+            </li>
+            <li style="display: list-item;" class="dno js-hidden">
+                <div class="favicon favicon-english" title="English Language &amp; Usage Stack Exchange"></div><a href="http://english.stackexchange.com/questions/311123/is-there-a-pre-internet-term-for-gamification" class="js-gps-track" data-gps-track="site.switch({ item_type:11, target_site:97 }); posts_hot_network.click({ item_type:2, location:11 })">
+                    Is there a pre-Internet term for "gamification"?
+                </a>
+
+            </li>
+            <li style="display: list-item;" class="dno js-hidden">
+                <div class="favicon favicon-rpg" title="Role-playing Games Stack Exchange"></div><a href="http://rpg.stackexchange.com/questions/76491/can-i-use-two-immovable-rods-as-an-infinite-ladder-or-monkey-bars" class="js-gps-track" data-gps-track="site.switch({ item_type:11, target_site:122 }); posts_hot_network.click({ item_type:2, location:11 })">
+                    Can I use Two Immovable Rods as an infinite ladder or monkey bars?
+                </a>
+
+            </li>
+            <li style="display: list-item;" class="dno js-hidden">
+                <div class="favicon favicon-astronomy" title="Astronomy Stack Exchange"></div><a href="http://astronomy.stackexchange.com/questions/13986/what-are-the-dimensions-of-ligo-detector-evacuated-chambers" class="js-gps-track" data-gps-track="site.switch({ item_type:11, target_site:514 }); posts_hot_network.click({ item_type:2, location:11 })">
+                    What are the dimensions of LIGO Detector evacuated chambers?
+                </a>
+
+            </li>
+            <li style="display: list-item;" class="dno js-hidden">
+                <div class="favicon favicon-worldbuilding" title="Worldbuilding Stack Exchange"></div><a href="http://worldbuilding.stackexchange.com/questions/37242/how-do-you-do-assassinate-someone-who-is-protected-by-precognitive-people" class="js-gps-track" data-gps-track="site.switch({ item_type:11, target_site:579 }); posts_hot_network.click({ item_type:2, location:11 })">
+                    How do you do assassinate someone who is protected by precognitive people?
+                </a>
+
+            </li>
+            <li style="display: list-item;" class="dno js-hidden">
+                <div class="favicon favicon-math" title="Mathematics Stack Exchange"></div><a href="http://math.stackexchange.com/questions/1681188/definition-of-connectedness" class="js-gps-track" data-gps-track="site.switch({ item_type:11, target_site:69 }); posts_hot_network.click({ item_type:2, location:11 })">
+                    Definition of connectedness?
+                </a>
+
+            </li>
+            <li style="display: list-item;" class="dno js-hidden">
+                <div class="favicon favicon-astronomy" title="Astronomy Stack Exchange"></div><a href="http://astronomy.stackexchange.com/questions/13975/do-star-remnants-actually-burn" class="js-gps-track" data-gps-track="site.switch({ item_type:11, target_site:514 }); posts_hot_network.click({ item_type:2, location:11 })">
+                    Do star remnants actually burn?
+                </a>
+
+            </li>
+            <li style="display: list-item;" class="dno js-hidden">
+                <div class="favicon favicon-electronics" title="Electrical Engineering Stack Exchange"></div><a href="http://electronics.stackexchange.com/questions/220559/counter-for-20-ghz-clock" class="js-gps-track" data-gps-track="site.switch({ item_type:11, target_site:135 }); posts_hot_network.click({ item_type:2, location:11 })">
+                    Counter for 20 GHz clock
+                </a>
+
+            </li>
+            <li style="display: list-item;" class="dno js-hidden">
+                <div class="favicon favicon-ux" title="User Experience Stack Exchange"></div><a href="http://ux.stackexchange.com/questions/90812/proper-wording-for-cancel-undo" class="js-gps-track" data-gps-track="site.switch({ item_type:11, target_site:102 }); posts_hot_network.click({ item_type:2, location:11 })">
+                    Proper wording for "Cancel Undo"?
+                </a>
+
+            </li>
+            <li style="display: list-item;" class="dno js-hidden">
+                <div class="favicon favicon-scifi" title="Science Fiction &amp; Fantasy Stack Exchange"></div><a href="http://scifi.stackexchange.com/questions/121076/are-storm-troopers-paid-or-rewarded-in-any-way-for-their-service" class="js-gps-track" data-gps-track="site.switch({ item_type:11, target_site:186 }); posts_hot_network.click({ item_type:2, location:11 })">
+                    Are Storm Troopers paid or rewarded in any way for their service?
+                </a>
+
+            </li>
+            <li style="display: list-item;" class="dno js-hidden">
+                <div class="favicon favicon-graphicdesign" title="Graphic Design Stack Exchange"></div><a href="http://graphicdesign.stackexchange.com/questions/67925/why-does-a-gif-increase-in-size-when-i-add-a-logo-although-number-of-colors-stay" class="js-gps-track" data-gps-track="site.switch({ item_type:11, target_site:174 }); posts_hot_network.click({ item_type:2, location:11 })">
+                    Why does a GIF increase in size when I add a logo although number of colors stays the same?
+                </a>
+
+            </li>
+    </ul>
+
+        
+</div>
+		</div>
+	
+<div id="feed-link">
+    <div id="feed-link-text">
+        <a href="http://stackoverflow.com/feeds/question/15857837" title="feed of this question and its answers">
+            <span class="feed-icon"></span>question feed
+        </a>
+    </div>
+</div>	<script>
+StackExchange.ready(function(){$.get('/posts/15857837/ivc/066b');});
+</script>
+<noscript>
+    <div><img src="/posts/15857837/ivc/066b" class="dno" alt="" width="0" height="0"></div>
+</noscript><div style="display:none" id="prettify-lang">lang-c</div></div>
+
+
+        </div>
+    </div>
+    <div id="footer" class="categories">
+        <div class="footerwrap">
+            <div id="footer-menu">
+                <div class="top-footer-links">
+                    <a href="http://stackoverflow.com/company/about">about us</a>
+                        <a href="http://stackoverflow.com/tour">tour</a>
+                    <a href="http://stackoverflow.com/help">help</a>
+                    <a href="http://blog.stackoverflow.com/?blb=1">blog</a>
+                        <a href="http://chat.stackoverflow.com/">chat</a>
+                    <a href="http://data.stackexchange.com/">data</a>
+                    <a href="http://stackexchange.com/legal">legal</a>
+                    <a href="http://stackexchange.com/legal/privacy-policy">privacy policy</a>
+                    <a href="http://stackoverflow.com/company/work-here">work here</a>
+                    <a href="http://stackexchange.com/mediakit">advertising info</a>
+
+                    <a onclick='StackExchange.switchMobile("on")'>mobile</a>
+                    <b><a href="http://stackoverflow.com/contact">contact us</a></b>
+                        <b><a href="http://meta.stackoverflow.com/">feedback</a></b>
+                    
+                </div>
+                <div id="footer-sites">
+                    <table>
+    <tbody><tr>
+            <th colspan="3">
+                Technology
+            </th>
+            <th>
+                Life / Arts
+            </th>
+            <th>
+                Culture / Recreation
+            </th>
+            <th>
+                Science
+            </th>
+            <th>
+                Other
+            </th>
+    </tr>
+    <tr>
+            <td>
+                <ol>
+                        <li><a href="http://stackoverflow.com/" title="professional and enthusiast programmers">Stack Overflow</a></li>
+                        <li><a href="http://serverfault.com/" title="system and network administrators">Server Fault</a></li>
+                        <li><a href="http://superuser.com/" title="computer enthusiasts and power users">Super User</a></li>
+                        <li><a href="http://webapps.stackexchange.com/" title="power users of web applications">Web Applications</a></li>
+                        <li><a href="http://askubuntu.com/" title="Ubuntu users and developers">Ask Ubuntu</a></li>
+                        <li><a href="http://webmasters.stackexchange.com/" title="pro webmasters">Webmasters</a></li>
+                        <li><a href="http://gamedev.stackexchange.com/" title="professional and independent game developers">Game Development</a></li>
+                        <li><a href="http://tex.stackexchange.com/" title="users of TeX, LaTeX, ConTeXt, and related typesetting systems">TeX - LaTeX</a></li>
+                            </ol></td><td><ol>
+                        <li><a href="http://programmers.stackexchange.com/" title="professional programmers interested in conceptual questions about software development">Programmers</a></li>
+                        <li><a href="http://unix.stackexchange.com/" title="users of Linux, FreeBSD and other Un*x-like operating systems">Unix &amp; Linux</a></li>
+                        <li><a href="http://apple.stackexchange.com/" title="power users of Apple hardware and software">Ask Different (Apple)</a></li>
+                        <li><a href="http://wordpress.stackexchange.com/" title="WordPress developers and administrators">WordPress Development</a></li>
+                        <li><a href="http://gis.stackexchange.com/" title="cartographers, geographers and GIS professionals">Geographic Information Systems</a></li>
+                        <li><a href="http://electronics.stackexchange.com/" title="electronics and electrical engineering professionals, students, and enthusiasts">Electrical Engineering</a></li>
+                        <li><a href="http://android.stackexchange.com/" title="enthusiasts and power users of the Android operating system">Android Enthusiasts</a></li>
+                        <li><a href="http://security.stackexchange.com/" title="information security professionals">Information Security</a></li>
+                            </ol></td><td><ol>
+                        <li><a href="http://dba.stackexchange.com/" title="database professionals who wish to improve their database skills and learn from others in the community">Database Administrators</a></li>
+                        <li><a href="http://drupal.stackexchange.com/" title="Drupal developers and administrators">Drupal Answers</a></li>
+                        <li><a href="http://sharepoint.stackexchange.com/" title="SharePoint enthusiasts">SharePoint</a></li>
+                        <li><a href="http://ux.stackexchange.com/" title="user experience researchers and experts">User Experience</a></li>
+                        <li><a href="http://mathematica.stackexchange.com/" title="users of Mathematica">Mathematica</a></li>
+                        <li><a href="http://salesforce.stackexchange.com/" title="Salesforce administrators, implementation experts, developers and anybody in-between">Salesforce</a></li>
+                        <li><a href="http://expressionengine.stackexchange.com/" title="administrators, end users, developers and designers for ExpressionEngine® CMS">ExpressionEngine® Answers</a></li>
+                    
+                        <li>
+                            <a href="http://stackexchange.com/sites#technology" class="more">
+                                more (13)
+                            </a>
+                        </li>
+                </ol>
+            </td>
+            <td>
+                <ol>
+                        <li><a href="http://photo.stackexchange.com/" title="professional, enthusiast and amateur photographers">Photography</a></li>
+                        <li><a href="http://scifi.stackexchange.com/" title="science fiction and fantasy enthusiasts">Science Fiction &amp; Fantasy</a></li>
+                        <li><a href="http://graphicdesign.stackexchange.com/" title="Graphic Design professionals, students, and enthusiasts">Graphic Design</a></li>
+                        <li><a href="http://movies.stackexchange.com/" title="movie and tv enthusiasts">Movies &amp; TV</a></li>
+                        <li><a href="http://cooking.stackexchange.com/" title="professional and amateur chefs">Seasoned Advice (cooking)</a></li>
+                        <li><a href="http://diy.stackexchange.com/" title="contractors and serious DIYers">Home Improvement</a></li>
+                        <li><a href="http://money.stackexchange.com/" title="people who want to be financially literate">Personal Finance &amp; Money</a></li>
+                        <li><a href="http://academia.stackexchange.com/" title="academics and those enrolled in higher education">Academia</a></li>
+                    
+                        <li>
+                            <a href="http://stackexchange.com/sites#lifearts" class="more">
+                                more (9)
+                            </a>
+                        </li>
+                </ol>
+            </td>
+            <td>
+                <ol>
+                        <li><a href="http://english.stackexchange.com/" title="linguists, etymologists, and serious English language enthusiasts">English Language &amp; Usage</a></li>
+                        <li><a href="http://skeptics.stackexchange.com/" title="scientific skepticism">Skeptics</a></li>
+                        <li><a href="http://judaism.stackexchange.com/" title="those who base their lives on Jewish law and tradition and anyone interested in learning more">Mi Yodeya (Judaism)</a></li>
+                        <li><a href="http://travel.stackexchange.com/" title="road warriors and seasoned travelers">Travel</a></li>
+                        <li><a href="http://christianity.stackexchange.com/" title="committed Christians, experts in Christianity and those interested in learning more">Christianity</a></li>
+                        <li><a href="http://gaming.stackexchange.com/" title="passionate videogamers on all platforms">Arqade (gaming)</a></li>
+                        <li><a href="http://bicycles.stackexchange.com/" title="people who build and repair bicycles, people who train cycling, or commute on bicycles">Bicycles</a></li>
+                        <li><a href="http://rpg.stackexchange.com/" title="gamemasters and players of tabletop, paper-and-pencil role-playing games">Role-playing Games</a></li>
+                    
+                        <li>
+                            <a href="http://stackexchange.com/sites#culturerecreation" class="more">
+                                more (21)
+                            </a>
+                        </li>
+                </ol>
+            </td>
+            <td>
+                <ol>
+                        <li><a href="http://math.stackexchange.com/" title="people studying math at any level and professionals in related fields">Mathematics</a></li>
+                        <li><a href="http://stats.stackexchange.com/" title="people interested in statistics, machine learning, data analysis, data mining, and data visualization">Cross Validated (stats)</a></li>
+                        <li><a href="http://cstheory.stackexchange.com/" title="theoretical computer scientists and researchers in related fields">Theoretical Computer Science</a></li>
+                        <li><a href="http://physics.stackexchange.com/" title="active researchers, academics and students of physics">Physics</a></li>
+                        <li><a href="http://mathoverflow.net/" title="professional mathematicians">MathOverflow</a></li>
+                        <li><a href="http://chemistry.stackexchange.com/" title="scientists, academics, teachers and students">Chemistry</a></li>
+                        <li><a href="http://biology.stackexchange.com/" title="biology researchers, academics, and students">Biology</a></li>
+                    
+                        <li>
+                            <a href="http://stackexchange.com/sites#science" class="more">
+                                more (5)
+                            </a>
+                        </li>
+                </ol>
+            </td>
+            <td>
+                <ol>
+                        <li><a href="http://stackapps.com/" title="apps, scripts, and development with the Stack Exchange API">Stack Apps</a></li>
+                        <li><a href="http://meta.stackexchange.com/" title="meta-discussion of the Stack Exchange family of Q&amp;A websites">Meta Stack Exchange</a></li>
+                        <li><a href="http://area51.stackexchange.com/" title="proposing new sites in the Stack Exchange network">Area 51</a></li>
+                        <li><a href="http://careers.stackoverflow.com/">Stack Overflow Careers</a></li>
+                    
+                </ol>
+            </td>
+    </tr>
+</tbody></table>
+                </div>
+            </div>
+
+            <div id="copyright">
+                site design / logo © 2016 Stack Exchange Inc; user contributions licensed under <a href="https://creativecommons.org/licenses/by-sa/3.0/" rel="license">cc by-sa 3.0</a> 
+                with <a href="http://blog.stackoverflow.com/2009/06/attribution-required/" rel="license">attribution required</a>
+            </div>
+            <div id="svnrev">
+                rev 2016.3.2.3314
+            </div>
+            
+        </div>
+    </div>
+    <noscript>
+        <div id="noscript-warning">Stack Overflow works best with JavaScript enabled<img src="http://pixel.quantserve.com/pixel/p-c1rF4kxgLUzNc.gif" alt="" class="dno"></div>
+    </noscript>
+<script>var p = "http", d = "static"; if (document.location.protocol == "https:") { p += "s"; d = "engine"; } var z = document.createElement("script"); z.type = "text/javascript"; z.async = true; z.src = p + "://" + d + ".adzerk.net/ados.js"; var s = document.getElementsByTagName("script")[0]; s.parentNode.insertBefore(z, s);</script>
+<script>
+    var ados = ados || {};
+    ados.run = ados.run || [];
+    ados.run.push(function () {
+            setTimeout(function () { $("#adzerk-user-match").remove(); }, window.AUMIframeDone ? 0 : 2000);
+        ados_setKeywords('c,gcc,makefile,gnu');; ados_load();
+    });         
+</script>
+
+    <script>
+        (function (i, s, o, g, r, a, m) {
+            i['GoogleAnalyticsObject'] = r; i[r] = i[r] || function () { (i[r].q = i[r].q || []).push(arguments) }, i[r].l = 1 * new Date(); a = s.createElement(o),
+            m = s.getElementsByTagName(o)[0]; a.async = 1; a.src = g; m.parentNode.insertBefore(a, m);
+        })(window, document, 'script', 'https://www.google-analytics.com/analytics.js', 'ga');
+        ga('create', 'UA-5620270-1');
+                        ga('set', 'dimension2', '|c|gcc|makefile|gnu|');         ga('send', 'pageview');
+        var _qevents = _qevents || [],
+            _comscore = _comscore || [];
+        (function () {
+            var ssl='https:'==document.location.protocol,
+                s=document.getElementsByTagName('script')[0],
+                qc=document.createElement('script');
+            qc.async=true;
+            qc.src=(ssl?'https://secure':'http://edge')+'.quantserve.com/quant.js';
+            s.parentNode.insertBefore(qc, s);
+            var sc=document.createElement('script');
+            sc.async=true;
+            sc.src=(ssl?'https://sb':'http://b') + '.scorecardresearch.com/beacon.js';
+            s.parentNode.insertBefore(sc, s);
+        })();
+        _comscore.push({ c1: "2", c2: "17440561" });
+        _qevents.push({ qacct: "p-c1rF4kxgLUzNc" });
+    </script>
+            
+    
+<script src="c%20-%20compile%20headers%20dependencies%20with%20makefile%20-%20Stack%20Overflow_files/p.js" async=""></script></body></html>

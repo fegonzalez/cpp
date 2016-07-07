@@ -1,0 +1,19 @@
+
+(implicit) Counter(std::string s)
+7
+
+(implicit) Counter(std::string s)
+7
+7
+
+(implicit) Counter(std::string s)
+7
+
+test explicit use of a non-const reference.
+0
+7
+
+test implicit conversion of a non-const reference:
+c1.copyme(string); // error: no known conversion from 'string' to Counter&
+operator string()
+s1; Counter2string

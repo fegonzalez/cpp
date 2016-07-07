@@ -1,0 +1,82 @@
+# Test: Makefile.vpath: testing "4.5.2 Selective search: vpath Directive"
+#
+# References: [4.2] vpath & headers -
+# http://www.cmcrossroads.com/article/basics-vpath-and-vpath
+#
+# make -f Makefile.vpath [target]
+
+
+################################################################################
+# variables
+################################################################################
+
+CXX=g++
+CXXFLAGS=-Wall
+LDFLAGS=
+INCLUDES = refs_lib.h
+SOURCES = refs_lib.cpp references_test.cpp
+OBJS=$(SOURCES:.cpp=.o)
+EXEC=references_test
+# LIBS="-lncurses -lm -lsdl"
+LIBS=
+
+################################################################################
+# required for make to find both refs_lib.cpp & refs_lib.h files
+#
+# equivalent to Makefile.VPATH: 
+#
+
+INCLUDE_DIRECTORIES = include  # WARNING to avoid differences between vpath & -I
+
+vpath %.cpp sources
+
+# step: do 'make' find the headers
+vpath %.h /usr/include            # default system first, ...
+vpath %.h $(INCLUDE_DIRECTORIES)  # ... then local include
+
+# step: do the compiler find the headers
+CXX_FLAGS_INCLUDES = $(addprefix -I ,$(INCLUDE_DIRECTORIES))
+CXXFLAGS += $(CXX_FLAGS_INCLUDES)
+################################################################################
+
+
+RM=rm -rf
+CORE_DUMPS=core.*
+TEST_DEPS = *.last_diff
+TRASH=  $(EXEC) $(TEST_DEPS) *.o  *.h.gch  a.out *.*~ *~  $(CORE_DUMPS) 
+
+
+
+################################################################################
+# public targets: all runtest successtest difftest
+################################################################################
+
+.PHONY : all
+
+all: $(EXEC)
+
+
+################################################################################
+# private targets: all runtest successtest difftest
+################################################################################
+
+$(EXEC):$(OBJS)
+	@echo 'Building target: $@'
+
+	$(CXX) $(LDFLAGS) $(CXXFLAGS) $^ $(LIBS) -o $@
+
+	@echo 'Finished building: $@'
+
+
+.cpp.o:
+	@echo 'Building target: $@'
+	$(CXX) -c $(CXXFLAGS)  $<
+
+#
+# phony targets
+#
+
+.PHONY : clean
+
+clean:
+	clear; $(RM) $(TRASH); ls -l

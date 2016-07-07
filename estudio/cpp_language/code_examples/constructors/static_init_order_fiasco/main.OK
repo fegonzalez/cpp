@@ -1,0 +1,23 @@
+
+ - initializing 'x'
+construction of x uses y (which is 0) ; (5 expected).
+
+warning fiasco DOES NOT IMPLIES compilation or linking error
+warning fiasco IMPLIES an uncontrolled unexpected bad initialization
+ => run-time  mistakes / errors / CRASH
+initializing 'y' (5)
+
+main() 
+Using the "Construct On First Use Idiom"
+main: First use of 'x_sol' %%%_(
+
+ - initializing 'x_sol'
+   cronstruction of x_solve uses y_sol (which is 
+ - initializing 'y_sol' (5)
+5) ; (5 expected).
+
+ - initializing 'y_sol' (5)
+22)_%%%
+main: 'y_sol' already created ---_(
+ - initializing 'y_sol' (5)
+5)_---

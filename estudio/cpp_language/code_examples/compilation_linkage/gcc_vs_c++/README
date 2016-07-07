@@ -1,0 +1,52 @@
+Testing "c++.howto" A.1. 'gcc' versus 'g++'  Compilation
+
+
+TEST Checking the difference between gcc & g++ over a C++ file (c++_code.cpp)
+
+  // one step
+  g++ c++_code.cpp           // OK
+  gcc c++_code.cpp           // Error (compilation OK, but link error)
+  gcc c++_code.cpp -lstdc++  // OK
+
+
+  // two steps
+  gcc -c c++_code.cpp        // Compilation OK
+  gcc c++_code.o             // Link error
+  gcc c++_code.o -lstdc++    // OK. 
+
+
+
+TEST Checking the difference between gcc & g++ over a C file (c_code.c)
+
+  // compile & link in one step
+  gcc c_code.c               // OK
+  g++ -x c c_code.c          // OK (compiled as C code)
+  g++ c_code.c               // full of errors (compiled as C++ code)
+
+  // compile & link in two separate steps
+  gcc -c c_code.c            // 
+  gcc c_code.o               // OK
+  g++ -x c -c c_code.c       // OK (compiled as C code)
+  g++ c_code.o               // OK (linked as C++ code)
+
+  g++ -x c -c c_code.c       // OK (compiled as C code)
+  gcc c_code.o               // OK (linked as C code)
+
+
+
+TEST '-x c' option: how to compile C source code as actual C code with g++
+
+// WARNING '-x c' option is only valid for source code
+
+  g++ -x c -c c_code.c       // OK (compiled as C code); 'c_code.o' created
+  g++ -x c c_code.o          // full of errors (-x c only valid for source code)
+ 
+  gcc -c c_code.c            // OK as C
+  gcc -x c c_code.o          // full of errors (-x c only valid for source code)
+
+
+
+TEST '-xc' and '-xc++' options: Compilation of multiple formats in one line: 
+
+  g++ -c -x c dummy_c_code.c -x c++ dummy_c++_code.cpp
+

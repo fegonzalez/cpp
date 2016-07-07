@@ -1,0 +1,26 @@
+# eg_4_5: Testing make manual, 4.5 Searching Directories for Prerequisites
+
+
+################################################################################
+# Test list
+################################################################################
+
+# Makefile.VPATH
+
+# Makefile.vpath
+
+
+
+################################################################################
+# Test Results:
+################################################################################
+
+
+# Test: Makefile.VPATH: testing "4.5.1 General search: VPATH variable"
+#
+
+
+
+# Test: Makefile.vpath: testing "4.5.2 Selective search: vpath Directive"
+#
+

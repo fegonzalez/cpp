@@ -1,0 +1,3002 @@
+
+
+################################################################################
+
+				GNU make
+
+################################################################################
+
+
+
+#-------------------------------------------------------------------------------
+# Section I - Notes from the GNU make manual [1] 
+#-------------------------------------------------------------------------------
+
+# 1 Overview of make
+
+
+# 2 Makefile Basics
+#
+# 2.1-2 Syntax
+# 2.3 How make Processes a Makefile
+# 2.4-5 Variables
+# 2.6 Another Style of Makefile: grouping entries by their prerequisites
+# 2.7 Rules for Cleaning the Directory
+
+
+# 3 Writing Makefiles
+#
+# 3.1 What Makefiles Contain
+# 3.2 What Name to Give Your Makefile
+# 3.3 Including Other Makefiles
+# 	3.3.1 The 'include' directive
+# 	3.3.2 The '-include' directive
+# 3.4 The Variable MAKEFILES
+# 3.5 How Makefiles Are Remade
+# 3.6 Overriding Part of Another Makefile
+# 3.7 How make Reads a Makefile
+# 3.8 Secondary Expansion
+
+
+# 4 Writing Rules
+#
+# 4.1-2 Rule Syntax
+# 4.3 Types of Prerequisites
+# 4.4 Using Wildcard Characters in File Names
+# 4.5 Searching Directories for Prerequisites
+# 	4.5.1 General search: VPATH variable	
+# 	4.5.2 Selective search: vpath Directive
+# 	4.5.3 Search Algorithm: How Directory Searches are Performed
+# 	4.5.4 Writing Recipes with Directory Search
+# 	4.5.5 Directory Search and Implicit Rules
+# 	4.5.6 Directory Search for Link Libraries
+# 4.6 Phony Targets
+# 4.7 Rules without Recipes or Prerequisites
+# 4.8 Empty Target Files to Record Events
+# 4.9 Special Built-in Target Names
+# 4.10 Multiple Targets in a Rule
+# 4.11 Multiple Rules for One Target
+# 4.12 Static Pattern Rules
+#      4.12.1 Syntax of Static Pattern Rules
+#      4.12.2 Static Pattern Rules versus Implicit Rules
+# 4.13 Double-Colon Rules
+# 4.14 Generating Prerequisites Automatically
+
+
+# 5 Writing Recipes in Rules
+#
+# 5.1 Recipe Syntax
+#     5.1.1 Splitting Recipe Lines
+#     5.1.2 Using Variables in Recipes
+# 5.2 Recipe Echoing
+# 5.3 Recipe Execution
+#     5.3.1 Using One Shell
+#     5.3.2 Choosing the Shell
+# 5.4 Parallel Execution
+#     5.4.1 Output During Parallel Execution
+#     5.4.2 Input During Parallel Execution
+# 5.5 Errors in Recipes
+# 5.6 Interrupting or Killing make
+# 5.7 Recursive Use of make
+#     5.7.1 How the MAKE Variable Works
+#     5.7.2 Communicating Variables to a Sub-make
+#     5.7.3 Communicating Options to a Sub-make
+#     5.7.4 The ‘--print-directory’ Option
+# 5.8 Defining Canned Recipes
+# 5.9 Using Empty Recipes
+
+
+# 6 How to Use Variables
+#
+# 6.1 Basics of Variable References
+# 6.2 The Two Flavors of Variables
+# 6.3 Advanced Features for Reference to Variables
+#     6.3.1 Substitution References
+#     6.3.2 Computed Variable Names (nested variable reference)
+# 6.4 How Variables Get Their Values
+# 6.5 Setting Variables
+# 6.6 Appending More Text to Variables
+# 6.7 The override Directive
+# 6.8 Defining Multi-Line Variables: define directive
+# 6.9 Undefining Variables: undefine directive
+# 6.10 Variables from the Environment
+# 6.11 Target-specific Variable Values
+# 6.12 Pattern-specific Variable Values
+# 6.13 Suppressing Inheritance
+# 6.14 Other Special Variables
+
+
+# 7 Conditional Parts of Makefiles
+#
+# 7.1 Example of a Conditional
+# 7.2 Syntax of Conditionals
+# 7.3 Conditionals that Test Flags
+
+
+# 8 Functions for Transforming Text
+#
+# 8.1 Function Call Syntax
+# 8.2 Functions for String Substitution and Analysis
+# 8.3 Functions for File Names
+# 8.4 Functions for Conditionals
+# 8.5 The foreach Function
+# 8.6 The file Function
+# 8.7 The call Function
+# 8.8 The value Function
+# 8.9 The eval Function
+# 8.10 The origin Function
+# 8.11 The flavor Function
+# 8.12 Functions That Control Make
+# 8.13 The shell Function
+# 8.14 The guile Function
+
+
+# 9 How to Run make
+#
+# 9.1 Arguments to Specify the Makefile
+# 9.2 Arguments to Specify the Goals
+# 9.3 Instead of Executing Recipes
+# 9.4 Avoiding Recompilation of Some Files
+# 9.5 Overriding Variables
+# 9.6 Testing the Compilation of a Program
+# 9.7 Summary of Options
+# 9.8 command line arguments
+
+
+# 10 Using Implicit Rules
+#
+# 10.1 Using Implicit Rules
+# 10.2 Catalogue of Built-In Rules
+# 10.3 Variables Used by Implicit Rules
+# 10.4 Chains of Implicit Rules
+# 10.5 Defining and Redefining Pattern Rules
+#     10.5.1 Introduction to Pattern Rules
+#     10.5.2 Pattern Rule Examples
+#     10.5.3 Automatic Variables
+#     10.5.4 How Patterns Match
+#     10.5.5 Match-Anything Pattern Rules
+#     10.5.6 Canceling Implicit Rules
+# 10.6 Defining Last-Resort Default Rules
+# 10.7 Old-Fashioned Suffix Rules
+# 10.8 Implicit Rule Search Algorithm
+
+
+# 11 Using make to Update Archive Files
+
+# 12 Extending GNU make
+
+# 13 Features of GNU make
+
+# 14 Incompatibilities and Missing Features
+
+# 15 Makefile Conventions
+#
+# 15.1 General Conventions for Makefiles
+# 15.2 Utilities in Makefiles
+# 15.3 Variables for Specifying Commands
+# 15.4 DESTDIR: Support for Staged Installs
+# 15.5 Variables for Installation Directories
+# 15.6 Standard Targets for Users
+# 15.7 Install Command Categories
+
+
+# Appendix A Quick Reference
+
+# Appendix B Errors Generated by Make
+
+# Appendix C Complex Makefile Example
+
+
+#-------------------------------------------------------------------------------
+# Section II - Personal notes
+#-------------------------------------------------------------------------------
+
+# Appendix II.A - Problems detected
+
+# Appendix II.B - Code examples (./code_examples)
+
+# Appendix II.C - Doc. References
+
+
+
+
+################################################################################
+# 1 Overview of make
+################################################################################
+
+[1]
+
+NOTICE working directory: directory from which make is executed.
+
+       - By default, source files, header files, target files, ...,
+         are searched by 'make' in the wd.
+
+       - By default, objects files are created in the wd.
+
+
+
+
+################################################################################
+# 2 Makefile Basics
+################################################################################
+
+# 2.1-2 Syntax
+
+    targets : prerequisites
+        recipe
+        …
+
+
+- target: the name of a file generated by a program (ie .o files); or
+	  the name of an action (ie clean)
+
+- prerequisites/dependency: file that is used as input to create the target
+
+- recipe/command: action that MAKE carries out
+
+  # WARNING a TAB character MUST be put at the beginning of every recipe line!
+
+- rule: explains how and when to remake certain files which are the
+	targets of the particular rule. make carries out the recipe
+	on the prerequisites to create or update the target. A rule can
+	also explain how and when to carry out an action.
+
+
+# Example Makefile
+
+edit : main.o kbd.o command.o display.o \
+       insert.o search.o files.o utils.o
+        g++ -o edit main.o kbd.o command.o display.o \
+                   insert.o search.o files.o utils.o
+
+main.o : main.cpp defs.h
+        g++ -c main.cpp
+kbd.o : kbd.cpp defs.h command.h
+        g++ -c kbd.cpp
+command.o : command.cpp defs.h command.h
+        g++ -c command.cpp
+display.o : display.cpp defs.h buffer.h
+        g++ -c display.cpp
+insert.o : insert.cpp defs.h buffer.h
+        g++ -c insert.cpp
+search.o : search.cpp defs.h buffer.h
+        g++ -c search.cpp
+files.o : files.cpp defs.h buffer.h command.h
+        g++ -c files.cpp
+utils.o : utils.cpp defs.h
+        g++ -c utils.cpp
+clean :
+        rm edit main.o kbd.o command.o display.o \
+           insert.o search.o files.o utils.o
+
+################################################################################
+
+# 2.3 How make Processes a Makefile
+
+
+NOTICE when GNU make starts (after it has processed any -C options) it
+       sets the variable CURDIR to the pathname of the current working
+       directory => make's working directory.
+
+i) default goal: By default, make starts with the first rule (not
+   counting rules whose target names start with `.').
+
+   (recursively)
+  
+ii) prerequisite rules: before executing the recipe of a target, make
+    has to process each prerequisite.
+
+iii) executing the recipe: finally, if the target is out of date (see 4.1-2)
+
+   (e.g.)
+   i) edit
+   ii) -> main.o .. utils.o
+   iii) g++ -o edit ...
+
+
+WARNING independent rules are not processed unless you tell make to do
+	so (i.e. make clean).
+
+################################################################################
+ 
+# 2.4-5 Variables
+
+- Useful to simplify the rules
+
+var_name = value/s
+
+   (e.g.)
+
+   OBSJ = main.o kbd.o command.o display.o \
+          insert.o search.o files.o utils.o
+   ...
+
+   edit : $(OBJS)
+           g++ -o edit $(OBJS)
+   ...
+
+################################################################################
+
+# 2.6 Another Style of Makefile: grouping entries by their prerequisites
+
+Iff all the objects of a makefile are created only by implicit rules
+
+   (e.g.)
+
+   OBSJ = main.o kbd.o command.o display.o \
+          insert.o search.o files.o utils.o
+   ...
+
+   $(OBJS): defs.h
+   
+   kbd.o command.o files.o : command.h
+
+   display.o insert.o search.o files.o : buffer.h
+
+################################################################################
+
+# 2.7 Rules for Cleaning the Directory
+
+   .PHONY : clean    # recommended but not mandatory (see 4.6)
+   
+   clean :
+        -rm edit $(objects)
+
+
+
+
+################################################################################
+# 3 Writing Makefiles
+################################################################################
+
+# 3.1 What Makefiles Contain
+
+a) explicit rules
+b) implicit rules
+c) variable definitions
+d) directives
+e) comments
+
+
+- recipe prefix character: a tab by default
+
+WARNING Any line beginning with a TAB will be considered as a recipe
+
+# 3.1.1 Splitting Long Lines
+
+Use backslash (\) character to split a long line
+
+(e.g.) edit : main.o kbd.o
+
+       # is equivalent to
+
+       edit : main.o \
+              kbd.o
+
+################################################################################
+
+# 3.2 What Name to Give Your Makefile
+
+a) Default names (in oder): GNUmakefile, makefile, Makefile
+
+b) Running Makefile from Command Prompt: make -f your-makefile-name
+
+################################################################################
+
+# 3.3 Including other Makefiles
+
+# 3.3.1 The 'include' directive
+
+- The include directive tells the make to suspend reading the current
+  makefile and read one or more other makefiles before continuing...
+  ... once finished, make resumes reading the original makefile.
+
+    (e.g) include foo *.mk $(bar)
+
+
+a) Searching include paths
+
+  i)   local path AND absolute paths
+
+  ii)  directories after '-I' or '--include-dir' option
+  
+  iii) default dirs (in this order): `prefix/include' (normally
+       `/usr/local/include') `/usr/gnu/include', `/usr/local/include',
+       `/usr/include'
+
+
+b) Treatment unfounded includes
+
+   i) warning message but make continues
+   
+   ii) After the include section, make will try to remake any that are
+       out of date or don't exist. Only after it has tried to find a
+       way to remake a makefile and failed, will make diagnose the
+       missing makefile as a fatal error. (See section 3.5., How Makefiles
+       Are Remade.)
+
+
+# 3.3.2 The '-include' directive
+
+b) -include filenames ...
+
+- This is acts like include in every way except that there is no error
+  (not even a warning) if any of the filenames do not exist.
+
+################################################################################
+
+# 3.4 The Variable MAKEFILES
+
+- If the environment variable MAKEFILES is defined, make considers its
+  value as a list of names (separated by whitespace) of additional
+  makefiles to be read before the others.
+
+- The main use of MAKEFILES is in communication between recursive
+  invocations of make (see section Recursive Use of make).
+
+WARNING Avoid to set MAKEFILES in the environment automatically on login.
+
+################################################################################
+
+# 3.5 How Makefiles Are Remade
+
+- Sometimes makefiles can be remade from other files, such as CVS-like
+  files (RCS, SCCS). If a makefile can be remade from other files, you
+  probably want make to get an up-to-date version of the makefile to
+  read in.
+
+################################################################################
+
+# 3.6 Overriding Part of Another Makefile
+
+- Why: Sometimes it is useful to have a makefile that is mostly just
+  like another makefile. You can often use the `include' directive to
+  include one in the other, and add more targets or variable
+  definitions. However, if the two makefiles give different recipes
+  for the same target, make will not let you just do this.
+
+
+  (e.g) file "GNUmakefile"
+
+
+  foo:
+        ... whatever action ...
+
+  %: force
+        @$(MAKE) -f Makefile $@
+
+  force: ;
+
+
+  > make foo   # GNUmakefile::foo is executed
+  > make bar   # Makefile::bar is executed
+
+
+  WARNING The rule specifies a prerequisite `force', to guarantee that
+  	  the recipes will be run even if the target file already
+  	  exists. We give `force' target empty recipes to prevent
+  	  make from searching for an implicit rule to build
+  	  it--otherwise it would apply the same match-anything rule to
+  	  `force' itself and create a prerequisite loop!
+
+################################################################################
+
+# 3.7 How make Reads a Makefile
+
+  i) read-in phase: make constructs a prerequisite graph of all the
+     targets and their prerequisites.
+
+  ii) target-update phase: make uses these internal structures to
+      determine what targets will need to be rebuilt and to invoke the
+      rules necessary to do so.
+
+
+- Function expansion: this two-phase approach has a direct impact on
+  how variable and function expansion happens (see [1] for details)
+
+  a) inmediate: if it happens during the first phase
+
+  b) deferred: if it happens during the second phase
+
+     i.e. Variable Definition
+
+     immediate = deferred
+     immediate := immediate
+
+
+     i.e. Rule Definition
+
+     immediate : immediate ; deferred
+             deferred
+
+################################################################################
+
+# 3.8 Secondary Expansion
+
+(see [1] for details)
+
+
+
+
+################################################################################
+# 4 Writing Rules
+################################################################################
+
+# 4.1-2 Rule Syntax
+
+In general, a rule looks like this:
+
+   targets : prerequisites
+           recipe
+           …
+
+or like this:
+
+   targets : prerequisites ; recipe
+           recipe
+           …
+
+
+NOTICE A rule tells make two things:
+
+       a) when the targets are out of date: if it does not exist OR if any of
+       	  its prerequisites is more recent than it.
+
+       b) how to update the target when necessary.
+
+################################################################################
+
+# 4.3 Types of Prerequisites
+
+a) normal-prerequisites
+
+   i) imposing the order to recipe invocation: the recipes for all
+      prerequisites of a target will be completed before the recipe
+      for the target is run.
+
+   ii) imposing a dependency relationship: if any prerequisite is
+       newer than the target, then the target is considered out-of-date
+       and must be rebuilt.
+
+b) order-only-prerequisites
+
+   - Cases of use: situation where you want to execute a prerequisite's
+     rule when needed, WITHOUT FORCING THE TARGET TO BE UPDATED.
+
+   - Use '|' to specify order-only-prerequisites
+
+
+   targets : [normal-prerequisites] [ | order-only-prerequisites]
+
+
+WARNING a file defined as both types will be handled as a normal-pre.
+
+
+   (e.g.) objects to be included in a separate directory
+          1) That directory must be made before any .o file
+	  2) Once created, you don't want to rebuild all the objects
+	  targets anytime the directory timestamp is updated (occurs
+	  every time a file is added, modified, ...)
+
+	  OBJDIR := objdir
+	  OBJS := $(addprefix $(OBJDIR)/,foo.o bar.o baz.o)
+
+	  all: $(OBJS)
+
+	  $(OBJDIR)/%.o : %.c
+              $(COMPILE.c) $(OUTPUT_OPTION) $<
+
+	  $(OBJS): | $(OBJDIR)    # does not execute $(OBJDIR)/%.o
+
+	  $(OBJDIR):
+              mkdir $(OBJDIR)
+
+################################################################################
+
+# 4.4 Using Wildcard Characters in File Names
+
+- The wildcard characters in make are: `*', `?' and `[...]'
+
+- `\' turns off the special significance of a wildcard character
+
+  (e.g)  OBJS = *.o
+  
+  (e.g)  OBJS := $(wildcard *.o)
+
+
+# 4.4.1 Pitfalls of Using Wildcards
+
+WARNING When a wildcard matches no files, it is left as it is.
+	(e.g) *.o is left as '*.o' if make can't file any .o file.
+
+  (e.g)  OBJS = *.o 
+
+  	 foo : $(OBJS)
+               cc -o foo $(CFLAGS) $(OBJS) 
+	
+
+	... and all object files has been removed
+
+	=> make tries to compile a file named '*.o'
+	=> make error saying it cannot figure out how to make `*.o'
+
+	SOLUTION: 'wildcard' function and string substitution (see 4.4.2. e.g.)
+
+
+# 4.4.2 The Function wildcard
+
+       $(wildcard pattern...)
+
+- Use: wildcard expansion when a variable is set
+
+- Use: wildcard expansion inside the arguments of a function.
+
+- INFO if no existing file name matches a pattern, then that pattern
+       is omitted from the output of the wildcard function => solution
+       to "Pitfalls of Using Wildcards".
+       
+
+  (e.g) makefile to compile all CPP source files in the directory and
+  	then link them together could be written as follows:
+
+	OBJS := $(patsubst %.cpp, %.o, $(wildcard *.cpp))
+
+	foo : $(OBJS)
+              g++ -o foo $(OBJS)
+
+################################################################################
+
+# 4.5 Searching Directories for Prerequisites
+
+GOAL When you redistribute the files among directories, you do not
+     need to change the individual rules, just the search paths.
+
+
+# 4.5.1 General search: VPATH variable
+
+- VPATH specifies an ORDERED search list that make applies for all files,
+  including files which are targets of rules.
+
+  WARNING Designed to find source files, not targets [4.1]
+
+- In the VPATH variable, directory names are separated by colons or blanks.
+
+
+  e.g.
+
+  VPATH = src:../headers
+
+  foo.o : foo.c
+
+  # is interpreted as if it were written like this (in order of search)
+
+  i)   foo.o : ./foo.c             # local directory
+  ii)  foo.o : ./src/foo.c         # first directory in VPATH
+  iii) foo.o : ../headers/foo.c    # second directory in VPATH
+                                   # ...
+
+WARNING VPATH is only used by GNU Make, not by the compiler
+	(compilation error ".h" file not found). To fix that, we need
+	to add an -I command-line option to CXXFLAGS. [4.2], [ceg4_5]
+
+
+
+# 4.5.2 Selective search: vpath Directive
+
+- Similar to the VPATH variable but more selective (subsets & patterns of files)
+
+WARNING Designed to find source files, not targets
+
+WARNING vpath is only used by GNU Make, not by the compiler
+	(compilation error ".h" file not found). To fix that, we need
+	to add an -I command-line option to CXXFLAGS. [4.2], [ceg4_5]
+
+
+vpath pattern directories
+
+      Specify the search path directories for file names that match
+      pattern.
+
+vpath pattern
+    Clear out the search path associated with pattern (like #undef to a #define)
+    
+vpath
+    Clear all search paths previously specified with vpath directives.
+
+
+- A vpath pattern is a string containing a `%' character.
+
+- Search order:
+
+  i)   local directory
+  ii)  vpath "directories" 
+  iii) VPATH directories.
+
+
+WARNING	multiple directives with the same pattern are independent of each other
+
+   (e.g) Thus,
+
+   VPATH = ../headers
+   vpath %.c foo
+   vpath %   blish
+   vpath %.c bar
+
+   will look for a file ending in `.c' in the current directory, then
+   `foo', then `blish', then `bar', then '../headers', while
+
+   VPATH = ../headers
+   vpath %.c foo:bar
+   vpath %   blish
+
+   will look for a file ending in `.c' in the current directory, then
+   `foo', then `bar', then `blish', then '../headers'.
+
+
+# 4.5.3 Search Algorithm: How Directory Searches are Performed
+
+  - Summary (see [1] for details)
+
+  a) By default, target files are rebuild locally, not in the directory
+     found via directory search.
+
+  b) Use GPATH to indicate make to rebuild in the path found via
+     directory search
+
+
+# 4.5.4 Writing Recipes with Directory Search
+
+PROBLEM when some files in a recipe are found off the working directory
+	via directory search, how to correctly get (path) them ?
+
+SOLUTION use automatic variables instead of explicitly call them:
+
+	 $^: list of all the prerequisites, including the names of the
+	     directories in which they were found.
+
+	 $<: only the first prerequisite.
+
+   (e.g)
+
+   # having foo.c in directory 'src'
+   VPATH = src:../headers
+   foo.o : foo.c defs.h hack.h
+   	   cc -c $(CFLAGS) $< -o $@       # OK: foo.c found via VPATH
+   	   cc -c $(CFLAGS) foo.c -o $@    # ERROR: foo.c not found in work dir.
+
+
+# 4.5.5 Directory Search and Implicit Rules
+
+SOLUTION use automatic variables in the implicit rules (already done
+	 by definition)
+
+
+# 4.5.6 Directory Search for Link Libraries
+
+Case: prerequisite's name has the form `-lname'
+
+  Make search (*) ...
+
+  i) `libname.so'
+  ii) `libname.a'
+
+  ... in the next files by this order:
+
+  i)   in the working directory.
+  ii)  vpath "directories" 
+  iii) VPATH directories.
+  iv)  `/lib', `/usr/lib', and `prefix/lib' (normally `/usr/local/lib'). 
+
+
+(*) Customize via the .LIBPATTERNS variable (set empty value to turn off)
+
+################################################################################
+
+# 4.6 Phony Targets
+
+- A phony target is one that is not really the name of a file;
+
+- Used to avoid conflicts with file names.
+
+- Used to improve performance:
+    + The Implicit Rule Search [1] is skipped for Phony targets.
+    + recursive invocations of make and parallel execution (see [1] for details)
+
+
+WARNING A phony target SHOULD NOT be a prerequisite of a real target file.
+
+	When one phony target is a prerequisite of another, it serves
+	as a subroutine of the other => its recipe will be run every
+	time make goes to update that file
+
+
+- Phony targets can have prerequisites (i.e. the target 'all')
+
+
+Usual phonies:
+
+.PHONY: all
+
+.PHONY: clean
+
+################################################################################
+
+# 4.7 Rules without Recipes or Prerequisites
+
+HINT Used to force all targets depending on them to always run their recipe [1]
+     (To be used in versions of make does not support .PHONY.)
+
+     (e.g)
+
+     clean: FORCE            
+            rm $(objects)    # -> always executed after make clean
+
+
+     FORCE:                  # rule without recipes nor prerequisites ->
+     			     # FORCE is a name commonly used for these rules
+
+################################################################################
+
+# 4.8 Empty Target Files to Record Events
+
+
+FOR_WHAT i.e. to execute some actions every time some of the
+	 prerequisite fields has changed
+
+
+- Variant of the phony target, with an actual file whose content do not matter.
+
+- The purpose of the empty target file is to record, with its
+  last-modification time, when the rule’s recipe was last executed
+  (touch command)
+
+
+   (e.g.) send to the printer any file every time it has changed
+
+   print: foo.c bar.c
+           lpr -p $?      # lpr: send a UNIX file to a network printer
+           touch print
+    
+################################################################################
+
+# 4.9 Special Built-in Target Names   
+
+
+.PHONY
+
+.SUFFIXES    list of suffixes to be used in checking for suffix rules.
+
+.DEFAULT     default recipe to be used for any target for which no rules
+	     are found
+
+.PRECIOUS    precious targets are not deleted if make is killed or
+	     interrupted during the execution of their recipes.
+
+
+.INTERMEDIATE         intermediate files
+
+.SECONDARY            intermediate files, but never automatically deleted
+
+.SECONDEXPANSION
+
+.DELETE_ON_ERROR      Explicitly tell make to delete a target file after
+		      its recipe fails.
+
+.IGNORE	              (see 5.5)
+
+.LOW_RESOLUTION_TIME
+
+.SILENT               not print the recipe before executing (deprecated by @)
+
+.EXPORT_ALL_VARIABLES export all variables to child processes by default.
+
+.NOTPARALLEL          this invocation of make will be run serially
+
+.ONESHELL             all lines of the recipe will be given to a single
+                      invocation of the shell rather than each line being
+		      invoked separately
+
+.POSIX                the makefile will be parsed and run in POSIX-conforming
+		      mode.
+
+warning Any defined implicit rule suffix also counts as a special
+	target if it appears as a target, and so does the
+	concatenation of two suffixes, such as ‘.c.o’.
+
+warning See [1] for details
+
+################################################################################
+
+# 4.10 Multiple Targets in a Rule
+
+- Equivalent to writing many rules.
+
+
+case  You want just prerequisites, no recipe. For example:
+
+      kbd.o command.o files.o: command.h
+
+
+case Similar recipes work for all the targets (use $@ to resolve the 'similar')
+
+     bigoutput littleoutput : text.g
+        generate text.g -$(subst output,,$@) > $@     [1]
+
+
+################################################################################
+
+# 4.11 Multiple Rules for One Target
+
+
+     (e.g. target 'files.o' with two rules)
+     
+     command.o files.o: command.h      # first rule: just prerequisites
+
+     files.o: files.c                  # second rule: more prereqs. + recipe
+            $(CC) -c $(CFLAGS) $<   
+
+
+WARNING There can ONLY be ONE RECIPE to be executed for a file. If
+	more than one rule gives a recipe for the same file, make uses
+	the last one given and prints an error message.
+
+
+WARNING If none of the explicit rules for a target has a recipe, then
+	make searches for an applicable implicit rule to find one (See 10.)
+
+
+INFO All the prerequisites mentioned in all the rules are merged into
+     one list of prerequisites for the target
+
+
+HINT Additional prerequisites could be specified with a variable that
+     you set with a command line argument to make:
+
+     extradeps=
+     $(objects) : $(extradeps)
+
+     then, ‘make extradeps=foo.h’ will consider foo.h as a
+     prerequisite of each object file, but plain ‘make’ will not.
+
+################################################################################
+
+# 4.12 Static Pattern Rules
+
+- Rules which specify multiple targets and construct the prerequisite
+  names for each target based on the target name.
+
+- Their prerequisites must be analogous, but not necessarily identical
+  => they are more general than ordinary rules with multiple targets
+
+
+# 4.12.1 Syntax of Static Pattern Rules
+
+
+     targets …: target-pattern: prereq-patterns …
+            recipe
+            …
+
+
+    (e.g) 
+
+     objects = foo.o bar.o
+
+     $(objects): %.o: %.c                 # $<: prerequisite's name (i.e. foo.c)
+            $(CC) -c $(CFLAGS) $< -o $@   # $@: target's name (i.e. foo.o)
+
+
+	    
+    (e.g) 'filter' function to remove non-matching file names
+
+     files = foo.elc bar.o lose.o
+
+     $(filter %.o,$(files)): %.o: %.c
+            ...
+
+
+# 4.12.2 Static Pattern Rules versus Implicit Rules [ceg2]
+
+
+- implicit rule: applies to ANY TARGET that matches its pattern.
+
+  %.o: %.c    # applies to every .o file
+
+- static p. rule: applies to (ALL) THE PRECISE LIST OF TARGETS in the rule.
+
+  $(objects): %.o: %.c    # applies only to .o files in 'objects' variable
+
+
+The static pattern rule can be better than an implicit rule:
+    explicitly avoiding misunderstanding [1]
+
+################################################################################
+
+# 4.13 Double-Colon Rules
+
+
+WARNING Double-colon rules are somewhat obscure and not often very
+	useful; they provide a mechanism for cases in which the method
+	used to update a target differs depending on which
+	prerequisite files caused the update, and such cases are rare.
+
+	thus, for a same target, different receipe depending on
+	different prerequisites
+
+
+INFO When a target appears in multiple rules, all the rules must be
+     the same type: all ordinary, or all double-colon.
+
+ 
+- Explicit rules
+
+- written with ‘::’ instead of ‘:’ after the target names.
+
+- They are handled differently from ordinary rules when the same
+  target appears in more than one rule: [1]
+
+  Each double-colon rule is processed individually, just as rules with
+  different targets are processed.
+
+
+################################################################################
+
+# 4.14 Generating Prerequisites Automatically
+
+PROBLEM header dependency
+
+- we need to manually update the Makefile every time #include lines
+  are added to a source file.
+
+       main.o: defs.h   # because in main.cpp, #include "defs.h" defined.
+
+- Most modern compilers can write these rules for you, by looking at
+  the #include lines in the source files. Usually this is done with
+  the ‘-M’ option to the compiler (-MM to omit prerequisites on system
+  header files)
+
+  For example, the command:
+
+     cc -M main.c
+
+  generates the output:
+
+     main.o : main.c defs.h
+
+
+BEST_PRACTICE to have one makefile corresponding to each source (.d makefile)
+	      (see [1].4.14 and [3.3] for details)
+
+
+
+
+################################################################################
+# 5 Writing Recipes in Rules
+################################################################################
+
+NOTICE recipes in makefiles are always interpreted by /bin/sh shell unless
+       the makefile specifies otherwise.
+
+# 5.1 Recipe Syntax
+
+      TAB recipe line
+
+
+WARNING The make program does not try to understand shell syntax =>
+	all the lines of a recipe are passed to the shell)
+
+	=> TAB blank line == empty recipe (see 5.9)
+
+
+# 5.1.1 Splitting Recipe Lines
+
+- backslash/newline pairs are not removed from the recipe, but
+  preserved and passed to the shell.
+
+- backslash/newline inside string quoted with DOUBLE QUOTES ("…") are REMOVED.
+
+- backslash/newline inside string quoted with single quotes ('…') aren't removed
+
+
+  (e.g.)
+
+   all : ; @echo 'hello \
+           world' ; echo "hello \
+       world"
+
+
+   which, according to shell quoting rules, results as
+
+   hello \
+   world
+   hello world
+
+
+# 5.1.2 Using Variables in Recipes
+
+- via variable expansion.
+
+WARNING the recipes for targets which are not rebuilt are never expanded.
+
+WARNING important to keep clear in your mind whether the variable you
+	want to reference is a make variable (use a single dollar
+	sign) or a shell variable (use two dollar signs).
+
+
+   (e.g)
+
+   LIST = one two three
+   all:
+        for i in $(LIST); do \
+            echo $$i; \
+        done
+
+   # results in the following command being passed to the shell:
+
+   for i in one two three; do \
+       echo $i; \
+   done
+
+   # which generates the expected result:
+
+   one
+   two
+   three
+
+################################################################################
+
+# 5.2 Recipe Echoing
+
+- By default, make prints (shell commands) and executes each line of the recipe.
+
+- When a line starts with ‘@’, the echoing of that line is suppressed:
+  it is printed in the shell as an echo (printed but not executed).
+
+- make flags ‘-s’ or ‘--silent’, or .SILENT: prevents all echo (deprecated by @)
+
+- make flags ‘-n’ or ‘--just-print’  =>  echoes recipes, without executing them.
+
+################################################################################
+
+# 5.3 Recipe Execution
+
+- Default execution: invoking a new sub-shell for each line of the
+  recipe (unless .ONESHELL)
+
+  => to use dependent commands (i.e. cd), use only one line wit '&&'
+
+  foo : bar/lose
+        cd $(@D) && gobble $(@F) > ../$@
+	
+
+# 5.3.1 Using One Shell
+
+- .ONESHELL directive
+ 
+- For improving performance (avoiding extra processes), and/or using
+  several lines in a single command (i.e. using Perl shell instead)
+
+See [1] for details.
+
+
+# 5.3.2 Choosing the Shell
+
+WARNING Environment SHELL: Unix: make != system;  DOS/WIN: make == system
+
+- make environment:
+  + shell program: under SHELL variable (default = /bin/sh )
+  + shell args.: under .SHELLFLAGS variable (default = -c normally, or -ec )
+
+################################################################################
+
+# 5.4 Parallel Execution
+
+-  make -j [number-of-recipes]  : execute n-o-r simultaneously (1 by default)
+
+- .NOTPARALLEL  : inhibit parallelism.
+
+See [1] for details.
+
+
+# 5.4.1 Output During Parallel Execution
+
+See [1] for details.
+
+
+# 5.4.2 Input During Parallel Execution
+
+WARNING you should not rely on any recipe using standard input at all
+	if you are using the parallel execution feature.
+
+See [1] for details.
+
+################################################################################
+
+# 5.5 Errors in Recipes
+
+- After each shell invocation returns, make looks at its exit
+  status. If there is an error (the exit status is nonzero), make
+  gives up on the current rule, and perhaps on all rules.
+
+
+a) '-'
+
+  To ignore errors in a recipe line, write a ‘-’ at the beginning of
+  the line’s text (after the initial tab). The ‘-’ is discarded before
+  the line is passed to the shell for execution.
+
+     clean:
+           -rm -f *.o
+
+
+b) make -i OR .IGNORE
+
+   Ignore errors in all the recipes of all rules
+
+   WARNING (obsolete since '-')
+
+
+c) make -k
+
+   Continue executing other targets after errors.
+
+
+d) .DELETE_ON_ERROR
+
+   - Explicitly tell make to delete a target file after its recipe fails.
+
+   - How: Set .DELETE_ON_ERROR as a target anywhere in the makefile.
+
+
+  PROBLEM If a recipe fails, or if a signal interrupts make, but the
+  	  target fail has been already created/updated:
+   
+   	   - Make does not remove the file by default.
+	   - Make will not remade the target's rule if the file exists.
+	     => corrupted target fail.
+
+  SOLUTION  - Manually delete the files / execute 'make clean'
+
+  	    - (best practice) Let make do it automatically: .DELETE_ON_ERROR
+
+################################################################################
+
+# 5.6 Interrupting or Killing make
+
+- If make gets a fatal signal while a shell is executing, it will
+  delete the target file that the recipe was supposed to update (iff
+  the target file’s last-modification time has changed since make
+  first checked it)
+
+  ??? Doubt: this says the opposite than 5.5.d) above
+
+- .PRECIOUS: You can prevent the deletion of a target file in this way
+  	     by making the special target .PRECIOUS depend on it.
+
+	     # (e.g.)
+	     .PRECIOUS: file.cpp
+
+################################################################################
+
+# 5.7 Recursive Use of make
+
+- Recursive use of make means using make as a command in a makefile.
+
+
+  .PHONY subsystem
+  
+  subsystem:
+        cd subdir && $(MAKE)
+
+	# or, equivalently, this (see Summary of Options):
+
+  subsystem:
+        $(MAKE) -C subdir
+
+
+HINT You may also find it useful to declare targets that invoke
+     recursive make commands as ‘.PHONY’
+
+NOTICE when GNU make starts (after it has processed any -C options) it
+       sets the variable CURDIR to the pathname of the current working
+       directory. This value is never touched by make again
+
+
+# 5.7.1 How the MAKE Variable Works
+
+- Recursive make commands should always use the variable MAKE, not the
+  explicit command name ‘make'.
+
+  MAKE = initial value of make program (see which make -> i.e. usr/bin/make)
+
+
+WARNING  MAKE in the recipe of a rule alters the effects of the ‘-t’,
+	 ‘-n’, ‘-q’ => these options do no apply to that line.
+  
+
+
+# 5.7.2 Communicating Variables to a Sub-make
+
+
+WARNING Some shells cannot cope with environment variable names
+	consisting of characters other than letters, numbers, and underscores.
+
+
+- Variable values of the top-level make are defined in the sub-make as defaults.
+
+- " " top-level make do not override variables defined in the makefile
+  used by the sub-make unless you use the ‘-e’ switch.
+
+- export specific variables to a sub-make:  export [variable …]
+
+- prevent export:  unexport [variable …]
+
+
+See [1] for details.
+
+
+
+# 5.7.3 Communicating Options to a Sub-make
+
+See [1] for details.
+
+- Variable MAKEFLAGS: used to pass options to sub-makes.
+
+  WARNING '-j' option is a special case (depends on the operating system)
+
+  WARNING never add ‘-t’, ‘-n’, and ‘-q’ options to MAKEFLAGS.
+  
+
+- Variable MAKEOVERRIDES: used to pass command line variable definitions.
+
+  WARNING  ‘Arg list too long’ error msg.
+
+
+
+# 5.7.4 The ‘--print-directory’ (- 'w') Option
+
+See [1] for details.
+
+- make -w can make the output a lot easier to understand.
+
+       (e.g)
+       make: Entering directory `/u/gnu/make'.
+
+################################################################################
+
+# 5.8 Defining Canned Recipes
+
+- Using common sequences of commands as make variables: (define ...  endef)
+
+  (e.g.)
+
+  define run-yacc =
+  yacc $(firstword $^)
+  mv y.tab.c $@
+  endef
+
+  foo.c : foo.y
+          $(run-yacc)
+
+
+WARNING The canned sequence is actually a variable, so the name must
+	not conflict with other variable names.
+
+
+- In recipe execution, each line of a canned sequence is treated as a
+  separate line of a rule recipe.
+
+- You can use the special prefix characters that affect command lines
+  (‘@’, ‘-’, and ‘+’) on each line of a canned sequence.
+
+################################################################################
+
+# 5.9 Using Empty Recipes
+
+  (e.g)
+	target: ;      # do nothing
+
+
+WARNING   THE ONLY reason this is useful is to prevent a target from
+	  getting implicit recipes (from implicit rules or the .DEFAULT
+	  special target)
+
+
+
+
+################################################################################
+# 6 How to Use Variables
+################################################################################
+
+- Naming variables:
+
+  + any sequence of characters not containing ‘:’, ‘#’, ‘=’, or whitespace.
+
+    WARNING: in some shells, names containing characters other than
+    	     letters, numbers, and underscores cannot be passed
+    	     through the environment to a sub-make (5.7.2)
+
+  + Variable names beginning with ‘.’ and an uppercase letter may be
+    given special meaning in future versions of make.
+    
+  + Particular specialized uses ($@, ...), (see 10.5.3 Automatic Variables)
+
+  + Variable names are case-sensitive.
+  
+################################################################################
+
+# 6.1 Basics of Variable References
+
+  $(var-name)  or  ${var-name}
+
+
+WARNING variable-reference vs variable-name
+
+	variable-name: objects
+
+	variable-reference: $(objects)
+
+################################################################################
+
+# 6.2 The Two Flavors of Variables
+
+a) Recursively expanded variable 
+
+   - defined by lines using ‘=’ or by the define directive.
+
+   - defined verbatim and expanded whenever this variable is used:
+     acts like a pointer to a variable.
+
+      (e.g) 
+
+
+         foo = $(bar)
+	                # verbatim def. means: 'foo' value is literally '$(bar)'
+         bar = $(ugh)
+         ugh = Huh?
+
+      all:;echo $(foo)      # NOW 'foo' is expanded
+
+      ... will echo ‘Huh?’
+
+
+  - Disadvantages:
+
+    + Any functions referenced in the definition will be executed every time
+      the variable is expanded:
+        => This makes make run slower
+        => Causes the wildcard and shell functions to give unpredictable results
+
+    + You cannot append something on the end of a variable, as in
+    
+      CFLAGS = $(CFLAGS) -O      => will cause an infinite loop
+
+
+b) Simply expanded variables
+
+   - defined by lines using ‘:=’ or ‘::=’
+
+   - Expanded during the variable definition and substituted verbatim when used.
+
+      (e.g)
+
+      	 x := foo
+
+	 # NOW 'y' is expanded to 'foo bar'
+      	 y := $(x) bar
+			
+      	 x := later
+
+      is equivalent to
+
+      	 y := foo bar
+      	 x := later
+
+  - Advantages:
+
+    + Simply expanded variables generally make complicated makefile
+      programming more predictable because they work like variables in
+      most programming languages
+
+    + Allow predictable use of wildcard and shell functions.
+
+    + a typical ‘descend into a directory’ recipe then looks like this:
+
+      ${subdirs}:
+         $(MAKE) -C $@ all
+
+    + You can also use them to introduce controlled leading whitespace
+      into variable values. [1]
+
+
+WARNING Putting a comment on the end of the line after some whitespace
+	add whitespaces to the variable value.
+
+	(e.g.)
+		dir := /foo/bar    # directory to put the frobs in
+		
+		Here the value of the variable dir is ‘/foo/bar    ’ 
+
+
+c) conditional variable assignment operator (special case of rec. expanded vars)
+
+   - It only has an effect if the variable is not yet defined.
+
+     	FOO ?= bar
+
+     is exactly equivalent to this (see The origin Function):
+
+        ifeq ($(origin FOO), undefined)
+  	     FOO = bar
+	endif
+
+     Note that a variable set to an empty value is still defined, so
+     ‘?=’ will not set that variable.
+
+################################################################################
+
+# 6.3 Advanced Features for Reference to Variables
+
+# 6.3.1 Substitution References
+
+- ‘$(var:a=b)’
+
+  For example:
+
+      foo := a.o b.o c.o
+      bar := $(foo:.o=.c)
+
+  sets ‘bar’ to ‘a.c b.c c.c’
+
+  WARNING Replace every a AT THE END OF A WORD: a must appear either
+    	  followed by whitespace or at the end of the value in order
+    	  to be replaced; other occurrences of a in the value are
+    	  unaltered.
+
+- ‘$(var:a=b)’ except that now a must contain a single ‘%’
+
+  This case is equivalent to ‘$(patsubst a,b,$(var))’
+
+  For example:
+
+      foo := a.o b.o c.o
+      bar := $(foo:%.o=%.c)
+
+  sets ‘bar’ to ‘a.c b.c c.c’. 
+  
+
+# 6.3.2 Computed Variable Names (nested variable reference)
+
+  CVN = Variables may be referenced inside the name of a variable:
+
+     x = y 
+     y = z
+     a := $($(x))
+
+
+WARNING Computed variable names are a complicated concept needed only
+	for sophisticated makefile programming. For most purposes you
+	need not consider them, except to know that making a variable
+	with a dollar sign in its name might have strange results.
+
+
+[1] for details
+
+################################################################################
+
+# 6.4 How Variables Get Their Values
+
+- Overriding Variables (9.5)
+
+- Assignment (6.5) or with a verbatim definition (6.8)
+
+- Variables in the environment become make variables (6.10)
+
+- Automatic variables (10.5.3)
+
+- Constant initial values (10.3)
+
+################################################################################
+
+# 6.5 Setting Variables
+
+- types:
+
+  recursive (‘=’)
+
+  simple (‘:=’ or ‘::=’)
+
+  appending (‘+=’)
+
+  conditional (‘?=’)
+
+
+- Whitespace around the variable name and immediately after the ‘=’ is ignored.
+
+- There is no limit on the length of the value of a variable (amount of memory)
+
+
+a) Initial values
+ 
+   - Default initial value for most variables is the empty string ("")
+
+   - Vars used in implicit rules (10.3): not empty built-in initial value
+   
+   - Automatic Variables ($@, ...): auto. set to a new value for each rule
+
+
+b) ‘!=’ : used to execute a program and set a variable to its output
+
+   (e.g)  file_list != find . -name '*.c'
+
+   WARNING If the result of the execution ends in a newline  ... [1]
+
+   WARNING If the result of the execution could produce a $  ... [1]
+
+
+c) Set a Simply expanded variable after a shell program execution
+
+   (e.g)  file_list := $(shell find . -name "*.c")
+
+################################################################################
+
+# 6.6 Appending More Text to Variables
+
+  Using ‘+=’ 
+
+a) variable in question has not been defined before:  ‘+=’ is equivalent to ‘=’
+
+b) when there is a previous definition, exactly what ‘+=’ does depends
+   on what flavor of variable you defined originally.
+
+   The importance of this comes when the variable’s old value contains
+   variable references. [1]
+
+   Take this common example: 
+
+   CFLAGS = $(includes) -O
+   …
+   CFLAGS += -pg # enable profiling
+
+
+   - Using ‘:=’
+
+     CFLAGS := $(CFLAGS) -pg # enable profiling
+
+     If includes is not yet defined, we get ‘ -O -pg’  => Not what we want
+
+
+   - Using ‘=’
+
+     CFLAGS = $(CFLAGS) -pg # enable profiling
+
+     If doesn't matter if includes is not yet defined.
+
+################################################################################
+
+# 6.7 The override Directive
+
+PROBLEM If a variable has been set with a command argument (see 9.5
+	Overriding Variables), then ordinary assignments in the
+	makefile are ignored.
+
+SOLUTION override directive: It was invented so YOU CAN ALTER AND ADD
+	 to values that the user specifies with command arguments.
+
+	 (e.g) you always want the ‘-g’ switch when you run the C compiler:
+	 
+	 override CFLAGS += -g
+
+
+- You can also use override directives with define directives:
+
+      	  override define foo =
+	  bar
+	  endef
+
+################################################################################
+
+# 6.8 Defining Multi-Line Variables: define directive [ceg3]
+
+- allows newline characters to be included in the value: which is
+  Convenient for defining both canned sequences of commands (see 5.8
+  Defining Canned Recipes), and also sections of makefile syntax to
+  use with eval (see 8.9 Eval Function).
+
+
+      [override] define var-name [assignment-operator] 
+      ... value-line-1...
+      ...
+      endef
+
+- assignment-operator is ‘=’ by default
+
+- You may nest define directives
+
+  (e.g) 
+
+  	define two-lines =
+	echo foo
+	echo $(bar)
+	endef
+
+  When used in a recipe, is functionally equivalent to this:
+
+       two-lines = echo foo; echo $(bar)
+
+################################################################################
+
+# 6.9 Undefining Variables: undefine directive
+
+- undefine directive: to make a variable appear as if it was never set.
+
+  [override] undefine var-name
+
+WARNING If you are using the flavor (see Flavor Function) and origin
+	(see Origin Function) functions, there is a difference between
+	a variable that was never set and a variable with an empty value.
+
+################################################################################
+
+# 6.10 Variables from the Environment
+
+- Variables in make can come from the environment in which make is
+  run. Every environment variable that make sees when it starts up is
+  transformed into a make variable with the same name and value.
+
+
+- BEST PRACTICE: However, an explicit assignment in the Makefile, or
+       		 with a command argument (‘-e’ ), overrides the environment.
+
+WARNING Also, any modification of an environment variable made inside
+	make, will stay active after the Makefile is executed.
+
+################################################################################
+
+# 6.11 Target-specific Variable Values [ceg3]
+
+- Variable values in make are usually global;
+
+  Exception: automatic variables ($@, ...)
+
+  Exception: Target-specific variables: used to change the value of a
+  	     variable for a specific target (and all its prerequisites)
+
+
+- [export | override | private]  target … : variable-assignment
+
+  where, variable-assignment is: ‘=’, ‘:=’, ‘::=’, ‘+=’, ‘?=’
+
+
+  (e.g)  CFLAGS = -Wall        # global value for every target
+  	 prog : CFLAGS := -g   # specific value for tha target 'prog'
+
+
+WARNING Note that this variable is actually distinct from any “global”
+	value: the two variables do not have to have the same flavor
+
+
+WARNING a target-specific variable value is also in effect for all
+	prerequisites of this target, and all their prerequisites
+	(unless override is used)
+
+  (e.g)  prog : CFLAGS = -g
+  	 prog : prog.o foo.o bar.o
+
+	 will set CFLAGS to ‘-g’ in the recipe for prog, but it will
+	 also set CFLAGS to ‘-g’ in the recipes that create prog.o,
+	 foo.o, and bar.o, and any recipes which create their
+	 prerequisites.
+
+
+WARNING Be aware that a given prerequisite will only be built once per
+	invocation of make, at most. If the same file is a
+	prerequisite of multiple targets, and each of those targets
+	has a different value for the same target-specific variable,
+	then the first target to be built will cause that prerequisite
+	to be built and the prerequisite will inherit the
+	target-specific value from the first target. It will ignore
+	the target-specific values from any other targets.
+
+	(e.g) prog : CFLAGS = -g
+  	      prog : prog.o foo.o   # foo.o only built here with 'CFLAGS=-g'
+	      oth : CFLAGS = -Wall
+  	      oth : oth.o foo.o     #foo.o not built here 'CFLAGS=-Wall' ignored
+
+################################################################################
+
+# 6.12 Pattern-specific Variable Values
+
+- Generalization for Target-specific Variable Values with common %-pattern.
+
+  (e.g)  %.o : CFLAGS = -O
+
+
+INFO  If a target matches more than one pattern, the more specific variables win
+
+################################################################################
+
+# 6.13 Suppressing Inheritance
+
+- 'private' modifier
+
+
+a) target- and pattern-specific variables:
+
+   Any variable marked 'private' will be visible to its local target but
+   will not be inherited by prerequisites of that target.
+
+
+b) global variables
+
+   A global variable marked private will not be inherited by any
+   target, and hence will not be visible in any recipe.
+
+################################################################################
+
+# 6.14 Other Special Variables [ceg3]
+
+MAKEFILE_LIST  (ordered) name of each makefile that is parsed by make
+
+.DEFAULT_GOAL
+
+MAKE_RESTARTS  counter, number of times this instance has restarted
+
+MAKE_TERMOUT   (standard output), name of the terminal device
+MAKE_TERMERR   (error output), name of the terminal device
+
+.RECIPEPREFIX  to reset the recipe-line introduction character from the default
+	       (TAB) to something else. Using the first char of this variable.
+	       (e.g.)
+	       .RECIPEPREFIX := >
+	       target_example:
+	       > @echo Hello, world
+
+.VARIABLES     list of the names of all global variables 
+
+.FEATURES      list of special features supported by this version of make.
+    
+.INCLUDE_DIRS  search included makefiles.
+
+
+
+################################################################################
+# 7 Conditional Parts of Makefiles
+################################################################################
+
+- Conditional Directives (ifeq, ifneq, ifdef, ifndef, else, endif),
+
+WARNING Conditionals control what make actually “sees” in the
+	makefile, so they cannot be used to control recipes at the
+	time of execution.
+
+################################################################################
+
+# 7.1 Example of a Conditional
+
+  libs_for_gcc = -lgnu
+  normal_libs =
+
+  foo: $(objects)
+  ifeq ($(CC),gcc)
+          $(CC) -o foo $(objects) $(libs_for_gcc)
+  else
+          $(CC) -o foo $(objects) $(normal_libs)
+  endif
+
+################################################################################
+
+# 7.2 Syntax of Conditionals
+
+  conditional-directive
+  text-if-true
+  endif
+
+- Equivalent condition forms:
+  
+  ifeq (arg1, arg2)
+  ifeq 'arg1' 'arg2'
+  ifeq "arg1" "arg2"
+  ifeq "arg1" 'arg2'
+  ifeq 'arg1' "arg2"
+
+################################################################################
+
+# 7.3 Conditionals that Test Flags
+
+- You can write a conditional that tests make command flags such as
+  ‘-t’ by using the variable MAKEFLAGS together with the findstring
+  function [1]
+
+USED_FOR when touch is not enough to make a file appear up to date. 
+
+
+
+################################################################################
+# 8 Functions for Transforming Text
+################################################################################
+ 
+# 8.1 Function Call Syntax
+
+
+  $(function-name f-argument-list)  or  ${function-name f-argument-list}
+
+  f-argument-list: arg1,arg2, ...
+
+WARNING Any whitespace contained in the second and subsequent arguments is kept
+	e.g.:
+	$(file  > fi1.txt,"hola")    # fi1.txt content is "hola"
+	$(file  > fi1.txt,   "hola") # fi1.txt content is "   hola"
+	
+################################################################################
+
+# 8.2 Functions for String Substitution and Analysis
+
+
+- $(patsubst pattern,replacement,text)    Remove whites and replace pattern-test
+  
+  (e.g.1)  $(patsubst %.o,%.c,$(objects))
+
+
+  WARNING Substitution references (see 6.3.1 Substitution References)
+	  are a SIMPLER way to get the effect of the patsubst function:
+
+  (e.g.2)  $(objects:.o=.c)  # equivalent to e.g.1 above
+
+
+- $(subst from,to,text)
+
+  (e.g.)   $(subst ee,EE,feet on the street)  =  ‘fEEt on the strEEt’.
+
+
+  (e.g) realistic example of the use of subst and patsubst.
+
+  	override CXXFLAGS += $(patsubst %,-I%,$(subst :, ,$(VPATH)))
+
+
+- $(strip string)    	    # Just removes whitespaces.
+
+- $(findstring find,in)
+
+- $(filter pattern…,text)   # Removing any words that do not match.
+
+- $(filter-out pattern…,text) # the opposite to filter
+
+- $(sort list)		    # and other sorts
+
+- $(word n,text)	    # returns the n-th word in text
+  	 		    # ... and other words
+
+################################################################################
+
+# 8.3 Functions for File Names
+
+- $(dir names…)             # Extracts the directory-part of each file name
+
+  (e.g.)  $(dir src/foo.c hacks)  =  ‘src/ ./’.
+
+- $(wildcard pattern)
+
+- $(realpath names…)
+
+- $(abspath names…)
+
+################################################################################
+
+# 8.4 Functions for Conditionals
+
+WARNING Conditional expansion: Only those arguments which need to be
+	expanded, will be expanded.
+
+- $(if condition,then-part[,else-part])
+
+- $(or condition1[,condition2[,condition3…]])
+
+- $(and condition1[,condition2[,condition3…]])
+
+################################################################################
+
+# 8.5 The foreach Function
+
+- $(foreach var,list,text)
+
+  (e.g.)  Executing UNIX's 'dir' command in a range of dirs:
+  	  find_files = $(wildcard $(dir)/*)   # reference to 'dir'
+  	  dirs := d1 d2
+	  files := $(foreach dir,$(dirs),$(find_files))
+
+          = list of all files in the directories in 'dir':
+            d1/refs_lib.h d2/references_test.cpp d2/refs_lib.cpp
+
+################################################################################
+
+# 8.6 The file Function
+
+- $(file op filename[,text])   # allows the makefile to write to a file
+
+  (e.g)  $(file  > fi1.txt,"hola")
+
+################################################################################
+
+# 8.7 The call Function
+
+- $(call variable,param,param,…)    used to create new parameterized functions.
+
+  (e.g)  reverse = $(2) $(1)
+  	 foo = $(call reverse,a,b)  # Here foo will contain ‘b a’
+
+MY_NOTE	 Similar to lambda functions
+
+################################################################################
+
+# 8.8 The value Function
+
+The value function provides a way for you to use the value of a
+variable without having it expanded.
+
+NOTICE The value f. is most often used in conjunction with the eval function
+
+- $(value variable-name)
+
+  (e.g) FOO = $PATH
+
+  	all:
+	     @echo $(FOO)        # returns 'ATH', since the “$P” ids expanded
+       	     @echo $(value FOO)  @ returns value of $PATH environment variable
+
+
+
+################################################################################
+
+# 8.9 The eval Function
+
+The eval function is very special: it allows you to define new
+makefile constructs that are not constant; which are the result of
+evaluating other variables and functions. The argument to the eval
+function is expanded, then the results of that expansion are parsed as
+makefile syntax. The expanded results can define new make variables,
+targets, implicit or explicit rules, etc. [1]
+
+
+################################################################################
+
+# 8.10 The origin Function
+
+- $(origin variable-name)     It tells how the variable variable was defined:
+
+  ‘undefined’
+  ‘default’
+  ‘environment’
+  ‘environment override’
+  ‘file’
+  ‘command line’
+  ‘override’
+
+################################################################################
+
+# 8.11 The flavor Function
+
+- $(flavor variable)     it tells you the flavor of a variable
+
+  ‘undefined’
+  ‘recursive’
+  ‘simple’
+  
+################################################################################
+
+# 8.12 Functions That Control Make
+
+These functions control the way make runs. Generally, they are used to
+provide information to the user of the makefile or to cause make to
+stop if some sort of environmental error is detected.
+
+- $(error text…)  Generates a fatal error where the message is text.
+- $(warning text…)
+- $(info text…)
+
+################################################################################
+
+# 8.13 The shell Function
+
+- Executes a shell command (via command expansion): it takes as an
+  argument a shell command and evaluates to the output of the command.
+
+WARNING make converts each newline (or carriage-return / newline pair)
+	to a single space.
+
+WARNING Performance (spawning a new shell): recursively expanded
+	variables vs. simply expanded
+
+	(e.g.) files := $(shell echo *.c)
+
+################################################################################
+
+# 8.14 The guile Function
+
+For use with GNU Guile
+
+
+
+################################################################################
+# 9 How to Run make
+################################################################################
+
+The exit status of make is always one of three values:
+
+0    successful 
+2    Errors
+1    make -q AND out of date
+
+################################################################################
+
+# 9.1 Arguments to Specify the Makefile
+
+make -f your-makefile-name
+
+################################################################################
+
+# 9.2 Arguments to Specify the Goals
+
+  make [target-name-1] [target-name-2] ...
+
+
+WARNING Any target in the makefile may be specified as a goal (unless
+	it starts with ‘-’ or contains an ‘=’, in which case it will
+	be parsed as a switch or variable definition, respectively).
+
+WARNING Even targets not in the makefile may be specified if make can
+	find implicit rules that say how to make them.
+
+
+- make will set the special variable MAKECMDGOALS to the list of goals
+  you specified on the command line.
+
+  WARNING MAKECMDGOALS should be used only in special circumstances.
+
+  e.g. Avoid including .d files during clean rules
+
+       sources = foo.c bar.c
+
+       ifneq ($(MAKECMDGOALS),clean)
+       include $(sources:.c=.d)
+       endif
+
+
+- Standard targets (See 15.6 Standard Targets)
+
+  all clean ...
+  
+################################################################################
+
+# 9.3 Instead of Executing Recipes
+
+ -n, --just-print, --dry-run, --recon
+            Print  the  commands  that  would be executed, but do not execute
+            them (except in certain circumstances).
+
+ -t, --touch
+
+ -W file, --what-if=file, --new-file=file, --assume-new=file
+            Pretend that the target file has just been modified.   When  used
+            with the -n flag, this shows you what would happen if you were to
+            modify that file.  Without -n, it is almost the same as running a
+            touch  command on the given file before running make, except that
+            the modification time is changed only in the imagination of make.
+
+################################################################################
+
+# 9.4 Avoiding Recompilation of Some Files
+
+- make '-o file’ flag, which marks a specified file as “old”
+
+  i.e. Some Changes in a header file must not cause recomp.of dependent sources
+
+  case a) you anticipate the problem before changing the header file
+
+       	  1) 'make' to recompile all
+	  2)  Make the changes in the header files.
+	  3) ‘make -t’ to mark all the object files as up to date.
+
+  case b) already changed the header file
+
+       	  1) ‘make -o headerfile’ to recompile all but the header
+	  2) ‘make -t’ Touch all the object files.
+
+################################################################################
+
+# 9.5 Overriding Variables
+
+- Command line arguments will override variable assignments inside make
+  file -> 'override directive' must be used to override them (see 6.7
+  The override Directive)
+
+################################################################################
+
+# 9.6 Testing the Compilation of a Program
+
+ ‘-k’ flag    try compiling every file that can be tried, to show you as
+      	       many compilation errors as possible.
+
+################################################################################
+
+# 9.7 Summary of Options
+
+  [1] or man make for details
+
+# enable additional warnings
+-Wall
+-Wextra 
+
+-Werror # all warnings as errors
+
+################################################################################
+
+# 9.8 command line arguments
+
+Modifying arguments via command line:
+
+
+  make "CPP_STD_FLAGS += -std=c++11" all # add -std=c++11 to CPP_STD_FLAGS
+
+  make "CPP_STD_FLAGS = -std=c++11" all  # set -std=c++11 to CPP_STD_FLAGS
+
+
+
+
+################################################################################
+# 10 Using Implicit Rules
+################################################################################
+
+Implicit rules tell make how to use customary techniques so that you
+do not have to specify them in detail when you want to use them
+(i.e. C++ make-default implicit rules)
+
+- pattern rules (4.12): You can define your own implicit rules by
+  	  		writing pattern rules.
+
+- Suffix Rules (10.7): Suffix rules are obsolete because pattern rules
+  	       	       are more general and clearer.
+
+
+################################################################################
+
+# 10.1 Using Implicit Rules [ceg2]
+
+a) How to define an implicit rule
+
+   i) Either write a rule with no recipe, or don’t write a rule at all.
+
+   ii) Then make will figure out which implicit rule to use based on
+       the kind of the source file, if the required prerequisites
+       “exist or can be made”.
+
+   i.e. 'file.o', make will use 'g++ -c file.cpp' as recipe to update 'file.o'
+
+
+WARNING Implicit rules only can supply source files (i.e. .c) as prerequisites.
+
+WARNING Implicit rules will not supply additional prerequisites
+	(i.e. header files)
+
+
+b) ADDITIONAL PREREQUISITES: WRITE A RULE WITH NO RECIPE [ceg2]
+
+   You would want to write a rule with no recipe if you need to
+   specify additional prerequisites, such as header files, that the
+   implicit rule cannot supply (see 4.11 Multiple Rules for One Target
+   example)
+
+
+c) Implicit rules selection
+
+   - If you do not want an implicit rule to be used for a target that
+     has no recipe, you can give that target an empty recipe by
+     writing a semicolon (see 5.9. Defining Empty Recipes).
+
+     e.g. target: ;
+
+
+WARNING Explicit prerequisites do not influence implicit rule
+	search. For example, consider this explicit rule:
+
+	e.g. foo.o: foo.p
+
+	make will use the implicit rule to make an object file from a
+	C source file is used instead, because it appears before the
+	Pascal rule in the list of predefined implicit rules (see 10.2
+	Catalogue of Built-In Rules).
+
+################################################################################
+
+# 10.2 Catalogue of Built-In Rules
+
+
+Compiling C++ programs
+
+    n.o is made automatically from n.cc, n.cpp, or n.C with a recipe
+    of the form ‘$(CXX) -c $(CXXFLAGS) $(CPPFLAGS) $<  -o $@’.
+
+       	   	
+Linking a single object file
+
+    n is made automatically from n.o by running the linker (usually
+    called ld) via the C compiler. The precise recipe used is
+    ‘$(CC) $(LDFLAGS) n.o $(LOADLIBES) $(LDLIBS)’.
+
+    WARNING Invalid for C++ linking (do CC=g++ or make an explicit recipe)
+
+
+[1] for more rules
+
+
+INFO 'make -r' cancels all predefined rules.
+
+################################################################################
+
+# 10.3 Variables Used by Implicit Rules [ceg2]
+
+INFO You can alter the values of these variables in the makefile
+     without redefining the rules themselves.
+
+     i.e. $(CXX) $(CPPFLAGS) $(CXXFLAGS) -c
+     
+     	  The default values of the variables used are ‘g++’ and
+     	  nothing, resulting in the command 'g++ -c'
+	  You can redefine CPPFLAGS without redefining the rule itself.
+
+
+INFO make flag ‘-R’ or ‘--no-builtin-variables’ cancel all variables
+     used by implicit rules.
+
+
+- Classes of variables: names of programs & arguments for the programs.
+
+INFO run 'make -p' in a directory with no makefiles to see the complete
+     list of predefined variables for your instance of GNU make
+
+
+a) some names [1]
+
+CC 	 Program for compiling C programs; default ‘cc’.
+
+CXX	 Program for compiling C++ programs; default ‘g++’.
+
+CPP 	 Program for running the C preprocessor, with results to standard
+	 output; default ‘$(CC) -E’.
+
+RM	 Command to remove a file; default ‘rm -f’.
+
+
+b) some arguments
+
+- compilation flags [5.1] [5.2] [5.3]
+
+CXXFLAGS  Extra flags to give to the C++ compiler. 
+
+CPPFLAGS  Extra flags to give to the C preprocessor and programs that use it.
+
+
+- compilation flags [5.4]
+
+WARNING -L is the path to the directories containing the libraries.
+
+WARNING -l is the name of the library you want to link to.
+
+
+LDFLAGS   Extra flags to give to compilers when they are supposed to
+	  invoke the linker, ‘ld’, such as -L.
+	  WARNING Libraries (-lfoo) should be added to the LDLIBS var instead.
+
+LDLIBS 	  Library flags or names given to compilers when they are
+	  supposed to invoke the linker, ‘ld’.
+	  WARNING Non-library linker flags, such as -L, should go in LDFLAGS.
+
+LOADLIBES deprecated (but still supported) alternative to LDLIBS
+
+################################################################################
+
+# 10.4 Chains of Implicit Rules
+
+Sometimes a file can be made by a sequence of implicit rules. For
+example, a file n.o could be made from n.y by running first Yacc and
+then cc. Such a sequence is called a chain.
+
+- intermediate files
+
+- .INTERMEDIATE special target
+
+- .SECONDARY  special target
+
+[1] for details
+
+################################################################################
+
+# 10.5 Defining and Redefining Pattern Rules
+
+You define an implicit rule by writing a pattern rule.
+
+
+# 10.5.1 Introduction to Pattern Rules
+
+  %.o : %.c [additional-pre-req]; recipe…
+
+WARNING More than one pattern rule may match a target. In this case
+	make will choose the “best fit” rule. (See 10.5.4 How Patterns Match)
+
+
+
+# 10.5.2 Pattern Rule Examples
+
+- Compiling C++ programs
+
+  %.o : %.cpp
+        $(CXX) -c $(CXXFLAGS) $(CPPFLAGS) $<  -o $@
+
+
+
+# 10.5.3 Automatic Variables
+
+$@  The file name of the target of the rule.
+
+
+$%  The target member name, when the target is an archive member. 
+
+
+$<  The name of the first prerequisite.
+
+
+$?  The names of all the prerequisites that are newer than the target.
+
+
+$^  The names of all the prerequisites.
+
+
+$+  This is like ‘$^’, but prerequisites listed more than once are
+    duplicated in the order they were listed in the makefile. (useful for
+    linking)
+
+
+$|  The names of all the order-only prerequisites
+
+
+$*  The stem with which an implicit rule matches (useful for
+    constructing names of related files)
+
+
+- Variants:
+
+  @D: just file’s directory name (‘$(@D)’)
+
+  @F: just the file name within the directory (‘$(@F)’)
+
+
+  WARNING These variants are semi-obsolete in GNU make since the
+	  functions dir and notdir can be used to get a similar effect.
+
+
+
+# 10.5.4 How Patterns Match
+
+- [prefix]%[sufix]
+
+- stem: The text between the prefix and the suffix.
+
+  (e.g) pattern ‘%.o’ matches the file name test.o, the stem is ‘test’.
+
+- Algorithm: more specific rules first.
+
+
+
+# 10.5.5 Match-Anything Pattern Rules (‘%’)
+
+Problem: speed
+
+Solution: One choice is to mark the match-anything rule as terminal by
+	  defining it with a double colon. When a rule is terminal, it
+	  does not apply unless its prerequisites actually exist.
+
+- dummy pattern rules: Special built-in dummy pattern rules are
+  provided solely to recognize certain file names so that non-terminal
+  match-anything rules will not be considered.
+
+
+
+# 10.5.6 Canceling Implicit Rules
+
+You can cancel a built-in implicit rule by defining a pattern rule
+with the same target and prerequisites, but no recipe.
+
+################################################################################
+
+# 10.6 Defining Last-Resort Default Rules
+
+a) last-resort implicit rule
+
+       %::  			    
+           recipe-here
+
+   This type of rules will match any target => used by those without
+   an specific or implicit rule.
+       
+       (e.g.) rule to update all the source files
+       %::  			    
+           touch $@
+
+
+b) Redefine .DEFAULT rule
+
+      .DEFAULT:
+
+c) Empty rules: avoid 
+
+      target: ;
+
+
+HINT You can use a last-resort rule to override part of another makefile (3.6)
+
+################################################################################
+
+# 10.7 Old-Fashioned Suffix Rules
+
+- Suffix rules are obsolete because pattern rules are more general and
+  clearer. They are supported in GNU make for compatibility with old
+  makefiles.
+
+a) double-suffix rule (i.e. '.c.o', equivalent to the pattern rule ‘%.o : %.c’)
+
+   .c.o:
+        $(CC) -c $(CFLAGS) $(CPPFLAGS) -o $@ $<
+
+
+b) single-suffix rule (i.e. '.c', equivalent to the pattern rule ‘% : %.c’)
+
+
+WARNING Suffix rules cannot have any prerequisites of their own
+	(i.e. .c.o: foo.h, the header is ignored as prerequisite, and
+	it is not equivalent to %.o: %.c foo.h)  [ceg2]
+
+WARNING Suffix rules with no recipe are also meaningless.
+
+
+c) The known suffixes are simply the names of the prerequisites of the
+   special target .SUFFIXES.
+
+   You can add your own suffixes by writing a rule for .SUFFIXES that
+   adds more prerequisites, as in:
+
+   .SUFFIXES: .hack .win
+
+################################################################################
+
+# 10.8 Implicit Rule Search Algorithm
+
+[1] for details
+
+
+
+
+################################################################################
+# 11 Using make to Update Archive Files
+################################################################################
+
+Archive files are files containing named sub-files called members;
+they are maintained with the program ar and their main use is as
+subroutine libraries for linking.
+
+([1] for details)
+
+
+
+################################################################################
+# 12 Extending GNU make
+################################################################################
+
+In cases where the built-in capabilities of GNU make are insufficient
+to your requirements there are two options for extending make:
+
+- GNU Guile: embedded scripting language
+
+- Dynamic Objects: on systems which support dynamically loadable
+  objects, you can write your own extension in any language (which can
+  be compiled into such an object) and load it to provide extended
+  capabilities
+
+([1] for details)
+
+
+
+################################################################################
+# 13 Features of GNU make  ([1] for details)
+# 14 Incompatibilities and Missing Features  ([1] for details)
+################################################################################
+
+
+################################################################################
+# 15 Makefile Conventions
+################################################################################
+
+Using Automake will help you write a Makefile that follows these conventions.
+
+################################################################################
+
+# 15.1 General Conventions for Makefiles [ceg2]
+
+a) Every Makefile should contain this line to avoid env inheritance conflicts
+
+SHELL = /bin/sh
+
+
+b) Set the suffix list explicitly using only the suffixes you need
+
+(e.g.)
+.SUFFIXES:		# clears current value ...
+.SUFFIXES: .cpp .o	# ... then set suffixes for implicit rules
+
+
+c) Set the source directory as 'srcdir' and use $(srcdir) with
+   automatic variables ($<, ...) in the rules
+
+- src directory vs build directory [1]
+
+- Don’t assume that '.' is in the path for command execution. 
+
+- The distinction between ./ (the build directory) and $(srcdir)/ (the
+  source directory) is important because users can build in a separate
+  directory using the ‘--srcdir’ option to configure.
+
+
+  (e.g.) source dir is the same as the build directory
+  srcdir = .
+  # ...then
+  VPATH = $(srcdir)/header
+
+################################################################################
+
+# 15.2 Utilities in Makefiles
+
+Programs used with-within make to: install, configure, ...  [1]
+
+################################################################################
+
+# 15.3 Variables for Specifying Commands
+
+- Makefiles should provide variables for overriding certain commands,
+  options, and so on.
+
+a) Programs: you should run most utility programs via variables
+
+   (e.g.) BISON = bison   # to run bison-like program
+
+
+b) Program-options: via 'FLAGS' variable.
+
+   (e.g.) BISONFLAGS
+
+
+c) CPPFLAGS: use CPPFLAGS in any compilation command that runs the preprocessor.
+
+
+d) LDFLAGS: use LDFLAGS in any compilation command that does linking as well as
+   	    in any direct use of ld.
+
+
+e) CXXFLAGS: to be used for optional (not required) compilation options only
+   	     => do not include MUST-DO compilation options here.
+
+
+   - Best practice: separate required and optional compilation options
+     in different flag variables and then past both of them to the recipe.
+
+     	(i.e.)
+  
+	# optional compilation options: via CXXFLAGS
+     	CXXFLAGS = -g
+
+     	# required compilation options: via non-predefined variable
+     	required_cxxflags = -I.
+
+     	all_cxxflags = $(required_cxxflags) $(CXXFLAGS)
+	     
+     	%.o : %.cpp
+       	    $(CXX) -c $(all_cxxflags) $(CPPFLAGS) $<  -o $@
+
+
+   - Put CXXFLAGS last in the compilation command, after other
+     variables containing compiler options, so the user can use
+     CXXFLAGS to override the others.
+
+   - CXXFLAGS should be used in every invocation of the C++ compiler,
+     both those which do compilation and those which do linking.
+
+
+f) Installation variables [1]
+
+   INSTALL, INSTALL_PROGRAM and INSTALL_DATA
+
+################################################################################
+
+# 15.4 DESTDIR: Support for Staged Installs
+
+Recommended (not mandatory) use for package creation
+
+
+a) DESTDIR is a variable prepended to each installed target file, like this:
+
+       $(INSTALL_PROGRAM) foo $(DESTDIR)$(bindir)/foo
+       $(INSTALL_DATA) libfoo.a $(DESTDIR)$(libdir)/libfoo.a
+
+
+b) DESTDIR should be supported only in the install* and uninstall*
+   targets, as those are the only targets where it is useful.
+
+
+c) The DESTDIR variable is specified by the user on the make command
+   line as an absolute file name. For example:
+
+       make DESTDIR=/tmp/stage install
+
+  WARNING You should not set the value of DESTDIR in your Makefile at al
+
+  WARNING Also, specifying DESTDIR should not change the operation of
+  	  the software in any way, so its value should not be included
+  	  in any file contents
+
+################################################################################
+
+# 15.5 Variables for Installation Directories
+
+Recommended (not mandatory) use for package creation
+
+- Installation directories should always be named by variables, so it
+  is easy to install in a nonstandard place.
+
+- See [1] for the full list of variables and its meaning.
+
+################################################################################
+
+# 15.6 Standard Targets for Users
+
+
+a) All GNU programs should have the following targets in their Makefiles:
+
+
+'all' 
+
+    Compile the entire program. This should be the default
+    target. This target need not rebuild any documentation files ...
+
+
+     
+‘install’
+
+    Compile the program and copy the executables, libraries, and so on ...     
+
+
+
+‘install-html’
+‘install-dvi’
+‘install-pdf’
+‘install-ps’
+
+    These targets install documentation in formats other than Info     
+
+
+
+‘uninstall’
+
+
+
+‘install-strip’
+
+    Like install, but strip the executable files ...
+
+
+
+'clean'
+
+    Delete all the files created by building the program.
+    However, don’t delete the files that record the configuration.
+
+
+
+‘distclean’
+
+    ‘make distclean’ should leave only the files that were in the distribution.
+
+
+
+‘mostlyclean’
+
+    Like ‘clean’, but may refrain from deleting a few files that
+    people normally don’t want to recompile.
+
+
+
+‘maintainer-clean’ [1]
+
+
+
+‘TAGS’
+
+    Update a tags table for this program.
+
+
+
+‘info’
+
+    Generate any Info files needed. [1]
+
+
+
+‘dvi’
+‘html’
+‘pdf’
+‘ps’
+
+    Generate documentation files in the given format.
+
+
+
+‘dist’
+
+    Create a distribution tar file for this program.
+
+
+
+‘check’
+
+    Perform self-tests (if any).
+
+
+
+b) The following targets are suggested as conventional names:
+
+
+installcheck
+
+    Perform installation tests (if any).
+
+
+
+installdirs
+
+    To create the directories where files are installed, and their
+    parent directories.
+
+
+
+################################################################################
+
+# 15.7 Install Command Categories
+
+When writing the install target, you must classify all the commands
+into three categories:
+
+
+a) Normal commands: move files into their proper places, and set their
+   modes. They may not alter any files except the ones that come
+   entirely from the package they belong to.
+
+b) Pre-installation commands:  (run install-info)
+
+c) post-installation command is to run install-info. 
+
+   Pre-installation and post-installation commands may alter other
+   files; in particular, they can edit global configuration files or data
+   bases.
+
+[1] for details
+
+
+
+################################################################################
+
+# Appendix A Quick Reference
+
+# Appendix B Errors Generated by Make
+
+# Appendix C Complex Makefile Example
+
+  Example: makefile for the GNU 'tar' program. 
+
+################################################################################
+
+
+
+
+#-------------------------------------------------------------------------------
+# Section II - Personal notes
+#-------------------------------------------------------------------------------
+
+
+################################################################################
+# Appendix II.A - Problems detected
+################################################################################
+
+# 1) Header files update ignored upon re-compilation
+
+  - Solution with explicit rules: [ceg1]
+
+  - Solution with implicit (pattern) rules [ceg2]
+  
+  - Solution (to be confirmed) to Auto-dependency ([1].4.14 Generating
+    Prerequisites Automatically, [3.1], [3.2], [3.3])
+  
+
+# 2) intermediate header file (.gch files)
+
+# WARNING intermediate header file: S(HEADERS) creates refs_lib.h.gch
+# type 'file refs_lib.h.gch' for info
+
+
+
+################################################################################
+# Appendix II.B - Code examples (./code_examples)
+################################################################################
+
+# Learning examples
+
+# [ceg1] local makefile with explicit rules and header references.
+
+# [ceg2] local makefile with implicit rules but without header references.
+
+# [ceg3] testing miscelaneous make features (special vars, ...)
+
+# [ceg4_5] testing make manual, 4.5 Searching Directories for Prerequisites
+
+
+# Work examples
+
+# [simple_1] implicit pattern-rules, headers detection, -I 
+
+# [simple_unit_test] simple_1 makefile + test targets (run, success, diff)
+
+# [improved_unit_test] simple_unit_test + multiple (and separated) tests.
+
+
+################################################################################
+# Appendix II.C - Doc. References
+################################################################################
+
+
+# [0] Makefiles rules - http://make.mad-scientist.net/papers/rules-of-makefiles
+
+# [1] GNU make - http://www.gnu.org/software/make/manual/make.html  (*)
+
+
+#---  Tutorials / guides 
+
+
+#--- Auto-dependency
+
+# [3.1] GNU make manual, chapter 4.14 Generating Prerequisites Automatically - http://www.gnu.org/software/make/manual/make.html#Automatic-Prerequisites
+
+# [3.2] http://stackoverflow.com/questions/15857837/compile-headers-dependencies-with-makefile  (*)
+
+# [3.3] A Program for Directing Recompilation - http://make.mad-scientist.net/papers/advanced-auto-dependency-generation/  (*)
+
+
+#--- Misc stuff
+
+[4.1] VPATH bad - http://make.mad-scientist.net/papers/how-not-to-use-vpath/
+
+[4.2] more vpath - http://www.cmcrossroads.com/article/basics-vpath-and-vpath
+
+
+
+#---  g++_options
+
+# [5.1] debug options -
+  https://gcc.gnu.org/onlinedocs/gcc/Debugging-Options.html (*)
+
+# [5.2] optimize options -
+  https://gcc.gnu.org/onlinedocs/gcc/Optimize-Options.html (*)
+
+# [5.3] warning options -
+  https://gcc.gnu.org/onlinedocs/gcc/Warning-Options.html (*)
+
+# [5.4] link options - https://gcc.gnu.org/onlinedocs/gcc/Link-Options.html (*)
+
+
+# (*) local copy at ./doc_references
+
+################################################################################

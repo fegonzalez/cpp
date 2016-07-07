@@ -1,0 +1,268 @@
+<!DOCTYPE html>
+<!--[if IE 7]>
+<html class="ie ie7" lang="en-US">
+<![endif]-->
+<!--[if IE 8]>
+<html class="ie ie8" lang="en-US">
+<![endif]-->
+<!--[if !(IE 7) & !(IE 8)]><!-->
+<html lang="en-US"><!--<![endif]--><head>
+<meta http-equiv="content-type" content="text/html; charset=UTF-8">
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width">
+<title>Rules of Makefiles | GNU make</title>
+<link rel="profile" href="http://gmpg.org/xfn/11">
+<link rel="pingback" href="http://make.mad-scientist.net/xmlrpc.php">
+<!--[if lt IE 9]>
+<script src="http://make.mad-scientist.net/wp-content/themes/twentytwelve/js/html5.js" type="text/javascript"></script>
+<![endif]-->
+<!-- Jetpack Site Verification Tags -->
+<meta name="google-site-verification" content="dbobFJJsW_-Rf6VLqx51zB9Wm7nvgSznPXxkux9Hx_M">
+<link rel="alternate" type="application/rss+xml" title="GNU make » Feed" href="http://make.mad-scientist.net/feed/">
+<link rel="alternate" type="application/rss+xml" title="GNU make » Comments Feed" href="http://make.mad-scientist.net/comments/feed/">
+<link rel="alternate" type="application/rss+xml" title="GNU make » Rules of Makefiles Comments Feed" href="http://make.mad-scientist.net/papers/rules-of-makefiles/feed/">
+		<script type="text/javascript">
+			window._wpemojiSettings = {"baseUrl":"https:\/\/s.w.org\/images\/core\/emoji\/72x72\/","ext":".png","source":{"concatemoji":"http:\/\/make.mad-scientist.net\/wp-includes\/js\/wp-emoji-release.min.js?ver=4.4.2"}};
+			!function(a,b,c){function d(a){var c,d=b.createElement("canvas"),e=d.getContext&&d.getContext("2d"),f=String.fromCharCode;return e&&e.fillText?(e.textBaseline="top",e.font="600 32px Arial","flag"===a?(e.fillText(f(55356,56806,55356,56826),0,0),d.toDataURL().length>3e3):"diversity"===a?(e.fillText(f(55356,57221),0,0),c=e.getImageData(16,16,1,1).data.toString(),e.fillText(f(55356,57221,55356,57343),0,0),c!==e.getImageData(16,16,1,1).data.toString()):("simple"===a?e.fillText(f(55357,56835),0,0):e.fillText(f(55356,57135),0,0),0!==e.getImageData(16,16,1,1).data[0])):!1}function e(a){var c=b.createElement("script");c.src=a,c.type="text/javascript",b.getElementsByTagName("head")[0].appendChild(c)}var f,g;c.supports={simple:d("simple"),flag:d("flag"),unicode8:d("unicode8"),diversity:d("diversity")},c.DOMReady=!1,c.readyCallback=function(){c.DOMReady=!0},c.supports.simple&&c.supports.flag&&c.supports.unicode8&&c.supports.diversity||(g=function(){c.readyCallback()},b.addEventListener?(b.addEventListener("DOMContentLoaded",g,!1),a.addEventListener("load",g,!1)):(a.attachEvent("onload",g),b.attachEvent("onreadystatechange",function(){"complete"===b.readyState&&c.readyCallback()})),f=c.source||{},f.concatemoji?e(f.concatemoji):f.wpemoji&&f.twemoji&&(e(f.twemoji),e(f.wpemoji)))}(window,document,window._wpemojiSettings);
+		</script><script type="text/javascript" src="Rules%20of%20Makefiles%20%7C%20GNU%20make_files/wp-emoji-release.js"></script>
+		<style type="text/css">
+img.wp-smiley,
+img.emoji {
+	display: inline !important;
+	border: none !important;
+	box-shadow: none !important;
+	height: 1em !important;
+	width: 1em !important;
+	margin: 0 .07em !important;
+	vertical-align: -0.1em !important;
+	background: none !important;
+	padding: 0 !important;
+}
+</style>
+<link rel="stylesheet" id="twentytwelve-fonts-css" href="Rules%20of%20Makefiles%20%7C%20GNU%20make_files/css.css" type="text/css" media="all">
+<link rel="stylesheet" id="twentytwelve-style-css" href="Rules%20of%20Makefiles%20%7C%20GNU%20make_files/style.css" type="text/css" media="all">
+<!--[if lt IE 9]>
+<link rel='stylesheet' id='twentytwelve-ie-css'  href='http://make.mad-scientist.net/wp-content/themes/twentytwelve/css/ie.css?ver=20121010' type='text/css' media='all' />
+<![endif]-->
+<link rel="stylesheet" id="parent-style-css" href="Rules%20of%20Makefiles%20%7C%20GNU%20make_files/style_002.css" type="text/css" media="all">
+<link rel="stylesheet" id="child-style-css" href="Rules%20of%20Makefiles%20%7C%20GNU%20make_files/style.css" type="text/css" media="all">
+<link rel="stylesheet" id="jetpack_css-css" href="Rules%20of%20Makefiles%20%7C%20GNU%20make_files/jetpack.css" type="text/css" media="all">
+<script type="text/javascript" src="Rules%20of%20Makefiles%20%7C%20GNU%20make_files/jquery.js"></script>
+<script type="text/javascript" src="Rules%20of%20Makefiles%20%7C%20GNU%20make_files/jquery-migrate.js"></script>
+<link rel="https://api.w.org/" href="http://make.mad-scientist.net/wp-json/">
+<link rel="EditURI" type="application/rsd+xml" title="RSD" href="http://make.mad-scientist.net/xmlrpc.php?rsd">
+<link rel="wlwmanifest" type="application/wlwmanifest+xml" href="http://make.mad-scientist.net/wp-includes/wlwmanifest.xml"> 
+<meta name="generator" content="WordPress 4.4.2">
+<link rel="canonical" href="http://make.mad-scientist.net/papers/rules-of-makefiles/">
+<link rel="shortlink" href="http://wp.me/P5hQIx-f">
+<link rel="alternate" type="application/json+oembed" href="http://make.mad-scientist.net/wp-json/oembed/1.0/embed?url=http%3A%2F%2Fmake.mad-scientist.net%2Fpapers%2Frules-of-makefiles%2F">
+<link rel="alternate" type="text/xml+oembed" href="http://make.mad-scientist.net/wp-json/oembed/1.0/embed?url=http%3A%2F%2Fmake.mad-scientist.net%2Fpapers%2Frules-of-makefiles%2F&amp;format=xml">
+
+<link rel="dns-prefetch" href="http://i0.wp.com/">
+<link rel="dns-prefetch" href="http://i1.wp.com/">
+<link rel="dns-prefetch" href="http://i2.wp.com/">
+<style type="text/css">img#wpstats{display:none}</style>		<style type="text/css">.recentcomments a{display:inline !important;padding:0 !important;margin:0 !important;}</style>
+		<style type="text/css" id="custom-background-css">
+body.custom-background { background-color: #e5ebff; }
+</style>
+
+<!-- Jetpack Open Graph Tags -->
+<meta property="og:type" content="article">
+<meta property="og:title" content="Rules of Makefiles">
+<meta property="og:url" content="http://make.mad-scientist.net/papers/rules-of-makefiles/">
+<meta property="og:description" content="A somewhat tongue-in-cheek title, but this page lists a few very important rules you should always keep in mind when creating makefiles. Following these rules will allow your makefiles to be both p…">
+<meta property="article:published_time" content="2002-11-02T19:27:37+00:00">
+<meta property="article:modified_time" content="2015-09-30T15:35:50+00:00">
+<meta property="og:site_name" content="GNU make">
+<meta property="og:image" content="https://s0.wp.com/i/blank.jpg">
+<meta property="og:locale" content="en_US">
+<meta name="twitter:card" content="summary">
+<link rel="stylesheet" type="text/css" id="gravatar-card-css" href="Rules%20of%20Makefiles%20%7C%20GNU%20make_files/hovercard.css"><link rel="stylesheet" type="text/css" id="gravatar-card-services-css" href="Rules%20of%20Makefiles%20%7C%20GNU%20make_files/services.css"></head>
+
+<body class="page page-id-15 page-child parent-pageid-82 page-template-default custom-background custom-font-enabled single-author">
+<div id="page" class="hfeed site">
+	<header id="masthead" class="site-header" role="banner">
+		<hgroup>
+			<div class="site-logo">
+				<img src="Rules%20of%20Makefiles%20%7C%20GNU%20make_files/gnu-head-sm.png" alt="[GNU] " height="120" width="122">
+			</div>
+			<div class="site-titlebox" style="left:122px">
+				<h1 class="site-title"><a href="http://make.mad-scientist.net/" title="GNU make" rel="home">GNU make</a></h1>
+				<div class="site-description">A Program for Directing Recompilation</div>
+			</div>
+			<div style="clear:both;"></div>
+		</hgroup>
+
+		<nav id="site-navigation" class="main-navigation" role="navigation">
+			<button class="menu-toggle">Menu</button>
+			<a class="assistive-text" href="#content" title="Skip to content">Skip to content</a>
+			<div class="menu-white-papers-container"><ul id="menu-white-papers" class="nav-menu"><li id="menu-item-33" class="menu-item menu-item-type-post_type menu-item-object-page menu-item-33"><a href="http://make.mad-scientist.net/">HOME</a></li>
+<li id="menu-item-84" class="menu-item menu-item-type-post_type menu-item-object-page current-page-ancestor current-menu-ancestor current-menu-parent current-page-parent current_page_parent current_page_ancestor menu-item-has-children menu-item-84"><a href="http://make.mad-scientist.net/papers/">Papers</a>
+<ul class="sub-menu">
+	<li id="menu-item-24" class="menu-item menu-item-type-post_type menu-item-object-page current-menu-item page_item page-item-15 current_page_item menu-item-24"><a href="http://make.mad-scientist.net/papers/rules-of-makefiles/">Rules of Makefiles</a></li>
+	<li id="menu-item-31" class="menu-item menu-item-type-post_type menu-item-object-page menu-item-31"><a href="http://make.mad-scientist.net/papers/how-not-to-use-vpath/">How Not to Use VPATH</a></li>
+	<li id="menu-item-58" class="menu-item menu-item-type-post_type menu-item-object-page menu-item-58"><a href="http://make.mad-scientist.net/papers/multi-architecture-builds/">Multi-Architecture Builds</a></li>
+	<li id="menu-item-66" class="menu-item menu-item-type-post_type menu-item-object-page menu-item-66"><a href="http://make.mad-scientist.net/papers/advanced-auto-dependency-generation/">Auto-Dependency Generation</a></li>
+	<li id="menu-item-75" class="menu-item menu-item-type-post_type menu-item-object-page menu-item-75"><a href="http://make.mad-scientist.net/papers/jobserver-implementation/">Jobserver Implementation</a></li>
+</ul>
+</li>
+<li id="menu-item-109" class="menu-item menu-item-type-post_type menu-item-object-page menu-item-109"><a href="http://make.mad-scientist.net/posts/">Musings</a></li>
+<li id="menu-item-40" class="menu-item menu-item-type-post_type menu-item-object-page menu-item-has-children menu-item-40"><a href="http://make.mad-scientist.net/about/">About</a>
+<ul class="sub-menu">
+	<li id="menu-item-44" class="menu-item menu-item-type-post_type menu-item-object-page menu-item-44"><a href="http://make.mad-scientist.net/about/comments/">Comments</a></li>
+</ul>
+</li>
+</ul></div>		</nav><!-- #site-navigation -->
+
+			</header><!-- #masthead -->
+
+	<div id="main" class="wrapper">
+
+	<div id="primary" class="site-content">
+		<div id="content" role="main">
+
+							
+	<article id="post-15" class="post-15 page type-page status-publish hentry">
+		<header class="entry-header">
+												<h1 class="entry-title">Rules of Makefiles</h1>
+<p style="margin-top: 1em;"><small>November 2nd, 2002&nbsp;&nbsp;&nbsp;&nbsp;(updated September 30th, 2015)</small></p>
+		</header>
+
+		<div class="entry-content">
+			<p>A somewhat tongue-in-cheek title, but this page lists a few very 
+important rules you should always keep in mind when creating makefiles. 
+ Following these rules will allow your makefiles to be both pithy and 
+beautiful.  And they will make maintaining and modifying them, and thus 
+your entire life, a much more pleasant experience.</p>
+<ol>
+<p> <a name="rule1"></a>
+</p><li><font size="+1">Use GNU <code>make</code>.</font><p></p>
+<p> Don’t hassle with writing portable makefiles, use a portable <em><code>make</code></em> instead!
+</p></li>
+<p> <a name="rule2"></a>
+</p><li> <font size="+1">Every non-<code>.PHONY</code> rule <strong>must</strong> update a file with the <em>exact</em> name of its target.</font><p></p>
+<p> Make sure every command script touches the file “<code>$@</code>“–not “<code>../$@</code>“, or “<code>$(notdir $@)</code>“, but <strong>exactly</strong> <code>$@</code>.  That way you and GNU <code>make</code> always agree.
+</p></li>
+<p> <a name="rule3"></a>
+</p><li> <font size="+1">Life is simplest if the targets are built in the current working directory.</font><p></p>
+<p> Use <code>VPATH</code> to <a href="http://make.mad-scientist.net/papers/how-not-to-use-vpath/">locate the sources</a> from the objects directory, not to locate the objects from the sources directory.
+</p></li>
+<p> <a name="rule4"></a>
+</p><li> <font size="+1">Follow the Principle of Least Repetition.</font><p></p>
+<p> Try to never write a filename more than once.  Do this through a 
+combination of make variables, pattern rules, automatic variables, and 
+GNU <code>make</code> functions.
+</p></li>
+<p> <a name="rule5"></a>
+</p><li> <font size="+1">Every non-continued line that starts with a TAB is part of a command script–and vice versa.</font><p></p>
+<p>If a non-continued line does not begin with a TAB character, it is <b>never</b> part of a command script: it is always interpreted as <code>makefile</code> syntax.  If a non-continued line does begin with a TAB character, it is <b>always</b> part of a command script: it is never interpreted as <code>makefile</code> syntax.  Note this is not strictly true but you are best off pretending it is always true.</p>
+<p>Continued lines are always of the same type as their predecessor, regardless of what characters they start with.
+</p></li>
+<p> <a name="rule6"></a>
+</p><li> <font size="+1">Don’t use directories as normal prerequisites.</font><p></p>
+<p> It’s virtually never correct to use a directory as a normal prerequisite for a target.  GNU <code>make</code>
+ treats directories as any other file and rebuilds the target if the 
+modification time of the directory has changed.  However, modification 
+times of directories change whenever a file is added, removed, or 
+renamed in that directory… this is almost never what you want.  It is 
+useful to list directories as <a href="http://www.gnu.org/software/make/manual/html_node/Prerequisite-Types.html"><i>order-only</i></a> prerequisites, however.
+</p></li>
+</ol>
+<p>Yes, that’s all of them… so far.  It’s not that that’s all I have to 
+say on the subject, but coming up with points which are both truly 
+fundamental and expressible in a succinct rule format, ain’t easy.</p>
+<p>Let me know if you have suggestions.</p>
+					</div><!-- .entry-content -->
+		<footer class="entry-meta">
+					</footer><!-- .entry-meta -->
+	</article><!-- #post -->
+				
+<div id="comments" class="comments-area">
+
+	
+	
+					<div id="respond" class="comment-respond">
+			<h3 id="reply-title" class="comment-reply-title">Leave a Reply <small><a rel="nofollow" id="cancel-comment-reply-link" href="http://make.mad-scientist.net/papers/rules-of-makefiles/#respond" style="display:none;">Cancel reply</a></small></h3>				<form action="http://make.mad-scientist.net/wp-comments-post.php" method="post" id="commentform" class="comment-form">
+					<p class="comment-notes"><span id="email-notes">Your email address will not be published.</span> Required fields are marked <span class="required">*</span></p><p class="comment-form-comment"><label for="comment">Comment</label> <textarea id="comment" name="comment" cols="45" rows="8" aria-required="true" required="required"></textarea></p><p class="comment-form-author"><label for="author">Name <span class="required">*</span></label> <input id="author" name="author" size="30" aria-required="true" required="required" type="text"></p>
+<p class="comment-form-email"><label for="email">Email <span class="required">*</span></label> <input id="email" name="email" size="30" aria-describedby="email-notes" aria-required="true" required="required" type="text"></p>
+<p class="comment-form-url"><label for="url">Website</label> <input id="url" name="url" size="30" type="text"></p>
+<p class="form-submit"><input name="submit" id="submit" class="submit" value="Post Comment" type="submit"> <input name="comment_post_ID" value="15" id="comment_post_ID" type="hidden">
+<input name="comment_parent" id="comment_parent" value="0" type="hidden">
+</p><p style="display: none;"><input id="akismet_comment_nonce" name="akismet_comment_nonce" value="30fd5594d3" type="hidden"></p><p class="comment-subscription-form"><input name="subscribe_comments" id="subscribe_comments" value="subscribe" style="width: auto; -moz-appearance: checkbox; -webkit-appearance: checkbox;" type="checkbox"> <label class="subscribe-label" id="subscribe-label" for="subscribe_comments">Notify me of follow-up comments by email.</label></p><p class="comment-subscription-form"><input name="subscribe_blog" id="subscribe_blog" value="subscribe" style="width: auto; -moz-appearance: checkbox; -webkit-appearance: checkbox;" type="checkbox"> <label class="subscribe-label" id="subscribe-blog-label" for="subscribe_blog">Notify me of new posts by email.</label></p><p style="display: none;"></p>				<input id="ak_js" name="ak_js" value="1457553198612" type="hidden"></form>
+					</div><!-- #respond -->
+		
+</div><!-- #comments .comments-area -->			
+		</div><!-- #content -->
+	</div><!-- #primary -->
+
+
+			<div id="secondary" class="widget-area" role="complementary">
+			<aside id="search-2" class="widget widget_search"><form role="search" method="get" id="searchform" class="searchform" action="http://make.mad-scientist.net/">
+				<div>
+					<label class="screen-reader-text" for="s">Search for:</label>
+					<input name="s" id="s" type="text">
+					<input id="searchsubmit" value="Search" type="submit">
+				</div>
+			</form></aside>		<aside id="recent-posts-2" class="widget widget_recent_entries">		<h3 class="widget-title">Recent Posts</h3>		<ul>
+					<li>
+				<a href="http://make.mad-scientist.net/the-eval-function/">Metaprogramming Make VI — The eval Function</a>
+							<span class="post-date">2014-11-30</span>
+						</li>
+					<li>
+				<a href="http://make.mad-scientist.net/constructed-include-files/">Metaprogramming Make V — Constructed Include Files</a>
+							<span class="post-date">2014-11-23</span>
+						</li>
+					<li>
+				<a href="http://make.mad-scientist.net/secondary-expansion/">Metaprogramming Make IV — Secondary Expansion</a>
+							<span class="post-date">2014-11-16</span>
+						</li>
+					<li>
+				<a href="http://make.mad-scientist.net/constructed-macro-names/">Metaprogramming Make III — Constructed Macro Names</a>
+							<span class="post-date">2014-11-09</span>
+						</li>
+					<li>
+				<a href="http://make.mad-scientist.net/recursive-expansion/">Metaprogramming Make II — Recursive Expansion</a>
+							<span class="post-date">2014-11-08</span>
+						</li>
+				</ul>
+		</aside>		<aside id="recent-comments-2" class="widget widget_recent_comments"><h3 class="widget-title">Recent Comments</h3><ul id="recentcomments"></ul></aside><aside id="archives-2" class="widget widget_archive"><h3 class="widget-title">Archives</h3>		<ul>
+			<li><a href="http://make.mad-scientist.net/2014/11/">November 2014</a></li>
+		</ul>
+		</aside><aside id="meta-2" class="widget widget_meta"><h3 class="widget-title">Meta</h3>			<ul>
+						<li><a href="http://make.mad-scientist.net/wp-login.php">Log in</a></li>
+			<li><a href="http://make.mad-scientist.net/feed/">Entries <abbr title="Really Simple Syndication">RSS</abbr></a></li>
+			<li><a href="http://make.mad-scientist.net/comments/feed/">Comments <abbr title="Really Simple Syndication">RSS</abbr></a></li>
+			<li><a href="https://wordpress.org/" title="Powered by WordPress, state-of-the-art semantic personal publishing platform.">WordPress.org</a></li>			</ul>
+			</aside>		</div><!-- #secondary -->
+		</div><!-- #main .wrapper -->
+	<footer id="colophon" role="contentinfo">
+		<div class="site-info">
+			Copyright © 1997-2016 <a href="http://mad-scientist.net/">Paul D. Smith</a> · Verbatim copying and distribution is permitted in any medium, provided this notice is preserved.
+		</div><!-- .site-info -->
+	</footer><!-- #colophon -->
+</div><!-- #page -->
+
+	<div style="display:none">
+	</div>
+<script type="text/javascript" src="Rules%20of%20Makefiles%20%7C%20GNU%20make_files/form.js"></script>
+<script type="text/javascript" src="Rules%20of%20Makefiles%20%7C%20GNU%20make_files/photon.js"></script>
+<script type="text/javascript" src="Rules%20of%20Makefiles%20%7C%20GNU%20make_files/devicepx-jetpack.js"></script>
+<script type="text/javascript" src="Rules%20of%20Makefiles%20%7C%20GNU%20make_files/gprofiles.js"></script>
+<script type="text/javascript">
+/* <![CDATA[ */
+var WPGroHo = {"my_hash":""};
+/* ]]> */
+</script>
+<script type="text/javascript" src="Rules%20of%20Makefiles%20%7C%20GNU%20make_files/wpgroho.js"></script>
+<script type="text/javascript" src="Rules%20of%20Makefiles%20%7C%20GNU%20make_files/comment-reply.js"></script>
+<script type="text/javascript" src="Rules%20of%20Makefiles%20%7C%20GNU%20make_files/navigation.js"></script>
+<script type="text/javascript" src="Rules%20of%20Makefiles%20%7C%20GNU%20make_files/wp-embed.js"></script>
+<script type="text/javascript" src="Rules%20of%20Makefiles%20%7C%20GNU%20make_files/e-201610.js" async="" defer="defer"></script>
+<script type="text/javascript">
+	_stq = window._stq || [];
+	_stq.push([ 'view', {v:'ext',j:'1:3.9.2',blog:'78135905',post:'15',tz:'-5',srv:'make.mad-scientist.net'} ]);
+	_stq.push([ 'clickTrackerInit', '78135905', '15' ]);
+</script>
+
+
+<img id="wpstats" src="Rules%20of%20Makefiles%20%7C%20GNU%20make_files/g.gif"></body></html>

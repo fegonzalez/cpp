@@ -1,0 +1,11 @@
+
+>>> test 11.2 Accessibility of base classes and base class members
+
+>>> test 11.7 Nested classes
+eobj.x = 1; ? : 1
+eobj.x = 22; ? : 22
+
+>>> test 11.4 Protected member access
+ok: can access Sneaky::prot_mem = 0
+error: can't access BaseProtectedTest::prot_mem = 
+

@@ -1,0 +1,16 @@
+# [improved_unit_test] simple_unit_test + multiple (and separated) tests:
+#
+# + one Makefile for any number of test files plus the main file
+#
+# + allows the execution of individualized test files.
+#
+# + allows the execution of the whole set of tests.
+
+
+
+
+# NOT HAVE
+
+- Recursive Makefiles
+
+- Auto-dependency
