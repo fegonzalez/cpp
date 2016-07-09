@@ -1,5 +1,5 @@
 # ==============================================================================
-# SUMMARY (following the order in [1_1])
+# SUMMARY (following the order in the c++ standard [1_1])
 # ==============================================================================
 
 # 0 The (C++) standard
@@ -7,11 +7,11 @@
 
 # 1 General
 #
-#   1.1 Scope
-#   1.7 The C++ memory model
-#   1.8 The C++ object model
-#   1.9 Program execution
-#   1.10 Multi-threaded executions and data races
+# 1.1 Scope
+# 1.7 The C++ memory model
+# 1.8 The C++ object model
+# 1.9 Program execution
+#  1.10 Multi-threaded executions and data races
 
 
 # 2 Lexical conventions
@@ -32,14 +32,30 @@
 
 # todo 3 Basic concepts
 #
-#   3.9 Types
-#       3.9.1 Fundamental types
-# 	3.9.2 Compound types
-# 	3.9.3 CV-qualifiers
-#       3.9.4 Types not defined in the standard
-#             3.9.4.1 TrivialType
-#             3.9.4.2 StandardLayoutType
-#             3.9.4.3 PODType
+# 3.1 Declarations and definitions
+# 3.2 One-definition rule
+# 3.3 Scope
+# 3.4 Name lookup
+# 3.5 Program and linkage
+# 3.6 Start and termination
+# 3.7 Storage duration
+# 3.8 Object lifetime
+#
+# 3.9 Types
+#
+#     3.9.1 Fundamental (built-in) types
+#           3.9.1.1 Integral types: boolean, characters, integers.
+#           3.9.1.2 Arithmetic types: integral types and floating-point types.
+#           3.9.1.3 Scalar types
+#     3.9.2 Compound types
+#     3.9.3 CV-qualifiers
+#     3.9.4 Types not defined in the standard
+#           3.9.4.1 TrivialType
+#           3.9.4.2 StandardLayoutType
+#           3.9.4.3 PODType
+#
+# 3.10 Lvalues and rvalues
+# 3.11 Alignment
 
 
 # todo 4 Standard conversions
@@ -60,30 +76,30 @@
 
 # todo 8 Declarators
 #
-#   8.3 Meaning of declarators
+# 8.3 Meaning of declarators
 #
-#	8.3.3 Pointers to members
+#     8.3.3 Pointers to members
 #
 #
-#   8.5 Initializers
+# 8.5 Initializers
 #
-#	8.5.0 Initialiation before C++11	
+#     8.5.0 Initialiation before C++11	
 #	
-#	8.5.1 Aggregates
+#     8.5.1 Aggregates
 #
-#	8.5.2 Character arrays
+#     8.5.2 Character arrays
 #
-#	8.5.3 References
-#	      8.5.3.1 Uses of references
-#	      8.5.3.2 Issues on using references
-#	      8.5.3.3 Defining (binding) references to objects
-#	      8.5.3.4 References as functions parameters
-#	      8.5.3.5 functions returning references
+#     8.5.3 References
+#	    8.5.3.1 Uses of references
+#	    8.5.3.2 Issues on using references
+#	    8.5.3.3 Defining (binding) references to objects
+#	    8.5.3.4 References as functions parameters
+#	    8.5.3.5 functions returning references
 #       \todo Rvalue References [3_1].13.6.1.  (see examples at [4_2_0])
 #
-#	8.5.4 List-initialization (or braced-init-list)
+#     8.5.4 List-initialization (or braced-init-list)
 #
-#	8.5.5 Class Member Initialization (or In-Class Initializers)
+#     8.5.5 Class Member Initialization (or In-Class Initializers)
 
 
 # todo 9 Classes
@@ -229,6 +245,12 @@
 
 # ==============================================================================
 
+Table Index
+
+3.9.1. C++ Arithmetic Types
+
+# ==============================================================================
+
 
 # ==============================================================================
 # 0 The (C++) standard
@@ -263,6 +285,8 @@ c) Using the proper c++ version in your programs:
 
 
 # 1.7 The C++ memory model
+
+Note.- byte, word, and memory location (Y.1)
 
 1) The byte
 
@@ -505,8 +529,8 @@ My-def: Units created by the compiler to store the template-code actually
 	Then the compiler compiles "x".
 
 
-2) Previously translated translation units and instantiation units can
-   be preserved individually or in libraries.
+2) Translated translation units and instantiation units can be preserved
+   individually or in libraries.
 
 The separate translation units of a program communicate (3.5) by (for
 example) calls to functions whose identifiers have external linkage,
@@ -529,7 +553,7 @@ My_note.- Here a brief explanation. Read [1_1] for details.
    _Pragma unary operator expressions are executed. Steps 1-4 are repeated for
    every #include
 
-5-6. Process string literals (concatenation, ...)
+5-6. Preprocess string literals (concatenation, ...)
 
    C++ compiler:
 
@@ -553,6 +577,7 @@ My_note.- Here a brief explanation. Read [1_1] for details.
 
 My_note.- Ignored. Read [1_1] for details. 
 
+- Basic Character set = [a-z][A-Z][0-9] _ {  ...  * +  ...  " ' 
 
 # 2.10 Identifiers
 
@@ -631,7 +656,7 @@ value. See 4.10 and 4.11. —end note ]
 2) A user-defined-literal is treated as a call to a literal operator or literal
    operator template (13.5.8).
 
-   i.e.  void operator "" _km(long double);
+   i.e.  void operator "" 123_km(long double);
 
 
 # ==============================================================================
@@ -639,20 +664,145 @@ value. See 4.10 and 4.11. —end note ]
 # ==============================================================================
 
 
-aki lo dejo: standard.pdf
+# 3.1 Declarations and definitions
+
+
+http://stackoverflow.com/questions/1410563/what-is-the-difference-between-a-definition-and-a-declaration
+
+
+
+- declaration: a promise that a name exists. Needed by the compiler.
+
+- definition: set an actual value to a name. Needed by the linker.
+
+  # e.g. declararions
+  extern int a;		// declares a
+  extern const int c; 	// declares c
+  int f(int);  	   	// declares f
+  struct S; 		// declares S
+  typedef int Int; 	// declares Int
+  extern X anotherX; 	// declares anotherX
+  using N::d; 		// declares d
+
+  # e.g. definitions
+  int a;		// defines a 
+  extern const int c = 1; // defines c
+  int f(int x) { return x+a; } // defines f and x
+
+# 3.2 One-definition rule
+# 3.3 Scope
+# 3.4 Name lookup
+# 3.5 Program and linkage
+# 3.6 Start and termination
+# 3.7 Storage duration
+# 3.8 Object lifetime
+
+
+# 3.4 Name lookup
+
+FACAT_1 In C++ , name lookup happens before type checking.
 
 
 # 3.9 Types
 
 FACT_1 Each variable in C++ has a type.
 
+FACT_2 In C++, the type of an object determines what operations can be
+       performed on it.
 
-# 3.9.1 Fundamental types
+FACT_3 C++ is a statically typed language; type checking is done at compile time
+ 
+
+- Built-in types: default types provided by C++.
+
+- Class types: types defined by the programmer.
 
 
-- Arithmetic types: integral and floating types.
+# 3.9.1 Fundamental (built-in) types
 
-- Scalar types:
+buit types = scalar types + void type
+
+
+# 3.9.1.1 Integral types: boolean, characters, integers.
+
+  sizeof: machine dependant (Table 3.9.1)
+
+
+# 3.9.1.2 Arithmetic types:integral types and floating-point types.
+
+a) size of arithmetic types
+
+The standard guarantees minimum sizes as listed in Table 3.9.1
+ 
+However, compilers are allowed to use larger sizes for these types.
+
+Because the number of bits varies, the largest (or smallest) value that a type
+can represent also varies (range = 2 ** num_bits)
+
+
+    	      Table 3.9.1. C++ Arithmetic Types
+
+Type  	     Meaning				MINIMUM Size
+----------------------------------------------------------------
+bool	     boolean				NA
+char         character		 	 	 8 bits
+wchar_t      wide character		 	16 bits
+char16_t     Unicode character		 	16 bits
+char32_t     Unicode character		 	32 bits
+short        short integer		 	16 bits
+int          integer		 	 	16 bits
+long         long integer		 	32 bits
+long long    long integer		 	64 bits
+float	     single-precision floating point	 6 significant digits
+double	     double-precision floating point	10 significant digits
+long double  extended-precision floating point	10 significant digits
+
+
+FACT_4 char is the same size as a single machine byte (1.7.1)
+
+NOTICE
+The language guarantees that an int will be at least as large as short,
+The language guarantees that a long at least as large as an int, and
+The language guarantees that long long at least as large as long.
+
+
+b) Signed and Unsigned Types
+
+NOTICE
+The standard does not define how signed types are represented, but does specify
+that the range should be evenly divided between positive and negative values.
+
+- integral types may be signed or unsigned: [unsigned] type-name
+
+- chars: char, signed char, and unsigned char. Where the (plain) char type uses
+  either signed or unsigned char representation depending on the compiler.
+
+
+c) Deciding which Type to Use
+
+BEST_PRACTICE [3_1]
+
+• Use an unsigned type when you know that the values cannot be negative.
+
+• Use int for integer arithmetic.
+  If your data values are larger than the minimum guaranteed size of an int,
+  then use long long.
+
+• Do not use plain char or bool in arithmetic expressions.
+
+  - For Tiny integers:
+    WARNING char is signed on some machines and unsigned on others =>
+    	    explicitly specify either signed char or unsigned char.
+    my_note: use (unit8_t ,..) types in <stdint.h> library instead
+
+• Use double for floating-point computations:
+  - Float lacks precision and in fact, on some machines, double-precision
+    operations are faster than single.
+  - The precision offered by long double usually is unnecessary and often
+    entails considerable run-time cost.
+
+
+# 3.9.1.3 Scalar types
 
   Arithmetic types,
   enumeration types,
@@ -661,7 +811,12 @@ FACT_1 Each variable in C++ has a type.
   std::nullptr_t,
   and cv-qualified versions of these types (3.9.3)
 
-  ... are collectively called scalar types.
+
+
+
+aki lo dejo: primer 2.1.2. Type Conversions
+
+
 
 
 # 3.9.2 Compound types
@@ -4671,6 +4826,11 @@ Note. In the terms defined in this chapter, the quote "this
 
 A
 
+- Arithmetic types
+
+  Built -in types representing integral types (boolean, characters, integers),
+  and floating-point numbers.
+
 
 B
 
@@ -4698,6 +4858,11 @@ B
 
 
 C
+
+- Class types
+
+  Types defined by the programmer.
+
 
 - C++ Standards
 
@@ -4914,23 +5079,26 @@ WARNING_5 public/private/protected are compile-time only. Once your
 
 # Y.1 Memory address  [7_1]
 
-# Word size versus address size
+a) byte & memory location: C++ concepts (1.7.1)
 
-a) word size = number of (binary {0,1}) digits that a CPU can process
-  at one time (i.e. 32, 64 bits)
+b) Word (processor concept)
 
-  A word size is characteristic to a given computer architecture
-  (register size, etc)
+  A word is the natural unit (fixed-size) of data used by a particular
+  processor design (register size)
 
-b) address size: number of memory locations.  
+  Most common word sizes are 8, 16, 32 and 64 bits, but other are possible.
 
-  total memory available = 2 exp address-size
+c) address size (processor concept)
 
-  - For a computer, the address size can be equal, larger or smaller
-    than the word size.
+   - address size = number of memory locations.  
 
-  - If equal, one memory address to be efficiently stored in one word    
-    e.g. 32-bit computer can address 2**32 = 4GB 
+   - total memory available = 2 exp address-size
+
+   - For a computer, the address size can be equal, larger or smaller
+     than the word size.
+
+   - If equal, one memory address to be efficiently stored in one word    
+     e.g. 32-bit computer can address 2**32 = 4GB 
     
 
 
@@ -5162,6 +5330,5 @@ b) address size: number of memory locations.
 
 
 # ==============================================================================
-
 
 
