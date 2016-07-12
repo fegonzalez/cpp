@@ -42,7 +42,6 @@
 # 3.8 Object lifetime
 #
 # 3.9 Types
-#
 #     3.9.1 Fundamental (built-in) types
 #           3.9.1.1 Integral types: boolean, characters, integers.
 #           3.9.1.2 Arithmetic types: integral types and floating-point types.
@@ -117,20 +116,20 @@
 
 # 11 Member access control
 #
-#   11.1 Access specifiers
-#   11.2 Accessibility of base classes and base class members
-#   11.3 Friends
-#   11.4 Protected member access
-#   11.5 Access to virtual functions
-#   11.6 Multiple access
-#   11.7 Nested classes
+# 11.1 Access specifiers
+# 11.2 Accessibility of base classes and base class members
+# 11.3 Friends
+# 11.4 Protected member access
+# 11.5 Access to virtual functions
+# 11.6 Multiple access
+# 11.7 Nested classes
 
 
 # todo 12 Special member functions
 #
-#   12.1 Constructors
-#   	12.1.1 Trivial Constructors
-# 	12.1.2 Non-Trivial Constructors
+# 12.1 Constructors
+#      12.1.1 Trivial Constructors
+#      12.1.2 Non-Trivial Constructors
 # 	      a) Default constructor
 # 	      b) Explicit Constructors
 #	      c) Constructors of Built-in Types (char, int, ...)
@@ -247,7 +246,8 @@
 
 Table Index
 
-3.9.1. C++ Arithmetic Types
+2.13.1   Specifying the Type of a Literal  ([3_1] Table 2.2)
+3.9.1  	 C++ Arithmetic Types
 
 # ==============================================================================
 
@@ -624,6 +624,46 @@ boolean-literal
 pointer-literal
 user-defined-literal
 
+
+==================================================================
+  Table 2.13.1 Specifying the Type of a Literal ([3_1] Table 2.2)
+==================================================================
+          Character and Character String Literals
+Prefix  Meaning                         Type
+----------------------------------------------------------------
+u	Unicode 16 character   		char16_t
+U	Unicode 32 character   		char32_t
+L	wide character   		wchar_t   
+u8	utf-8 (string literals obly)	char
+
+    Integer Literals            Floating-Point Literals
+Suffix     Minimum Type         Suffix     Type
+----------------------------------------------------------------
+u or U     unsigned		f or F     float
+l or L     long			l or L	   long double        
+ll or LL   long long 
+==================================================================
+
+
+
+bool	     boolean				NA
+char         character		 	 	 8 bits
+wchar_t      wide character		 	16 bits
+char16_t     Unicode character		 	16 bits
+char32_t     Unicode character		 	32 bits
+short        short integer		 	16 bits
+int          integer		 	 	16 bits
+long         long integer		 	32 bits
+long long    long integer		 	64 bits
+float	     single-precision floating point	 6 significant digits
+double	     double-precision floating point	10 significant digits
+long double  extended-precision floating point	10 significant digits
+
+
+
+WARNING overleaf
+We can override the default use of literals using a suffix from Table 2.2
+
 # 2.13.5 String literals
 
 - Raw string literal: string-literal that has an R in the prefix:
@@ -720,8 +760,7 @@ FACT_3 C++ is a statically typed language; type checking is done at compile time
 
 # 3.9.1 Fundamental (built-in) types
 
-buit types = scalar types + void type
-
+built-in types = scalar types (3.9.1.3) + void type
 
 # 3.9.1.1 Integral types: boolean, characters, integers.
 
@@ -739,9 +778,9 @@ However, compilers are allowed to use larger sizes for these types.
 Because the number of bits varies, the largest (or smallest) value that a type
 can represent also varies (range = 2 ** num_bits)
 
-
+=======================================================================
     	      Table 3.9.1. C++ Arithmetic Types
-
+=======================================================================
 Type  	     Meaning				MINIMUM Size
 ----------------------------------------------------------------
 bool	     boolean				NA
@@ -756,7 +795,7 @@ long long    long integer		 	64 bits
 float	     single-precision floating point	 6 significant digits
 double	     double-precision floating point	10 significant digits
 long double  extended-precision floating point	10 significant digits
-
+=======================================================================
 
 FACT_4 char is the same size as a single machine byte (1.7.1)
 
@@ -776,6 +815,14 @@ that the range should be evenly divided between positive and negative values.
 
 - chars: char, signed char, and unsigned char. Where the (plain) char type uses
   either signed or unsigned char representation depending on the compiler.
+
+WARNING
+Don’t Mix Signed and Unsigned Types (negative signed numbers will be converted
+to unsigned):
+e.g. // WRONG: u can never be less than 0; the condition will always succeed
+     // when u==0 and --u is executed, then u won't be -1 but a high signed)
+     for (unsigned u = 10; u >= 0; --u)
+     std::cout << u << std::endl;
 
 
 c) Deciding which Type to Use
@@ -806,9 +853,7 @@ BEST_PRACTICE [3_1]
 
   Arithmetic types,
   enumeration types,
-  pointer types,
-  pointer to member types (3.9.2),
-  std::nullptr_t,
+  pointer types, pointer to member types (3.9.2), std::nullptr_t,
   and cv-qualified versions of these types (3.9.3)
 
 
@@ -816,6 +861,10 @@ BEST_PRACTICE [3_1]
 
 aki lo dejo: primer 2.1.2. Type Conversions
 
+
+
+todo primer 2.1.2. Type Conversions
+todo primer 2.1.2. literals
 
 
 
@@ -4849,6 +4898,7 @@ B
 - (primitive) built-in type
 
   Type, such as int, defined by the language.
+  built-in types = scalar types (3.9.1.3) + void type
 
 
 - built-in operator
