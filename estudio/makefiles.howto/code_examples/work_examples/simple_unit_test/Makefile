@@ -214,8 +214,42 @@ difftest:all
 # Compilation & linking via implicit (pattern) rules
 #===============================================================================
 
+
+#------------------------------------------------------------------------
+# 1) Only-dependency rules: to detect changes in headers
+#------------------------------------------------------------------------
+#
+#-- DO-CHANGE-HERE
+#
+# (e.g)   main.o: main.h
+# (e.g.)  $(OBJS): %.o: $(COMMON_HEADERS)
+#
+# (e.g.) all the objects that depend on their own header: i.e. dummy.o dummy.h
+# 	 e.g.: all the objects but $(EXEC).o have a header.
+#        HEADER_OBJS:=$(subst $(EXEC).o,,$(OBJS)) 
+#        $(HEADER_OBJS): %.o: %.h
+
+
+
+
+#------------------------------------------------------------------------
+# 2) recipe rules
+#------------------------------------------------------------------------
+
+
 #------------------
-# 1) linking
+# a) compilation
+#------------------
+
+$(OBJS): %.o: %.cpp
+	@echo ''
+	@echo 'Building target: $@'
+	$(CXX) -c $(all_cxxflags) $(CPPFLAGS) $<  -o $@ 
+
+
+
+#------------------
+# b) linking
 #------------------
 
 $(EXEC):$(OBJS)
@@ -223,29 +257,6 @@ $(EXEC):$(OBJS)
 	@echo 'Building target: $@'
 	$(CXX) $(LDFLAGS) -o $@ $^ $(LDLIBS)
 
-
-
-#------------------
-# 2) compilation
-#------------------
-
-#-- DO-CHANGE-HERE
-#
-# a) Only-dependency rules: to detect changes in headers
-#
-# (e.g)   main.o: main.h
-# (e.g.)  $(OBJS): %.o: $(COMMON_HEADERS)
-#
-# (e.g.) all sources but main.cpp:
-#        HEADER_OBJS:=$(subst $(EXEC).o,,$(OBJS))
-#        $(HEADER_OBJS): %.o: %.h
-
-# b) recipe rules
-
-$(OBJS): %.o: %.cpp
-	@echo ''
-	@echo 'Building target: $@'
-	$(CXX) -c $(all_cxxflags) $(CPPFLAGS) $<  -o $@ 
 
 
 

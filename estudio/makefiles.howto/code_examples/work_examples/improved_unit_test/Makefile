@@ -68,6 +68,7 @@ debug_mode := 1
 
 ## 2) Select project files & paths: VPATH, vpath, sources, objects, headers, ...
 
+#-- DO-CHANGE-HERE
 MAIN_FILE := main.cpp
 
 #project-particular variables
@@ -76,8 +77,8 @@ MAIN_FILE := main.cpp
 ## generic variables
 
 # Note.- variable naming explanation:
-# TEST_XXX: only for the main file of the modeule/application.
-# EXEC_XXX: only for unitary test files.
+# TEST_XXX: only for unitary test files.
+# EXEC_XXX: only for the main file of the module/application.
 # MODULE_XXX: only for the files that construct the module/application, thus
 #             all but test & exec.
 
@@ -344,17 +345,49 @@ $(DIFF.TEST_TARGETS): diff.%: %
 # Compilation & linking via implicit (pattern) rules
 #===============================================================================
 
-#------------------
-# 1) linking
-#------------------
 
-# a) Only-dependency rules: to detect changes in headers
+#------------------------------------------------------------------------
+# 1) Only-dependency rules: to detect changes in headers
+#------------------------------------------------------------------------
+#
 #-- DO-CHANGE-HERE
-$(EXEC): $(COMMON_HEADERS)
-$(TEST_EXECS): $(COMMON_HEADERS)
+#
+# (e.g)   main.o: main.h
+# (e.g.)  $(OBJS): %.o: $(COMMON_HEADERS)
+#
+# (e.g.) all the objects that depend on their own header: i.e. dummy.o dummy.h
+# 	 e.g.: all the objects but $(EXEC).o have a header.
+#        HEADER_OBJS:=$(subst $(EXEC).o,,$(OBJS)) 
+#        $(HEADER_OBJS): %.o: %.h
 
 
-# b) recipe rules
+#------------------
+# a) compilation
+#------------------
+
+$(OBJS): %.o: $(COMMON_HEADERS)
+
+
+
+
+#------------------------------------------------------------------------
+# 2) recipe rules
+#------------------------------------------------------------------------
+
+
+#------------------
+# a) compilation
+#------------------
+
+$(OBJS): %.o: %.cpp
+	@echo ''
+	@echo 'Building target: $@'
+	$(CXX) -c $(all_cxxflags) $(CPPFLAGS) $<  -o $@ 
+
+
+#------------------
+# b) linking
+#------------------
 
 $(EXEC):$(EXEC_OBJ) $(MODULE_OBJS)
 	@echo ''
@@ -370,31 +403,6 @@ $(TEST_EXECS): %: %.o \
 	@echo 'Building target: $@'
 	$(CXX) $(LDFLAGS) -o $@ $^ $(LDLIBS)
 
-
-#------------------
-# 2) compilation
-#------------------
-
-# a) Only-dependency rules: to detect changes in headers
-#-- DO-CHANGE-HERE
-#
-# (e.g)   main.o: main.h
-# (e.g.)  $(OBJS): %.o: $(COMMON_HEADERS)
-#
-# (e.g.) all the objects that depend on their own header: i.e. dummy.o dummy.h
-# 	 e.g.: all the objects but $(EXEC).o have a header.
-#        HEADER_OBJS:=$(subst $(EXEC).o,,$(OBJS)) 
-#        $(HEADER_OBJS): %.o: %.h
-
-$(OBJS): %.o: $(COMMON_HEADERS)
-
-
-# b) recipe rules
-
-$(OBJS): %.o: %.cpp
-	@echo ''
-	@echo 'Building target: $@'
-	$(CXX) -c $(all_cxxflags) $(CPPFLAGS) $<  -o $@ 
 
 
 #===============================================================================
