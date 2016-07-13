@@ -71,7 +71,7 @@ const int &ref621 = g(); // ref621 refers to TEMPORARY with value 9
 b4) A reference declared as extern does not require initialization: 
 extern const int &ref71; // Declaration at base.h
 const int &ref71 = 22;   // Definition at refs_lib.cpp
-std::cout << ref71;      // Use: at main.cpp
+std::cout << ref71;      // Use: at main.cpp => 22
 
 c) Invalid bindings
 

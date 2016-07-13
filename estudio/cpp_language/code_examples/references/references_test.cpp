@@ -208,10 +208,11 @@ a1) Reference to an object of the same type
   std::cout << "\nb4) A reference declared as extern does not require "
 	    << "initialization: "
 	    << "\nextern const int &ref71; // Declaration at base.h"
-  	    << "\nconst int &ref71 = 22"
-	    << ";   // Definition at refs_lib.cpp"
-	    << "\nstd::cout << ref71; " << "     // Use: at main.cpp"
+  	    << "\nconst int &ref71 = 22;   // Definition at refs_lib.cpp"
+	    << "\nstd::cout << ref71;      // Use: at main.cpp => "
+	    << ref71
 	    << std::endl;
+  
 
   
   

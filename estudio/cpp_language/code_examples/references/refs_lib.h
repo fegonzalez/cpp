@@ -13,8 +13,6 @@ class BaseClass;
 class DerivedClass;
 class Passbyref;
 
-
-
 //------------------------------------------------------------------------------
 // Testing references as functions parameters
 //------------------------------------------------------------------------------
@@ -133,7 +131,6 @@ void ptr_incr(int* &i);
 class Passbyref{
 
   class DummyData{};
-
   
  public:
   

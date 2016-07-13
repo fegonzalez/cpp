@@ -109,7 +109,7 @@ void nonconst_finput(int& param)
 */
 int& f_return_local_var()
 {
-  int  local_obj = 4;
+  int local_obj = 4;
   local_obj++;
   
   const std::string mynameis = "int& f_return_local_var()";
