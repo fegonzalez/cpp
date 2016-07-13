@@ -29,6 +29,15 @@
 # 2.11 Keywords
 # 2.12 Operators and punctuators
 # 2.13 literals
+#      2.13.1 Kinds of literals
+#      2.13.2 integer-literal
+#      2.13.3 character-literal
+#      2.13.4 floating-literal
+#      2.13.5 string-literal
+#      2.13.6 boolean-literal
+#      2.13.7 pointer-literal
+#      2.13.8 user-defined-literal
+
 
 # todo 3 Basic concepts
 #
@@ -43,8 +52,8 @@
 #
 # 3.9 Types
 #     3.9.1 Fundamental (built-in) types
-#           3.9.1.1 Integral types: boolean, characters, integers.
-#           3.9.1.2 Arithmetic types: integral types and floating-point types.
+#           3.9.1.1 Integral types
+#           3.9.1.2 Arithmetic types
 #           3.9.1.3 Scalar types
 #     3.9.2 Compound types
 #     3.9.3 CV-qualifiers
@@ -246,8 +255,13 @@
 
 Table Index
 
-2.13.1   Specifying the Type of a Literal  ([3_1] Table 2.2)
-3.9.1  	 C++ Arithmetic Types
+# 2.13.2   Types of integer literals
+# 2.13.3   Types of Character and Character String Literals
+# 2.13.4   Types of Floating-Point Literals
+# 2.13.15  Escape Sequences
+
+# 3.9.1	   C++ Arithmetic Types
+
 
 # ==============================================================================
 
@@ -616,77 +630,187 @@ WARNING reserved for future use:  export  register
 
 # 2.13 literals
 
-integer-literal
-character-literal
-floating-literal
-string-literal
-boolean-literal
-pointer-literal
-user-defined-literal
+# 2.13.1 Kinds of literals
+
+  integer-literal
+  character-literal
+  floating-literal
+  string-literal
+  boolean-literal
+  pointer-literal
+  user-defined-literal
+  
+
+NOTICE	
+We can override literal's default types by using a suffix.
+# i.e. 20L or 024L or 0x14L  // type long instead (default) type int 
 
 
-==================================================================
-  Table 2.13.1 Specifying the Type of a Literal ([3_1] Table 2.2)
-==================================================================
-          Character and Character String Literals
-Prefix  Meaning                         Type
-----------------------------------------------------------------
-u	Unicode 16 character   		char16_t
-U	Unicode 32 character   		char32_t
-L	wide character   		wchar_t   
-u8	utf-8 (string literals obly)	char
+# 2.13.2 integer-literal
 
-    Integer Literals            Floating-Point Literals
-Suffix     Minimum Type         Suffix     Type
-----------------------------------------------------------------
-u or U     unsigned		f or F     float
-l or L     long			l or L	   long double        
-ll or LL   long long 
-==================================================================
+  integer-literal:				(prefix)     (example)
+    binary-literal integer-suffixopt       	0b or 0B     0B10100
+    octal-literal integer-suffixopt		0     	     024
+    decimal-literal integer-suffixopt		none	     20
+    hexadecimal-literal integer-suffixopt	0x or 0X     0x14	 
+
+- By default, decimal literals are signed whereas octal and
+  hexadecimal literals can be either signed or unsigned types.
+
+- The type of an integer literal is the first (the smallest) of the
+  corresponding list in Table 2.13.2 in which its value can be represented:
 
 
+                   Table 2.13.2 Types of integer literals
+ ==============================================================================
+  Suffix        Decimal literal		  Binary, octal, or hexadecimal literal
+ ==============================================================================
+  none		int			  int
+  		long int		  unsigned int
+  		long long int		  long int
+		     	  		  unsigned long int
+		     	  		  long long int
+		     	  		  unsigned long long int 
+ ------------------------------------------------------------------------------
+  u or U	unsigned int		  unsigned int
+  		unsigned long int	  unsigned long int
+  		unsigned long long int	  unsigned long long int
+ ------------------------------------------------------------------------------
+  l or L	long int		  long int
+  		long long int	  	  unsigned long int
+		     	  		  long long int
+		     	  		  unsigned long long int 
+ ------------------------------------------------------------------------------
+  both u or U	unsigned long int	  unsigned long int
+  and l or L	unsigned long long int	  unsigned long long int
+ ------------------------------------------------------------------------------
+  ll or LL	long long int		  long long int
+  			  		  unsigned long long int
+ ------------------------------------------------------------------------------
+  both u or U    unsigned long long int   unsigned long long int
+  and ll or LL
+ ==============================================================================
 
-bool	     boolean				NA
-char         character		 	 	 8 bits
-wchar_t      wide character		 	16 bits
-char16_t     Unicode character		 	16 bits
-char32_t     Unicode character		 	32 bits
-short        short integer		 	16 bits
-int          integer		 	 	16 bits
-long         long integer		 	32 bits
-long long    long integer		 	64 bits
-float	     single-precision floating point	 6 significant digits
-double	     double-precision floating point	10 significant digits
-long double  extended-precision floating point	10 significant digits
+... thus:
+
+- A decimal literal has the smallest type of int, long, or long long
+  in which the literal’s value fits.
+
+- Octal and hexadecimal literals have the smallest type of int,
+  unsigned int, long, unsigned long, long long, or unsigned long long
+  in which the literal’s value fits.
+
+- It is an error (ill-formed program) to use a literal that is too
+  large to fit in the largest related type
+
+CONCLUSIONS 
+The type of an integer literal depends on its value and notation
+  # e.g. 12UL is of type unsigned long
+  notation: suffix UL => possible types are unsigned long or unsigned long long
+  value: 12 => unsigned long is the smallest type that can represent that value
+  
+
+# 2.13.3 character-literal
+
+  A character enclosed within single quotes is a literal of type char: i.e 'a'
+
+    Table 2.13.3 Types of Character and Character String Literals
+  ================================================================
+    Prefix (one of)     Meaning                       Type
+  ----------------------------------------------------------------
+	u		Unicode 16 character          char16_t
+    	U	  	Unicode 32 character   	      char32_t
+   	L	  	wide character   	      wchar_t   
+    	u8	  	utf-8 (string literals only)  char
+
+  # e.g. 'a' is of type char
+  # e.g. u'a' is of type char16_t
 
 
+# 2.13.4 floating-literal
 
-WARNING overleaf
-We can override the default use of literals using a suffix from Table 2.2
+- Floating-point literals include either a decimal point or an
+  exponent specified using scientific notation (e/E)
+  # e.g. 3.14159 3.14159E0 0. 0e0 .001
 
-# 2.13.5 String literals
+- The type of a floating literal is double unless explicitly specified
+  by a suffix :
+
+  Table 2.13.4 Types of Floating-Point Literals
+  =============================================
+	Suffix     Type
+  ---------------------------------------------
+	f or F     float
+	l or L     long double        
+  =============================================
+
+  
+# 2.13.5 string-literal
+
+- Zero or more characters enclosed in double quotation marks: i.e "Hello"
+
+- The default type of a string literal is array of constant chars. 
+  An optional prefix can be used to change the default type (Table 2.13.3)
+
+- The compiler appends a null character (’\0’) to every string literal:
+  size of "Hello" = 6 ('H' 'e' 'l' 'l' 'o' ’\0’)
+
+- Two string literals that appear adjacent to one another and that are
+  separated only by spaces, tabs, or newlines are concatenated into a
+  single literal (by the compiler - see 2.2 ).
+  # e.g. // multiline string literal
+  std::cout << "a really, really long string literal "
+  	       "that spans two lines" << std::endl;
+
+- Escape Sequences:
+
+                   Table 2.13.15 Escape Sequences
+ ==============================================================================
+    newline         \n    horizontal tab  \t    alert (bell)  \a
+    vertical tab    \v 	  backspace  	  \b 	double quote  \"
+    backslash 	    \\ 	  question mark   \?    single quote  \'
+    carriage return \r 	  formfeed 	  \f
+    octal number    \ooo  hex number      \xhhh
+ ==============================================================================
+
+  We use an escape sequence as if it were a single character.
+
+- Generalized escape sequences:
+
+    \x followed by ONE OR MORE hexadecimal digits, or
+    \ followed by ONE, TWO, or THREE octal digits.
+
+  The value represents the numerical value of the character. 
+  Some examples (assuming the Latin-1 character set):
+  \7 (bell)   \12 (newline)   \40 (blank)
+  \0 (null)   \115 ('M')      \x4d ('M')
 
 - Raw string literal: string-literal that has an R in the prefix:
-
   [ Example: The raw string
-
   R"a(
   )\
   a"
   )a"
-  
   is equivalent to "\n)\\\na\"\n".
 
-# 2.13.7 Pointer literals 
 
-nullptr
+# 2.13.6 boolean-literal
+
+  The Boolean literals are the keywords false and true. Such literals
+  are prvalues and have type bool.
+
+
+# 2.13.7 pointer-literal
+
+  nullptr
 
 [ Note: std::nullptr_t is a distinct type that is neither a pointer type nor a
 pointer to member type; rather, a prvalue of this type is a null pointer
 constant and can be converted to a null pointer value or null member pointer
 value. See 4.10 and 4.11. —end note ]
 
-2.13.8 User-defined literals
+
+2.13.8 user-defined-literal
 
    i.e. 123_km
 
@@ -703,17 +827,74 @@ value. See 4.10 and 4.11. —end note ]
 # 3 Basic concepts
 # ==============================================================================
 
+- Entity
+
+An entity is a value, object, reference, function, enumerator, type,
+class member, bit-field, template, template specialization, namespace,
+or parameter pack.
+
+
+- Name
+
+A name is a use of an identifier (2.10), operator-function-id (13.5),
+literal-operator-id (13.5.8), conversion-function-id (12.3.2), or
+template-id (14.2) that denotes an entity or label (6.6.4, 6.1).
+
+Every name that denotes an entity is introduced by a declaration.
+Every name that denotes a label is introduced either by a goto statement (6.6.4)
+or a labeled-statement (6.1).
+
+A name used in more than one translation unit can potentially refer to
+the same entity in these translation units depending on the linkage
+(3.5) of the name specified in each translation unit.
+
+
+- Variable
+
+A variable is introduced by the declaration of a reference other than
+a non-static data member or of an object. The variable’s name, if any,
+denotes the reference or object.
+
+
+- Object
+
+A region of memory that has a type. A variable is an object that has a name.
+
 
 # 3.1 Declarations and definitions
+
+To support separate compilation (2.1), C++ distinguishes between
+declarations and definitions.
+
+
+a) declaration
+
+- A promise that a name exists. NEEDED BY THE COMPILER.
+
+- A declaration makes a name known to the program. A file that wants
+  to use a name defined elsewhere includes a declaration for that name.
+
+- A variable declaration specifies the type and name of a variable.
+
+b) definition
+
+- A definition creates the associated entity to the name. NEEDED BY THE LINKER.
+
+- A definition is also a declaration (8.5)
+
+- NOTICE
+  In addition to specifying the name and type, a definition also ALLOCATES
+  STORAGE and may provide the variable with an initial value.
+  To obtain a declaration that is not also a definition, we add the
+  extern keyword and may not provide an explicit initializer [k3101]
+
+
+
+aki lo dejo    PRIMER's page 77 / 1399
 
 
 http://stackoverflow.com/questions/1410563/what-is-the-difference-between-a-definition-and-a-declaration
 
-
-
-- declaration: a promise that a name exists. Needed by the compiler.
-
-- definition: set an actual value to a name. Needed by the linker.
 
   # e.g. declararions
   extern int a;		// declares a
@@ -725,9 +906,10 @@ http://stackoverflow.com/questions/1410563/what-is-the-difference-between-a-defi
   using N::d; 		// declares d
 
   # e.g. definitions
-  int a;		// defines a 
-  extern const int c = 1; // defines c
-  int f(int x) { return x+a; } // defines f and x
+  int a;			// defines a 
+  extern const int c = 1; 	// defines c
+  int f(int x) { return x+a; } 	// defines f and x
+
 
 # 3.2 One-definition rule
 # 3.3 Scope
@@ -740,7 +922,7 @@ http://stackoverflow.com/questions/1410563/what-is-the-difference-between-a-defi
 
 # 3.4 Name lookup
 
-FACAT_1 In C++ , name lookup happens before type checking.
+FACAT_1 In C++, name lookup happens before type checking.
 
 
 # 3.9 Types
@@ -779,7 +961,7 @@ Because the number of bits varies, the largest (or smallest) value that a type
 can represent also varies (range = 2 ** num_bits)
 
 =======================================================================
-    	      Table 3.9.1. C++ Arithmetic Types
+    	      Table 3.9.1 C++ Arithmetic Types
 =======================================================================
 Type  	     Meaning				MINIMUM Size
 ----------------------------------------------------------------
@@ -855,16 +1037,6 @@ BEST_PRACTICE [3_1]
   enumeration types,
   pointer types, pointer to member types (3.9.2), std::nullptr_t,
   and cv-qualified versions of these types (3.9.3)
-
-
-
-
-aki lo dejo: primer 2.1.2. Type Conversions
-
-
-
-todo primer 2.1.2. Type Conversions
-todo primer 2.1.2. literals
 
 
 
@@ -1060,6 +1232,24 @@ d) Examples [k8503]:
   // is_trivial:         false // derivated from a non-trivial
   // is_standard_layout: false // same as derived_from_trivial
   // is_pod:             false // non-trivial, non-standard_layout
+
+
+
+# ==============================================================================
+# 4 Standard conversions
+# ==============================================================================
+
+    a) When we assign one arithmetic type to another [3_1] 2.1.2
+
+    bool b = 42;          // b is true
+    int i = b; 		  // i has value 1
+    i = 3.14; 		  // i has value 3 (truncated)
+    double pi = i; 	  // pi has value 3.0
+    unsigned char c = -3; // assuming 8-bit chars, c has value 253 (256 - 3%256)
+    //
+    // WARNING If we assign an out -of -range value to an object of
+    // signed type, the result is undefined. 
+    signed char c2 = 256; // assuming 8-bit chars, the value of c2 is undefined
 
 
 # ==============================================================================
@@ -4799,7 +4989,13 @@ Solution: declare the variable as 'extern' (in one or many header
 
   [k2] File naming - "file_naming"
 
-  [k11] multiple definitions of... linkage error - "linkage/multiple_definitions_error"
+  [k11] multiple definitions of... linkage error -
+  "linkage/multiple_definitions_error"
+
+
+# Chapter 3 Basic concepts - "./3_basic_concepts/declarations_and_definitions/"
+
+  [k3101] extern declaration - "./extern"
 
 
 # io_first_look  "./code_examples/io_first_look/"
@@ -4944,15 +5140,44 @@ pointer.
 <glvalue> type of the most derived object (for pointers and references)
 <prvalue> static type of the prvalue expression
 
+
 E
 
 - extern
  
-This keyword tells the compiler that and object (variable, function,
-..), declared in a header file, is defined somewhere else. So the
-compiler will not write the object definition in any of the object files
-that include the header, then avoiding 'multiple definitions' linkage
-error. [k5]
+This keyword tells the compiler that and object (variable, function, ..), 
+declared in a header file, is defined somewhere else. So the compiler will 
+not write the object definition in any of the object files that include 
+the header, then avoiding 'multiple definitions' linkage error. [k3101]
+
+Explanation: 
+
+If several header files define a variable with the same name, and
+two or more of them are included by any source files, then
+the LINKER will rise a "multiple definition error"
+
+Note.- If only one of the headers is been included, then no error will
+be raised, but the program is ill-formed.
+
+Solution: use <<extern>> to declare the variable in all the headers,
+	  and define the variable in only one source file.
+	  
+  [Example] [k3101]
+
+  // file a.h
+  int shared_var; // ill-formed: multiple definition (a.h and b.h)
+  extern int shared_var; // ok: extern declaration
+
+  // file b.h
+  int shared_var; // ill-formed: multiple definition (a.h and b.h)
+  extern int shared_var; // ok: extern declaration
+
+  // file a.cpp
+  #include "a.h"
+  int shared_var; // ok: definition in one and only one source file is required
+
+  // file b.cpp
+  #include "b.h"
 
 
 I

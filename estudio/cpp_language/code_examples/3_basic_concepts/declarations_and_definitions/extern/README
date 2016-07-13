@@ -1,0 +1,43 @@
+[k3101] test.- How to use "extern" in declarations.
+
+- extern
+ 
+This keyword tells the compiler that and object (variable, function, ..), 
+declared in a header file, is defined somewhere else. So the compiler will 
+not write the object definition in any of the object files that include 
+the header, then avoiding 'multiple definitions' linkage error. [k5]
+
+
+/******************************************************************************/
+/* Common files                                                               */
+/******************************************************************************/
+
+
+If several header files define a variable with the same name, and
+two or more of them are included by any source files, then
+the LINKER will rise a "multiple definition error"
+
+Note.- If only one of the headers is been included, then no error will
+be raised, but the program is ill-formed.
+
+Solution: use <<extern>> to declare the variable in all the headers,
+	  and define the variable in only one source file.
+	  
+[Example]
+
+// file a.h
+int shared_var; // ill-formed: multiple definition (a.h and b.h)
+extern int shared_var; // ok: extern declaration
+
+// file b.h
+int shared_var; // ill-formed: multiple definition (a.h and b.h)
+extern int shared_var; // ok: extern declaration
+
+// file a.cpp
+#include "a.h"
+int shared_var; // ok: definition in one and only one source file is required
+
+// file b.cpp
+#include "b.h"
+
+/******************************************************************************/

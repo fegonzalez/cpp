@@ -67,9 +67,8 @@ debug_mode := 1
 
 
 ## 2) Select project files & paths: VPATH, vpath, sources, objects, headers, ...
-
 #-- DO-CHANGE-HERE
-MAIN_FILE := main.cpp
+MAIN_FILE := 
 
 #project-particular variables
 
@@ -77,8 +76,8 @@ MAIN_FILE := main.cpp
 ## generic variables
 
 # Note.- variable naming explanation:
-# TEST_XXX: only for the main file of the modeule/application.
-# EXEC_XXX: only for unitary test files.
+# TEST_XXX: only for unitary test files.
+# EXEC_XXX: only for the main file of the module/application.
 # MODULE_XXX: only for the files that construct the module/application, thus
 #             all but test & exec.
 
@@ -111,24 +110,17 @@ TEST_EXECS := $(TEST_SOURCES:%.cpp=%)
 #
 #file expecific option values (MUST be set manually)
 #-- DO-CHANGE-HERE
-sales_item_test.input_options = <./data/add_item
-sales_item_test.run_options = 
-sales_item_test.runtest_output_options = 
-sales_item_test.successtest_output_options = > sales_item_test.OK
-sales_item_test.difftest_output_options = > sales_item_test.last_diff
-#
-avg_price_test.input_options = <./data/book_sales 
-avg_price_test.run_options = 
-avg_price_test.runtest_output_options = 
-avg_price_test.successtest_output_options = > avg_price_test.OK
-avg_price_test.difftest_output_options =  > avg_price_test.last_diff
-
+extern_test.input_options = 
+extern_test.run_options = 
+extern_test.runtest_output_options = 
+extern_test.successtest_output_options = > extern_test.OK
+extern_test.difftest_output_options = > extern_test.last_diff
 
 #header files & paths # i.e. HEADERS := a.h: b.h
 #-- DO-CHANGE-HERE:  
 INCLUDE_DIRECTORIES := $(srcdir)
 # i.e. INCLUDE_DIRECTORIES += $(srcdir)/header
-COMMON_HEADERS=Sales_item.h
+COMMON_HEADERS=
 #
 # Best Practice: allow 'make' to find files in directories other than 'srcdir'
 #
@@ -364,7 +356,8 @@ $(DIFF.TEST_TARGETS): diff.%: %
 # a) compilation
 #------------------
 
-$(OBJS): %.o: $(COMMON_HEADERS)
+a.o extern_test.o: a.h 
+b.o extern_test.o: b.h
 
 
 #------------------------------------------------------------------------
@@ -399,7 +392,6 @@ $(TEST_EXECS): %: %.o \
 	@echo ''
 	@echo 'Building target: $@'
 	$(CXX) $(LDFLAGS) -o $@ $^ $(LDLIBS)
-
 
 
 #===============================================================================
