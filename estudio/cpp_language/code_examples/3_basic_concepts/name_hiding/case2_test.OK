@@ -1,0 +1,5 @@
+
+(enum color hidden): color = 33.33
+
+(class clase hidden): void clase()
+

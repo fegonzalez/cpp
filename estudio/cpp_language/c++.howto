@@ -44,6 +44,20 @@
 # 3.1 Declarations and definitions
 # 3.2 One-definition rule
 # 3.3 Scope
+#     3.3.1 Declarative regions and scopes
+#     3.3.2 Point of declaration
+#     3.3.3 Block scope
+#     3.3.4 Function prototype scope
+#     3.3.5 Function scope
+#     3.3.6 Namespace scope
+#     	    3.3.6.1 (Translation unit) local scope or internal linkage
+#     	    3.3.6.2 Global scope & global names
+#     3.3.7 Class scope
+#     3.3.8 Enumeration scope [basic.scope.enum]
+# \todo 3.3.9 Template parameter scope
+#     3.3.10 Name hiding
+
+
 # 3.4 Name lookup
 # 3.5 Program and linkage
 # 3.6 Start and termination
@@ -538,7 +552,7 @@ My-def: Units created by the compiler to store the template-code actually
 	b.h: with template functions 4,5.6
 	main.cpp: uses 1 and 5
 	// compilation
-	The compiler ignores 2,3,4,6 and store 1 & 6 in a separate file "x".
+	The compiler ignores 2,3,4,6 and store 1 & 5 in a separate file "x".
 	The file "x" is an instantiation unit.
 	Then the compiler compiles "x".
 
@@ -583,7 +597,7 @@ My_note.- Here a brief explanation. Read [1_1] for details.
    C++ linker:
 
 9. a) Linkage is executed to resolve external references.
-   b) All such translator output is collected into image which contains
+   b) All such translator output is collected into an image which contains
       information needed for execution in its execution environment.
 
 
@@ -705,6 +719,7 @@ We can override literal's default types by using a suffix.
 
 CONCLUSIONS 
 The type of an integer literal depends on its value and notation
+  # e.g. 12   is of type int
   # e.g. 12UL is of type unsigned long
   notation: suffix UL => possible types are unsigned long or unsigned long long
   value: 12 => unsigned long is the smallest type that can represent that value
@@ -782,16 +797,16 @@ The type of an integer literal depends on its value and notation
 
   The value represents the numerical value of the character. 
   Some examples (assuming the Latin-1 character set):
-  \7 (bell)   \12 (newline)   \40 (blank)
-  \0 (null)   \115 ('M')      \x4d ('M')
+    \7 (bell)   \12 (newline)   \40 (blank)
+    \0 (null)   \115 ('M')      \x4d ('M')
 
 - Raw string literal: string-literal that has an R in the prefix:
   [ Example: The raw string
-  R"a(
-  )\
-  a"
-  )a"
-  is equivalent to "\n)\\\na\"\n".
+    R"a(
+    )\
+    a"
+    )a"
+    is equivalent to "\n)\\\na\"\n".
 
 
 # 2.13.6 boolean-literal
@@ -845,20 +860,22 @@ Every name that denotes a label is introduced either by a goto statement (6.6.4)
 or a labeled-statement (6.1).
 
 A name used in more than one translation unit can potentially refer to
-the same entity in these translation units depending on the linkage
-(3.5) of the name specified in each translation unit.
-
-
-- Variable
-
-A variable is introduced by the declaration of a reference other than
-a non-static data member or of an object. The variable’s name, if any,
-denotes the reference or object.
+the same entity in these translation units depending on the linkage (3.5)
+of the name specified in each translation unit.
 
 
 - Object
 
-A region of memory that has a type. A variable is an object that has a name.
+A region of memory that has a type.
+A variable is an object that has a name.
+
+
+- Variable
+
+A variable is an object that has a name.
+A variable is introduced by the declaration of a reference other than
+a non-static data member or of an object. The variable’s name, if any,
+denotes the reference or object.
 
 
 # 3.1 Declarations and definitions
@@ -867,18 +884,18 @@ To support separate compilation (2.1), C++ distinguishes between
 declarations and definitions.
 
 
-a) declaration
+a) declaration (name)
 
-- A promise that a name exists. NEEDED BY THE COMPILER.
+- A promise that a NAME exists. NEEDED BY THE COMPILER.
 
 - A declaration makes a name known to the program. A file that wants
   to use a name defined elsewhere includes a declaration for that name.
 
 - A variable declaration specifies the type and name of a variable.
 
-b) definition
+b) definition (entity)
 
-- A definition creates the associated entity to the name. NEEDED BY THE LINKER.
+- A definition creates the associated ENTITY to the name. NEEDED BY THE LINKER.
 
 - A definition is also a declaration (8.5)
 
@@ -887,14 +904,6 @@ b) definition
   STORAGE and may provide the variable with an initial value.
   To obtain a declaration that is not also a definition, we add the
   extern keyword and may not provide an explicit initializer [k3101]
-
-
-
-aki lo dejo    PRIMER's page 77 / 1399
-
-
-http://stackoverflow.com/questions/1410563/what-is-the-difference-between-a-definition-and-a-declaration
-
 
   # e.g. declararions
   extern int a;		// declares a
@@ -906,33 +915,331 @@ http://stackoverflow.com/questions/1410563/what-is-the-difference-between-a-defi
   using N::d; 		// declares d
 
   # e.g. definitions
-  int a;			// defines a 
+  int a;			// defines a
+  int a = 1;			// defines and initialices a
   extern const int c = 1; 	// defines c
   int f(int x) { return x+a; } 	// defines f and x
 
 
 # 3.2 One-definition rule
-# 3.3 Scope
+
+1) No translation unit shall contain more than one definition of any
+   variable, function, class type, enumeration type, or template."
+
+   Note.- an identifier can be declared as often as you want.
+      	  double f(int, double); // legal code: twice definition in a row
+      	  double f(int, double);
+   Note.- an identifier MUST be defined exactly once.
+
+2) An expression is POTENTIALLY EVALUATED unless it is an unevaluated
+   operand (Clause 5) or a subexpression thereof. The set of potential
+   results of an expression e is defined as follows: (read [1_1] for details)
+
+3) A variable x whose name appears as a potentially-evaluated
+   expression ex is ODR-USED by ex unless ... (read [1_1] for details)
+
+   My_note.- Informally "odr-used" means "bind, or memory location accessed"
+
+4) Inline vs non-inline definition
+
+   Every program shall contain exactly one definition of every
+   non-inline function or variable that is odr-used in that program.
+
+   An inline function shall be defined in every translation unit in
+   which it is odr-used.
+
+5) class definition:
+
+   Exactly one definition of a class is required in a translation unit if the 
+   class is used in a way that requires the class type to be complete.
+   # e.g. 
+   class A;
+   A a;      // definition required
+   A *a:     // definition not required
+
+6) There can be more than one definition of a class type (Clause 9),
+   enumeration type (7.2), ..., in a program 
+   
+   - provided that each definition appears in a different translation unit, and 
+
+   - provided the definitions satisfy the following requirements: ...
+     (read [1_1] for details)
+     
+
+# 3.3 Scope (name - declaration)
+
+# 3.3.1 Declarative regions and scopes
+
+- declarative region: every name is introduced in some portion of
+  program text called a declarative region.
+
+- scope: In general, each particular name is valid only within some
+  possibly discontiguous portion of program text called its scope.
+
+
+# 3.3.2 Point of declaration
+
+- The point of declaration for a name is immediately after its complete
+  declarator (Clause 8) and before its initializer (if any), (unless exceptions)
+
+
+# 3.3.3 Block scope
+
+1) A name declared in a block (6.3) is local to that block; it has block scope.
+   Its potential scope begins at its point of declaration (3.3.2) and ends at
+   the end of its block.
+   A variable declared at block scope is a local variable.
+
+2) The potential scope of a function parameter name (including one
+   appearing in a lambda-declarator) or of a function-local predefined
+   variable in a function definition (8.4) begins at its point of declaration.
+   [...]
+   A parameter name shall not be redeclared in the outermost block of
+   the function definition nor in the outermost block of any handler
+   associated with a function-try-block.
+
+3) The name declared in an exception-declaration is local to the handler
+   and shall not be redeclared in the outermost block of the handler.
+
+4) Names declared in the for-init-statement, for-range-declaration, if, while,
+   for, and switch statements are local to the if, while, for, or switch
+   statement (including the controlled statement)
+   and shall not be redeclared in a subsequent condition of that
+   statement nor in the outermost block (or, for the if statement, any
+   of the outermost blocks) of the controlled statement; see 6.4.
+
+
+# 3.3.4 Function prototype scope
+
+In a function declaration, ...., names of parameters (if supplied)
+have function prototype scope.
+
+
+# 3.3.5 Function scope
+
+Labels (6.1) have function scope and may be used anywhere in the
+function in which they are declared. Only labels have function scope.
+
+
+# 3.3.6 Namespace scope
+
+Declarations within the namescape body has namespace scope.
+
+Its potential scope begins at its point of declaration and ends at the
+end of the namespace.
+
+
+[ Example: [k3306]
+
+    namespace N
+    {
+	int i;
+	int g(int a) { return a; }
+	int j();
+	void q();
+
+  	int get_j = j(); // ok: j() already declared (and defined later)
+
+  	int get_h = h(); // error: h() not declared yet, the point of
+		    	 // declaration of h() is after this statement
+    }
+
+    //unnamed namespace
+    // the potential scope of l is from its point of declaration
+    // to the end of the translation unit => unit-local scope
+    namespace { int l=1; }
+
+    namespace N
+    {
+	int g(char a)	// overloads N::g(int)
+	{ 
+    	  return l+a;	// l is from unnamed namespace
+    	}
+
+    	int i;		// error: duplicate definition
+    	int j(); 	// OK: duplicate function declaration
+
+    	int j()  	// OK: definition of N::j()
+    	{ 
+      	  return g(i);	// calls N::g(int)
+    	}
+    
+	int q();	// error: different return type
+
+  	int h() {return 77;}  // declaration of h()
+  	int get_h = h();      // Here: ok: h() declared and defined
+
+	
+    } //eof namespace N
+
+—end example ]
+
+
+# 3.3.6.1 (Translation unit) local scope or internal linkage
+
+Every member of every unnamed namespace in a translation unit has local scope.
+Thus its potential scope is from its point of declaration to the end of the
+translation unit.
+
+
+# 3.3.6.2 Global scope & global names
+
+- The outermost declarative region of a translation unit is also a
+  namespace, called the global namespace.
+
+- A name declared in the global namespace has global namespace scope
+  (also called global scope).
+
+- The potential scope of such a name begins at its point of declaration (3.3.2)
+  and ends at the end of the translation unit that is its declarative region.
+
+WARNING
+All the global variables (names), belongs to the same translation unit
+=> multiple definitions of the same name in different source files is
+equivalent to multiple declarations of the same variable => linkage error.
+
+  # e.g. 
+  //file a.cpp
+  int name1=7;
+  //file b.cpp
+  int name1=7;  // compilation error: multiple definitions of `name1'
+
+
+
+- A name with global namespace scope is said to be a global name.
+
+a) Naming the global namespace "::" 
+
+  # e.g. [k33062a]
+  int c = 0; // global variable ::c  
+  int main()
+  {
+   int c = 1; //local variable c
+   assert(c==1);
+   assert(::c==0);
+   ...
+  }
+
+
+
+# 3.3.7 Class scope
+
+1) The following rules describe the scope of names declared in classes.
+
+   ...
+
+   2) A name N used in a class S shall refer to the same declaration
+      in its context and when re-evaluated in the completed scope of
+      S. No diagnostic is required for a violation of this rule.
+
+   ...
+
+
+   [ Example: [k3307]
+
+   typedef int c;
+   enum { i = 1 };
+   class X 
+   {
+	char v[i];			// error (violates rule 2)
+	     				// i refers to ::i
+	     				// but when reevaluated is X::i
+
+	int f() { return sizeof(c); }	// OK: X::c
+	char c;
+	enum { i = 2 };			// error: changes meaning of ‘i’
+		     			// from ‘<anonymous enum> i’
+   };
+
+   typedef char* T;
+   struct Y 
+   {
+	T a;				// error (rule 2): T refers to ::T
+	  				// but when reevaluated is Y::T
+	typedef long T;
+	T b;
+   };
+
+   typedef int I;
+   class D 
+   {
+	typedef I I;			// error, even though no reordering 
+		  			// involved
+					// error: changes meaning of ‘I’ 
+					// from ‘typedef int I’
+   };
+   —end example ]
+
+
+# 3.3.8 Enumeration scope
+
+The name of a scoped enumerator (7.2) has enumeration scope. Its
+potential scope begins at its point of declaration and terminates at
+the end of the enum-specifier.
+
+
+#!\todo  3.3.9 Template parameter scope
+
+
+# 3.3.10 Name hiding
+
+2) A class name (9.1) or enumeration name (7.2) can be hidden by the
+   name of a variable, data member, function, or enumerator declared
+   in the same scope. The declaration order doesn't matters. [k3310]
+
+... 
+
+5) If a name is in scope and is not hidden it is said to be visible.
+
+
+My_note: A name can be hidden by a new declaration with the same name:
+  # e.g. [k3310]
+  int b;
+  int a=1;		// (a_1)
+  void f()
+  {
+      int a=2;		// (a_2) the other 'a' is hidden inside the function f()
+      b = a;   	  	// Here: b = (a_2) == 2
+      assert(b==2);
+  }			// (a_1) is visible again
+  int main()
+  {  
+     b = a; 		// Here: b = (a_1) == 1
+     assert(b==1);
+     f();
+  }
+  
+
+
 # 3.4 Name lookup
+
+The process by which the use of a name is matched to its declaration.
+
+FACT_1 In C++, name lookup happens before type checking.
+
+
+aki lo dejo 1   STANDARD
+
+aki lo dejo 2   (after standard 3.8 finished) PRIMER's page 77 / 1399
+
+
+
+
 # 3.5 Program and linkage
 # 3.6 Start and termination
 # 3.7 Storage duration
 # 3.8 Object lifetime
 
 
-# 3.4 Name lookup
-
-FACAT_1 In C++, name lookup happens before type checking.
-
 
 # 3.9 Types
 
-FACT_1 Each variable in C++ has a type.
+FACT_2 Each variable in C++ has a type.
 
-FACT_2 In C++, the type of an object determines what operations can be
+FACT_3 In C++, the type of an object determines what operations can be
        performed on it.
 
-FACT_3 C++ is a statically typed language; type checking is done at compile time
+FACT_4 C++ is a statically typed language; type checking is done at compile time
  
 
 - Built-in types: default types provided by C++.
@@ -979,7 +1286,7 @@ double	     double-precision floating point	10 significant digits
 long double  extended-precision floating point	10 significant digits
 =======================================================================
 
-FACT_4 char is the same size as a single machine byte (1.7.1)
+FACT_5 char is the same size as a single machine byte (1.7.1)
 
 NOTICE
 The language guarantees that an int will be at least as large as short,
@@ -4993,9 +5300,12 @@ Solution: declare the variable as 'extern' (in one or many header
   "linkage/multiple_definitions_error"
 
 
-# Chapter 3 Basic concepts - "./3_basic_concepts/declarations_and_definitions/"
+# Chapter 3 Basic concepts - "./3_basic_concepts/"
 
-  [k3101] extern declaration - "./extern"
+  [k3101] extern declaration - "./declarations_and_definitions/extern"
+  [k3306] class scope - "./scope/namespace_scope_test.cpp"
+  [k33062a] global scope - "./scope/global_namespace_name_test.cpp"
+  [k3310] name hiding - "./name_hiding"  
 
 
 # io_first_look  "./code_examples/io_first_look/"
@@ -5204,6 +5514,11 @@ state of the class.  Mutable members of const classes are modifiable.
 
 N
 
+- name lookup 
+
+Process by which the use of a name is matched to its declaration.
+
+
 - The “Named Constructor Idiom”?
 
 Technique that provides more intuitive and/or safer construction
@@ -5273,6 +5588,14 @@ without considering execution semantics
 [ Note: The static type of an expression depends only on the form of
 the program in which the expression appears, and does not change while
 the program is executing. —end note ]
+
+
+T
+
+- type checking 
+
+Term used to describe the process by which the compiler verifies that the way 
+objects of a given type are used is consistent with the definition of that type.
 
 
 U

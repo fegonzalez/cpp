@@ -1,0 +1,5 @@
+
+BEGIN namespace_scope_test
+N::get_j: 60
+N::get_h: 77
+
