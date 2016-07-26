@@ -56,8 +56,7 @@
 #     3.3.8 Enumeration scope [basic.scope.enum]
 # \todo 3.3.9 Template parameter scope
 #     3.3.10 Name hiding
-
-
+#
 # 3.4 Name lookup
 # 3.5 Program and linkage
 # 3.6 Start and termination
@@ -94,6 +93,10 @@
 
 # todo 7 Declarations
 #
+# todo 7.1 Specifiers
+#     7.1.1 Storage class specifiers
+#     	    7.1.1.1 extern (Appendix T)
+
 
 
 # todo 8 Declarators
@@ -1183,6 +1186,21 @@ the end of the enum-specifier.
 
 # 3.3.10 Name hiding
 
+My_note: A name can be hidden by a new declaration with the same name.
+
+My_note: A name can be hidden by a new declaration in an inner scope
+	 (see example just bellow), or can be hidden while it is in scope
+	 (see example [k3310] at 5 later).
+  
+  # e.g. name hiding in an inner scope
+  int i = 33;
+  {
+   double i =2.8;  // ok: hiding 'int i' in this block
+   std::cout << i; 	   // prints '2.8'
+  }
+  std::cout << i; 	   // 'int i' is visible again; prints '33'
+
+
 2) A class name (9.1) or enumeration name (7.2) can be hidden by the
    name of a variable, data member, function, or enumerator declared
    in the same scope. The declaration order doesn't matters. [k3310]
@@ -1191,8 +1209,6 @@ the end of the enum-specifier.
 
 5) If a name is in scope and is not hidden it is said to be visible.
 
-
-My_note: A name can be hidden by a new declaration with the same name:
   # e.g. [k3310]
   int b;
   int a=1;		// (a_1)
@@ -1210,17 +1226,60 @@ My_note: A name can be hidden by a new declaration with the same name:
   }
   
 
-
 # 3.4 Name lookup
 
-The process by which the use of a name is matched to its declaration.
+1) The process by which the use of a name is matched to its declaration.
 
-FACT_1 In C++, name lookup happens before type checking.
+- Name lookup shall find an unambiguous declaration for the name.
 
+- Name lookup may associate more than one declaration with a name if
+  it finds the name to be a function name; the declarations are said
+  to form a set of overloaded functions (13.1).
+
+- Expression processing steps:
+  a) name lookup, 
+  b) (after a success): overload resolution
+  c) (after b success): access rules (public, protected, ...)
+  d) (after c success): process the name in the expression.
+
+
+3.4.1 Unqualified name (Appendix T) lookup
+
+1) Name lookup ends as soon as a declaration is found for the name. 
+   If no declaration is found, the program is ill-formed.
+
+   [ Example: [k3402]
+   namespace M 
+   {
+	class B { };
+   }
+   namespace N 
+   {
+	class Y : public M::B 
+	{
+		class X {
+		      int a = i;
+		};
+	};
+   }
+   // The following scopes are searched for a declaration of i:
+   // 1) scope of class N::Y::X, before the use of i (see my_note_1 bellow)
+   // 2) scope of class N::Y, before the definition of N::Y::X
+   // 3) scope of N::Y’s base class M::B
+   // 4) scope of namespace N, before the definition of N::Y
+   // 5) global scope, before the definition of N
+   //
+   // my_note_1.- 'i' can be declared AFTER it is used, but then 'a'
+   // will be default-init, instead of initialised with the value of 'i' ([k3402])
+
+
+3.4.2 Argument-dependent name lookup
 
 aki lo dejo 1   STANDARD
 
 aki lo dejo 2   (after standard 3.8 finished) PRIMER's page 77 / 1399
+
+
 
 
 
@@ -1580,6 +1639,67 @@ WARNING Entering an End-of-File from the Keyboard:
 	Unix: control-d
 	Win:  control-z
 
+
+
+
+# ==============================================================================
+# 7 Declarations
+# ==============================================================================
+
+#
+# 7.1 Specifiers
+
+# 7.1.1 Storage class specifiers
+
+1) The storage class specifiers are
+
+   extern
+   static
+   thread_local
+   mutable
+
+
+# 7.1.1.1 extern (Appendix T)
+
+- The extern specifier can be applied only to the names of variables and functions. 
+
+WARNING 
+The extern specifier cannot be used in the declaration of class members 
+or function parameters.
+  # e.g. 
+  class X
+  {
+   extern int i;  // error: storage class specified for ‘i’
+   int i;     	  // ok	  
+   int a = i;
+  };
+
+- For the linkage of a name declared with an extern specifier, see 3.5.
+
+- The name of a declared but undefined class can be used in an extern
+  declaration. Such a declaration can only be used in ways that do not
+  require a complete class type. 
+  [ Example:
+  struct S;
+  extern S a;
+  extern S f();
+  extern void g(S);
+  void h() 
+  {
+   g(a); // error: S is incomplete
+   f(); // error: S is incomplete
+  }
+  —end example ]
+
+
+# todo 7.1.2 Function specifiers
+
+1) Function-specifiers can be used only in function declarations.
+
+   function-specifier:
+	inline
+	virtual
+	explicit
 
 
 # ==============================================================================
@@ -5302,10 +5422,17 @@ Solution: declare the variable as 'extern' (in one or many header
 
 # Chapter 3 Basic concepts - "./3_basic_concepts/"
 
-  [k3101] extern declaration - "./declarations_and_definitions/extern"
-  [k3306] class scope - "./scope/namespace_scope_test.cpp"
-  [k33062a] global scope - "./scope/global_namespace_name_test.cpp"
+  [k3101] extern declaration - "./3_1_declarations_and_definitions/extern"
+
+  3.3 scope test - "./3_basic_concepts/3_3_scope/"
+  
+  [k3306] class scope - "./namespace_scope_test.cpp"
+  [k33062a] global scope - "./global_namespace_name_test.cpp"
   [k3310] name hiding - "./name_hiding"  
+
+  3.4 Name lookup - "./3_basic_concepts/3_4_name_lookup/"
+
+  [k3401] Unqualified name lookup - ./3_4_name_lookup/
 
 
 # io_first_look  "./code_examples/io_first_look/"
@@ -5622,6 +5749,12 @@ depends on the implementation.
 [ Note: The implementation is not required to document which behavior
 occurs. The range of possible behaviors is usually delineated by this
 International Standard. —end note ]
+
+
+- Unqualified name
+
+A qualified name is one that specifies a scope; i.e. "std::cout"
+An unqualified name is one that doesn't; i.e "cout"
 
 
 W
