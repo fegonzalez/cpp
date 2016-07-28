@@ -4,3 +4,6 @@ Unqualified_name_lookup::test_point_3::N::A::g::i = 33
 Unqualified_name_lookup::test_point_3::N::f = 66
 Unqualified_name_lookup::test_point_7_4::N::Y::X::a = 3
 
+ value = 1
+ value = c
+ value = 16.8
