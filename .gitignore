@@ -13,7 +13,8 @@
 # html
 *_files/*
 
-
+#links
+estudio/cpp_language/doc_references/emacs_howtos
 
 # videos
 *.mp4
@@ -36,4 +37,5 @@ estudio/cpp_language/doc_references/standard.pdf
 estudio/cpp_language/doc_references/primer/*
 
 #code
+
 
