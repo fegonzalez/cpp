@@ -15,6 +15,8 @@
 
 #links
 estudio/cpp_language/emacs_howtos
+estudio/cpp_language/doc_references/libros_local
+
 
 # videos
 *.mp4
@@ -23,6 +25,8 @@ estudio/cpp_language/emacs_howtos
 # c++ stuff
 *.o
 a.out
+*.last_diff
+
 
 #saves
 save_old_estudio/*
