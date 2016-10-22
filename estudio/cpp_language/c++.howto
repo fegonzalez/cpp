@@ -76,7 +76,7 @@
 #           3.9.1.1 Integral types
 #           3.9.1.2 Arithmetic types
 #           3.9.1.3 Scalar types
-#     3.9.2 Compound types
+# \todo    3.9.2 Compound types
 #     3.9.3 CV-qualifiers
 #     3.9.4 Types not defined in the standard
 #           3.9.4.1 TrivialType
@@ -884,9 +884,11 @@ A variable is an object that has a name.
 - Variable
 
 A variable is an object that has a name.
+
 A variable is introduced by the declaration of a reference other than
-a non-static data member or of an object. The variable’s name, if any,
-denotes the reference or object.
+a non-static data member, or by the declaration of an object.
+
+The variable’s name, if any, denotes the reference or object.
 
 
 # 3.1 Declarations and definitions
@@ -1689,6 +1691,7 @@ BEST_PRACTICE [3_1]
 
 # 3.9.2 Compound types
 
+\todo
 
 # 3.9.3 CV-qualifiers
 
@@ -1746,6 +1749,8 @@ program might contain a variable updated by the system clock.)
 
 # b) const Qualifier
 
+
+# c) const volatile Qualifier
 
 
 # ------------------------------------------------------------------------------

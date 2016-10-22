@@ -1,1 +1,3 @@
-C++ notes
+- C++ notes
+
+- ANSI C notes
