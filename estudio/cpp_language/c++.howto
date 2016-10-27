@@ -242,7 +242,8 @@
 # B.1 memory analysis - valgrind 
 
 
-# Appendix D - Compilation, Linkage, ...
+
+# Appendix C - Compilation, Linkage, ...
 #
 # C.0. Compiling and Executing Our Program
 # C.1. 'gcc' versus 'g++'  Compilation
@@ -251,6 +252,11 @@
 # C.4. Compilation options
 # C.5. Linkage
 # C.6. C++11 compilation options  [6]
+
+
+# Appendix I - Undocumented Issues
+#
+# I.1 Local static variables are shared
 
 
 # Appendix K - Code examples (./code_examples)
@@ -5693,6 +5699,30 @@ Solution: declare the variable as 'extern' (in one or many header
 
 
 # ==============================================================================
+# Appendix I - Undocumented Issues
+# ==============================================================================
+
+# 1) Local static variables are shared by all the objects
+
+  FACT: They are just like "class variables", but with local scope
+  	 (scope = the function they are defined)
+
+  
+  [ Example:  Example
+
+  class Dummy_Static
+  {
+     void f_with_local_static() 
+     {
+       static int local_static_var= 0; //!\warning  SHARED by all the objects
+     }
+  };
+
+  —end example ]
+  
+
+
+# ==============================================================================
 # Appendix K - Code examples (./code_examples)
 # ==============================================================================
 
@@ -5763,13 +5793,19 @@ Solution: declare the variable as 'extern' (in one or many header
   [k1101] virtual_vs_nonvirtual_test - virtual_vs_nonvirtual_test.cpp
 
 
-# initializers "./code_examples//initializers"
+# initializers - "./code_examples//initializers"
 
   [k8501] cpp98 vs cpp11 init - "./cpp98" &  "./cpp11"
 
   [k8502] aggregates - "./aggregates/aggregates_test.cpp"
 
   [k8503] pods - "./aggregates/pods/pod_test.cpp"
+
+
+
+# Appendix I - Undocumented Issues - "./code_examples/issues"
+
+  [KI001]  static issues- "./static"
 
 
 # ==============================================================================
