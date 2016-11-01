@@ -29,7 +29,9 @@
 #include <cassert>
 
 
+/***************************************************************************/
 /*!\test The "Implicit conversion" situation */
+/***************************************************************************/
 class Date
 {
  public:
@@ -54,7 +56,9 @@ private:
 };
 
 
+/***************************************************************************/
 /*!\test WARNING Only One Class-Type Conversion Is Allowed by the compiler */
+/***************************************************************************/
 
 class Counter
 {
@@ -67,15 +71,29 @@ class Counter
   /* implicit conversion - access: Counter - string */
   Counter(std::string s):the_count(s.size())  // implicit conversion
   {
-    std::cout << "\n(implicit) Counter(std::string s)" << std::endl;
+    std::cout << "\nINSIDE: (implicit) Counter(std::string s)" << std::flush;
   }
 
   operator std::string()
   {
-    std::cout << "operator string()\n";
+    std::cout << "\nINSIDE: operator string()" << std::flush;
     return "Counter2string";
   }
 
+  Counter(const Counter &src)
+  {
+    std::cout << "\nINSIDE: Counter copy ctor" << std::flush;
+    the_count = src.the_count;
+  }
+
+  Counter & operator=(const Counter &src)
+  {
+    std::cout << "\nINSIDE: Counter operator=" << std::flush;
+    the_count = src.the_count;
+    return *this;
+  }
+
+  
   /* explicit construction - access : Counter - int */
   // explicit Counter(int count):the_count(count)
   // {
@@ -96,7 +114,11 @@ class Counter
   void reset() { the_count = 0;}
 
 
-  void set(const Counter& src) { the_count = src.the_count;}
+  void set(const Counter& src)
+  {
+    std::cout << "\nINSIDE: void set(const Counter& src)" << std::flush;
+    the_count = src.the_count;
+  }
 
 
   /*!\test implicit conversion of a non-const reference.
@@ -106,7 +128,11 @@ class Counter
     error: "no known conversion"
 
   */
-  void copyme(Counter& src) { src.the_count = the_count;}
+  void set_nonconst(Counter& src)
+  {
+    std::cout << "\nINSIDE: void set_nonconst(Counter& src)"<< std::flush;
+    src.the_count = the_count;
+  }
 
   
   
@@ -137,19 +163,76 @@ int main()
   std::clog << d3.time() << std::endl;
 
 
+  /*!\test Implicit conversion operators */
   
+  std::string s1 = "I am a literal";
+
+  std::cout << std::endl;
+  std::cout << "\nCounter c1(s1);";
+  Counter c1(s1);  // ok: implicit conversion (conversor operator)
+
+  std::cout << std::endl;
+  std::cout << "\nCounter c3 = s1;";
+  Counter c3 = s1;  // ok: (implicit constructor)
+
+  std::cout << std::endl;
+  std::cout << "\nCounter c4 = c3";
+  Counter c4 = c3;  // ok: (copy constructor)
+
+  std::cout << std::endl;
+  std::cout << "\nc4 = c3";
+  c4 = c3;     	    // ok: (operator=)
+
+	
   /*!\test WARNING Only One Class-Type Conversion Is Allowed by the compiler */
-  std::string s1 = "I am s1";
-  Counter c1(s1);  // ok: implicit conversion
-  std::cout << c1.count() << std::endl;
-  Counter c2 = s1; // ok: implicit conversion
-  std::cout << c2.count() << std::endl;
+	       
+  /*  a) Functions that require a string can accept a literal => one
+      conversion (literal to string)
 
-  c1.set(c2); // ok: explicit call
-  std::cout << c1.count() << std::endl;
+      i) Conversion from literal to a (temporary) string
+      ii) Calling Counter(std::string s)
+  */
 
-  c1.set(s1); // ok: implicit conversion
-  std::cout << c1.count() << std::endl;
+  std::cout << std::endl;
+  std::cout << "\nCounter c2(\"I am a literal\")";
+  Counter c2("I am a literal");  // ok: implicit conversion (implicit constructor)
+
+
+  /* b) Functions that require a Counter can accept a string => 
+     => one conversion: string to Counter
+
+     i) Calling Counter(std::string s) to create a temporary Counter
+     ii) Calling the function with the temporary Counter
+  */
+
+  std::cout << std::endl;
+  std::cout << "\nc1.set(s1);";
+  c1.set(s1);            // ok: implicit conversion
+
+
+
+  std::cout << std::endl;
+
+  
+  /*
+    c) Functions that require a Counter cannot accept a literal =>
+    => two conversion: literal to (temporary) string to Counter
+  */
+
+  //  c4 = "I am a literal"; // error: no match for ‘operator=’ (operand types
+                             // are ‘Counter’ and ‘const char [15]’)
+                             // (calling operator=(Counter &) )
+  
+  //  Counter c5 = "I am a";     // error: conversion from ‘const char [8]’
+                             // to non-scalar type ‘Counter’ requested
+                             // (calling the copy constructor)
+
+  	
+  /*!\test WARNING The compiler can not perform an implicit conversion
+    for a non-const reference because it can't be temporary, (it has
+    no sense):
+  */
+  
 
   // error: no constructor exists to convert a "const char*" to a Counter.
   //
@@ -160,21 +243,24 @@ int main()
 
   std::cout << "\ntest explicit use of a non-const reference."
 	    << std::endl;
-  c2.reset();
-  std::cout << c2.count() << std::endl;
-  c1.copyme(c2);
-  std::cout << c2.count() << std::endl;
+  c3.reset();
+  std::cout << c3.count();
+  c1.set_nonconst(c3);
+  std::cout << std::endl << c3.count();
+  std::cout << std::endl;
 
-
+  std::cout << std::endl;
   std::cout << "\ntest implicit conversion of a non-const reference:"
-	    << "\nc1.copyme(string); // error: no known conversion from "
-	    << "'string' to Counter&"
-	    << std::endl;
-  /* c1.copyme(s1); */
+  	    << "\nc1.set_nonconst(string); // error: no known conversion from "
+  	    << "'string' to Counter&"
+  	    << std::endl;
+  //  c1.set_nonconst(s1);
 
+  //!\test operator string
+  std::cout << std::endl;
   s1 = c1;
   std::cout << "s1; " << s1 << std::endl;
-
-  
+  std::cout << std::endl;
+    
   return 0;
 }

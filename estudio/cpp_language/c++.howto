@@ -210,7 +210,26 @@
 #
 # 13.6 Built-in operators
 
-# todo 14 Templates
+
+# doing 14 Templates
+#
+# 14.1 Class Templates
+#      14.1.1 Declaring a Class Template
+#      	    14.1.1.1 Instantiation and Specialization
+#      	    14.1.1.1 Template Arguments
+#      	    14.1.1.1 Default Type Arguments
+#      14.1.2 Template Specializations
+#      14.1.3 Partial Specializations and Explicit Specializations
+#      	    14.1.3.1 Explicit Specializations of a Class Template
+#
+# 14.2 Function Templates
+#      14.2.1 Overloading and Partial Specialization
+#
+# 14.3 Member Templates
+#      14.3.1 Templates and Inplicit Conversions
+#
+# 14.4 Exported Templates
+
 
 # todo 15 Exception handling
 
@@ -4122,7 +4141,7 @@ iii) Classes with some virtual base class (Virtual inheritance) [4_10_1]
 
   i) Those that take multiple arguments.
 
-  ii) Implicit conversion operators (converting constructors [4_7_5]):
+  ii) Implicit conversion operators (converting constructors [4_7_5]) [k6]:
 
      A non explicit constructor that take a single argument and
      thus operate as conversion operator from the constructor’s
@@ -4133,30 +4152,78 @@ iii) Classes with some virtual base class (Virtual inheritance) [4_10_1]
         # (e.g.)  [k6]
         class Counter {
  	public:
-  	  Counter(std::string s);  // implicit conversion
-	  operator std::string();  // implicit operator 
+  	  Counter(std::string s);       // implicit conversion
+  	  Counter(const Counter &src);
+	  Counter & operator=(const Counter &src);
+	  operator std::string();  	// implicit operator 
+	  void set(const Counter& src);
         };
 
 	std::string s1 = "I am s1";
-  	Counter c1(s1);  // ok: implicit conversion
-	Counter c2 = s1; // ok: implicit conversion
-	s1 = c1;         // ok: implicitly calls Counter::operator string()
+  	Counter c1(s1);        // ok: (implicit constructor)
+	Counter c2("I am");    // ok: (implicit constructor)
+	Counter c3 = s1;       // ok: (implicit constructor)
+	Counter c4 = c3;       // ok: (copy constructor)
+	c4 = c3;     	       // ok: (operator=)
+        c4 = "I am a literal"; // error: no match for ‘operator=’
+	     	   	       // (calling operator=(Counter &) )
+	Counter c5 = "I am";   // error: conversion from ‘const char [8]’
+ 			       // to non-scalar type ‘Counter’ requested
+			       // (calling the copy constructor)
 
 
-     	WARNING Only One Class-Type Conversion Is Allowed by the compiler:
-		// error: requires two user-defined conversions:
-		// (1) convert "a literal" to a string
-		// (2) convert that (temporary) string to Counter
-	void set(const Counter& src);
-     	c1.set(s1);          // ok: implicit conversion
-	c1.set("a literal"); // error: no known conversion
+    WARNING 
+    Only One Class-Type conversion Is Allowed by the compiler [k6]
+
+    [ Example:
+
+    a) Functions that require a string can accept a literal => one
+       conversion (literal to string)
+
+       i) Conversion from literal to a (temporary) string
+       ii) Calling Counter(std::string s)
+
+       Counter c2("I am a literal"); 
 
 
-	WARNING
-	The compiler can not perform an implicit conversion for a
-	non-const reference because it can't be temporary, (it has no sense):
-	void copyme(Counter& src);
-	c1.copyme(s1); // error: no known conversion from "string" to Counter&
+    b) Functions that require a Counter can accept a string => 
+       => one conversion: string to Counter
+
+       i) Calling Counter(std::string s) to create a temporary Counter
+       ii) Calling the function with the temporary Counter
+
+       c1.set(s1);            // ok: implicit conversion
+
+
+   c) Functions that require a Counter cannot accept a literal =>
+       => two conversion: literal to (temporary) string to Counter
+       
+        c4 = "I am a literal"; // calling operator=(Counter &)
+	     	   	       //
+			       // error: no match for ‘operator=’ (operand 
+                               // types are ‘Counter’ and ‘const char [15]’)
+
+        Counter c5 = "I am a"; // calling copy ctor.
+		     	       //
+			       // error: conversion from ‘const char [8]’
+			       // to non-scalar type ‘Counter’ requested
+
+
+	c1.set("a literal");   // error: no known conversion
+ 
+    —end example ]
+
+
+
+    WARNING 
+    The compiler can not perform an implicit conversion for a non-const 
+    reference because it can't be temporary, (it has no sense) [k6]:
+
+    [ Example:
+        void set_nonconst(Counter& src); 
+    	c1.set_nonconst(s1); // error: no known conversion from "string" to Counter&
+    —end example ]
+  
 
 
      - The "Implicit conversion" situation [k6]: 
@@ -5096,6 +5163,56 @@ extern "C" void operator "" _m(long double); // error: C language linkage
 
 
 # ==============================================================================
+# 14 Templates
+# ==============================================================================
+
+# 14.1 Class Templates [k1401]
+
+# 14.1.1 Declaring a Class Template
+
+
+1)  template <template_parameter_list> class class_name;
+
+  [ Example: [k1401]
+
+  template <class T> class Vector;  //declaration
+
+
+  template <class T> class Vector  //definition
+  {
+   private:
+
+   size_t sz;
+   T * buff;
+
+   public:
+   explicit Vector<T>(size_t s=100);
+   ...
+   
+  }  
+
+  —end example ]
+  
+
+2) Member functions can be defined outside the class body, following the class
+   definition (same file)
+
+  [ Example: [k1401]
+
+  template <class T>
+  Vector<T>::Vector<T>(size_t s): sz(s), buff(new T[s])
+  {}
+
+  —end example ]
+
+
+
+# 14.1.1.1 Instantiation and Specialization
+
+
+
+
+# ==============================================================================
 # 16 Preprocessing directives
 # ==============================================================================
 
@@ -5800,6 +5917,11 @@ Solution: declare the variable as 'extern' (in one or many header
   [k8502] aggregates - "./aggregates/aggregates_test.cpp"
 
   [k8503] pods - "./aggregates/pods/pod_test.cpp"
+
+
+# templates - "./code_examples/14_templates"
+
+  [k1401] class template example - "./class_template"
 
 
 
