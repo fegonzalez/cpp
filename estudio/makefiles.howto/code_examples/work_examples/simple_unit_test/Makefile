@@ -75,7 +75,13 @@ OBJS := $(SOURCES:%.cpp=%.o)
 # EXEC_OPTIONS: execution options
 #
 # case: default execution
-EXEC := #futfill with the test source name
+# futfill with the test source name
+#
+#\error "Text file busy" msg. error after executing make is due to this:
+# EXEC := main # write some comment here cause the "Text file busy ..." error
+# ... instead of this:
+# EXEC := main
+EXEC := main
 EXEC_OPTIONS =
 #
 # case: read test input from file
