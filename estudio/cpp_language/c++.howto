@@ -89,6 +89,18 @@
 
 # todo 4 Standard conversions
 #
+# \todo 4.1 Exlicit conversions
+#
+# 4.2 Implicit conversions
+#     4.2.1 Order of the conversions
+#     4.2.2 Implicitly convertible expression
+#     4.2.3 \todo Contextual conversions
+#     4.2.4 \todo Value transformations
+#
+# \todo 4.3 User-defined conversions
+#
+# \todo 4.4 cpp standard chapter 4
+
 
 # todo 5 Expressions
 #
@@ -165,11 +177,13 @@
 #      12.1.1 Trivial Constructors
 #      12.1.2 Non-Trivial Constructors
 # 	      a) Default constructor
-# 	      b) Explicit Constructors
-#	      c) Constructors of Built-in Types (char, int, ...)
-# 	      d) Member Initialization Lists
-# 	      e) Copy constructor 
-#
+# 	      b) Converting Constructor
+# 	      c) Explicit Constructor
+#	      d) Constructors of Built-in Types (char, int, ...)
+# 	      e) Member Initialization Lists
+# 	      f) Copy constructor 
+#	      g) CV-qualifiers on constructors  \todo test me
+
 # todo	12.1.3 Initialization order
 #
 #	      \todo [C++11] Delegating Constructors [3_1] 7.5.2., p 378
@@ -1916,6 +1930,118 @@ d) Examples [k8503]:
 # 4 Standard conversions
 # ==============================================================================
 
+
+FACT_1  Only (zero or) one implicit conversion is allowed (ill-formed otherwise)
+
+
+
+1) Standard conversions are implicit conversions with built-in meaning.
+
+
+# ------------------------------------------------------------------------------
+# \todo 4.1 Exlicit conversions [4_12_1]
+# ------------------------------------------------------------------------------
+ 
+Converts between types using a combination of explicit and implicit conversions.
+
+
+( new_type ) expression 	(1) 	
+new_type ( expression ) 	(2) 	
+new_type ( expressions ) 	(3) 	
+new_type ( ) 	(4) 	
+new_type { expression-list(optional) } 	(5) 	(since C++11)
+template ( expressions(optional) ) 	(6) 	(since C++17)
+template { expressions(optional) } 	(7) 	(since C++17)
+
+Returns a value of type new_type. 
+
+
+# ------------------------------------------------------------------------------
+# 4.2 Implicit conversions [4_12_2]
+# ------------------------------------------------------------------------------
+
+Implicit conversions are performed whenever an expression of some type T1 is 
+used in context that does not accept that type, but accepts some other type T2;
+in particular:
+
+
+- when the expression is used as the argument when calling a function
+  that is declared with T2 as parameter;
+
+- when the expression is used as an operand with an operator that expects T2;
+
+- when initializing a new object of type T2, including return
+  statement in a function returning T2;
+
+- when the expression is used in a switch statement (T2 is integral type);
+
+- when the expression is used in an if statement or a loop (T2 is bool). 
+
+  
+WARNING
+The program is well-formed (compiles) only if there exists (zero or) ONE 
+unambiguous implicit conversion sequence from T1 to T2. [k6]
+
+
+WARNING 
+The compiler can not perform an implicit conversion for a non-const 
+reference because it can't be temporary, (it has no sense) [k6]:
+
+
+
+# 4.2.1 Order of the conversions
+
+Implicit conversion sequence consists of the following, in this order:
+
+1) ZERO OR ONE standard conversion sequence (in this order)
+
+   i) zero or one lvalue transformation;
+   ii) zero or one numeric promotion or numeric conversion;
+   iii) zero or one function pointer conversion;              (since C++17)
+   iv) zero or one qualification adjustment.
+
+
+2) zero or one user-defined conversion;
+
+   i) zero or one non-explicit single-argument constructor 
+   ii) zero or one non-explicit conversion function call
+
+
+# 4.2.2 Implicitly convertible expression
+
+An expression e is said to be implicitly convertible to T2 if and only if:
+
+    T2 t = e; 
+
+is well-formed (can be compiled), for some invented temporary t. 
+
+
+# 4.2.3 \todo Contextual conversions
+
+# 4.2.4 \todo Value transformations
+
+Value transformations are conversions that change the value category of an 
+expression. They take place whenever an expression appears as an operand of 
+an operator that expects an expression of a different value category.
+
+
+# ------------------------------------------------------------------------------
+# \todo 4.3 User-defined conversions
+# ------------------------------------------------------------------------------
+
+Enables implicit conversion or explicit conversion from a class type
+to another type.
+
+operator conversion-type-id 	(1) 	
+
+explicit operator conversion-type-id 	(2) 	(since C++11)
+
+
+# ------------------------------------------------------------------------------
+# \todo 4.4 cpp standard chapter 4 
+# ------------------------------------------------------------------------------
+
+
     a) When we assign one arithmetic type to another [3_1] 2.1.2
 
     bool b = 42;          // b is true
@@ -1927,6 +2053,8 @@ d) Examples [k8503]:
     // WARNING If we assign an out -of -range value to an object of
     // signed type, the result is undefined. 
     signed char c2 = 256; // assuming 8-bit chars, the value of c2 is undefined
+
+
 
 
 # ==============================================================================
@@ -4135,149 +4263,154 @@ iii) Classes with some virtual base class (Virtual inheritance) [4_10_1]
     such members have in-class initializers.
 
 
-# b) Explicit Constructors [4_7_1]
+# b) Converting Constructors [4_7_11] [4_7_1]  [k6]
 
-  Non-default constructors are further divided into two subcategories:
+  A constructor that is not declared with the specifier explicit and
+  which can be called with a single parameter (UNTIL C++11).
 
-  i) Those that take multiple arguments.
+  - Converting constructors are considered during direct initialization. [k6]
 
-  ii) Implicit conversion operators (converting constructors [4_7_5]) [k6]:
+  - Converting constructors ARE considered during copy initialization    [k6]
+    (as part of user-defined conversion sequence - see 4.3)
 
-     A non explicit constructor that take a single argument and
-     thus operate as conversion operator from the constructor’s
-     parameter type to the class type.
+  - Can be used as implicit conversion operators. 
 
-     MyString s = "xyzzy"; // to allow this kind of construction expressions
-
-        # (e.g.)  [k6]
-        class Counter {
- 	public:
-  	  Counter(std::string s);       // implicit conversion
-  	  Counter(const Counter &src);
-	  Counter & operator=(const Counter &src);
-	  operator std::string();  	// implicit operator 
-	  void set(const Counter& src);
-        };
-
-	std::string s1 = "I am s1";
-  	Counter c1(s1);        // ok: (implicit constructor)
-	Counter c2("I am");    // ok: (implicit constructor)
-	Counter c3 = s1;       // ok: (implicit constructor)
-	Counter c4 = c3;       // ok: (copy constructor)
-	c4 = c3;     	       // ok: (operator=)
-        c4 = "I am a literal"; // error: no match for ‘operator=’
-	     	   	       // (calling operator=(Counter &) )
-	Counter c5 = "I am";   // error: conversion from ‘const char [8]’
- 			       // to non-scalar type ‘Counter’ requested
-			       // (calling the copy constructor)
+  - Implicitly-declared and user-defined non-explicit copy
+    constructors and move constructors are converting constructors.
 
 
-    WARNING 
-    Only One Class-Type conversion Is Allowed by the compiler [k6]
+  [ Example  [[k6] :
 
-    [ Example:
-
-    a) Functions that require a string can accept a literal => one
-       conversion (literal to string)
-
-       i) Conversion from literal to a (temporary) string
-       ii) Calling Counter(std::string s)
-
-       Counter c2("I am a literal"); 
-
-
-    b) Functions that require a Counter can accept a string => 
-       => one conversion: string to Counter
-
-       i) Calling Counter(std::string s) to create a temporary Counter
-       ii) Calling the function with the temporary Counter
-
-       c1.set(s1);            // ok: implicit conversion
-
-
-   c) Functions that require a Counter cannot accept a literal =>
-       => two conversion: literal to (temporary) string to Counter
-       
-        c4 = "I am a literal"; // calling operator=(Counter &)
-	     	   	       //
-			       // error: no match for ‘operator=’ (operand 
-                               // types are ‘Counter’ and ‘const char [15]’)
-
-        Counter c5 = "I am a"; // calling copy ctor.
-		     	       //
-			       // error: conversion from ‘const char [8]’
-			       // to non-scalar type ‘Counter’ requested
-
-
-	c1.set("a literal");   // error: no known conversion
+  struct A
+  {
+    A() { }         // converting constructor (since C++11)  
+    A(int) { }      // converting constructor
+    A(int, int) { } // converting constructor (since C++11)
+    A(std::string)  // converting constructor
+  };
  
-    —end example ]
+  void seta(const A&);   // const &: one implicit conversion allowed (see 4.2)
+  void seta_noconst(A&); // no-const &: NONE implicit conversion allowed
+
+ 
+  int main()
+  {
+   std::string sa {"literal"};
+   A a1 = 1;      // OK: copy-initialization selects A::A(int)
+   A a2(2);       // OK: direct-initialization selects A::A(int)
+   A a3{4, 5};    // OK: direct-list-initialization selects A::A(int, int)
+   A a4 = {4, 5}; // OK: copy-list-initialization selects A::A(int, int)
+   A a5 = (A)1;// OK: explicit cast performs static_cast, direct-init A::A(int)
+   A a8(sa);      // OK: direct-initialization selects A::A(string)
+   A a9("literal");  // OK: direct-initialization selects A::A(string)
+   A a10 = sa;    // OK: copy-initialization  selects A::A(string)
+   A a11 = "literal"; // error: invalid conversion <= ONLY one implicit
+		      // conversion allowed, 2 required: char[] => string => A
+   A a12(a1);     // OK: copy constructor
+   a12 = a1;      // OK: operator=(): A => A :  implicit conversion required
+   a12 = sa;    // OK: operator=() accepts one implicit conversion:  string => A
+   a12 = "literal";  // error: invalid user-defined conversion
+		     //        ONLY one implicit conversion allowed
+
+  seta(sa);        // OK: one implicit conversion (string => A) to make temp. A
+  seta({1,2});     // OK: one implicit conversion: A::A(int, int) 
+  seta("literal"); // error: ONLY one implicit conversion allowed, two required
+		     
+  seta_noconst(a1); // ok: zero implicit conversions
+  seta_noconst(sa); // error: one implicit conversion required.
+ }
+
+  —end example ]
 
 
 
-    WARNING 
-    The compiler can not perform an implicit conversion for a non-const 
-    reference because it can't be temporary, (it has no sense) [k6]:
+# c) Explicit Constructors [4_7_11] [4_7_1]
 
-    [ Example:
-        void set_nonconst(Counter& src); 
-    	c1.set_nonconst(s1); // error: no known conversion from "string" to Counter&
-    —end example ]
+  PROBLEM of Converting Constructors: copy initialization can produce
+  unexpected undesired implicit conversions (executed by the compiler)
+
+  SOLUTION expecific specifier
   
+- explicit specifier
+
+  The explicit specifier specifies that a constructor, (or conversion function 
+  since C++11), doesn't allow implicit conversions OR COPY-INITIALIZATION.
+
+  
+- Explicit constructors are ONLY considered during direct initialization. [k6]
+
+- Explicit constructors ARE NOT considered during copy initialization. [k6]
 
 
-     - The "Implicit conversion" situation [k6]: 
-
-       class Date
-       {
-         public:
-	  Date(); // default ctor; no arguments required 
-  	  Date(time_t t); // extracts date from a time_t value  (*P)
-       };
-
-       main()
-       {
-        Date p = NULL; // Compilation OK because it fits (*P)
-       }
+  INFO
+  Why is not 'explicit' the default behaviour of C++ constructors?
+  Because the problem was detected after the definition of the
+  language, and several software requiring implicit conversions would
+  have be affected.
 
 
-     PROBLEM:
-     The compiler executes an implicit conversion from long (NULL's
-     type) to time_t. The problem here is that the implicit conversion
-     (taking place behind the programmer's back) switches off the
-     compiler's static type checking.
-
-     SOLUTION:     
-     The 'explicit' keyword: constructors declared explicit will refuse (the
-     compiler will refuse) to perform such implicit conversions:
-     
-       class Date
-       {
-         public:
-         //...
-         explicit Date(time_t t); // no implicit conversions
-       };
-
-       time_t t;
-       Date d1(t);  // ok: direct initialization [4_7_5] [k6]
-       Date d1 = t; // error: cannot use the copy form of initialization
-       	       	    //        with an explicit constructor
+  BEST_PRACTICE
+  As a rule,
+  - Every constructor that takes a single argument, including constructors 
+  that take multiple arguments with default values (before C++11) ...
+  - All the constructors (since C++11) ...
+  ... should be explicit, unless you have a good reason to allow
+  implicit conversions.
 
 
-INFO
-Why is not 'explicit' the default behaviour of C++ constructors?
-Because the problem was detected after the definition of the language, and
-several software requiring implicit conversions would have be affected.
+  [ Example  [[k6] :
+
+  struct B
+  {
+   explicit B() {}
+   explicit B(int) {}
+   explicit B(int, int) {}
+   explicit B(std::string) {}
+  };
+
+  void setb(const B&);
+  void setb_noconst(B&);
+
+ 
+  int main()
+  {
+   std::string sb {"literal"};
+   B b1 = 1;       // error: copy-initialization does not consider B::B(int)
+   B b2(2);           // OK: direct-initialization selects B::B(int)
+   B b3{4, 5};        // OK: direct-list-initialization selects B::B(int, int)
+   B b4 = { 4, 5}; // error: copy-list-initialization selected an
+                      //        explicit constructor B::B(int, int)
+   B b5 = (B)1;       // OK: explicit cast, direct-init: B::B(int) 
+  
+                     // default construction cases
+  B b6;              // OK, default-initialization selects B::B()
+  B b7{};            // OK, direct-list-initialization selects B::B()
+  B b8 = {};       // error: copy-list-initialization selected
+                     // an explicit constructor B::B()
+  
+  B b8(sb);          // OK: direct-initialization selects B::B(string)
+  B b9("literal");   // OK: direct-initialization selects B::B(string)
+
+  B b10 = sb;     // error: copy-initialization does not consider B::B(string)
+  B b11 = "literal"; // error: invalid conversion
+  B b12(b2);         // OK: copy constructor
+  b12 = b2;          // OK: operator=(): B => B : no implicit conversion 
+  b12 = sb;          // error: no match for ‘operator=’
+  b12 = "literal";   // error: no match for ‘operator=’
+
+  setb(b2);    // ok: direct init
+  setb(sb);    // error: explicit constructor doesn't allow implicit conversions
+  setb({1,2}); // error: explicit constructor doesn't allow implicit conversions
+
+  setb_noconst(b2); // ok: zero implicit conversions
+  setb_noconst(sb); // error: one implicit conversion required.
+
+  }
+
+  —end example ]
 
 
-BEST_PRACTICE
-As a rule, every constructor that takes a single argument, including
-constructors that take multiple arguments with default values should
-be explicit (i.e. std::vector(size_t)), unless you have a good reason
-to allow implicit conversions.
-
-
-# c) Constructors of Built-in Types (char, int, ...)
+# d) Constructors of Built-in Types (char, int, ...)
 
    char c = char();       // equivalent to: char c = char(0);
    char c = char('a');
@@ -4285,7 +4418,7 @@ to allow implicit conversions.
    int *pi = new int(6);
 
 
-# d) Member Initialization Lists [4_7_1]
+# e) Member Initialization Lists [4_7_1]
 
      aka constructor initializer list, mem-initializers, mem-list, mem-init
 
@@ -4313,7 +4446,7 @@ to allow implicit conversions.
      should explicitly initialize every member of built-in type.
 
   
-# d1) Mem-list vs initialization into the constructor body
+# e1) Mem-list vs initialization into the constructor body
 
      i) Equivalent cases (the compiler expands the same code):
 
@@ -4359,7 +4492,7 @@ to allow implicit conversions.
 	 pool of memory or if it opened the wrong file). [4_7_6]
 
 
-d2) Mem-list, Conclussions:
+e2) Mem-list, Conclussions:
 
     BEST_PRACTICE
     Due to the performance difference, mem-list should be always used.
@@ -4396,7 +4529,7 @@ d2) Mem-list, Conclussions:
              { std::memcpy(data_, s, len_ + 1u);}
 
 
- e) Copy constructor 
+ f) Copy constructor (copy initialization)
 
     Constructor that creates & initializes a new object as a copy of
     another existing object of the same type.
@@ -4410,7 +4543,7 @@ d2) Mem-list, Conclussions:
     Detailed description (12.8)
     
 
- f) CV-qualifiers on constructors  \todo test me
+ g) CV-qualifiers on constructors  \todo test me
 
     - const and volatile semantics (7.1.6.1) are not applied on an
       object under construction. They come into effect when the
@@ -4887,7 +5020,9 @@ BEST_PRACTICE Follow 'The Rule of Three' (12.8)
 
 A class object can be copied or moved in two ways:
 
-i) by initialization (12.1, 8.5), including for function argument
+i) By Copy initialization [4_7_10]:
+
+   By initialization (12.1, 8.5), including for function argument
    passing (5.2.2) and for function value return (6.6.3): implemented
    by a copy/move constructor.
 
@@ -4912,7 +5047,7 @@ WARNING If no copy-constructor (operator=) is defined, the compiler
 
 # 12.8.1 copy-constructor & assignment-operator
 
-a) When is invoked the copy-constructor ?
+a) When is invoked the copy-constructor ? 
 
    For Construction of a new object: iff the destination object does
    not exists yet.
@@ -5887,7 +6022,7 @@ Solution: declare the variable as 'extern' (in one or many header
 
 # constructors "./code_examples/constructors"
 
-  [k6] implicit conversors & explicit constructors - "./explicit_constructor"
+  [k6] Converting vs explicit constructors - "./explicit_constructor"
 
   [k8] default_ctor - "./default_ctor/main.cpp"
 
@@ -6003,6 +6138,21 @@ C
 Technique used to prevent the static initialization order fiasco. [4_7_6]
 
 
+
+- Copy Initialization (copy constructor)
+
+  Initializes an object from another object 
+
+  T object = other;
+  T object = {other} ; 	(until C++11)
+  f(other)
+  return other; 	
+  throw object;
+  catch (T object)
+  T array[N] = {other};
+
+
+
 D
 
 - Dereferencing
@@ -6017,10 +6167,22 @@ pointer.
 	*p = 1; // dereferencing p => equivalent to "x=1"
 
 
+
+- Direct Initialization
+
+  Initializes an object from explicit set of constructor arguments.
+
+  T object ( arg );
+  T object ( arg1, arg2, ... );
+  ...
+
+
+
 - dynamic type
 
 <glvalue> type of the most derived object (for pointers and references)
 <prvalue> static type of the prvalue expression
+
 
 
 E
@@ -6217,35 +6379,45 @@ Note.- No compilation errors do not imply well-formed (run-time errors).
 # Appendix W - Remarkable Warnings
 # ==============================================================================
 
-WARNING_1: a const variable can be indirectly modified by a pointer,
-	   as in the following example:
+WARNING_1:
+A const variable can be indirectly modified by a pointer, as in the
+following example:
 
 	 const int my_age = 32;
 	 *(int*)&my_age = 35;
 
-	 TODO to be confirmed as a test result (gcc file.c) was: core dumped
+ODO to be confirmed as a test result (gcc file.c) was: core dumped
 
 
-WARNING_2 Compilers usually DON’T care about the form of header file names,
-	  but IDEs sometimes do. [k2].test_header_suffix.cpp
+WARNING_2
+Compilers usually DON’T care about the form of header file NAMES, but
+IDEs sometimes do. [k2].test_header_suffix.cpp
 
 
-WARNING_3 Compilers actually DO CARE about the form of source file names:
-	  (e.g.) g++ test_source_suffix 
-	         test_source_suffix: file not recognized:
+WARNING_3
+Compilers actually DO CARE about the form of source file names:
+(e.g.) g++ test_source_suffix 
+       test_source_suffix: file not recognized:
 
 
-WARNING_4 linkage error "undefined reference to ..."
-	  a) Using gcc instead of g++ compiler.
-	  b) Not providing all the ".gcc" files to the linker
-	  c) Some functions has been declared but not defined.
+WARNING_4
+Linkage error "undefined reference to ..."
+a) Using gcc instead of g++ compiler.
+b) Not providing all the ".gcc" files to the linker
+c) Some functions has been declared but not defined.
 
 
-WARNING_5 public/private/protected are compile-time only. Once your
-	  application gets compiled, private fields sit next to public
-	  fields and there is no protection against modification.
+WARNING_5
+public/private/protected are compile-time only.
+Once your application gets compiled, private fields sit next to public
+fields and there is no protection against modification.
 
-	 TODO to be confirmed (http://stackoverflow.com/questions/4706788/why-can-i-expose-private-members-when-i-return-a-reference-from-a-public-member)
+TODO to be confirmed (http://stackoverflow.com/questions/4706788/why-can-i-expose-private-members-when-i-return-a-reference-from-a-public-member)
+
+
+WARNING_6 
+The program is well-formed (compiles) only if there exists (zero or) ONE 
+unambiguous implicit conversion sequence from T1 to T2.
 
 
 
@@ -6419,6 +6591,15 @@ c) address size (processor concept)
       [4_7_8] ctor. order of member functions - [1_1], 12.6.2
       	      Initializing bases and members, paragraph 16
 
+      [4_7_9] direct initialization -
+      	      http://en.cppreference.com/w/cpp/language/direct_initialization
+
+      [4_7_10] copy initialization -
+      	       http://en.cppreference.com/w/cpp/language/copy_initialization
+
+      [4_7_11] converting constructor -
+      	      http://en.cppreference.com/w/cpp/language/converting_constructor
+
 
 [4_8] Copying and moving class objects
 
@@ -6453,6 +6634,18 @@ c) address size (processor concept)
       [4_11_2] v-table & v-pointer implementation & use -               (*)
       	       https://isocpp.org/wiki/faq/virtual-functions#dyn-binding 
 	       https://isocpp.org/wiki/faq/virtual-functions#dyn-binding2
+
+
+[4_12] Conversions
+
+      [4_12_1] Explicit Conversions -
+      	       http://en.cppreference.com/w/cpp/language/explicit_cast
+
+      [4_12_2] Implicit Conversions -
+      	       http://en.cppreference.com/w/cpp/language/implicit_conversion
+	       
+      [4_12_3] user-defined conversion -
+               http://en.cppreference.com/w/cpp/language/cast_operator
 
 
 [4_100] Containers

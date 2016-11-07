@@ -1,0 +1,64 @@
+A::A(int) 
+A::A(int) 
+A::A(int, int) 
+A::A(int, int) 
+A::A(int) 
+A::A(std::string): 
+A::A(std::string): 
+A::A(std::string): 
+A::A(const A&): 
+A& A::operator=(const A&) 
+
+a12 = std::string
+A::A(std::string): 
+A& A::operator=(const A&) 
+
+seta(string)
+A::A(std::string): 
+void seta(const A&) 
+
+seta({1,2})
+A::A(int, int) 
+void seta(const A&) 
+
+seta("literal")
+error: ONLY one implicit conversion allowed, two required.
+
+error: The compiler can not perform an implicit conversion for a non-const reference because it can't be temporary, (it has no sense).
+void seta(A&) 
+
+
+note.- just to avoid warnings
+A& A::operator=(const A&) 
+A& A::operator=(const A&) 
+A& A::operator=(const A&) 
+
+
+
+ EXPLICIT 
+
+B::B(int) 
+B::B(int, int) 
+
+B b5 = (B)1
+B::B(int) 
+B::B() 
+B::B() 
+B::B(std::string): 
+B::B(std::string): 
+B::B(const B&): 
+B& B::operator=(const B&) 
+
+setb(B)
+void setb(const B&) 
+
+setb(string)
+
+setb({1,2})
+error: The compiler can not perform an implicit conversion for a non-const reference because it can't be temporary, (it has no sense).
+void setb(B&) 
+
+
+note.- just to avoid warnings
+B& B::operator=(const B&) 
+B& B::operator=(const B&) 

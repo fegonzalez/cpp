@@ -7,9 +7,15 @@
 # (*) Do changes (if necessary) only after this label:  DO-CHANGE-HERE
 #
 #===============================================================================
-
-
-
+#
+# c++11 support
+#
+# make "CPP_STD_FLAGS = -std=c++11" all
+#
+# c++14 support
+#
+# make "CPP_STD_FLAGS = -std=c++14" all
+#
 #===============================================================================
 #
 # INFO Automatic Variables meaning
@@ -58,12 +64,24 @@ debug_mode := 1
 ## 2) Select project files & paths: VPATH, vpath, sources, objects, headers, ...
 
 SOURCES := $(wildcard *.cpp)
+# TEST_SOURCES := $(filter %_test.cpp,$(SOURCES)) # only %_test.cpp files
 OBJS := $(SOURCES:%.cpp=%.o)
 
 
 #-- DO-CHANGE-HERE
-# main source file name: i.e. main for main.cpp
-EXEC := explicit
+#
+# execution command (runtest, difftest): ./$(EXEC) $(EXEC_OPTIONS)
+# EXEC: main source file name: i.e. main for main.cpp
+# EXEC_OPTIONS: execution options
+#
+# case: default execution
+EXEC := main
+#futfill with the test source name
+EXEC_OPTIONS =
+#
+# case: read test input from file
+# EXEC_OPTIONS = <file_path/file_name
+# i.e. make "EXEC_OPTIONS = <./data/add_item" runtest
 
 
 #-- DO-CHANGE-HERE:  header files & paths
@@ -88,10 +106,29 @@ VPATH := $(INCLUDE_DIRECTORIES)
 ## 3) Compilation & Linkage
 
 WARNING_FLAGS = -Wall -Wextra # enable additional warnings 
-# WARNING_FLAGS += -Werror      # all warnings as errors
+WARNING_FLAGS += -Werror      # all warnings as errors
 DEBUG_FLAGS = -g
 OPTIM_FLAGS = -O
 INCLUDE_FLAGS = $(addprefix -I ,$(INCLUDE_DIRECTORIES))
+
+# select C++ version: c++03 / c++11 / ...
+#
+CPP_STD_FLAGS = -std=c++14
+#CPP_STD_FLAGS += -std=c++11  or via command:
+ifeq ($(CPP_STD_FLAGS), -std=c++11)
+WARNING_FLAGS += -Wc++11-compat
+WARNING_FLAGS += -Wno-missing-field-initializers
+else ifeq ($(CPP_STD_FLAGS), -std=gnu++11)
+WARNING_FLAGS += -Wc++11-compat
+WARNING_FLAGS += -Wno-missing-field-initializers
+else ifeq ($(CPP_STD_FLAGS), -std=c++14)
+# #WARNING_FLAGS += -Wc++14-compat
+WARNING_FLAGS += -Wno-missing-field-initializers
+else ifeq ($(CPP_STD_FLAGS), -std=gnu++14)
+# #WARNING_FLAGS += -Wc++14-compat
+WARNING_FLAGS += -Wno-missing-field-initializers
+endif
+
 
 # Compiling C++ programs
 CXX := g++
@@ -100,6 +137,7 @@ CPPFLAGS =
 # compilation flags: optional flags (CXXFLAGS) + required flags
 CXXFLAGS = 
 required_cxxflags += $(INCLUDE_FLAGS)
+required_cxxflags += $(CPP_STD_FLAGS)
 
 # Linking #-- DO-CHANGE-HERE
 #
@@ -132,6 +170,7 @@ RM.EXEC := $(EXEC) a.out
 RM.SAVES :=  $(wildcard *.*~ ) $(wildcard *~)
 RM.OTHER_STUFF := $(wildcard *.h.gch)
 #-- DO-CHANGE-HERE
+#RM.OTHER_STUFF +=
 RM.OTHER_STUFF += $(EXEC:%=%.last_diff)
 RM.TRASH = $(RM.CORES) $(RM.EXEC) $(RM.SAVES) $(OBJS) $(RM.OTHER_STUFF)
 
@@ -147,13 +186,14 @@ RM.TRASH = $(RM.CORES) $(RM.EXEC) $(RM.SAVES) $(OBJS) $(RM.OTHER_STUFF)
 
 all: $(EXEC)
 
+
 runtest:all
 	@echo 'Building target: $@'
 	./$(EXEC)
 	@echo ''
 	@echo 'Finished building: $@'
 
-
+ 
 successtest:all
 	@echo 'Building target: $@'
 	./$(EXEC) > $(EXEC).OK
@@ -175,8 +215,42 @@ difftest:all
 # Compilation & linking via implicit (pattern) rules
 #===============================================================================
 
+
+#------------------------------------------------------------------------
+# 1) Only-dependency rules: to detect changes in headers
+#------------------------------------------------------------------------
+#
+#-- DO-CHANGE-HERE
+#
+# (e.g)   main.o: main.h
+# (e.g.)  $(OBJS): %.o: $(COMMON_HEADERS)
+#
+# (e.g.) all the objects that depend on their own header: i.e. dummy.o dummy.h
+# 	 e.g.: all the objects but $(EXEC).o have a header.
+#        HEADER_OBJS:=$(subst $(EXEC).o,,$(OBJS)) 
+#        $(HEADER_OBJS): %.o: %.h
+
+
+
+
+#------------------------------------------------------------------------
+# 2) recipe rules
+#------------------------------------------------------------------------
+
+
 #------------------
-# 1) linking
+# a) compilation
+#------------------
+
+$(OBJS): %.o: %.cpp
+	@echo ''
+	@echo 'Building target: $@'
+	$(CXX) -c $(all_cxxflags) $(CPPFLAGS) $<  -o $@ 
+
+
+
+#------------------
+# b) linking
 #------------------
 
 $(EXEC):$(OBJS)
@@ -184,28 +258,6 @@ $(EXEC):$(OBJS)
 	@echo 'Building target: $@'
 	$(CXX) $(LDFLAGS) -o $@ $^ $(LDLIBS)
 
-
-
-#------------------
-# 2) compilation
-#------------------
-
-#-- DO-CHANGE-HERE
-#
-# a) Only-dependency rules: to detect changes in headers
-#
-# (e.g)   main.o: main.h
-# (e.g.)  $(OBJS): %.o: $(COMMON_HEADERS)
-
-# $(OBJS): %.o: refs_lib.h base.h
-
-
-# b) recipe rules
-
-$(OBJS): %.o: %.cpp
-	@echo ''
-	@echo 'Building target: $@'
-	$(CXX) -c $(all_cxxflags) $(CPPFLAGS) $<  -o $@ 
 
 
 
