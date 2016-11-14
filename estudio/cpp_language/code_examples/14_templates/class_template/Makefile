@@ -75,7 +75,7 @@ OBJS := $(SOURCES:%.cpp=%.o)
 # EXEC_OPTIONS: execution options
 #
 # case: default execution
-EXEC := #futfill with the test source name
+EXEC := main
 EXEC_OPTIONS =
 #
 # case: read test input from file
@@ -112,7 +112,7 @@ INCLUDE_FLAGS = $(addprefix -I ,$(INCLUDE_DIRECTORIES))
 
 # select C++ version: c++03 / c++11 / ...
 #
-CPP_STD_FLAGS =            
+CPP_STD_FLAGS = -std=c++14
 #CPP_STD_FLAGS += -std=c++11  or via command:
 ifeq ($(CPP_STD_FLAGS), -std=c++11)
 WARNING_FLAGS += -Wc++11-compat
@@ -230,7 +230,7 @@ difftest:all
 #        $(HEADER_OBJS): %.o: %.h
 
 
-
+main.o: myvector.h
 
 #------------------------------------------------------------------------
 # 2) recipe rules

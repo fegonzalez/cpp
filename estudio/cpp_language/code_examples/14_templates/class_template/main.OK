@@ -1,0 +1,19 @@
+
+Vector<T> explicit ctor(size_t s)
+
+Reading operator[]
+{ 0, 0, 0, 0, 0, 0}
+
+Writing operator[]
+Vector<T> operator[]
+{ 3, 0, 0, 0, 0, 0}
+
+Vector<T> copy ctor. (warning inside call to oeprator=
+
+Vector<T> operator=()
+
+Vector<T> operator=()
+
+Vector<T> destructor.
+
+Vector<T> destructor.

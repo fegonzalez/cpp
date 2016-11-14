@@ -5335,8 +5335,24 @@ extern "C" void operator "" _m(long double); // error: C language linkage
   [ Example: [k1401]
 
   template <class T>
-  Vector<T>::Vector<T>(size_t s): sz(s), buff(new T[s])
-  {}
+  Vector<T>::Vector(size_t s): sz(s), buff(new T[s]){}    // ok
+
+  template <class T>
+  Vector<T>::Vector<T>...   // error: ‘Vector<T>::Vector’ names the constructor,
+			    // not the type Vector<T>::Vector<T>
+
+  —end example ]
+
+
+3) Within the scope of the class name (Vector in this examples,
+   qualification with parameter T is redundant:
+
+  [ Example: [k1401]
+
+  Vector(size_t s=100); // equivalent to Vector<T>(size_t s=100);
+
+  ~Vector();            // equivalent to ~Vector<T>()
+
 
   —end example ]
 
