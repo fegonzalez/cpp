@@ -230,11 +230,10 @@
 # 14.1 Class Templates
 #      14.1.1 Declaring a Class Template
 #      	    14.1.1.1 Instantiation and Specialization
-#      	    14.1.1.1 Template Arguments
-#      	    14.1.1.1 Default Type Arguments
-#      14.1.2 Template Specializations
-#      14.1.3 Partial Specializations and Explicit Specializations
-#      	    14.1.3.1 Explicit Specializations of a Class Template
+#      	    14.1.1.2 Template Arguments
+#      	    14.1.1.3 Default Type Arguments
+#      14.1.2 Partial Specializations and Explicit Specializations
+#      	    14.1.2.1 Explicit Specializations of a Class Template
 #
 # 14.2 Function Templates
 #      14.2.1 Overloading and Partial Specialization
@@ -5360,6 +5359,96 @@ extern "C" void operator "" _m(long double); // error: C language linkage
 
 # 14.1.1.1 Instantiation and Specialization
 
+A class template is not a "real" class.
+
+4) Instantiation: the process of instantiating a "real" class from a template.
+
+5) Specialization: template_name<list_of_arguments>
+
+   i.e. Vector<int>, Vector<double *>, are specializations of
+   Vector<T> instantiated by the compiler.
+
+   An specialization can be used like any other class.
+
+
+6) FACT_1
+   (To accomplish the "generate on demand" policy (see T)) The
+   compiler instantiates ONLY the necessary member functions of a
+   given template specialization => the compiler generates code ONLY
+   for the member functions which are used either explicitly OR
+   IMPLICITLY in the program [k1401]
+
+
+# 14.1.1.2 Template Arguments
+
+  < argument_1, argument_2, ... >
+
+7) A template can take one or more type parameters (<T, U, ...>)
+
+8) A template can also take ordinary types as parameters (<int, char, ...>)
+
+9) When an ordinary type is used as a parameter, the template argument
+   MUST be a constant or a constant expression of an INTEGRAL TYPE
+   (3.9.1.1 boolean, characters, integers)
+
+
+  [ Example: [k1401]
+
+  const int cn = 5;
+  int num = 10;
+  const float cd = 5.0;  
+  Array<char, 5> ac;              // ok: 5 is a const
+  Array<char, cn> ac;             // ok: cn is a const
+  Array<char, sizeof(float))> ac; // ok: constant expression used
+  Array<char, num> ac;    	  // error: num is not a constant  
+  Array<char, cd> ac;             // error: const float is not an integral type
+
+  —end example ]
+
+
+  Exceptions (other than constant expressions): 
+
+  - pointer to a non-overloaded member
+  - the address of an object or function with external linkage
+
+  => this implies that a string literal cannot be used because it has
+     "static storage type"
+
+
+10) A template can take a template as a template argument
+
+    Vector <Vector<char *> > msg_que;
+
+
+WARNING 
+When a template is used as a template argument, the space between the
+right two angle brackets is mandatory
+
+
+# 14.1.1.3 Default Type Arguments
+
+11) Class templates can have default template arguments. 
+
+    Goal: flexibility in choosing the optimal type for a particular application.
+    
+    i.e. using other types than size_t to manage very large or very
+    small memory buffers.
+
+
+  [ Example: [k1401]
+
+  template <class T, class S = size_t> class Vector;
+  ...
+  Vector<int> ordinary;
+  Vector<int, unsigned char> tiny(5);
+
+  —end example ]
+
+    
+
+# 14.1.2 Partial Specializations and Explicit Specializations
+
+# 14.1.2.1 Explicit Specializations of a Class Template
 
 
 
@@ -6240,6 +6329,20 @@ Solution: use <<extern>> to declare the variable in all the headers,
   #include "b.h"
 
 
+G
+
+- "generate on demand" policy.
+
+A requirement of the C++ standard. It has two functions:
+
+ 1) Efficiency: certain class templates defines hundreds of member
+    functions, but normally each program only uses a few of them.
+
+ 2) Flexibility: in some cases, not every function defined in a class
+    template is supported in the target platform program.
+    (i.e. operator<<() functions are only defined for some classes)
+
+
 I
 
 - ill-formed program
@@ -6402,7 +6505,7 @@ following example:
 	 const int my_age = 32;
 	 *(int*)&my_age = 35;
 
-ODO to be confirmed as a test result (gcc file.c) was: core dumped
+TODO to be confirmed as a test result (gcc file.c) was: core dumped
 
 
 WARNING_2
@@ -6435,6 +6538,12 @@ WARNING_6
 The program is well-formed (compiles) only if there exists (zero or) ONE 
 unambiguous implicit conversion sequence from T1 to T2.
 
+
+WARNING_7
+When a template is used as a template argument, the space between the
+right two angle brackets is mandatory
+
+      Vector <Vector<char *> > msg_que;
 
 
 # ==============================================================================
