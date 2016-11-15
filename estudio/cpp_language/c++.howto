@@ -232,8 +232,8 @@
 #      	    14.1.1.1 Instantiation and Specialization
 #      	    14.1.1.2 Template Arguments
 #      	    14.1.1.3 Default Type Arguments
-#      14.1.2 Partial Specializations and Explicit Specializations
-#      	    14.1.2.1 Explicit Specializations of a Class Template
+#      14.1.2 Partial Specializations of a Class Template
+#      14.1.3 Explicit Specializations of a Class Template
 #
 # 14.2 Function Templates
 #      14.2.1 Overloading and Partial Specialization
@@ -5305,6 +5305,9 @@ extern "C" void operator "" _m(long double); // error: C language linkage
 # 14.1.1 Declaring a Class Template
 
 
+Note.- In template <class T>.  Using class is equivalent to using typename.
+
+
 1)  template <template_parameter_list> class class_name;
 
   [ Example: [k1401]
@@ -5352,7 +5355,6 @@ extern "C" void operator "" _m(long double); // error: C language linkage
 
   ~Vector();            // equivalent to ~Vector<T>()
 
-
   —end example ]
 
 
@@ -5363,10 +5365,12 @@ A class template is not a "real" class.
 
 4) Instantiation: the process of instantiating a "real" class from a template.
 
-5) Specialization: template_name<list_of_arguments>
+5) Specialization: template_name<list_of_arguments> instantiated by
+   the compiler.
 
-   i.e. Vector<int>, Vector<double *>, are specializations of
-   Vector<T> instantiated by the compiler.
+   Vector<T>  --->  specializtaion  --->  Vector<int>
+                                          vector<double *> 
+					  ...
 
    An specialization can be used like any other class.
 
@@ -5388,9 +5392,8 @@ A class template is not a "real" class.
 8) A template can also take ordinary types as parameters (<int, char, ...>)
 
 9) When an ordinary type is used as a parameter, the template argument
-   MUST be a constant or a constant expression of an INTEGRAL TYPE
+   MUST be a constant or a CONSTANT EXPRESSION of an INTEGRAL TYPE
    (3.9.1.1 boolean, characters, integers)
-
 
   [ Example: [k1401]
 
@@ -5445,11 +5448,97 @@ right two angle brackets is mandatory
   —end example ]
 
     
+# 14.1.2 Partial Specializations of a Class Template
 
-# 14.1.2 Partial Specializations and Explicit Specializations
+12) A partial specialization of a class template OVERRIDES the primary
+    template for specific specializations.
 
-# 14.1.2.1 Explicit Specializations of a Class Template
+  [ Example:
 
+    template <typename T> 
+    class Vector                  // primary
+    {
+     void push_back(const T &val);
+     ...
+    }   
+
+    template <typename T> 
+    class Vector <T*>             // partial specialization
+    {
+     void push_back(const T &val);
+     ...
+    }   
+
+  —end example ]
+
+
+WARNING The set of template arguments after the class name is the key
+	(<T*>) in this example.
+
+
+13) The distinction between pointers and non-pointer types is needed.
+
+  [ Example:
+
+    v[0].destroy();  // vector of non-pointers
+    v[0]->destroy(); // vector of pointers
+
+  —end example ]
+
+
+14) The partial specializations must be ordered: least specialized
+    before more specialized.
+
+  [ Example:
+
+    Vector <T>;            // primary #1
+    Vector <T*>;	   // partial specialization #2
+    Vector <volatile T*>;  // another partial specialization #3
+
+  —end example ]
+
+
+# 14.1.3 Explicit Specializations of a Class Template
+
+12) An EXPLICIT specialization of a class template provides an alternative 
+    definition of the primary template. It is used instead of the primary 
+    definition (or a partial specialization) if the arguments match those 
+    that are given in the explicit specialization.
+
+    why needed? i.e. to execute specific implementations of some methods for
+      	      	a concrete type of data.
+
+
+  [ Example:
+
+    template <> class Vector <bool>	// explicit specialization
+
+  —end example ]
+
+  
+a) The "template<>" prefix indicates specialization of an existing
+   primary template.
+
+b) The template arguments are specified in the second pair of angle
+   brackets (<bool>) in this example.
+
+
+13) an explicit specialization SHOULD be declared after the primary
+    template and its partial specializations.
+
+
+  [ Example:
+
+    template <class T> class Vector;               // primary #1
+    {...};
+    template <class T> class Vector <T*>;          // partial specialization #2
+    {...};
+    template <class T> class Vector <volatile T*>; // partial specialization #3
+    {...};
+    template <> class Vector <bool>                // explicit specialization #4
+    {...}
+
+  —end example ]
 
 
 # ==============================================================================
