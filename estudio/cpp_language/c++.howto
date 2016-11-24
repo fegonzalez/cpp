@@ -232,14 +232,15 @@
 #      	    14.1.1.1 Instantiation and Specialization
 #      	    14.1.1.2 Template Arguments
 #      	    14.1.1.3 Default Type Arguments
-#      14.1.2 Partial Specializations of a Class Template
+#      14.1.2 Class template partial specializations
 #      14.1.3 Explicit Specializations of a Class Template
 #
 # 14.2 Function Templates
-#      14.2.1 Overloading and Partial Specialization
+#      14.2.1 Argument deduction
+#      14.2.2 Overloading and Partial Specialization
 #
 # 14.3 Member Templates
-#      14.3.1 Templates and Inplicit Conversions
+#      14.3.1 Templates and Implicit Conversions
 #
 # 14.4 Exported Templates
 
@@ -2762,8 +2763,8 @@ v. Unit testing: references can't be changed to different test values.
 
        	struct Foo
        	{
-	  std::string& m;
-       	  Foo(std::string& s):m(s){}
+	  std::string& text;
+       	  Foo(std::string& s):text(s){}
 	  Foo & operator=(const Foo& src)  // MUST be defined by the programer
 	  {  
       	    if(this != &src)
@@ -2779,8 +2780,8 @@ v. Unit testing: references can't be changed to different test values.
         {
 	  std::string s1("I am s1");
 	  std::string s2("I am s2");
-	  Foo foo_s1(a); 
-	  Foo foo_s2(b);
+	  Foo foo_s1(s1); 
+	  Foo foo_s2(s2);
 	  foo_s2 = foo_s1;       // iv. s2 implicitly modified! (I am s1)
 	  s2 = "Still  I'am s2"; // i.  foo_s2 implicitly modified!
 
@@ -2865,7 +2866,7 @@ a5) Pointer references (references to pointers)
     int main() {
       int* i = 0;
       cout << "i (addr) = " << i << endl;
-      ptr_incr((i);
+      ptr_incr(i);
       cout << "i (addr)= " << i << endl;  // the pointer is incremented,
       	      	 	      	   	  // not what it points to.
     } 
@@ -3103,7 +3104,7 @@ a2) Returning a reference to a local variable
   Compilation: OK
   
      This case is, by definition of memory reference, equivalent to
-     case 'a' BUT the compiler dose not rise a warning and accepts the
+     case 'a' BUT the compiler does not rise a warning and accepts the
      code instead.
 
   Returned value: undefined (as expected)
@@ -5300,7 +5301,11 @@ extern "C" void operator "" _m(long double); // error: C language linkage
 # 14 Templates
 # ==============================================================================
 
+
+# ------------------------------------------------------------------------------
 # 14.1 Class Templates [k1401]
+# ------------------------------------------------------------------------------
+
 
 # 14.1.1 Declaring a Class Template
 
@@ -5368,7 +5373,7 @@ A class template is not a "real" class.
 5) Specialization: template_name<list_of_arguments> instantiated by
    the compiler.
 
-   Vector<T>  --->  specializtaion  --->  Vector<int>
+   Vector<T>  --->  specialization  --->  Vector<int>
                                           vector<double *> 
 					  ...
 
@@ -5448,7 +5453,7 @@ right two angle brackets is mandatory
   —end example ]
 
     
-# 14.1.2 Partial Specializations of a Class Template
+# 14.1.2 Class template partial specializations [1_1].14.5.5
 
 12) A partial specialization of a class template OVERRIDES the primary
     template for specific specializations.
@@ -5476,6 +5481,11 @@ WARNING The set of template arguments after the class name is the key
 	(<T*>) in this example.
 
 
+TODO a code example of this.
+
+
+
+
 13) The distinction between pointers and non-pointer types is needed.
 
   [ Example:
@@ -5489,6 +5499,12 @@ WARNING The set of template arguments after the class name is the key
 14) The partial specializations must be ordered: least specialized
     before more specialized.
 
+    A partial specialization shall be DECLARED before the first use of
+    a class template specialization that would make use of the partial
+    specialization as the result of an implicit or explicit
+    instantiation IN EVERY TRANSLATION UNIT in which such a use
+    occurs; no diagnostic is required.
+
   [ Example:
 
     Vector <T>;            // primary #1
@@ -5500,7 +5516,7 @@ WARNING The set of template arguments after the class name is the key
 
 # 14.1.3 Explicit Specializations of a Class Template
 
-12) An EXPLICIT specialization of a class template provides an alternative 
+15) An EXPLICIT specialization of a class template provides an alternative 
     definition of the primary template. It is used instead of the primary 
     definition (or a partial specialization) if the arguments match those 
     that are given in the explicit specialization.
@@ -5523,9 +5539,8 @@ b) The template arguments are specified in the second pair of angle
    brackets (<bool>) in this example.
 
 
-13) an explicit specialization SHOULD be declared after the primary
-    template and its partial specializations.
-
+16) The primary template shall be DECLARED before any specializations
+    of that template.
 
   [ Example:
 
@@ -5539,6 +5554,175 @@ b) The template arguments are specified in the second pair of angle
     {...}
 
   —end example ]
+
+
+# ------------------------------------------------------------------------------
+# 14.2 Function Templates [k1402]
+# ------------------------------------------------------------------------------
+
+1) A function template is DEFINED inside a header file
+
+WARNING Which means that it may be #included in multiple compilation sessions 
+
+
+  [ Example:
+
+  //cpp file myfunction.h
+
+  template <class T> 
+  const T& max (const T &t1, conts T &t2) // DEFINITION in a header file
+  {
+    return (t1>t2) ? t1 : t2;
+  }
+
+  —end example ]
+
+
+# 14.2.1 Argument deduction
+
+# 14.2.1.1 Implicit Argument deduction
+
+2) Unlike class template parameters, function teemplate parameters are
+   IMPLICITLY deduced from the types of their matching arguments.
+
+  [ Example:
+
+  double d1 = max (2.3, 4.5); // ok: implicit deduction: double(double, double)
+  char cmx = max('0', '8');   // ok: implicit deduction:  char max(char, char)
+  cmx = max(6, '8'); // error: no matching function for call to ‘max(int, char)’
+
+  —end example ]
+
+
+# 14.2.1.2 Explicit Argument deduction
+
+  function-name <explicit-type-list> (function-arguments)
+
+a) When the function template takes no arguments.
+b) When you want to override the default type deduction.
+
+  [ Example:
+
+   int nmx = max<int>(false, 5.6); // ok: explicit int deduction
+   max<double>(false, &d1);        // error: no matching function for call to
+			   	   // ‘max(bool, double*)’
+  —end example ]
+
+
+# 14.2.2 Overloading and Partial Specialization
+
+3) As opposed to class templates, a function template does not support
+   partial specializations; instead, you use overloading.
+
+  [ Example:
+
+  const char *p1 = "string1";
+  const char *p2 = "string2";
+  const char *maxstr = max(p1, p2); //error: pointer comparison;
+				    //lexicographical comparison required
+
+  // overloading max()
+  const char * max(const char * t1, const char * t2)
+  {
+    int val = std::strcmp(t1,t2);
+    if (val>0) return t1; else return t2;  
+  }
+
+  const char *maxstr = max(p1, p2); //ok: overloaded max() selected.
+
+  —end example ]
+
+
+4) Overloading vs partial specialization; main difference.
+
+a) Partial specialization doesn't introduce a new template, it extends an
+   existing template.
+
+b) An overloaded version INTRODUCES A NEW function, completely
+   independent of any other overloads.
+
+c) Overloading look-up: When the compiler has to choose which template
+   version to use, it considers all of the overloaded versions
+   TOGETHER, using the overload resolution rules to select the best fit.
+
+d) Partial Spec. look-up: only the primary template is considered
+   first. The, if the compiler finds a partial spec. of that template
+   which template arguments that match the instantiation, the partial
+   spec. is used.
+
+
+5) Other differences:
+
+a) You can specialize a member template of a class (i.e. a member
+   function that is a template) without changing the class
+   definition. However it's impossible to add an overloaded version of
+   a member function without editing the class' definition.
+
+b) When selecting templates, the argument matching rules are stricter
+   than those of function overloading. Therefore it is possible to
+   define specializations that rely on subtle parameter differences
+   (i.e. T* vs const T*)
+
+c) When you declare a function template f(T) as a friend, all
+   instances thereof, say f<int>, f<char> etc. are granted the same
+   privileges. However, you have to declare each overloaded version as
+   a friend.
+
+
+WARNING 
+As a rule, you SHOULD always have all overloaded versions of a
+function declared before the function is called. [3_102]
+
+
+# ------------------------------------------------------------------------------
+# 14.3 Member Templates [k1403]
+# ------------------------------------------------------------------------------
+
+1) Template member AND member template ARE DIFFERENT things.
+
+- Template member: is a member (var, fn), declared inside a class template.
+
+- MEMBER TEMPLATE: IS A TEMPLATE declared inside a class or a class template
+
+
+  [ Example:
+
+  template <class T>  class C
+  {
+   T *p;                 // a template member
+   void f(T&) const;     // another template member 
+
+   template <class T2> int f2(const T2&);  // a member template
+  }
+
+  —end example ]
+
+
+# 14.3.1 Templates and Implicit Conversions
+
+2) Member templates are useful for solving the lack of implicit conversions 
+   between different specializations of the same class template.
+
+
+  [ Example:
+
+  double dd =  3;      // trivial implicit converion to 1.0
+
+  vector<int> vi {10};
+  vector<double> vd;
+  vd = vi;             // compilation error
+
+  —end example ]
+
+
+# case study: Asymmetric Assiggnment Operator
+
+
+
+
+# ------------------------------------------------------------------------------
+# 14.4 Exported Templates
+# ------------------------------------------------------------------------------
 
 
 # ==============================================================================
@@ -6252,6 +6436,10 @@ Solution: declare the variable as 'extern' (in one or many header
 
   [k1401] class template example - "./class_template"
 
+  [k1402] function template example - "./function_templates"
+
+  [k1403] member template example - "./member_templates"
+
 
 
 # Appendix I - Undocumented Issues - "./code_examples/issues"
@@ -6633,6 +6821,7 @@ When a template is used as a template argument, the space between the
 right two angle brackets is mandatory
 
       Vector <Vector<char *> > msg_que;
+
 
 
 # ==============================================================================

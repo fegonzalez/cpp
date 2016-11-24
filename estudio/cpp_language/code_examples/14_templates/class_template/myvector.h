@@ -24,6 +24,11 @@ template <class T> class Vector;  //declaration
 template <class T>
 std::ostream & operator<<(std::ostream & , const Vector<T> &); 
 
+
+/******************************************************************************/
+/* Primary Template */ 
+/******************************************************************************/
+
 template <class T>  class Vector // definition
 {
  public:
@@ -38,7 +43,6 @@ template <class T>  class Vector // definition
   const T& operator[](unsigned int index)const;
   size_t size()const;
 
-
   bool template_never_used_doesneed_definition()const;
 
   bool template_used_needs_definition()const {return true;}
@@ -48,6 +52,7 @@ template <class T>  class Vector // definition
   size_t sz = 100;
   T *buff = nullptr;
 };
+
 
 
 /******************************************************************************/
@@ -142,6 +147,7 @@ size_t Vector<T>::size()const
   return sz;
 }
 
+
 //------------------------------------------------------------------------------
   
 template <class T>
@@ -161,8 +167,82 @@ std::ostream & operator<<(std::ostream &os , const Vector<T> &obj)
   return os;
 }
 
+
+
+/******************************************************************************/
+/* 14.1.2 Partial Specializations of a Class Template */ 
+/******************************************************************************/
+
+template <class T>
+class Vector<T*>    // partial specialization
+{
+ public:
+
+  Vector(const Vector<T> & src);
+  Vector<T>& operator=(const Vector<T> & src);
+  ~Vector();
+
+};
+
+
+/******************************************************************************/
+/* definitions of Partial Specializations of a Class Template */ 
+/******************************************************************************/
+
+
+
 //------------------------------------------------------------------------------
+ 
+template <class T>
+Vector<T*> & Vector<T*>::operator=(const Vector<T> & src)
+{
+  std::cout << "\nVector<T*> operator=()\n";
   
+  if(not(this==&src))
+  {
+    //release element ptr. by element ptr.
+    release();
+
+    sz = src.sz;
+    buff = new T[src.sz];
+    assert(buff);
+    //copy element ptr. by element ptr.
+    for(size_t loopi=0; loopi< src.sz; ++loopi)
+    {
+	buff[loopi] = new T(src[loopi]);
+	assert(buff[loopi]);
+    }
+  }
+    return *this;
+}
+  
+//------------------------------------------------------------------------------
+    
+template <class T>
+Vector<T*>::~Vector()
+{
+  std::cout << "\nVector<T*> destructor.\n";
+ 
+  release();
+}
+  
+//------------------------------------------------------------------------------
+    
+template <class T>
+void Vector<T*>::release()
+{
+  std::cout << "\nVector<T*> release.\n";
+
+  for(size_t loopi=0; loopi< src.sz; ++loopi)
+    {
+      delete(buff[loopi]);
+      buff[loopi] = nullptr;
+    }
+  delete [] buff;
+  buff = nullptr;
+}
+
+//------------------------------------------------------------------------------
 
 
 #endif

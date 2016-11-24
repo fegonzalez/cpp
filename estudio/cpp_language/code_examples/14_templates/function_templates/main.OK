@@ -1,0 +1,10 @@
+
+ max (2.3, 4.5) = 4.5
+
+ max('0', '8') = 8
+
+ max<int>(false, 5.6) = 5
+
+USING: const char * max
+
+const char *maxstr = max(p1,p0) = string1
