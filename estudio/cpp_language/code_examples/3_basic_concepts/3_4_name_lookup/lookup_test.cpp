@@ -54,7 +54,7 @@ namespace Unqualified_name_lookup
   //----------------------------------------------------------------------------
 
   /*!\namespace test_point_7_4
-    \test [k3402]
+    \test [k34032]
   */
   namespace test_point_7_4
   {

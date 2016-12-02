@@ -1328,8 +1328,8 @@ WARNING From now, brief description for each point, read [1_1] for details.
 
 # 3.4.2 Argument-dependent name lookup
 
-\brief For functions calls, other other namespaces not considered
-       during the usual unqualified lookup (3.4.1) may be searched. 
+\brief For functions calls, other namespaces not considered during the
+       usual unqualified lookup (3.4.1) may be searched.
 
 [1_1] for details.
 
@@ -5481,11 +5481,6 @@ WARNING The set of template arguments after the class name is the key
 	(<T*>) in this example.
 
 
-TODO a code example of this.
-
-
-
-
 13) The distinction between pointers and non-pointer types is needed.
 
   [ Example:
@@ -5582,7 +5577,7 @@ WARNING Which means that it may be #included in multiple compilation sessions
 
 # 14.2.1.1 Implicit Argument deduction
 
-2) Unlike class template parameters, function teemplate parameters are
+2) Unlike class template parameters, function template parameters are
    IMPLICITLY deduced from the types of their matching arguments.
 
   [ Example:
@@ -5723,6 +5718,17 @@ function declared before the function is called. [3_102]
 # ------------------------------------------------------------------------------
 # 14.4 Exported Templates
 # ------------------------------------------------------------------------------
+
+
+
+
+
+
+
+
+TODO   implementar  partial specialization de Vector<T>
+TODO   implementar  explicit specializations de Vector<bool>
+
 
 
 # ==============================================================================
@@ -6534,7 +6540,6 @@ Technique used to prevent the static initialization order fiasco. [4_7_6]
   T array[N] = {other};
 
 
-
 D
 
 - Dereferencing
@@ -6682,6 +6687,10 @@ Using the "::" as qualifier.
   class B { int i; }
   B::i = 7;  // qualified id 'i'
   i = 7;  // un-qualified id 'i'
+
+
+  'nns::id' 	   qualified id
+  'nns'  	   nested-name-specifier of a qualified-id,
 
 
 S
