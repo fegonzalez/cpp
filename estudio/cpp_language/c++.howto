@@ -39,10 +39,15 @@
 #      2.13.8 user-defined-literal
 
 
-# todo 3 Basic concepts
+# 3 Basic concepts
 #
 # 3.1 Declarations and definitions
+#
 # 3.2 One-definition rule
+#     3.2.1 One-per-Program Constraints
+#     3.2.2 One-per-Translation Unit Constraints
+#     3.2.3 Cross-Translation Unit Equivalence Constraints
+
 # 3.3 Scope
 #     3.3.1 Declarative regions and scopes
 #     3.3.2 Point of declaration
@@ -53,8 +58,10 @@
 #     	    3.3.6.1 (Translation unit) local scope or internal linkage
 #     	    3.3.6.2 Global scope & global names
 #     3.3.7 Class scope
-#     3.3.8 Enumeration scope [basic.scope.enum]
-# \todo 3.3.9 Template parameter scope
+#     3.3.8 Enumeration scope
+
+# \todo # 3.3.9 Template parameter scope
+
 #     3.3.10 Name hiding
 #
 # 3.4 Name lookup
@@ -64,32 +71,34 @@
 #     	    3.4.3.1 Class members
 # 	    3.4.3.2 Namespace members
 #     3.4.4 Elaborated type specifiers
-
-
+#     3.4.5 Class member access
+#     3.4.6 Using-directives and namespace aliases [basic.lookup.udir]
+#
 # 3.5 Program and linkage
-# 3.6 Start and termination
-# 3.7 Storage duration
-# 3.8 Object lifetime
+#
+# \todo # 3.6 Start and termination
+# \todo # 3.7 Storage duration
+# \todo # 3.8 Object lifetime
 #
 # 3.9 Types
 #     3.9.1 Fundamental (built-in) types
 #           3.9.1.1 Integral types
 #           3.9.1.2 Arithmetic types
 #           3.9.1.3 Scalar types
-# \todo    3.9.2 Compound types
+# \todo # 3.9.2 Compound types
 #     3.9.3 CV-qualifiers
 #     3.9.4 Types not defined in the standard
 #           3.9.4.1 TrivialType
 #           3.9.4.2 StandardLayoutType
 #           3.9.4.3 PODType
 #
-# 3.10 Lvalues and rvalues
-# 3.11 Alignment
+# \todo # 3.10 Lvalues and rvalues
+# \todo # 3.11 Alignment
 
 
-# todo 4 Standard conversions
+# \todo # 4 Standard conversions
 #
-# \todo 4.1 Exlicit conversions
+# \todo # 4.1 Explicit conversions
 #
 # 4.2 Implicit conversions
 #     4.2.1 Order of the conversions
@@ -102,24 +111,24 @@
 # \todo 4.4 cpp standard chapter 4
 
 
-# todo 5 Expressions
+# \todo # 5 Expressions
 #
 
 
-# todo 6 Statements
+# \todo # 6 Statements
 #
-#   6.5 Iteration statements
+# 6.5 Iteration statements
 
 
-# todo 7 Declarations
+# \todo # 7 Declarations
 #
-# todo 7.1 Specifiers
+# \todo # 7.1 Specifiers
 #     7.1.1 Storage class specifiers
 #     	    7.1.1.1 extern (Appendix T)
 
 
 
-# todo 8 Declarators
+# \todo # 8 Declarators
 #
 # 8.3 Meaning of declarators
 #
@@ -147,11 +156,11 @@
 #     8.5.5 Class Member Initialization (or In-Class Initializers)
 
 
-# todo 9 Classes
+# \todo # 9 Classes
 #
 
 
-# todo 10 Derived classes
+# \todo # 10 Derived classes
 #
 #   10.3 Virtual functions
 #   	10.3.1 Calling virtual member functions vs calling non-virtual members
@@ -171,7 +180,7 @@
 # 11.7 Nested classes
 
 
-# todo 12 Special member functions
+# \todo # 12 Special member functions
 #
 # 12.1 Constructors
 #      12.1.1 Trivial Constructors
@@ -184,7 +193,7 @@
 # 	      f) Copy constructor 
 #	      g) CV-qualifiers on constructors  \todo test me
 
-# todo	12.1.3 Initialization order
+# \todo # 12.1.3 Initialization order
 #
 #	      \todo [C++11] Delegating Constructors [3_1] 7.5.2., p 378
 #       \todo [C++11] constexpr Constructors [3_1] 7.5.6. Literal Classes, p 387
@@ -210,7 +219,7 @@
 #       12.8.1 copy-constructor & assignment-operator
 
 
-# todo 13 Overloading
+# \todo # 13 Overloading
 #
 # 13.5 Overloaded operators
 #      13.5.1 Unary operators
@@ -225,7 +234,7 @@
 # 13.6 Built-in operators
 
 
-# doing 14 Templates
+# \todo # 14 Templates
 #
 # 14.1 Class Templates
 #      14.1.1 Declaring a Class Template
@@ -410,7 +419,7 @@ Note.- byte, word, and memory location (Y.1)
    It is not safe to concurrently update two bit-fields in the same struct
    if all fields between them are also bit-fields of non-zero width.
 
-   Example: 
+   [ Example: 
 
    struct
    {
@@ -425,6 +434,7 @@ Note.- byte, word, and memory location (Y.1)
    Result: 'a', 'd', and 'e.ee' are each separate memory locations.
    	   'b' and 'c' together constitute the fourth memory location.
 
+   —end example ]
 
 # 1.8 The C++ object model
 
@@ -857,7 +867,7 @@ The type of an integer literal depends on its value and notation
     a"
     )a"
     is equivalent to "\n)\\\na\"\n".
-
+   —end example ]
 
 # 2.13.6 boolean-literal
 
@@ -973,26 +983,17 @@ b) definition (entity)
   int f(int x) { return x+a; } 	// defines f and x
 
 
-# 3.2 One-definition rule
 
-1) No translation unit shall contain more than one definition of any
-   variable, function, class type, enumeration type, or template."
+# 3.2 One-definition rule [k3201]
 
-   Note.- an identifier can be declared as often as you want.
-      	  double f(int, double); // legal code: twice definition in a row
-      	  double f(int, double);
-   Note.- an identifier MUST be defined exactly once.
+My_note.- Informally "odr-used" means "bind, or memory location accessed"
 
-2) An expression is POTENTIALLY EVALUATED unless it is an unevaluated
-   operand (Clause 5) or a subexpression thereof. The set of potential
-   results of an expression e is defined as follows: (read [1_1] for details)
+Note.- an identifier can be DECLARED as often as you want.
+       double f(int, double); // legal code: twice definition in a row
+       double f(int, double);
 
-3) A variable x whose name appears as a potentially-evaluated
-   expression ex is ODR-USED by ex unless ... (read [1_1] for details)
 
-   My_note.- Informally "odr-used" means "bind, or memory location accessed"
-
-4) Inline vs non-inline definition
+(4) Inline vs non-inline definition [1_1]
 
    Every program shall contain exactly one definition of every
    non-inline function or variable that is odr-used in that program.
@@ -1000,23 +1001,148 @@ b) definition (entity)
    An inline function shall be defined in every translation unit in
    which it is odr-used.
 
-5) class definition:
 
-   Exactly one definition of a class is required in a translation unit if the 
-   class is used in a way that requires the class type to be complete.
-   # e.g. 
-   class A;
-   A a;      // definition required
-   A *a:     // definition not required
+# 3.2.1 One-per-Program Constraints [3_102]
 
-6) There can be more than one definition of a class type (Clause 9),
-   enumeration type (7.2), ..., in a program 
-   
-   - provided that each definition appears in a different translation unit, and 
+RULE1	No program shall contain more than one DEFINITION of any...
 
-   - provided the definitions satisfy the following requirements: ...
-     (read [1_1] for details)
-     
+a) Variables with external linkage  (3.5.1)
+
+   i) namespace scope
+   ii) non-static global variables  // check at [k3201]
+
+b) Functions:
+
+   i) Noninline functions
+   ii) Noninline member functions
+   iii) Noninline function templates
+   iv) Noninline member function templates
+
+c) Static data members // check at [k3201]
+
+d) Class template data members when they are declared with export
+
+   i) Noninline members of class templates when ... export
+
+   ii) Static data members of class templates when ... export
+
+
+RULE1_EXCEPTION This rule does not apply to entities with internal
+		linkage (3.5.2)
+
+  [ Example: (explicitly declared) static names // check at [k3201]
+
+  // Translation unit 1:
+  static int counter = 2; // unrelated to other1 translation units
+  namespace n1 {
+  static int counter = 2222; // unrelated to other translation units
+  }
+
+  // Translation unit 2:
+  static int counter = 0; // unrelated to other translation units
+  namespace n1 {
+  static int counter = 2; // unrelated to other translation units
+  }
+
+
+  // Translation unit 1:
+  const int const_counter = 0; // unrelated to other translation units
+
+  // Translation unit 2:
+  const int const_counter = 2; // unrelated to other translation units
+
+  —end example ]
+
+
+RULE2 Every program SHALL contain exactly one definition of every
+      previous item ( RULE_1's a) to d) ) that is odr-used in that
+      program. [1_1]
+
+RULE2_EXCEPTION There are two kinds of references that do not
+		constitute an odr-use in the previous sense:
+
+e2-a) A reference to an entity appears as part of a sizeof operator
+
+e2-b) A reference that appears as part of a typeid operator it is not
+      odr-used unless the argument of the typeid operator ends
+      designating a polymorphic object (because in general it is not
+      always possible to determine the result of a polymorphic typeid
+      operation until run time).
+
+  [ Example:
+
+  #include <typeinfo>
+
+  class Decider
+  {
+  #if defined(DYNAMIC)
+  virtual ~Decider() {}
+  #endif
+  };
+  
+  extern Decider d;
+
+  int main()
+  {
+   int retval = (int) sizeof(d);  // ok: e2-a
+   const char* name = typeid(d).name(); // ok: (e2-b) iff DYNAMIC is not defined
+                                        // error: if DYNAMIC defined
+   return retval;
+  }
+
+  —end example ]
+
+
+WARNING
+According to the C++ standard, the constraints described in this
+section do not require a diagnostic from a C++ implementation.
+In practice, they are almost always reported by linkers as duplicate
+or missing definitions.
+
+
+# 3.2.2 One-per-Translation Unit Constraints [3_102]
+
+RULE3	No translation unit shall contain more than one DEFINITION of any entity
+
+  [ Example:
+
+  inline void f() {}
+  inline void f() {} // ERROR: duplicate definition
+
+  —end example ]
+
+  This is one of the main reasons for surrounding the code in header
+  files with so-called guards:
+  
+  // File guard_demo.hpp:
+  #ifndef GUARD_DEMO_HPP
+  #define GUARD_DEMO_HPP
+
+  … // content discarted the second time this is #included => following RULE3
+
+#endif // GUARD_DEMO_HPP
+
+
+WARNING
+The C++ standard requires that compilers issue some sort of diagnostic
+when one of these rules is violated.
+An exception is the lack of definition of a nonexported parameterized
+function. Such situations are typically not diagnosed.
+
+
+# 3.2.3 Cross-Translation Unit Equivalence Constraints [3_102]
+
+WARNING
+
+The ability to define certain kinds of entities in more than one translation
+unit brings with it the potential for a new kind of error: multiple definitions
+that don't match.
+
+Unfortunately, such errors are hard to detect by traditional compiler
+technology in which translation units are processed one at a time. =>
+C++ does NOT mandate to be detected nor diagnosed => C++ qualifies
+this as UNDEFINED behaviour.
+
 
 # 3.3 Scope (name - declaration)
 
@@ -1118,7 +1244,7 @@ end of the namespace.
     
 	int q();	// error: different return type
 
-  	int h() {return 77;}  // declaration of h()
+  	int h() {return 77;}  // definition of h()
   	int get_h = h();      // Here: ok: h() declared and defined
 
 	
@@ -1180,8 +1306,8 @@ a) Naming the global namespace: the unary scope operator "::" (3.4.3 4)
    ...
 
    2) A name N used in a class S shall refer to the same declaration
-      in its context and when re-evaluated in the completed scope of
-      S. No diagnostic is required for a violation of this rule.
+      in its context and when re-evaluated in the completed scope of S. 
+      No diagnostic is required for a violation of this rule.
 
    ...
 
@@ -1194,7 +1320,7 @@ a) Naming the global namespace: the unary scope operator "::" (3.4.3 4)
    {
 	char v[i];			// error (violates rule 2)
 	     				// i refers to ::i
-	     				// but when reevaluated is X::i
+	     				// but when re-evaluated is X::i
 
 	int f() { return sizeof(c); }	// OK: X::c
 	char c;
@@ -1206,7 +1332,7 @@ a) Naming the global namespace: the unary scope operator "::" (3.4.3 4)
    struct Y 
    {
 	T a;				// error (rule 2): T refers to ::T
-	  				// but when reevaluated is Y::T
+	  				// but when re-evaluated is Y::T
 	typedef long T;
 	T b;
    };
@@ -1541,7 +1667,7 @@ void h()
 
  AB::f(1);    // f is not declared directly in AB so the rules are
  	      // applied recursively to A and B;
-	      // BECAUSE f it found in A and/or B, then namespace Y is
+	      // BECAUSE f is found in A and/or B, then namespace Y is
 	      // not searched and Y::f(float) is not considered;
 	      // S is { A::f(int), B::f(char) } and overload
 	      // resolution chooses A::f(int)
@@ -1598,19 +1724,89 @@ My_note.- More examples of different cases in [1_1]
 
 # 3.4.4 Elaborated type specifiers
 
+1 An elaborated-type-specifier (7.1.6.3) may be used to refer to a
+  previously declared class-name or enum-name even though the name has
+  been hidden by a non-type declaration (3.3.10).
+
+
+# 3.4.5 Class member access
+
+  Shown & Pass.
+
+# 3.4.6 Using-directives and namespace aliases [basic.lookup.udir]
+
+1 In a using-directive or namespace-alias-definition, during the
+  lookup for a namespace-name or for a name in a nested-name-specifier
+  only namespace names are considered.
+
+
+
+# 3.5 Program and linkage
+
+(1) A program consists of one or more translation units (Clause 2) linked
+   together. A translation unit consists of a sequence of declarations.
+
+(2) A NAME is said to HAVE LINKAGE when it might denote the same
+   object, reference, function, type, template, namespace or value as
+   a name introduced by a declaration in another scope:
+
+
+# 3.5.1 External linkage
+
+(2.1) When a name has external linkage, the entity it denotes can be
+      referred to by names:
+
+      a) from scopes of other translation units
+
+      b) from other scopes of the same translation unit
+
+
+Names with external linkage:
+
+a) Named namespaces (including the global namespace)
+
+
+# 3.5.2 Internal linkage
+
+(2.2) Only from other scopes of the same translation unit (i.e. names
+      of an unnamed namespace)
+
+
+Names with internal linkage:
+
+a) Unnamed namespaces
+
+b) Names in named namespaces that are:
+
+   b1) (explicitly declared) static names
+
+       (including the global namespace, see 3.2.1 RULE1_EXCEPTION's example)
+
+   b2) a variable of non-volatile const-qualified type that is neither
+       explicitly declared extern nor previously declared to have
+       external linkage:
+
+       (non-extern) (non-volatile) const ...
+
+   b3) A data member of an anonymous union.
+
+
+# 3.5.3 No linkage
+
+(2.3) When a name has no linkage, the entity it denotes cannot be
+      referred to by names from other scopes.
 
 
 aki lo dejo 1   STANDARD
 
-aki lo dejo 2   (after standard 3.8 finished) PRIMER's page 77 / 1399
-   
 
-
-# 3.5 Program and linkage
 # 3.6 Start and termination
 # 3.7 Storage duration
 # 3.8 Object lifetime
 
+
+aki lo dejo 2   (after standard 3.8 finished), goto PRIMER's Chapter 2. Variables and Basic Types
+   
 
 
 # 3.9 Types
@@ -1734,7 +1930,7 @@ BEST_PRACTICE [3_1]
 
 # 3.9.3 CV-qualifiers
 
-# a) volatile Qualifier [3_1].19.8.3.
+# a) volatil eQualifier [3_1].19.8.3.
 
 WARNING
 The precise meaning of volatile is inherently machine dependent and
@@ -1939,7 +2135,7 @@ FACT_1  Only (zero or) one implicit conversion is allowed (ill-formed otherwise)
 
 
 # ------------------------------------------------------------------------------
-# \todo 4.1 Exlicit conversions [4_12_1]
+# \todo 4.1 Explicit conversions [4_12_1]
 # ------------------------------------------------------------------------------
  
 Converts between types using a combination of explicit and implicit conversions.
@@ -5601,6 +5797,7 @@ b) When you want to override the default type deduction.
    int nmx = max<int>(false, 5.6); // ok: explicit int deduction
    max<double>(false, &d1);        // error: no matching function for call to
 			   	   // ‘max(bool, double*)’
+   float result = noargs_function<float>(); // ok: f. template takes no args.
   —end example ]
 
 
@@ -5636,11 +5833,11 @@ a) Partial specialization doesn't introduce a new template, it extends an
 b) An overloaded version INTRODUCES A NEW function, completely
    independent of any other overloads.
 
-c) Overloading look-up: When the compiler has to choose which template
+c) Overloading lookup: When the compiler has to choose which template
    version to use, it considers all of the overloaded versions
    TOGETHER, using the overload resolution rules to select the best fit.
 
-d) Partial Spec. look-up: only the primary template is considered
+d) Partial Spec. lookup: only the primary template is considered
    first. The, if the compiler finds a partial spec. of that template
    which template arguments that match the instantiation, the partial
    spec. is used.
@@ -6338,7 +6535,7 @@ Solution: declare the variable as 'extern' (in one or many header
 # Appendix I - Undocumented Issues
 # ==============================================================================
 
-# 1) Local static variables are shared by all the objects
+# I.1 Local static variables are shared by all the objects of its trans. unit
 
   FACT: They are just like "class variables", but with local scope
   	 (scope = the function they are defined)
@@ -6375,6 +6572,11 @@ Solution: declare the variable as 'extern' (in one or many header
 # Chapter 3 Basic concepts - "./3_basic_concepts/"
 
   [k3101] extern declaration - "./3_1_declarations_and_definitions/extern"
+
+  3.2 One-definition rule - "./3_basic_concepts/3_2_onedef_rule/"
+
+  [k3201] class scope - "./namespace_scope_test.cpp"
+
 
   3.3 scope test - "./3_basic_concepts/3_3_scope/"
   
