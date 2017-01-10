@@ -1,0 +1,10 @@
+
+test [k14106]  14.4.2 Using this->
+trickybasics.hpp : Base<T>::exit
+
+trickybasics.hpp : Base<T>::exit
+
+trickybasics.hpp : Derived<T>::exit2
+
+trickybasics.hpp : Derived<T>::exit2
+

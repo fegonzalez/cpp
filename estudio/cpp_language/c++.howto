@@ -1,5 +1,9 @@
 # ==============================================================================
-# SUMMARY (following the order in the c++ standard [1_1])
+# Summary
+#
+# (following the order in the c++ standard [1_1]; except chapter 14,
+#  following [3_102])
+# 
 # ==============================================================================
 
 # 0 The (C++) standard
@@ -39,10 +43,15 @@
 #      2.13.8 user-defined-literal
 
 
-# todo 3 Basic concepts
+# 3 Basic concepts
 #
 # 3.1 Declarations and definitions
+#
 # 3.2 One-definition rule
+#     3.2.1 One-per-Program Constraints
+#     3.2.2 One-per-Translation Unit Constraints
+#     3.2.3 Cross-Translation Unit Equivalence Constraints
+
 # 3.3 Scope
 #     3.3.1 Declarative regions and scopes
 #     3.3.2 Point of declaration
@@ -53,8 +62,10 @@
 #     	    3.3.6.1 (Translation unit) local scope or internal linkage
 #     	    3.3.6.2 Global scope & global names
 #     3.3.7 Class scope
-#     3.3.8 Enumeration scope [basic.scope.enum]
-# \todo 3.3.9 Template parameter scope
+#     3.3.8 Enumeration scope
+
+# \todo # 3.3.9 Template parameter scope
+
 #     3.3.10 Name hiding
 #
 # 3.4 Name lookup
@@ -64,32 +75,35 @@
 #     	    3.4.3.1 Class members
 # 	    3.4.3.2 Namespace members
 #     3.4.4 Elaborated type specifiers
-
-
+#     3.4.5 Class member access
+#     3.4.6 Using-directives and namespace aliases [basic.lookup.udir]
+#
 # 3.5 Program and linkage
-# 3.6 Start and termination
-# 3.7 Storage duration
-# 3.8 Object lifetime
+#
+
+# \todo # 3.6 Start and termination
+# \todo # 3.7 Storage duration
+# \todo # 3.8 Object lifetime
 #
 # 3.9 Types
 #     3.9.1 Fundamental (built-in) types
 #           3.9.1.1 Integral types
 #           3.9.1.2 Arithmetic types
 #           3.9.1.3 Scalar types
-# \todo    3.9.2 Compound types
+# \todo # 3.9.2 Compound types
 #     3.9.3 CV-qualifiers
 #     3.9.4 Types not defined in the standard
 #           3.9.4.1 TrivialType
 #           3.9.4.2 StandardLayoutType
 #           3.9.4.3 PODType
 #
-# 3.10 Lvalues and rvalues
-# 3.11 Alignment
+# \todo # 3.10 Lvalues and rvalues
+# \todo # 3.11 Alignment
 
 
-# todo 4 Standard conversions
+# \todo # 4 Standard conversions
 #
-# \todo 4.1 Exlicit conversions
+# \todo # 4.1 Explicit conversions
 #
 # 4.2 Implicit conversions
 #     4.2.1 Order of the conversions
@@ -102,24 +116,24 @@
 # \todo 4.4 cpp standard chapter 4
 
 
-# todo 5 Expressions
+# \todo # 5 Expressions
 #
 
 
-# todo 6 Statements
+# \todo # 6 Statements
 #
-#   6.5 Iteration statements
+# 6.5 Iteration statements
 
 
-# todo 7 Declarations
+# \todo # 7 Declarations
 #
-# todo 7.1 Specifiers
-#     7.1.1 Storage class specifiers
+# \todo # 7.1 Specifiers
+# \todo    7.1.1 Storage class specifiers
 #     	    7.1.1.1 extern (Appendix T)
+# \todo    7.1.2 Function specifiers
+#     	    7.1.2.1 inline
 
-
-
-# todo 8 Declarators
+# \todo # 8 Declarators
 #
 # 8.3 Meaning of declarators
 #
@@ -147,11 +161,11 @@
 #     8.5.5 Class Member Initialization (or In-Class Initializers)
 
 
-# todo 9 Classes
+# \todo # 9 Classes
 #
 
 
-# todo 10 Derived classes
+# \todo # 10 Derived classes
 #
 #   10.3 Virtual functions
 #   	10.3.1 Calling virtual member functions vs calling non-virtual members
@@ -171,7 +185,7 @@
 # 11.7 Nested classes
 
 
-# todo 12 Special member functions
+# \todo # 12 Special member functions
 #
 # 12.1 Constructors
 #      12.1.1 Trivial Constructors
@@ -184,7 +198,7 @@
 # 	      f) Copy constructor 
 #	      g) CV-qualifiers on constructors  \todo test me
 
-# todo	12.1.3 Initialization order
+# \todo # 12.1.3 Initialization order
 #
 #	      \todo [C++11] Delegating Constructors [3_1] 7.5.2., p 378
 #       \todo [C++11] constexpr Constructors [3_1] 7.5.6. Literal Classes, p 387
@@ -210,7 +224,7 @@
 #       12.8.1 copy-constructor & assignment-operator
 
 
-# todo 13 Overloading
+# \todo # 13 Overloading
 #
 # 13.5 Overloaded operators
 #      13.5.1 Unary operators
@@ -225,24 +239,59 @@
 # 13.6 Built-in operators
 
 
-# doing 14 Templates
+# \todo # 14 Templates
 #
-# 14.1 Class Templates
-#      14.1.1 Declaring a Class Template
-#      	    14.1.1.1 Instantiation and Specialization
-#      	    14.1.1.2 Template Arguments
-#      	    14.1.1.3 Default Type Arguments
-#      14.1.2 Class template partial specializations
-#      14.1.3 Explicit Specializations of a Class Template
+# 14.1 Function Templates
+#      14.1.1 Defining the template
+#      14.1.2 Using the template
+#      14.1.3 Argument deduction
+#      14.1.4 Template Parameters
+#      14.1.5 Overloading Function Templates
 #
-# 14.2 Function Templates
-#      14.2.1 Argument deduction
-#      14.2.2 Overloading and Partial Specialization
+# 14.2 Class Templates
+#      14.2.1 Declaration of Class Templates
+#      	      14.2.1.1 Type and Name
+#      14.2.2 Implementation (definition) of Member Functions
+#      14.2.3 Use (instantiation) of Class Templates
+#      14.2.4 (Explicit) Specializations of Class Templates
+#      14.2.5 Partial specialization
+#      14.2.6 Template Arguments
+#      14.2.7 Default Template Arguments
 #
-# 14.3 Member Templates
-#      14.3.1 Templates and Implicit Conversions
+# 14.3 Nontype Template Parameters
+#      14.3.1 Nontype Class Template Parameters
+#      14.3.2 Nontype Function Template Parameters
+#      14.3.3 Restrictions for Nontype Template Parameters
 #
-# 14.4 Exported Templates
+# 14.4 Tricky Basics
+#      14.4.1 Keyword Typename
+#      	      14.4.1.1 The `.template' Construct
+#      14.4.2 Using this->
+#      14.4.3 Member Template
+#      14.4.4 Template Template Parameters
+#      14.4.5 Zero Initialization
+#      14.4.6 Using string literals as Arguments for Function Templates
+#
+# 14.5 Using Templates in Practice
+#      14.5.1 The Inclusion Model
+#      	      14.5.1.1 Linker Errors
+#      14.5.1.2 Templates in Header Files
+#      14.5.2 Explicit Instantiation
+#      	      14.5.2.1 Example of Explicit Instantiation
+# 	      14.5.2.2 Combining the Inclusion Model and Explicit Instantiation
+#      14.5.3 The Separation Model
+#      14.5.4 Templates and inline
+#      14.5.5 Precompiled Headers
+#      14.5.6 Debugging Templates
+# 	      14.5.6.1 Tracers
+# 	      14.5.6.2 Oracles
+# 	      14.5.6.3 Archetypes
+#
+# 14.6 Basic Template Terminology
+#      14.6.1 Template Arguments versus Template Parameters
+#
+# 14.7 Friends
+
 
 
 # todo 15 Exception handling
@@ -272,7 +321,7 @@
 
 # Appendix B - Debug, memory, ...
 #
-# B.1 memory analysis - valgrind 
+# B.2 memory analysis - valgrind 
 
 
 
@@ -350,7 +399,7 @@ c) Using the proper c++ version in your programs:
    #
    # c++11 support: CXXFLAGS += -std=c++11
    #
-   # C++98 support_ otherwise
+   # C++98 support: otherwise
 
 
 # ==============================================================================
@@ -410,7 +459,7 @@ Note.- byte, word, and memory location (Y.1)
    It is not safe to concurrently update two bit-fields in the same struct
    if all fields between them are also bit-fields of non-zero width.
 
-   Example: 
+   [ Example: 
 
    struct
    {
@@ -425,6 +474,7 @@ Note.- byte, word, and memory location (Y.1)
    Result: 'a', 'd', and 'e.ee' are each separate memory locations.
    	   'b' and 'c' together constitute the fourth memory location.
 
+   —end example ]
 
 # 1.8 The C++ object model
 
@@ -857,7 +907,7 @@ The type of an integer literal depends on its value and notation
     a"
     )a"
     is equivalent to "\n)\\\na\"\n".
-
+   —end example ]
 
 # 2.13.6 boolean-literal
 
@@ -973,26 +1023,17 @@ b) definition (entity)
   int f(int x) { return x+a; } 	// defines f and x
 
 
-# 3.2 One-definition rule
 
-1) No translation unit shall contain more than one definition of any
-   variable, function, class type, enumeration type, or template."
+# 3.2 One-definition rule [k3201]
 
-   Note.- an identifier can be declared as often as you want.
-      	  double f(int, double); // legal code: twice definition in a row
-      	  double f(int, double);
-   Note.- an identifier MUST be defined exactly once.
+My_note.- Informally "odr-used" means "bind, or memory location accessed"
 
-2) An expression is POTENTIALLY EVALUATED unless it is an unevaluated
-   operand (Clause 5) or a subexpression thereof. The set of potential
-   results of an expression e is defined as follows: (read [1_1] for details)
+Note.- an identifier can be DECLARED as often as you want.
+       double f(int, double); // legal code: twice definition in a row
+       double f(int, double);
 
-3) A variable x whose name appears as a potentially-evaluated
-   expression ex is ODR-USED by ex unless ... (read [1_1] for details)
 
-   My_note.- Informally "odr-used" means "bind, or memory location accessed"
-
-4) Inline vs non-inline definition
+(4) Inline vs non-inline definition [1_1]
 
    Every program shall contain exactly one definition of every
    non-inline function or variable that is odr-used in that program.
@@ -1000,23 +1041,148 @@ b) definition (entity)
    An inline function shall be defined in every translation unit in
    which it is odr-used.
 
-5) class definition:
 
-   Exactly one definition of a class is required in a translation unit if the 
-   class is used in a way that requires the class type to be complete.
-   # e.g. 
-   class A;
-   A a;      // definition required
-   A *a:     // definition not required
+# 3.2.1 One-per-Program Constraints [3_102]
 
-6) There can be more than one definition of a class type (Clause 9),
-   enumeration type (7.2), ..., in a program 
-   
-   - provided that each definition appears in a different translation unit, and 
+RULE1	No program shall contain more than one DEFINITION of any...
 
-   - provided the definitions satisfy the following requirements: ...
-     (read [1_1] for details)
-     
+a) Variables with external linkage  (3.5.1)
+
+   i) namespace scope
+   ii) non-static global variables  // check at [k3201]
+
+b) Functions:
+
+   i) Noninline functions
+   ii) Noninline member functions
+   iii) Noninline function templates
+   iv) Noninline member function templates
+
+c) Static data members // check at [k3201]
+
+d) Class template data members when they are declared with export (14.5.3)
+
+   i) Noninline members of class templates when ... export
+
+   ii) Static data members of class templates when ... export
+
+
+RULE1_EXCEPTION This rule does not apply to entities with internal
+		linkage (3.5.2)
+
+  [ Example: (explicitly declared) static names // check at [k3201]
+
+  // Translation unit 1:
+  static int counter = 2; // unrelated to other1 translation units
+  namespace n1 {
+  static int counter = 2222; // unrelated to other translation units
+  }
+
+  // Translation unit 2:
+  static int counter = 0; // unrelated to other translation units
+  namespace n1 {
+  static int counter = 2; // unrelated to other translation units
+  }
+
+
+  // Translation unit 1:
+  const int const_counter = 0; // unrelated to other translation units
+
+  // Translation unit 2:
+  const int const_counter = 2; // unrelated to other translation units
+
+  —end example ]
+
+
+RULE2 Every program SHALL contain exactly one definition of every
+      previous item ( RULE_1's a) to d) ) that is odr-used in that
+      program. [1_1]
+
+RULE2_EXCEPTION There are two kinds of references that do not
+		constitute an odr-use in the previous sense:
+
+e2-a) A reference to an entity appears as part of a sizeof operator
+
+e2-b) A reference that appears as part of a typeid operator it is not
+      odr-used unless the argument of the typeid operator ends
+      designating a polymorphic object (because in general it is not
+      always possible to determine the result of a polymorphic typeid
+      operation until run time).
+
+  [ Example:
+
+  #include <typeinfo>
+
+  class Decider
+  {
+  #if defined(DYNAMIC)
+  virtual ~Decider() {}
+  #endif
+  };
+  
+  extern Decider d;
+
+  int main()
+  {
+   int retval = (int) sizeof(d);  // ok: e2-a
+   const char* name = typeid(d).name(); // ok: (e2-b) iff DYNAMIC is not defined
+                                        // error: if DYNAMIC defined
+   return retval;
+  }
+
+  —end example ]
+
+
+WARNING
+According to the C++ standard, the constraints described in this
+section do not require a diagnostic from a C++ implementation.
+In practice, they are almost always reported by linkers as duplicate
+or missing definitions.
+
+
+# 3.2.2 One-per-Translation Unit Constraints [3_102]
+
+RULE3	No translation unit shall contain more than one DEFINITION of any entity
+
+  [ Example:
+
+  inline void f() {}
+  inline void f() {} // ERROR: duplicate definition
+
+  —end example ]
+
+  This is one of the main reasons for surrounding the code in header
+  files with so-called guards:
+  
+  // File guard_demo.hpp:
+  #ifndef GUARD_DEMO_HPP
+  #define GUARD_DEMO_HPP
+
+  … // content discarted the second time this is #included => following RULE3
+
+#endif // GUARD_DEMO_HPP
+
+
+WARNING
+The C++ standard requires that compilers issue some sort of diagnostic
+when one of these rules is violated.
+An exception is the lack of definition of a nonexported parameterized
+function. Such situations are typically not diagnosed.
+
+
+# 3.2.3 Cross-Translation Unit Equivalence Constraints [3_102]
+
+WARNING
+
+The ability to define certain kinds of entities in more than one translation
+unit brings with it the potential for a new kind of error: multiple definitions
+that don't match.
+
+Unfortunately, such errors are hard to detect by traditional compiler
+technology in which translation units are processed one at a time. =>
+C++ does NOT mandate to be detected nor diagnosed => C++ qualifies
+this as UNDEFINED behaviour.
+
 
 # 3.3 Scope (name - declaration)
 
@@ -1118,7 +1284,7 @@ end of the namespace.
     
 	int q();	// error: different return type
 
-  	int h() {return 77;}  // declaration of h()
+  	int h() {return 77;}  // definition of h()
   	int get_h = h();      // Here: ok: h() declared and defined
 
 	
@@ -1180,8 +1346,8 @@ a) Naming the global namespace: the unary scope operator "::" (3.4.3 4)
    ...
 
    2) A name N used in a class S shall refer to the same declaration
-      in its context and when re-evaluated in the completed scope of
-      S. No diagnostic is required for a violation of this rule.
+      in its context and when re-evaluated in the completed scope of S. 
+      No diagnostic is required for a violation of this rule.
 
    ...
 
@@ -1194,7 +1360,7 @@ a) Naming the global namespace: the unary scope operator "::" (3.4.3 4)
    {
 	char v[i];			// error (violates rule 2)
 	     				// i refers to ::i
-	     				// but when reevaluated is X::i
+	     				// but when re-evaluated is X::i
 
 	int f() { return sizeof(c); }	// OK: X::c
 	char c;
@@ -1206,7 +1372,7 @@ a) Naming the global namespace: the unary scope operator "::" (3.4.3 4)
    struct Y 
    {
 	T a;				// error (rule 2): T refers to ::T
-	  				// but when reevaluated is Y::T
+	  				// but when re-evaluated is Y::T
 	typedef long T;
 	T b;
    };
@@ -1541,7 +1707,7 @@ void h()
 
  AB::f(1);    // f is not declared directly in AB so the rules are
  	      // applied recursively to A and B;
-	      // BECAUSE f it found in A and/or B, then namespace Y is
+	      // BECAUSE f is found in A and/or B, then namespace Y is
 	      // not searched and Y::f(float) is not considered;
 	      // S is { A::f(int), B::f(char) } and overload
 	      // resolution chooses A::f(int)
@@ -1598,19 +1764,135 @@ My_note.- More examples of different cases in [1_1]
 
 # 3.4.4 Elaborated type specifiers
 
+1 An elaborated-type-specifier (7.1.6.3) may be used to refer to a
+  previously declared class-name or enum-name even though the name has
+  been hidden by a non-type declaration (3.3.10).
+
+
+# 3.4.5 Class member access
+
+  Shown & Pass.
+
+# 3.4.6 Using-directives and namespace aliases [basic.lookup.udir]
+
+1 In a using-directive or namespace-alias-definition, during the
+  lookup for a namespace-name or for a name in a nested-name-specifier
+  only namespace names are considered.
+
+
+
+# 3.5 Program and linkage
+
+(1) A program consists of one or more translation units (Clause 2) linked
+   together. A translation unit consists of a sequence of declarations.
+
+(2) A NAME is said to HAVE LINKAGE when it might denote the same
+   object, reference, function, type, template, namespace or value as
+   a name introduced by a declaration in another scope:
+
+
+# 3.5.1 External linkage
+
+(2.1) When a name has external linkage, the entity it denotes can be
+      referred to by names:
+
+      a) from scopes of other translation units
+
+      b) from other scopes of the same translation unit
+
+
+Names with external linkage:
+
+a) Named namespaces (including the global namespace)
+
+
+# 3.5.2 Internal linkage
+
+(2.2) Only from other scopes of the same translation unit (i.e. names
+      of an unnamed namespace)
+
+
+Names with internal linkage:
+
+a) Unnamed namespaces
+
+b) Names in named namespaces that are:
+
+   b1) (explicitly declared) static names
+
+       (including the global namespace, see 3.2.1 RULE1_EXCEPTION's example)
+
+   b2) a variable of non-volatile const-qualified type that is neither
+       explicitly declared extern nor previously declared to have
+       external linkage:
+
+       (non-extern) (non-volatile) const ...
+
+   b3) A data member of an anonymous union.
+
+
+# 3.5.3 No linkage
+
+(2.3) When a name has no linkage, the entity it denotes cannot be
+      referred to by names from other scopes.
+
+
+# 3.5.4 Linkage and Storage class specifiers 
+
+The linkages implied by successive declarations for a given entity
+shall agree. That is, within a given scope, each declaration declaring
+the same variable name or the same overloading of a function name
+shall imply the same linkage. Each function in a given set of
+overloaded functions can have a different linkage, however. (7.1.1)
+
+
+  [ Example:
+
+  static char* f();	// f() has internal linkage
+  char* f()    	    	// f() still has internal linkage
+  { /* ... */ }
+
+  char* g();		// g() has external linkage
+  static char* g() 	// error: inconsistent linkage
+  { /* ... */ }
+
+  void h();
+  inline void h();	// external linkage
+
+  inline void l();
+  void l();		// external linkage
+
+  inline void m();
+  extern void m();	// external linkage
+
+  static void n();
+  inline void n();	// internal linkage
+
+  static int a; 	// a has internal linkage
+  int a;     		// error: two definitions
+
+  static int b; 	// b has internal linkage
+  extern int b; 	// b still has internal linkage
+
+  int c;     		// c has external linkage
+  static int c; 	// error: inconsistent linkage
+
+  extern int d; 	// d has external linkage
+  static int d; 	// error: inconsistent linkage
+
+  —end example ]
 
 
 aki lo dejo 1   STANDARD
 
-aki lo dejo 2   (after standard 3.8 finished) PRIMER's page 77 / 1399
-   
 
-
-# 3.5 Program and linkage
 # 3.6 Start and termination
 # 3.7 Storage duration
 # 3.8 Object lifetime
 
+
+aki lo dejo 2   (after standard 3.8 finished), goto PRIMER's Chapter 2. Variables and Basic Types
+   
 
 
 # 3.9 Types
@@ -1734,7 +2016,7 @@ BEST_PRACTICE [3_1]
 
 # 3.9.3 CV-qualifiers
 
-# a) volatile Qualifier [3_1].19.8.3.
+# a) volatil eQualifier [3_1].19.8.3.
 
 WARNING
 The precise meaning of volatile is inherently machine dependent and
@@ -1939,7 +2221,7 @@ FACT_1  Only (zero or) one implicit conversion is allowed (ill-formed otherwise)
 
 
 # ------------------------------------------------------------------------------
-# \todo 4.1 Exlicit conversions [4_12_1]
+# \todo 4.1 Explicit conversions [4_12_1]
 # ------------------------------------------------------------------------------
  
 Converts between types using a combination of explicit and implicit conversions.
@@ -2088,7 +2370,7 @@ WARNING Entering an End-of-File from the Keyboard:
 #
 # 7.1 Specifiers
 
-# 7.1.1 Storage class specifiers
+# \todo 7.1.1 Storage class specifiers
 
 1) The storage class specifiers are
 
@@ -2100,7 +2382,8 @@ WARNING Entering an End-of-File from the Keyboard:
 
 # 7.1.1.1 extern (Appendix T)
 
-- The extern specifier can be applied only to the names of variables and functions. 
+- The extern specifier can be applied only to the names of variables
+  and functions.
 
 WARNING 
 The extern specifier cannot be used in the declaration of class members 
@@ -2131,14 +2414,67 @@ or function parameters.
   —end example ]
 
 
-# todo 7.1.2 Function specifiers
+# \todo 7.1.2 Function specifiers
 
-1) Function-specifiers can be used only in function declarations.
+1) Function-specifiers can be used only in function  DECLARATIONS.
 
    function-specifier:
 	inline
 	virtual
 	explicit
+
+
+# 7.1.2.1 inline
+
+2) The inline specifier indicates to the implementation that inline
+   substitution of the function body at the point of call is to be
+   PREFERRED to the usual function call mechanism, thus Inline
+   Functions Avoid Function Call Overhead
+
+WARNING
+An implementation IS NOT REQUIRED to perform this inline substitution
+at the point of call: the inline specification is only a request to
+the compiler.
+
+FACT_7_1 The inline keyword has no effect on the linkage of a function (3.5.4)
+
+
+3) A function defined within a class definition is an inline function.
+
+   The inline specifier shall not appear on a block scope function declaration.
+
+   If the inline specifier is used in a friend declaration, that
+   declaration shall be a definition or the function shall have
+   previously been declared inline.
+
+4) An inline function shall be DEFINED in every translation unit in
+   which it is odr-used and shall have exactly the same DEFINITION in
+   every case (3.2). [ Note: A call to the inline function may be
+   encountered before its definition appears in the translation
+   unit. —end note ]
+
+   If the definition of a function appears in a translation unit
+   before its first declaration as inline, the program is ill-formed.
+
+   If a function with external linkage is DECLARED inline in one
+   translation unit, it shall be DECLARED inline in all translation
+   units in which it appears; no diagnostic is required.
+
+   An inline function with external linkage shall have the same
+   address in all translation units (My_note.- this is for the
+   compiler makers)
+
+   A static local variable in an extern inline function always refers
+   to the same object (I.1). 
+
+   A type defined within the body of an extern inline function is the
+   same type in every translation unit.
+
+
+WARNING (Recommendation) Put inline in Header Files [3_1].6.5.2).
+(Either in the declaration, or in the definition of template functions.)
+Why: Multiple (identical) definitions may exists (one-def rule, see 4)
+bellow). As a result, inline functions normally are defined in headers.
 
 
 # ==============================================================================
@@ -5175,7 +5511,7 @@ Use Member Initialization Lists in the copy-constructor ([k5].Passbyref) .
 
 # 13.5 Overloaded operators 
 
-FACTS ([3_1] 14.1):
+FACTS ([3_1] 14.2):
 
 - Operators that can not be overloaded   ::   .*   .   ?:
 
@@ -5301,271 +5637,55 @@ extern "C" void operator "" _m(long double); // error: C language linkage
 # 14 Templates
 # ==============================================================================
 
-
-# ------------------------------------------------------------------------------
-# 14.1 Class Templates [k1401]
-# ------------------------------------------------------------------------------
-
-
-# 14.1.1 Declaring a Class Template
-
-
-Note.- In template <class T>.  Using class is equivalent to using typename.
-
-
-1)  template <template_parameter_list> class class_name;
-
-  [ Example: [k1401]
-
-  template <class T> class Vector;  //declaration
-
-
-  template <class T> class Vector  //definition
-  {
-   private:
-
-   size_t sz;
-   T * buff;
-
-   public:
-   explicit Vector<T>(size_t s=100);
-   ...
-   
-  }  
-
-  —end example ]
-  
-
-2) Member functions can be defined outside the class body, following the class
-   definition (same file)
-
-  [ Example: [k1401]
-
-  template <class T>
-  Vector<T>::Vector(size_t s): sz(s), buff(new T[s]){}    // ok
-
-  template <class T>
-  Vector<T>::Vector<T>...   // error: ‘Vector<T>::Vector’ names the constructor,
-			    // not the type Vector<T>::Vector<T>
-
-  —end example ]
-
-
-3) Within the scope of the class name (Vector in this examples,
-   qualification with parameter T is redundant:
-
-  [ Example: [k1401]
-
-  Vector(size_t s=100); // equivalent to Vector<T>(size_t s=100);
-
-  ~Vector();            // equivalent to ~Vector<T>()
-
-  —end example ]
-
-
-
-# 14.1.1.1 Instantiation and Specialization
-
-A class template is not a "real" class.
-
-4) Instantiation: the process of instantiating a "real" class from a template.
-
-5) Specialization: template_name<list_of_arguments> instantiated by
-   the compiler.
-
-   Vector<T>  --->  specialization  --->  Vector<int>
-                                          vector<double *> 
-					  ...
-
-   An specialization can be used like any other class.
-
-
-6) FACT_1
-   (To accomplish the "generate on demand" policy (see T)) The
-   compiler instantiates ONLY the necessary member functions of a
-   given template specialization => the compiler generates code ONLY
-   for the member functions which are used either explicitly OR
-   IMPLICITLY in the program [k1401]
-
-
-# 14.1.1.2 Template Arguments
-
-  < argument_1, argument_2, ... >
-
-7) A template can take one or more type parameters (<T, U, ...>)
-
-8) A template can also take ordinary types as parameters (<int, char, ...>)
-
-9) When an ordinary type is used as a parameter, the template argument
-   MUST be a constant or a CONSTANT EXPRESSION of an INTEGRAL TYPE
-   (3.9.1.1 boolean, characters, integers)
-
-  [ Example: [k1401]
-
-  const int cn = 5;
-  int num = 10;
-  const float cd = 5.0;  
-  Array<char, 5> ac;              // ok: 5 is a const
-  Array<char, cn> ac;             // ok: cn is a const
-  Array<char, sizeof(float))> ac; // ok: constant expression used
-  Array<char, num> ac;    	  // error: num is not a constant  
-  Array<char, cd> ac;             // error: const float is not an integral type
-
-  —end example ]
-
-
-  Exceptions (other than constant expressions): 
-
-  - pointer to a non-overloaded member
-  - the address of an object or function with external linkage
-
-  => this implies that a string literal cannot be used because it has
-     "static storage type"
-
-
-10) A template can take a template as a template argument
-
-    Vector <Vector<char *> > msg_que;
-
-
-WARNING 
-When a template is used as a template argument, the space between the
-right two angle brackets is mandatory
-
-
-# 14.1.1.3 Default Type Arguments
-
-11) Class templates can have default template arguments. 
-
-    Goal: flexibility in choosing the optimal type for a particular application.
-    
-    i.e. using other types than size_t to manage very large or very
-    small memory buffers.
-
-
-  [ Example: [k1401]
-
-  template <class T, class S = size_t> class Vector;
-  ...
-  Vector<int> ordinary;
-  Vector<int, unsigned char> tiny(5);
-
-  —end example ]
-
-    
-# 14.1.2 Class template partial specializations [1_1].14.5.5
-
-12) A partial specialization of a class template OVERRIDES the primary
-    template for specific specializations.
-
-  [ Example:
-
-    template <typename T> 
-    class Vector                  // primary
-    {
-     void push_back(const T &val);
-     ...
-    }   
-
-    template <typename T> 
-    class Vector <T*>             // partial specialization
-    {
-     void push_back(const T &val);
-     ...
-    }   
-
-  —end example ]
-
-
-WARNING The set of template arguments after the class name is the key
-	(<T*>) in this example.
-
-
-13) The distinction between pointers and non-pointer types is needed.
-
-  [ Example:
-
-    v[0].destroy();  // vector of non-pointers
-    v[0]->destroy(); // vector of pointers
-
-  —end example ]
-
-
-14) The partial specializations must be ordered: least specialized
-    before more specialized.
-
-    A partial specialization shall be DECLARED before the first use of
-    a class template specialization that would make use of the partial
-    specialization as the result of an implicit or explicit
-    instantiation IN EVERY TRANSLATION UNIT in which such a use
-    occurs; no diagnostic is required.
-
-  [ Example:
-
-    Vector <T>;            // primary #1
-    Vector <T*>;	   // partial specialization #2
-    Vector <volatile T*>;  // another partial specialization #3
-
-  —end example ]
-
-
-# 14.1.3 Explicit Specializations of a Class Template
-
-15) An EXPLICIT specialization of a class template provides an alternative 
-    definition of the primary template. It is used instead of the primary 
-    definition (or a partial specialization) if the arguments match those 
-    that are given in the explicit specialization.
-
-    why needed? i.e. to execute specific implementations of some methods for
-      	      	a concrete type of data.
-
-
-  [ Example:
-
-    template <> class Vector <bool>	// explicit specialization
-
-  —end example ]
-
-  
-a) The "template<>" prefix indicates specialization of an existing
-   primary template.
-
-b) The template arguments are specified in the second pair of angle
-   brackets (<bool>) in this example.
-
-
-16) The primary template shall be DECLARED before any specializations
-    of that template.
-
-  [ Example:
-
-    template <class T> class Vector;               // primary #1
-    {...};
-    template <class T> class Vector <T*>;          // partial specialization #2
-    {...};
-    template <class T> class Vector <volatile T*>; // partial specialization #3
-    {...};
-    template <> class Vector <bool>                // explicit specialization #4
-    {...}
-
-  —end example ]
+FACT_14_1
+When you use a template, you pass the types as arguments (implicit or explicit).
+
+FACT_14_2
+Because templates are language features, you have full support of type checking
+and scope.
 
 
 # ------------------------------------------------------------------------------
-# 14.2 Function Templates [k1402]
+# 14.1 Function Templates [k1402]
 # ------------------------------------------------------------------------------
 
-1) A function template is DEFINED inside a header file
+# Summary
+
+* Template functions define a family of functions for different
+  template arguments.
+
+* When you pass template arguments, function templates are
+  instantiated for these argument types.
+
+* The type of the arguments may be implicitly or explicitly deduced.
+
+* You can overload function templates.
+
+* When you overload function templates, limit your changes to
+  specifying template parameters explicitly.
+
+* All overload versions must be declared before calling them.
+
+
+FACT_14_3
+Function templates are functions that are parameterized so that they
+represent a family of functions.
+
+
+# 14.1.1 Defining the template
+
+1) A function template is DEFINED inside a header file (14.5.1 The
+   Inclusion Model)
 
 WARNING Which means that it may be #included in multiple compilation sessions 
 
 
   [ Example:
 
-  //cpp file myfunction.h
+  //myfunction.h  //basics/max.hpp
 
-  template <class T> 
-  const T& max (const T &t1, conts T &t2) // DEFINITION in a header file
+  template <typename T> 
+  inline const T& max (const T &t1, conts T &t2) // DEFINITION in a header file
   {
     return (t1>t2) ? t1 : t2;
   }
@@ -5573,12 +5693,42 @@ WARNING Which means that it may be #included in multiple compilation sessions
   —end example ]
 
 
-# 14.2.1 Argument deduction
+# 14.1.2 Using the template
 
-# 14.2.1.1 Implicit Argument deduction
+Instantiation: the process of instantiating a "real" function/class
+from a template definition.
 
-2) Unlike class template parameters, function template parameters are
-   IMPLICITLY deduced from the types of their matching arguments.
+Normally, the compiler generates different entities for every instantiation:
+
+
+FACT_14_4
+Templates are compiled twice
+1. Without instantiation, the code itself for correct syntax.
+2. At the time of instantiation, the templates code is checked to
+   ensure that all calls are valid (i.e. unsupported function calls)
+
+=>
+
+PROBLEM
+In practice, template instantiation requires that the compiler need to
+see the template's definition => This breaks the usual compile and
+link distinction
+
+SOLUTION
+Simplest approach: each template is implemented inside a header file
+by using INLINE functions (14.5.1 The Inclusion Model)
+
+
+# 14.1.3 Argument deduction
+
+FACT_14_5
+No automatic type conversion is allowed in calls to function templates. [k14104]
+
+
+# 14.1.3.1 Implicit Argument deduction
+
+Unlike class template parameters, function template parameters are
+IMPLICITLY deduced from the types of their matching arguments.
 
   [ Example:
 
@@ -5589,7 +5739,7 @@ WARNING Which means that it may be #included in multiple compilation sessions
   —end example ]
 
 
-# 14.2.1.2 Explicit Argument deduction
+# 14.1.3.2 Explicit Argument deduction
 
   function-name <explicit-type-list> (function-arguments)
 
@@ -5601,13 +5751,47 @@ b) When you want to override the default type deduction.
    int nmx = max<int>(false, 5.6); // ok: explicit int deduction
    max<double>(false, &d1);        // error: no matching function for call to
 			   	   // ‘max(bool, double*)’
+   float result = noargs_function<float>(); // ok: f. template takes no args.
   —end example ]
 
 
-# 14.2.2 Overloading and Partial Specialization
+# 14.1.4 Template Parameters (14.6.1)
 
-3) As opposed to class templates, a function template does not support
-   partial specializations; instead, you use overloading.
+# a) Template parameters
+
+     template <typename T>   // T is a template parameter
+
+
+# b) Call parameters
+
+  ... max (const T &t1, conts T &t2)   // t1 and t2 are call parameters
+
+
+FACT_14_6
+You may have as many template parameters as you like.
+
+
+WARNING
+Unlike class templates, in function templates NO default template
+arguments can be specified.
+
+=>
+
+FUTURE
+Maybe future compilers support this. ([3_102] 2.3)
+
+
+# 14.1.5 Overloading Function Templates
+
+As opposed to class templates, a function template does not support
+partial specializations (see 14.1.5.2); instead, you use overloading.
+
+
+# 14.1.5.1  Defining and using overloaded function templates
+
+Template and nontemplate functions can coexist.The overload resolution
+process normally prefers the nontemplate one.
+
 
   [ Example:
 
@@ -5617,7 +5801,7 @@ b) When you want to override the default type deduction.
 				    //lexicographical comparison required
 
   // overloading max()
-  const char * max(const char * t1, const char * t2)
+  inline const char* & max(const char* & t1, const char* & t2)
   {
     int val = std::strcmp(t1,t2);
     if (val>0) return t1; else return t2;  
@@ -5628,7 +5812,16 @@ b) When you want to override the default type deduction.
   —end example ]
 
 
-4) Overloading vs partial specialization; main difference.
+WARNING
+Note that in all overload implementations we pass arguments by
+reference. In general it is a good idea not to change more than
+necessary when overloading the function templates. Otherwise,
+unexpected effects may happen. (See [3_102] page. 38-39)
+
+
+# 14.1.5.2 Overloading vs partial specialization
+
+Main difference.
 
 a) Partial specialization doesn't introduce a new template, it extends an
    existing template.
@@ -5636,11 +5829,11 @@ a) Partial specialization doesn't introduce a new template, it extends an
 b) An overloaded version INTRODUCES A NEW function, completely
    independent of any other overloads.
 
-c) Overloading look-up: When the compiler has to choose which template
+c) Overloading lookup: When the compiler has to choose which template
    version to use, it considers all of the overloaded versions
    TOGETHER, using the overload resolution rules to select the best fit.
 
-d) Partial Spec. look-up: only the primary template is considered
+d) Partial Spec. lookup: only the primary template is considered
    first. The, if the compiler finds a partial spec. of that template
    which template arguments that match the instantiation, the partial
    spec. is used.
@@ -5670,17 +5863,559 @@ function declared before the function is called. [3_102]
 
 
 # ------------------------------------------------------------------------------
-# 14.3 Member Templates [k1403]
+# 14.2 Class Templates [k1401] [k14101] [k14102]
 # ------------------------------------------------------------------------------
 
-1) Template member AND member template ARE DIFFERENT things.
+# Summary
 
-- Template member: is a member (var, fn), declared inside a class template.
+* A class template is a class that is implemented with one or more
+  type parameters left open.
 
-- MEMBER TEMPLATE: IS A TEMPLATE declared inside a class or a class template
+* To use a class template, you pass the open types as template arguments. The
+  class template is then instantiated (and compiled) for these types.
+
+* For class templates, only those member functions that are called are
+  instantiated.
+
+* You can (explicitly) specialize class templates for certain types.
+
+* You can partially specialize class templates for certain types.
+
+* You can define default values for class template parameters. These
+  may refer to previous template parameters.
+
+
+# 14.2.1 Declaration of Class Templates
+
+
+Note.- In template <class T>.  Using class is equivalent to using typename.
+
+
+1)  template <template_parameter_list> class class_name;
+
+  [ Example: [k1401] [k14101]
+
+  template <class T> class Vector;  //declaration
+
+
+  template <class T> class Vector  //definition
+  {
+   private:
+
+   size_t sz;
+   T * buff;
+
+   public:
+   explicit Vector<T>(size_t s=100);
+   ...
+   
+  }  
+
+  —end example ]
+  
+
+# 14.2.1.1 Type and Name
+
+2) In template <class T> class Vector;
+
+   The type is: Vector<T> 
+
+   The name is: Vector     // i.e. used in destructor and constructors
+
+
+  [ Example: [k1401]
+
+  // ok: TYPE:NAME : Vector<T>::Vector
+  //
+  template <class T>
+  Vector<T>::Vector(size_t s): sz(s), buff(new T[s]){}    
+
+  template <class T>
+  Vector<T>::Vector<T>...   // error: ‘Vector<T>::Vector’ names the constructor,
+			    // not the type Vector<T>::Vector<T>
+  —end example ]
+
+
+3) Within the scope of the class name (Vector in this examples,
+   qualification with parameter T is redundant:
+
+  [ Example: [k1401]
+
+  explicit Vector(size_t s=100); // Declaration: name required, not type.
+
+  ~Vector();            
+
+  —end example ]
+
+
+# 14.2.2 Implementation (definition) of Member Functions
+
+You have to specify that it is a function template:
+
+    template <template_parameter>
+    
+And you have to use the full type qualification of the class template:
+
+    return_type template_type::function_name(function_arguments)
+    
+
+4) Member functions can be defined outside the class body, following the class
+   definition (in the same file)
+
+  [ Example: [k1401] [k14101]
+
+  template <class T>
+  Vector<T>::Vector(size_t s): sz(s), buff(new T[s]){}    
+
+  —end example ]
+
+
+# 14.2.3 Use (instantiation) of Class Templates
+
+You must specify the template arguments explicitly.
+
+  [ Example: [k1401] [k14101]
+
+    Vector<int>  v(4);
+
+  —end example ]
+
+
+5) A class template is not a "real" class.
+   Instantiation: the process of instantiating a "real" class from a template.
+
+6) (To accomplish the "generate on demand" policy (see T)) The
+   compiler instantiates ONLY the necessary member functions of a
+   given template specialization => the compiler generates code ONLY
+   for the member functions which are used either explicitly OR
+   IMPLICITLY in the program [k1401] [k14101]
+
+7) If a class template has static members, these are instantiated ONCE
+   FOR EACH TYPE.
+
+
+# 14.2.4 (Explicit) Specializations of Class Templates [k14102]
+
+8) An EXPLICIT specialization of a class template provides an alternative
+   definition of the primary template. It is used instead of the primary
+   definition (or a partial specialization) if the arguments match those
+   that are given in the explicit specialization.
+
+   Why needed?
+
+   a) To optimize implementations for certain types.
+
+   b) To fix a misbehaviour of certain types for an instantiation.
 
 
   [ Example:
+
+    template <>		// <> indicates explicit specialization of a template
+    class Vector <bool>	// <bool> template arguments
+
+  —end example ]
+
+  
+9) If you specialize a class template, you MUST also specialize all
+   member functions.
+
+10) Although it is possible to specialize a single member function,
+    once you have done so, you can no longer specialize the whole class.
+
+11) For these specializations, any definition of a member function
+    must be defined as an "ordinary" member function, with each
+    occurrence of T being replaced by the specialized type.
+
+  [ Example:
+
+    // primary template [k14101]
+    template <typename T>               // template function 
+    void Stack<T>::push(const T& elem)  
+    ...
+
+
+    //explicit spec. [k14102]
+    // NOT a template function
+    void Stack<std::string>::push(const std::string& elem); 
+
+  —end example ]
+
+
+# 14.2.5 Partial specialization
+
+12) A partial specialization of a class template OVERRIDES the primary
+    template for specific specializations. 
+
+WARNING
+The set of template arguments after the class name is the key.
+
+
+  [ Example:
+
+    // Declaration
+
+    template <typename T1, typename T2> 
+    class Myclass { ... };                // primary template
+
+
+    // Partial specialization: both template parameters have same type
+    template <typename T>
+    class Myclass<T,T> { ... };
+
+
+    // Partial specialization: second type is int
+    template <typename T>
+    class Myclass<T,int> { ... };
+
+
+    // Partial specialization: both template parameters are pointer types
+    template <typename T1, T2>
+    class Myclass<T1*,T2*> { ... };
+
+  —end example ]
+
+
+13) The distinction between pointers and non-pointer types is needed.
+
+  [ Example:
+
+    v[0].destroy();  // vector of non-pointers
+    v[0]->destroy(); // vector of pointers
+
+  —end example ]
+
+
+14) Instantiation: If more than one partial specialization matches
+    equally well, the declaration is ambiguous.
+
+
+  [ Example:
+
+    // Instantiation
+
+    Myclass<int,float> mif;	// uses MyClass<T1,T2>
+    Myclass<float,float> mff; 	// uses MyClass<T>
+    Myclass<float,int> mfi;	// uses MyClass<T,int>
+    Myclass<int*, float*> mp; 	// uses MyClass<T1*,T2*>
+
+
+    Myclass<int, int> m;   // ERROR: matches MyClass<T,T>, and MyClass<T,int>
+
+    Myclass<int*, int*> m; // ERROR: matches MyClass<T,T>, and MyClass<T1*,T2*>
+
+
+    // i.e. To resolve the ambiguity:
+    template <typename T>
+    class Myclass<T*,T*> { ... };
+    
+  —end example ]
+
+
+15) The primary template shall be DECLARED before any specializations
+    of that template. The specializations must be ordered: least
+    specialized before more specialized, thus explicit specializations
+    are defined the last.
+
+  [ Example:
+
+    template <class T> class Vector;               // primary #1
+    {...};
+    template <class T> class Vector <T*>;          // partial specialization #2
+    {...};
+    template <class T> class Vector <volatile T*>; // partial specialization #3
+    {...};
+    template <> class Vector <bool>                // explicit specialization #4
+    {...}
+
+  —end example ]
+
+
+# 14.2.6 Template Arguments (see 4.6.1)
+
+  < argument_1, argument_2, ... >
+
+16) A template can take one or more type parameters (<T, U, ...>)
+
+17) A template can take a template as a template argument
+
+    Vector <Vector<char *> > msg_que;
+
+    WARNING 
+    When a template is used as a template argument, the space between
+    the right two angle brackets is mandatory
+
+
+# 14.2.7 Default Template Arguments [k14103]
+
+18) Class templates can have default template arguments. 
+
+    Goal: flexibility in choosing the optimal type for a particular application.
+    
+    i.e. using other types than size_t to manage very large or very
+    small memory buffers.
+
+
+  [ Example: [k1401]
+
+  template <class T, class S = size_t> class Vector;
+  ...
+  Vector<int> ordinary;
+  Vector<int, unsigned char> tiny(5);
+
+  —end example ]
+
+    
+# ------------------------------------------------------------------------------
+# 14.3 Nontype Template Parameters
+# ------------------------------------------------------------------------------
+
+# Summary
+
+* Templates can have template parameters that are values rather than types.
+
+* Nontype template parameters MUST be: constant integral types or the
+  address of an object or function with external linkage.
+
+
+1) For function and class templates, template can also take ordinary
+   values as parameters (<int, char, bool, ...>)
+
+
+# 14.3.1 Nontype Class Template Parameters
+
+  See example [k14104]
+
+
+# 14.3.2 Nontype Function Template Parameters
+
+  [ Example: [k14105]
+
+  //basics/addval.hpp
+  
+  template<typename T, int VAL> //VAL is a value rather than a type
+  T addValue(const T& x)
+  {
+    return (x + VAL);
+  }
+  
+  —end example ]
+
+
+These kind of functions are useful if functions or operations are used
+as parameters:
+
+  [ Example: [k14105]
+
+  std::transform(source.begin(), source.end(),
+                 dest.begin(),
+		 addValue<int,5>); //operation (function template)
+  —end example ]
+
+
+# 14.3.3 Restrictions for Nontype Template Parameters
+
+
+2) When an ordinary type is used as a parameter, the template argument
+   MUST be a constant or a CONSTANT EXPRESSION of an INTEGRAL TYPE
+   (boolean, characters, integers, see 3.9.1.1 )
+
+  [ Example: [k1401]
+
+  const int cn = 5;
+  int num = 10;
+  const float cd = 5.0;  
+  Array<char, 5> ac;              // ok: 5 is a const
+  Array<char, cn> ac;             // ok: cn is a const
+  Array<char, sizeof(float))> ac; // ok: constant expression used
+  Array<char, num> ac;    	  // error: num is not a constant  
+  Array<char, cd> ac;             // error: const float is not an integral type
+
+  —end example ]
+
+
+  Exceptions (other than constant expressions): 
+
+  - pointer to a non-overloaded member
+  - the address of an object or function with external linkage
+
+  => this implies that a string literal cannot be used because they
+     have internal linkage
+
+  [ Example: [k14101]
+
+  class MyClass { ... };
+
+  const char* internal_linkage = "hello";
+  MyClass<internal_linkage> x; //ERROR: internal linkage
+
+
+
+  // BUT this is valid (according to [3_102])
+  //
+  // WARNING invalid in my test (C++14):
+
+  extern const char external_linkage[] = "hello";
+  MyClass<external_linkage> x; //OK
+
+  //WARNING invalid in my test (C++14):
+  //‘external_linkage’ has both ‘extern’ and initializer extern const
+  //char external_linkage[] = "hello";
+
+  —end example ]
+
+ 
+# ------------------------------------------------------------------------------
+# 14.4 Tricky Basics
+# ------------------------------------------------------------------------------
+
+# 14.4.1 Keyword Typename 
+
+The keyword typename was introduced during the standardization of C++
+to clarify that an identifier inside a template is as type.
+
+1) In general, typename has to be used whenever a name that depends on
+   a template parameter is a type. See 14.8.3.2 - [3_102].9.3.2 dor details.
+
+  [ Example:
+
+  class MyClass
+  {
+    typename T::Subtype * ptr;
+
+    //with typename: ptr is a pointer to a type defined within class T
+
+    //without typename: Subtype would be considered a static member of
+    //class T, and then (T::Subtype * ptr) would be considered a multiplication
+
+  };
+
+  —end example ]
+
+
+2) A typical use of typename is the access to iterators of STL
+   containers in template code:
+
+  [ Example: [k14105]
+
+  //basics/addvaltest.cpp
+
+  std::vector<int> dest {10,20,30};
+  typename std::vector<int>::const_iterator citr;
+  typename std::vector<int>::const_iterator citr_end = dest.end();
+  for (citr = dest.begin();
+      citr != citr_end;
+      ++citr)
+  {
+    std::cout << *citr << " ";
+  }
+
+
+  template <typename T>
+  void printcoll (const T& coll)
+  {
+    typename T::const_iterator pos; //iterator to iterate over coll
+    typename T::const_iterator end(coll.end()); //end position
+
+    for(pos=coll.begin();
+    	pos!=end;
+	++pos)
+    {
+     std::cout << *pos << ' ';
+    }
+   
+  };
+
+
+  // Where the type T::const_iterator has been declared inside each STL
+  // container class
+
+  class stlcontainer // i.e. vector, deque, ...
+  {
+   ...
+   typedef ... iterator; // iterator for read/write access
+   typedef ... const_iterator; // iterator for read access
+   ...
+  };
+   
+  —end example ]
+   
+
+# 14.4.1.1 The `.template' Construct
+
+3) The .template notation (and similar notations such as ->template)
+   should be used only inside templates and only if they follow
+   something that depends on a template parameter. See 14.8.3.3 -
+   [3_102].9.3.3 for details.
+
+
+  [ Example:
+
+  template <int N>
+  void printBitset(std::bitset<N> const& bs)
+  {
+   std::cout << bs.template to_string<char, ....
+
+   // without .template, the compiler does not know that the `<' token that
+   // follows is not "less than" but the beginning of a template argument list.
+
+  };
+
+  —end example ]
+
+
+# 14.4.2 Using this->  [k14106]
+
+For class templates with base classes, using a name "name" by itself
+is not always equivalent to this->name, even though a member name is
+inherited.
+
+  [ Example:
+
+  template <typename T>
+  class Base
+  {
+   public:
+   void exit();  // not overloaded
+   void exit2(); // overloaded
+  };
+
+  template <typename T>
+  class Derived: public Base<T>
+  {
+   public:
+    void exit2();
+    void foo()
+    {
+	exit();  // ERROR Base::exit is never considered by the compiler, thus
+             	 // either you have an error or an external exit() is called.
+        Base<T>::exit(); // ok: calls Base::exit()
+	this->exit();    // ok: calls Base::exit()
+	exit2();         // ok: calls Derived::exit2()
+	this->exit2();   // ok: calls Derived::exit2()
+    }  
+  };
+
+  —end example ]
+
+
+4) As a rule of thumb, we recommend that you ALWAYS qualify any symbol
+   that is declared in a base that is somehow dependent on a template
+   parameter with "this->" or with "Base<T>::". If you want to avoid
+   all uncertainty, you may consider qualifying all member access (in
+   templates). See 14.8.4.2 - [3_102].9.4.2 for details.
+
+
+# 14.4.3 Member Template [k1403]
+
+5) Template member AND member template ARE DIFFERENT things.
+
+- Template member: is a member (var, fn), declared inside a class template.
+
+- MEMBER TEMPLATE: IS A TEMPLATE declared inside a class or a class
+  template. This is possible for both nested classes and member functions.
+
+
+  [ Example:0
 
   template <class T>  class C
   {
@@ -5693,11 +6428,8 @@ function declared before the function is called. [3_102]
   —end example ]
 
 
-# 14.3.1 Templates and Implicit Conversions
-
-2) Member templates are useful for solving the lack of implicit conversions 
+6) Member templates are useful for solving the lack of implicit conversions 
    between different specializations of the same class template.
-
 
   [ Example:
 
@@ -5710,25 +6442,613 @@ function declared before the function is called. [3_102]
   —end example ]
 
 
-# case study: Asymmetric Assiggnment Operator
+a) The Asymmetric Assignment Operator example: see [k14107] for the
+   complete example.
 
 
+# 14.4.4 Template Template Parameters [k14108]
+
+7) You can also use class templates as template parameters, as
+   so-called template template parameters.
+
+GOAL: use templates with this notation:
+
+      Stack<int, std::vector> vstack;
+
+      instead this one:
+
+      Stack<int, std::vector<int> > vstack;  // 2nd int is redundant
+
+
+General expression:
+
+	template<typename T,
+                 template<typename ELEM> class CONT = std::deque> //OK
+
+        //warning: CONT is used to define a class and must be declared with
+	//         the keyword `class'
+	template<typename T,
+                 template<typename ELEM> typename CONT = std::deque> //ERROR
+
+
+Simplified expression (when ELEM is not used inside the class):
+
+	template<typename T,
+                 template<typename> class CONT = std::deque>
+
+
+8) Template template Argument Matching
+
+Template template arguments must match exactly. Default template
+arguments of template template arguments are ignored.
+
+
+  [ Example: [k14108]
+
+  //error because std::deque requires to parameters: (type, allocator)
+  //
+  template<typename T,
+           template<typename> class CONT = std::deque> // ERROR
+
+  template<typename T,
+           template<typename ELEM, typename ALLOC = std::allocator<ELEM> >
+	   class CONT = std::deque> //OK
+
+
+  // declaration (simplified expression)
+  template <typename T,
+	  template<typename ELEM,
+		   typename = std::allocator<ELEM> >
+	  class CONT = std::deque>  //OK 
+  class Stack { ... };
+
+  // implementation
+  template <typename T, template<typename,typename> class CONT>
+  inline bool Stack<T,CONT>::empty()const { return elems.empty(); }
+
+  —end example ]
+
+
+9) Template template parameters for function parameters are not allowed
+
+
+# 14.4.5 Zero Initialization
+
+Before C++11, built-in types aren't default initialized, thus template
+T built-in types neither.
+
+10) Zero initialization in function templates:
+
+  [ Example:
+
+    template <typename T>
+    void foo()
+    {
+      // T x; // before C++11, x is undefined
+
+      T x =  T(); // zero init. for x
+    }
+    
+  —end example ]
+
+
+11) Zero initialization in class templates:
+
+  [ Example:
+
+    template <typename T>
+    class MyClass
+    {
+      private:
+      T x;     // before C++11, x is undefined
+
+      MyClass(): x(); // zero init. for data member x, even for built-in types.<
+    };
+    
+  —end example ]
+
+
+# 14.4.6 Using string literals as Arguments for Function Templates
+
+12) For string literals there is an array-to-pointer argument
+    deduction if and only if the parameter is not a reference.
+
+
+13) General problem:
+
+a) string literals have different array types depending on their length:
+   i.e. "apple" has type const char[6], "tomato" has type const char[7].
+
+b) In a call to a function, during argument deduction, array-to-pointer
+   conversion (decay) occurs only if the parameter isn't a reference.
+
+   i.e.: void (std::string & val1); // NO decay
+   	 void (std::string val1);   // decay occurs
+
+
+14) Consequences in templates:
+
+   In templates we know that implicit parameter deduction is executed
+   upon calling a function template, and that all the template
+   parameters must have the same type to be correct.
+
+  [ Example: reference parameters (T&)  // basics/max5.cpp
+
+    template <typename T>
+    inline const T& max(const T& a, const T& b)
+    {
+      return a < b ? b : a; 
+    };
+
+    int main()
+    {
+      std::string s, s2;
+      ::max("apple", "peach");  // OK: same type (const char[6])
+      ::max("apple", "tomato"); // ERROR: different types
+      ::max("apple", s);        // ERROR: different types
+      ::max(s,s2);              // OK: same type (std::string)
+      ::max<std::string>("apple", "tomato"); // OK: same type (std::string)
+    }
+    
+  —end example ]
+
+
+  [ Example: value parameters (T)   // basics/max6.cpp
+
+    template <typename T>
+    inline const T max(const T a, const T b)
+    {
+      return a < b ? b : a; 
+    };
+
+    int main()
+    {
+      ::max("apple", "peach");  // OK: same type (const char[6])
+      ::max("apple", "tomato"); // OK: decays to same type
+      ::max("apple", s);        // ERROR: different types
+    }
+    
+  —end example ]
+
+
+15) Possible solutions; depending on the context you can:
+
+a) Use nonreferences instead of references => unnecessary copying 
+
+b) Overload both reference and nonref. parameters => potential ambiguities
+
+c) Overload with concrete types (such std:string)
+
+d) Overload with array types, for example:
+
+      template <typename T, int N, int M>
+      const T* max(T const(&a)[N], T const(&b)[M])
+      { return a < b ? b : a; }
+
+e) Force application programmers to use explicit conversions.
 
 
 # ------------------------------------------------------------------------------
-# 14.4 Exported Templates
+# 14.5 Using Templates in Practice
 # ------------------------------------------------------------------------------
 
+* Templates challenge the classic compiler-plus-linker model. Therefore there
+  are different approaches to organize template code: the inclusion model,
+  explicit instantiation, and the separation model.
 
 
+# 14.5.1 The Inclusion Model
+
+1) This is the most popular approach (as of the time of writing:
+   November 12, 2002) to organize template source code.
 
 
+# 14.5.1.1 Linker Errors
+
+2) If we separate the template declaration (.h file) and the template
+   definition (.cpp file), then the compiler can't instantiate the
+   template, thus it can't create the instantiation unit (2.1.b); the
+   compialtion might be all right, but the linker can't find the
+   references to the template code.
 
 
+# 14.5.1.2 Templates in Header Files
 
-TODO   implementar  partial specialization de Vector<T>
-TODO   implementar  explicit specializations de Vector<bool>
+3) When we include all template declarations and definitions in the
+   same (header) file, the code correctly compiles, links, and executes.
+   This way of organizing templates is called the inclusion model.
 
+4) The inclusion model ensures that all the needed templates are
+   instantiated. This happens because the C++ compilation system
+   automatically generates those instantiations as they are needed.
+
+5) The inclusion model computational cost problem:
+
+WARNING
+This approach considerably increase the cost of including the template
+header files because it must also cause the inclusion of all the
+headers already included in the template header file (i.e. all the std
+libraries) => THIS IS A REAL PROBLEM IN PRACTICE.
+
+NOTE (from [3_102])
+Despite this build-time issue, we do recommend following this
+inclusion model to organize your templates when possible. We examine
+two alternatives, but in our opinion their engineering deficiencies
+are more serious than the build-time issue discussed here.
+
+
+6) Another (more subtle) observation about the inclusion approach is
+that NONINLINE FUNCTION TEMPLATES are distinct from inline functions
+and macros in an important way: THEY ARE NOT EXPANDED AT THE CALL
+SITE. Instead, when they are instantiated, they create a new copy of a
+function. Because this is an automatic process, a compiler could end
+up creating two copies in two different files, and some linkers could
+issue errors when they find two distinct definitions for the same
+function. In theory, this should not be a concern of ours: It is a
+problem for the C++ compilation system to accommodate. In practice,
+things work well most of the time, and we don't need to deal with this
+issue at all. For large projects that create their own library of
+code, however, problems occasionally show up. A discussion of
+instantiation This document was created by an unregistered ChmMagic,
+please go to http://www.bisenter.com to register it. Thanks .  90
+schemes in Chapter 10 and a close study of the documentation that came
+with the C++ translation system (compiler) should help address these
+problems.
+
+
+# 14.5.2 Explicit Instantiation
+
+a) Inclusion model: AUTOMATIC IMPLICIT instantiation BY THE COMPILER.
+
+b) Explicit Instantiation directive: MANUAL EXPLICIT instantiation BY THE CODER.
+
+   [ Example
+
+     // declaration of template
+     template <typename T>
+     void print_typeof (T const&);
+
+     // explicitly instantiate print_typeof() for type double
+     template void print_typeof<double>(double const&);
+     	      //
+     	      // keyword template
+	      // change T by the explicit type: double here
+     
+   end-example ]
+
+
+7) (GIANT) PROBLEM
+
+Each directive should appear only once in a program. Not following
+this rule usually results in linker errors that report duplicate
+definitions of the instantiated entities
+=> For large projects this quickly becomes an excessive burden
+=> hence we ([3_102] authors) do not recommend it.
+
+
+8) ADVANTAGES
+
+* The overhead of large headers is avoided.
+
+* The source code of template definition can be kept hidden, but then
+  no additional instantiations can be created by a client program.
+
+* For some applications it can be useful to control the exact location
+  (that is, the object file) of a template instance.
+
+
+# 14.5.2.1 Example of Explicit Instantiation
+
+  See [3_102] 6.2.1 for details.
+
+
+# 14.5.2.2 Combining the Inclusion Model and Explicit Instantiation
+
+  See [3_102] 6.2.2 for details.
+
+
+# 14.5.3 The Separation Model
+
+WARNING
+9) We stop here because the current standard (C++14) does not support the
+keyword `export' (2.11)
+
+
+# 14.5.4 Templates and inline
+
+WARNING
+10) If you write function templates that should be handled as inline
+functions, you should use the inline specifier (unless the function is
+inline already because it is defined inside a class definition).
+
+
+  [ Example:
+
+    // declaration
+
+    template <typename T>
+    class MyClass
+    {
+	public:
+
+	void memfun2() // implicitly inline
+	{ ...   }
+	
+    	void memfun3(); // explicitly inline
+    };
+
+    // definition
+    
+    
+    template <typename T>
+    inline                       // explicitly inline
+    void MyClass<T>::memfun3 ()
+    { … }
+  
+  —end example ]
+  
+
+# 14.5.5 Precompiled Headers
+
+* Problem: compilation time due to headers inclusion
+
+* Proposed scheme solution:
+
+The precompiled header scheme relies on the fact that code can be
+organized in such a manner that many files start with the same lines
+of code (include directives) . The these common N lines of code can be
+precompiled and then, for every file in our program, we could reload
+the saved state and start compilation at line N+1.
+
+To take advantage of precompiled headers, be sure to keep the same
+order fo#r include directives.
+
+WARNING
+This scheme operates outside the scope of the standard and relies on
+vendor-specific options.
+
+See [3_102] 6.5 for details.
+
+
+# 14.5.6 Debugging Templates
+
+To debug a template after a successful compilation (does it work as
+expected ?), there are different approaches: tracers, oracles, archetypes.
+
+# 14.5.6.1 Tracers
+
+A tracer is a user-defined class that can be used as an argument for a
+template to be tested.
+
+Tracers allow us to trace the execution of templates only for specific
+input data and for a specific behavior of its related functionality.
+
+  [ Example:
+
+    SortTracer to trace the STL::sort algorithm:
+    
+  —end example ]
+  
+
+See [3_102] 6.6.4 for details.
+
+
+# 14.5.6.2 Oracles
+
+An extension of tracers is known in some circles as oracles (or
+run-time analysis oracles). They are tracers that are connected to a
+so-called inference engine—a program that can remember assertions and
+reasons about them to infer certain conclusions.
+
+
+# 14.5.6.3 Archetypes
+
+When such a minimal tracer does not generate run-time output, it is
+sometimes called an archetype.
+
+
+# 14.6 Basic Template Terminology
+
+# 14.6.1 Template Arguments versus Template Parameters
+
+
+1) In short, you can say that you "pass arguments to become parameters."
+
+  [ Example:
+
+    template <typename T, int N>	// T, N: template parameters 
+    class ArrayInClass
+    {
+	public:
+    	T array[N];
+    };
+
+    int main()
+    {
+	ArrayInClass<double,10> ad;	// double, 10: template arguments
+    	...
+    }
+
+  —end example ]
+
+
+FACT_14_7
+Any template argument must be a quantity or value that can be
+determined at compile time.
+
+   =>
+
+   Because template parameters are eventually substituted by compile-time
+   values, they can themselves be used to form compile-time expressions.
+   
+   =>
+
+   Because template parameters are compile-time entities, they can
+   also be used to create valid template arguments.
+
+
+  [ Example:
+
+    template <typename T>
+    class Dozen
+    {
+      public:
+    	ArrayInClass<T,12>contents;  // T: both parameter and argument
+    };
+
+  —end example ]
+
+
+NOTICE As becomes clear later, this requirement translates into
+       dramatic benefits for the run-time costs of template entities.
+
+
+# ------------------------------------------------------------------------------
+# 14.7 Friends [1_1].14.5.4
+# ------------------------------------------------------------------------------
+
+1) A friend of a class or class template can be:
+   - a function template
+   - a class template
+   - a specialization of a function template
+   - a specialization of a class template
+   - a non-template function or class.
+
+  [ Example:
+  
+    template<class T> class task;
+    template<class T> task<T>* preempt(task<T>*);
+    
+    template<class T> class task
+    {
+      friend void next_time();
+      friend void process(task<T>*);
+      friend task<T>* preempt<T>(task<T>*);
+      template<class C> friend int func(C);
+      friend class task<int>;
+      template<class P> friend class frd;
+    };
+    
+  —end example ]
+
+2) A friend template may be declared within a class or class template.
+   A friend function template may be defined within a class or class template.
+   A friend class template may NOT be defined in a class or class template.
+   In these cases, all specializations of the friend class or friend function
+   template are friends of the class or class template granting friendship.
+
+  [ Example:
+  
+    class A
+    {
+	template<class T> friend class B;    // OK: t. class declaration
+    	template<class T> friend void f(T)   // OK: t. function definition
+	{ /* ... */ }
+
+	template<class T> friend class B    // ERROR: t. class definition
+	{ /* ... */ }
+
+    };
+    
+  —end example ]
+
+
+3) A template friend declaration specifies that all specializations of
+   that template, whether they are implicitly instantiated ,
+   partially specialized or explicitly specialized,
+   are friends of the class containing the template friend
+   declaration.
+
+  [ Example:
+
+    class X
+    {
+      template<class T> friend struct A;  // All specs. of A are freinds of X
+      class Y { };
+    };
+    template<class T> struct A { X::Y ab; };     // OK
+    template<class T> struct A<T*> { X::Y ab; }; // OK
+    
+  —end example ]
+
+
+4) When a function is defined in a friend function declaration in a class
+   template, the function is instantiated when the function is odr-used.
+
+5) A MEMBER of a class template may be declared to be a friend of a
+   non-template class. In this case, the corresponding member of every
+   specialization of the primary class template and class template
+   partial specializations thereof is a friend of the class granting
+   friendship.
+
+   For explicit specializations and specializations of partial
+   specializations, the corresponding member is the member (if any)
+   that has the same name, kind (type, function, class template, or
+   function template), template parameters, and signature as the
+   member of the class template instantiation that would otherwise
+   have been generated.
+
+   [ Example:
+
+     template<class T> struct A
+     {
+	struct B { };
+	void f();
+	struct D {
+	void g();
+	};
+	};
+
+     template<> struct A<int>
+     {
+	struct B { };
+	int f();
+	struct D
+	{
+	  void g();
+	};
+     };
+     
+     class C
+     {
+	template<class T> friend struct A<T>::B;
+	//
+	// grants friendship to A<int>::B even though
+	// it is not a specialization of A<T>::B
+     
+	template<class T> friend void A<T>::f();
+	//
+	// does not grant friendship to A<int>::f()
+     	// because its return type does not match
+
+     	template<class T> friend void A<T>::D::g();
+	//
+	// does not grant friendship to A<int>::D::g()
+     	// because A<int>::D is not a specialization of A<T>::D
+
+     };
+     
+   —end example ]
+
+
+7) A friend template shall not be declared in a local class.
+
+8) Friend declarations shall not declare partial specializations.
+
+   [ Example:
+
+     template<class T> class A { };
+     class X
+     {
+	template<class T> friend class A<T*>; // error
+     };
+
+   —end example ]
+
+9) When a friend declaration refers to a specialization of a function
+   template, the function parameter declarations shall not include
+   default arguments, nor shall the inline specifier be used in such a
+   declaration.
 
 
 # ==============================================================================
@@ -5953,8 +7273,83 @@ FAQ Sounds like I should never use reference semantics, right?  [4_4_1]
 # Appendix B - Debug, memory, ...
 # ==============================================================================
 
-# B.1 memory analysis 
+# B.1 Aids for Debugging: assert and NDEBUG [3_1].6.5.3
 
+# B.1.1 assert
+
+  #include <cassert>
+  assert(boo_expr);
+
+1) assert is a preprocessor macro: managed by the preprocessor, not
+   the compiler.
+
+
+# B.1.2 The NDEBUG Preprocessor Variable
+
+2) If NDEBUG is defined, assert does nothing.
+
+3) Most compilers provide a command-line option that lets us define
+   preprocessor variables:
+
+  [ Example:
+
+  
+  $ CC -D NDEBUG main.C # use /D with the Microsoft compiler has the same effect
+       	  	 	# as writing # define NDEBUG at the beginning of main.C
+
+  —end example ]
+  
+
+# B.1.3 Aid debugging messages.
+
+a) Defined by the compiler:
+
+   _ _func_ _   // it is a local static array of const char
+   	      	// that holds the name of the function.
+
+
+b) Defined by the preprocessor:
+
+   _ _FILE_ _ string literal containing the name of the file
+   _ _LINE_ _ integer literal containing the current line number
+   _ _TIME_ _ string literal containing the time the file was compiled
+   _ _DATE_ _ string literal containing the date the file was compiled
+
+
+c) EXIT_FAILURE, EXIT_SUCCESS  // #include <cstdlib> 
+
+   A zero return indicates success; most other values indicate failure.
+   A nonzero value has a machine-dependent meaning. To make return values
+   machine independent, the cstdlib header defines two preprocessor
+   variables that we can use to indicate success or failure:
+
+   [ Example: 
+
+   if (word.size() < threshold)
+   {
+      cerr << "Error: " << __FILE__
+      << " : in function " << __func__
+      << " at line " << __LINE__ << endl
+      << " Compiled on " << __DATE__
+      << " at " << __TIME__ << endl
+      << " Word read was \"" << word
+      << "\": Length too short" << endl;
+
+      return EXIT_FAILURE;
+   }
+   else
+      return EXIT_SUCCESS;	
+
+   Result:
+   "Error: wdebug.cc : in function main at line 27
+   Compiled on Jul 11 2012 at 20:50:03
+   Word read was "foo": Length too short"
+
+   -end example ]
+
+
+# B.2 memory analysis 
+ 
 # valgrind tool
 
   valgrind [valgrind-options] [your-program] [your-program-options]
@@ -6338,7 +7733,7 @@ Solution: declare the variable as 'extern' (in one or many header
 # Appendix I - Undocumented Issues
 # ==============================================================================
 
-# 1) Local static variables are shared by all the objects
+# I.1 Local static variables are shared by all the objects of its trans. unit
 
   FACT: They are just like "class variables", but with local scope
   	 (scope = the function they are defined)
@@ -6375,6 +7770,11 @@ Solution: declare the variable as 'extern' (in one or many header
 # Chapter 3 Basic concepts - "./3_basic_concepts/"
 
   [k3101] extern declaration - "./3_1_declarations_and_definitions/extern"
+
+  3.2 One-definition rule - "./3_basic_concepts/3_2_onedef_rule/"
+
+  [k3201] class scope - "./namespace_scope_test.cpp"
+
 
   3.3 scope test - "./3_basic_concepts/3_3_scope/"
   
@@ -6445,7 +7845,18 @@ Solution: declare the variable as 'extern' (in one or many header
   [k1402] function template example - "./function_templates"
 
   [k1403] member template example - "./member_templates"
+ 
 
+  [k14100] C++Templates_TheCompleteGuide - "./C++Templates_TheCompleteGuide"
+  [k14101] class template example - "./basics/stack1test.cpp"
+  [k14102] class template specialization - "./basics/stack2test.cpp"
+  [k14103] default template arguments - "./basics/stack3test.cpp"
+  [k14104] nontype template arguments - "./basics/stack4test.cpp"
+  [k14105] nontype function template args. - "./basics/addvaltest.cpp"
+  [k14106] Tricky Basics - "./basics/trickybasicstest.cpp"
+  [k14107] Member templates, The Asymmetric Assignment Operator - 
+  	   "./basics/asyn_assig_operatortest.cpp
+  [k14108] Template Template Parameters - "./basics/stack8test.cpp
 
 
 # Appendix I - Undocumented Issues - "./code_examples/issues"
@@ -6526,7 +7937,6 @@ C
 Technique used to prevent the static initialization order fiasco. [4_7_6]
 
 
-
 - Copy Initialization (copy constructor)
 
   Initializes an object from another object 
@@ -6541,6 +7951,12 @@ Technique used to prevent the static initialization order fiasco. [4_7_6]
 
 
 D
+
+- Decay
+
+In a call to a function, during argument deduction, array-to-pointer conversion 
+is often called decay. It occurs only if the parameter isn't a reference.
+
 
 - Dereferencing
 
@@ -6830,6 +8246,18 @@ When a template is used as a template argument, the space between the
 right two angle brackets is mandatory
 
       Vector <Vector<char *> > msg_que;
+
+
+WARNING_8 
+(Recommendation) Put inline in Header Files [3_1].6.5.2). Either in
+the declaration, or in the definition of template functions.
+
+
+WARNING_9
+As a rule of thumb, we recommend that you ALWAYS qualify any symbol
+that is declared in a base that is somehow dependent on a template
+parameter with "this->" or with "Base<T>::". If you want to avoid
+all uncertainty, you may consider qualifying all member access (in templates)
 
 
 

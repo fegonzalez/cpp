@@ -1,7 +1,6 @@
 #===============================================================================
 # 
-# Basic GENERIC (*) Makefile for C++ valid for any program (static
-# pattern & implicit rules used)
+# Basic GENERIC (*) Makefile for C++ valid for any program (implicit rules used)
 #
 # Default configuration = using DEBUG options
 #
@@ -17,7 +16,6 @@
 #
 # make "CPP_STD_FLAGS = -std=c++14" all
 #
-# Optional : Parallel Execution: make -j4 ...
 #===============================================================================
 #
 # INFO Automatic Variables meaning
@@ -30,9 +28,6 @@
 #
 # $?  The names of all the prerequisites that are newer than the target.
 #
-# WARNING limited scope
-# It’s very important that you recognize the limited scope in which automatic
-# variable values are available: they only have values within the recipe.
 #===============================================================================
 
 
@@ -68,91 +63,49 @@ debug_mode := 1
 
 ## 2) Select project files & paths: VPATH, vpath, sources, objects, headers, ...
 
-#-- DO-CHANGE-HERE
-MAIN_FILE := main.cpp
-
-#project-particular variables
-
-
-## generic variables
-
-# Note.- variable naming explanation:
-# TEST_XXX: only for unitary test files.
-# EXEC_XXX: only for the main file of the module/application.
-# MODULE_XXX: only for the files that construct the module/application, thus
-#             all but test & exec.
-
-
-#source files
 SOURCES := $(wildcard *.cpp)
-EXEC_SOURCE := $(MAIN_FILE)
-TEST_SOURCES := $(filter %_test.cpp,$(SOURCES))
-MODULE_SOURCES := $(filter-out $(TEST_SOURCES),$(SOURCES))
-MODULE_SOURCES := $(filter-out $(EXEC_SOURCE),$(MODULE_SOURCES))
-
-#object files
+# TEST_SOURCES := $(filter %_test.cpp,$(SOURCES)) # only %_test.cpp files
 OBJS := $(SOURCES:%.cpp=%.o)
-EXEC_OBJ := $(EXEC_SOURCE:%.cpp=%.o)
-TEST_OBJS := $(TEST_SOURCES:%.cpp=%.o)
-MODULE_OBJS := $(MODULE_SOURCES:%.cpp=%.o)
 
-#exec files
-EXEC := $(EXEC_SOURCE:%.cpp=%)
+
 #-- DO-CHANGE-HERE
+#
+# execution command (runtest, difftest): ./$(EXEC) $(EXEC_OPTIONS)
+# EXEC: main source file name: i.e. main for main.cpp
+# EXEC_OPTIONS: execution options
+#
+# case: default execution
+# futfill with the test source name
+#
+#\error "Text file busy" msg. error after executing make is due to this:
+# EXEC := main # write some comment here cause the "Text file busy ..." error
+# ... instead of this:
+# EXEC := main
+EXEC := main
 EXEC_OPTIONS =
-#EXEC_OPTIONS = <./data/add_item 
-# case: read test input from file named "/data/add_item"
-# make "EXEC_OPTIONS = <./data/add_item" difftest"
 #
-# TEST_EXECS := $(patsubst %.cpp,%,$(TEST_SOURCES))
-TEST_EXECS := $(TEST_SOURCES:%.cpp=%)
-
-#default option values
-#
-#file expecific option values (MUST be set manually)
-#-- DO-CHANGE-HERE
-# i.e. TEST_EXECS (see def. above): sales_item_test avg_price_test
-sales_item_test.input_options = <./data/add_item
-sales_item_test.run_options = 
-sales_item_test.runtest_output_options = 
-sales_item_test.successtest_output_options = > sales_item_test.OK
-sales_item_test.difftest_output_options = > sales_item_test.last_diff
-#
-avg_price_test.input_options = <./data/book_sales 
-avg_price_test.run_options = 
-avg_price_test.runtest_output_options = 
-avg_price_test.successtest_output_options = > avg_price_test.OK
-avg_price_test.difftest_output_options =  > avg_price_test.last_diff
+# case: read test input from file
+# EXEC_OPTIONS = <file_path/file_name
+# i.e. make "EXEC_OPTIONS = <./data/add_item" runtest
 
 
-#header files & paths # i.e. HEADERS := a.h: b.h
-#-- DO-CHANGE-HERE:  
+#-- DO-CHANGE-HERE:  header files & paths
+# i.e. HEADERS := a.h: b.h 
 INCLUDE_DIRECTORIES := $(srcdir)
 # i.e. INCLUDE_DIRECTORIES += $(srcdir)/header
-COMMON_HEADERS=Sales_item.h
-#
-# Best Practice: allow 'make' to find files in directories other than 'srcdir'
+
+
+# allow 'make' to find files in directories other than 'srcdir'
 #
 # make Search order:
 #
 #   i)   local directory
 #   ii)  vpath "directories" 
 #   iii) VPATH directories.
-#
+
 #-- DO-CHANGE-HERE
 VPATH := $(INCLUDE_DIRECTORIES)
 #vpath := 
-
-
-#test execution files
-# i.e. TEST_EXECS (see def. above): sales_item_test avg_price_test
-# 1) foreach  unit_test en $(TEST_EXECS)
-# crear una lista RUN.TEST_TARGETS para runtest: run.unit_test
-# crear una lista SUCCESS.TEST_TARGETS para successtest: success.unit_test
-# crear una lista DIFF.TEST_TARGETS para difftest: diff.unit_test
-RUN.TEST_TARGETS := $(TEST_EXECS:%=run.%)
-SUCCESS.TEST_TARGETS := $(TEST_EXECS:%=success.%)
-DIFF.TEST_TARGETS := $(TEST_EXECS:%=diff.%)
 
 
 ## 3) Compilation & Linkage
@@ -165,7 +118,7 @@ INCLUDE_FLAGS = $(addprefix -I ,$(INCLUDE_DIRECTORIES))
 
 # select C++ version: c++03 / c++11 / ...
 #
-CPP_STD_FLAGS = -std=c++14
+CPP_STD_FLAGS =            
 #CPP_STD_FLAGS += -std=c++11  or via command:
 ifeq ($(CPP_STD_FLAGS), -std=c++11)
 WARNING_FLAGS += -Wc++11-compat
@@ -194,8 +147,7 @@ required_cxxflags += $(CPP_STD_FLAGS)
 # Linking #-- DO-CHANGE-HERE
 #
 # LDFLAGS: flags (i.e -g), and library paths (i.e. -L path-lib)
-LDFLAGS =	
-LDFLAGS += $(CPP_STD_FLAGS)
+LDFLAGS =
 # LDLIBS:  library names: (i.e. LDIBS="-lncurses -lm -lsdl")
 LDLIBS =
 
@@ -219,16 +171,14 @@ all_cxxflags = $(required_cxxflags) $(CXXFLAGS)
 
 # RM=rm -f
 RM.CORES := $(wildcard core.*)
-RM.EXEC := $(EXEC) a.out $(TEST_EXECS)
+RM.EXEC := $(EXEC) a.out
 RM.SAVES :=  $(wildcard *.*~ ) $(wildcard *~)
 RM.OTHER_STUFF := $(wildcard *.h.gch)
 #-- DO-CHANGE-HERE
-RM.OTHER_STUFF += $(TEST_EXECS:%=%.last_diff)
-RM.TRASH = $(RM.CORES) \
-	   $(RM.EXEC)  \
-	   $(RM.SAVES) \
-	   $(OBJS) \
-	   $(RM.OTHER_STUFF)
+#RM.OTHER_STUFF +=
+RM.OTHER_STUFF += $(EXEC:%=%.last_diff)
+RM.TRASH = $(RM.CORES) $(RM.EXEC) $(RM.SAVES) $(OBJS) $(RM.OTHER_STUFF)
+
 
 
 #===============================================================================
@@ -237,109 +187,33 @@ RM.TRASH = $(RM.CORES) \
 # default target = all
 #===============================================================================
 
-.PHONY: all exec test runexec runtest successtest difftest
-	@echo '$*'
+.PHONY: all
 
-all: $(TEST_EXECS) $(EXEC)
+all: $(EXEC)
+
+
+runtest:all
 	@echo 'Building target: $@'
-
-exec: $(EXEC)
-	@echo 'Building target: $@'
-
-test: $(TEST_EXECS)
-
-
-#-------------------------------------------------------------------------------
-# rules to execute test/main programs
-#-------------------------------------------------------------------------------
-
-#!\warning EOLINE is not expanded, so ';' is required to separate
-# commands over the shell console.
-
-RUNEXEC_COMMAND = ./$(exec_unit) $(EXEC_OPTIONS)
-
-
-RUNTEST_COMMAND = \
-		./$(test_unit) \
-		$($(test_unit).input_options) \
-		$($(test_unit).run_options) \
-		$($(test_unit).runtest_output_options) ;
-
-SUCCESSTEST_COMMAND = \
-		./$(test_unit) \
-		$($(test_unit).input_options) \
-		$($(test_unit).run_options) \
-		$($(test_unit).successtest_output_options) ;
-
-DIFFTEST_COMMAND = \
-		./$(test_unit) \
-		$($(test_unit).input_options) \
-		$($(test_unit).run_options) \
-		$($(test_unit).difftest_output_options) ; \
-		echo '\ndiff result on: $(test_unit)' ; \
-		diff $(test_unit).last_diff $(test_unit).OK ;
-
-
-#------------------
-# main-program execution
-#------------------
-
-runexec:exec
-	@echo 'Building target: $@'
-	$(foreach exec_unit,$(EXEC),$(RUNEXEC_COMMAND))
+	./$(EXEC)
+	@echo ''
 	@echo 'Finished building: $@'
 
-
-#------------------
-# test execution - all in a row
-#------------------
-
-runtest:test
+ 
+successtest:all
 	@echo 'Building target: $@'
-	$(foreach test_unit,$(TEST_EXECS),$(RUNTEST_COMMAND))
+	./$(EXEC) > $(EXEC).OK
 	@echo ''
 	@echo 'Finished building: $@'
 
 
-successtest:test
+difftest:all
 	@echo 'Building target: $@'
-	$(foreach test_unit,$(TEST_EXECS),$(SUCCESSTEST_COMMAND))
+	./$(EXEC) > $(EXEC).last_diff
+	diff -s $(EXEC).last_diff $(EXEC).OK
 	@echo ''
 	@echo 'Finished building: $@'
 
 
-difftest:test
-	@echo 'Building target: $@'
-	$(foreach test_unit,$(TEST_EXECS),$(DIFFTEST_COMMAND))
-	@echo ''
-	@echo 'Finished building: $@'
-
-
-#------------------
-# test execution - one by one
-#------------------
-
-$(RUN.TEST_TARGETS): run.%: %
-	@echo ''
-	@echo 'Building target: $@'
-	./$< $($(<).input_options) \
-		$($(<).run_options) \
-		$($(<).runtest_output_options)
-
-$(SUCCESS.TEST_TARGETS): success.%: %
-	@echo ''
-	@echo 'Building target: $@'
-	./$< $($(<).input_options) \
-		$($(<).run_options) \
-		$($(<).successtest_output_options)
-
-$(DIFF.TEST_TARGETS): diff.%: %
-	@echo ''
-	@echo 'Building target: $@'
-	./$< $($(<).input_options) \
-		$($(<).run_options) \
-		$($(<).difftest_output_options) ; \
-	     diff $<.last_diff $<.OK
 
 
 #===============================================================================
@@ -362,13 +236,7 @@ $(DIFF.TEST_TARGETS): diff.%: %
 #        $(HEADER_OBJS): %.o: %.h
 
 
-#------------------
-# a) compilation
-#------------------
-
-$(OBJS): %.o: $(COMMON_HEADERS)
-
-
+main.o: other_source.h
 
 
 #------------------------------------------------------------------------
@@ -386,23 +254,16 @@ $(OBJS): %.o: %.cpp
 	$(CXX) -c $(all_cxxflags) $(CPPFLAGS) $<  -o $@ 
 
 
+
 #------------------
 # b) linking
 #------------------
 
-$(EXEC):$(EXEC_OBJ) $(MODULE_OBJS)
+$(EXEC):$(OBJS)
 	@echo ''
 	@echo 'Building target: $@'
 	$(CXX) $(LDFLAGS) -o $@ $^ $(LDLIBS)
 
-
-# each test executable depends on its obj file...
-# ... and in any of the module objects.
-$(TEST_EXECS): %: %.o \
-              $(MODULE_OBJS)  
-	@echo ''
-	@echo 'Building target: $@'
-	$(CXX) $(LDFLAGS) -o $@ $^ $(LDLIBS)
 
 
 
@@ -414,4 +275,3 @@ $(TEST_EXECS): %: %.o \
 
 clean:
 	clear; $(RM) $(RM.TRASH); ls -l
-

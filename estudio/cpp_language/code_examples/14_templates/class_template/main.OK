@@ -1,4 +1,6 @@
 
+Function: primary_template_test
+
 Vector<T> explicit ctor(size_t s)
 
 Reading operator[]
@@ -8,12 +10,15 @@ Writing operator[]
 Vector<T> operator[]
 { 3, 0, 0, 0, 0, 0}
 
-Vector<T> copy ctor. (warning inside call to oeprator=
-
+Copy constructor
+Vector<T> copy ctor. (warning inside call to operator=)
 Vector<T> operator=()
 
+assignment operator
 Vector<T> operator=()
 
 Vector<T> destructor.
 
 Vector<T> destructor.
+
+Function: parcial_specialization_test

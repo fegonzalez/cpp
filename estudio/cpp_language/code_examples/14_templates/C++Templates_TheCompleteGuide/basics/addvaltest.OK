@@ -1,0 +1,4 @@
+
+test [k14105] nontype function template args.
+Before std::transform. dest = 10 20 30 
+After std::transform. dest = 6 7 8 

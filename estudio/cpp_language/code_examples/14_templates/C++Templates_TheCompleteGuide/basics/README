@@ -1,0 +1,18 @@
+Test Summary
+
+[k14101] class template example - "./basics/stack1test.hpp"
+
+[k14102] class template specialization - "./basics/stack2test.hpp"
+
+[k14103] default template arguments - "./basics/stack3test.hpp"
+
+[k14104] nontype template arguments - "./basics/stack4test.hpp"
+
+[k14105] nontype function template args. - "./basics/addvaltest.cpp"
+
+[k14106] Tricky Basics - "./basics/trickybasicstest.cpp"
+
+[k14107] Member templates, The Asymmetric Assignment Operator - 
+  	   "./basics/asyn_assig_operatortest.cpp
+
+[k14108] Template Template Parameters - "./basics/stack8test.cpp

@@ -1,0 +1,13 @@
+
+test [k14108] Template Template Parameters.
+using the default  internal container
+
+{ 42 7 }
+
+{ 42 7 }
+
+
+using a vector as an internal container
+7
+{ 42 7 }
+

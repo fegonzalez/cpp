@@ -69,7 +69,8 @@ debug_mode := 1
 ## 2) Select project files & paths: VPATH, vpath, sources, objects, headers, ...
 
 #-- DO-CHANGE-HERE
-MAIN_FILE := main.cpp
+#MAIN_FILE := main.cpp
+MAIN_FILE := 
 
 #project-particular variables
 
@@ -86,7 +87,7 @@ MAIN_FILE := main.cpp
 #source files
 SOURCES := $(wildcard *.cpp)
 EXEC_SOURCE := $(MAIN_FILE)
-TEST_SOURCES := $(filter %_test.cpp,$(SOURCES))
+TEST_SOURCES := $(filter %test.cpp,$(SOURCES))
 MODULE_SOURCES := $(filter-out $(TEST_SOURCES),$(SOURCES))
 MODULE_SOURCES := $(filter-out $(EXEC_SOURCE),$(MODULE_SOURCES))
 
@@ -111,25 +112,74 @@ TEST_EXECS := $(TEST_SOURCES:%.cpp=%)
 #
 #file expecific option values (MUST be set manually)
 #-- DO-CHANGE-HERE
-# i.e. TEST_EXECS (see def. above): sales_item_test avg_price_test
-sales_item_test.input_options = <./data/add_item
-sales_item_test.run_options = 
-sales_item_test.runtest_output_options = 
-sales_item_test.successtest_output_options = > sales_item_test.OK
-sales_item_test.difftest_output_options = > sales_item_test.last_diff
+
+stack1test.input_options = 
+stack1test.run_options = 
+stack1test.runtest_output_options = 
+stack1test.successtest_output_options = > stack1test.OK
+stack1test.difftest_output_options = > stack1test.last_diff
 #
-avg_price_test.input_options = <./data/book_sales 
-avg_price_test.run_options = 
-avg_price_test.runtest_output_options = 
-avg_price_test.successtest_output_options = > avg_price_test.OK
-avg_price_test.difftest_output_options =  > avg_price_test.last_diff
+stack2test.input_options = 
+stack2test.run_options = 
+stack2test.runtest_output_options = 
+stack2test.successtest_output_options = > stack2test.OK
+stack2test.difftest_output_options = > stack2test.last_diff
+#
+stack3test.input_options = 
+stack3test.run_options = 
+stack3test.runtest_output_options = 
+stack3test.successtest_output_options = > stack3test.OK
+stack3test.difftest_output_options =  > stack3test.last_diff
+#
+stack4test.input_options = 
+stack4test.run_options = 
+stack4test.runtest_output_options = 
+stack4test.successtest_output_options = > stack4test.OK
+stack4test.difftest_output_options =  > stack4test.last_diff
+#
+addvaltest.input_options = 
+addvaltest.run_options = 
+addvaltest.runtest_output_options = 
+addvaltest.successtest_output_options = > addvaltest.OK
+addvaltest.difftest_output_options =  > addvaltest.last_diff
+#
+trickybasicstest.input_options = 
+trickybasicstest.run_options = 
+trickybasicstest.runtest_output_options = 
+trickybasicstest.successtest_output_options = > trickybasicstest.OK
+trickybasicstest.difftest_output_options =  > trickybasicstest.last_diff
+#
+asyn_assig_operatortest.input_options = 
+asyn_assig_operatortest.run_options = 
+asyn_assig_operatortest.runtest_output_options = 
+asyn_assig_operatortest.successtest_output_options = > asyn_assig_operatortest.OK
+asyn_assig_operatortest.difftest_output_options =  > asyn_assig_operatortest.last_diff
+#
+stack8test.input_options = 
+stack8test.run_options = 
+stack8test.runtest_output_options = 
+stack8test.successtest_output_options = > stack8test.OK
+stack8test.difftest_output_options =  > stack8test.last_diff
+#
+max5test.input_options = 
+max5test.run_options = 
+max5test.runtest_output_options = 
+max5test.successtest_output_options = > max5test.OK
+max5test.difftest_output_options =  > max5test.last_diff
+#
+max6test.input_options = 
+max6test.run_options = 
+max6test.runtest_output_options = 
+max6test.successtest_output_options = > max6test.OK
+max6test.difftest_output_options =  > max6test.last_diff
+
 
 
 #header files & paths # i.e. HEADERS := a.h: b.h
 #-- DO-CHANGE-HERE:  
 INCLUDE_DIRECTORIES := $(srcdir)
 # i.e. INCLUDE_DIRECTORIES += $(srcdir)/header
-COMMON_HEADERS=Sales_item.h
+#COMMON_HEADERS=Sales_item.h
 #
 # Best Practice: allow 'make' to find files in directories other than 'srcdir'
 #
@@ -145,7 +195,6 @@ VPATH := $(INCLUDE_DIRECTORIES)
 
 
 #test execution files
-# i.e. TEST_EXECS (see def. above): sales_item_test avg_price_test
 # 1) foreach  unit_test en $(TEST_EXECS)
 # crear una lista RUN.TEST_TARGETS para runtest: run.unit_test
 # crear una lista SUCCESS.TEST_TARGETS para successtest: success.unit_test
@@ -166,6 +215,7 @@ INCLUDE_FLAGS = $(addprefix -I ,$(INCLUDE_DIRECTORIES))
 # select C++ version: c++03 / c++11 / ...
 #
 CPP_STD_FLAGS = -std=c++14
+
 #CPP_STD_FLAGS += -std=c++11  or via command:
 ifeq ($(CPP_STD_FLAGS), -std=c++11)
 WARNING_FLAGS += -Wc++11-compat
@@ -219,7 +269,7 @@ all_cxxflags = $(required_cxxflags) $(CXXFLAGS)
 
 # RM=rm -f
 RM.CORES := $(wildcard core.*)
-RM.EXEC := $(EXEC) a.out $(TEST_EXECS)
+RM.EXEC := $(EXEC) a.out $(TEST_EXECS) $(MODULE_SOURCES:%.cpp=%)
 RM.SAVES :=  $(wildcard *.*~ ) $(wildcard *~)
 RM.OTHER_STUFF := $(wildcard *.h.gch)
 #-- DO-CHANGE-HERE
@@ -229,6 +279,7 @@ RM.TRASH = $(RM.CORES) \
 	   $(RM.SAVES) \
 	   $(OBJS) \
 	   $(RM.OTHER_STUFF)
+
 
 
 #===============================================================================
@@ -366,9 +417,7 @@ $(DIFF.TEST_TARGETS): diff.%: %
 # a) compilation
 #------------------
 
-$(OBJS): %.o: $(COMMON_HEADERS)
-
-
+$(TEST_OBJS): %test.o: %.hpp
 
 
 #------------------------------------------------------------------------

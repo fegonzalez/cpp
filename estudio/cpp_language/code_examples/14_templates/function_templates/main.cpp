@@ -1,6 +1,9 @@
 #include "myfunction.h"
 #include <iostream>
 
+/*\test [k1402] # 14.1 Function Templates
+*/
+
 int main()
 {
   double d1 = max (2.3, 4.5);  // implicit deduction: double(double, double)
@@ -27,7 +30,7 @@ int main()
   //After const char * max(const char * t1, const char * t2) definition:
   const char *maxstr = max(p1, p0);
   std::cout << "\nconst char *maxstr = max(p1,p0) = " << maxstr << std::endl;
-  
+
   
   return 0;
 }

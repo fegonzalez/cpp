@@ -17,38 +17,44 @@
 #include <cstddef>
 #include <cassert>
 #include <iostream>
+#include <cstdlib> // __func__
 
 
-template <class T> class Vector;  //declaration
+template <typename T> class Vector;  //declaration
 
-template <class T>
-std::ostream & operator<<(std::ostream & , const Vector<T> &); 
+template <typename T>
+std::ostream & operator<<(std::ostream & , const Vector<T> &);
+
+template <typename T>
+std::ostream & operator<<(std::ostream & , const Vector<T*> &);
 
 
 /******************************************************************************/
 /* Primary Template */ 
 /******************************************************************************/
 
-template <class T>  class Vector // definition
+template <typename T>  class Vector // definition
 {
+  friend std::ostream & operator<< <T>    //!\warning <T> is required      
+    (std::ostream & , const Vector<T> &); //          (see c++-howto.14.7.1)
+
  public:
 
-  
-  explicit Vector(size_t s=100); // equivalent to Vector<T>(size_t s=100);
+  explicit Vector(size_t s=100);
   Vector(const Vector<T> & src);
   Vector<T>& operator=(const Vector<T> & src);
   ~Vector();
 
   T& operator[](unsigned int index);
   const T& operator[](unsigned int index)const;
-  size_t size()const;
+  size_t size()const {return sz;}
 
   bool template_never_used_doesneed_definition()const;
 
   bool template_used_needs_definition()const {return true;}
   
- private:
-
+  private:
+  
   size_t sz = 100;
   T *buff = nullptr;
 };
@@ -62,7 +68,8 @@ template <class T>  class Vector // definition
 /******************************************************************************/
 
 
-template <class T>
+template <typename T>
+inline
 Vector<T>::Vector(size_t s):
  sz(s),
  buff(new T[s])
@@ -72,19 +79,19 @@ Vector<T>::Vector(size_t s):
 
 //------------------------------------------------------------------------------
   
-template <class T>
+template <typename T>
 Vector<T>::Vector(const Vector<T> & src):
 sz(0),
   buff(nullptr)
 {
-  std::cout << "\nVector<T> copy ctor. (warning inside call to oeprator=\n";
+  std::cout << "\nVector<T> copy ctor. (warning inside call to operator=)";
 
   *this = src; //use overloaded operator=
 }
 
 //------------------------------------------------------------------------------
  
-template <class T>
+template <typename T>
 Vector<T> & Vector<T>::operator=(const Vector<T> & src)
 {
   std::cout << "\nVector<T> operator=()\n";
@@ -105,7 +112,8 @@ Vector<T> & Vector<T>::operator=(const Vector<T> & src)
 
 //------------------------------------------------------------------------------
   
-template <class T>
+template <typename T>
+inline
 Vector<T>::~Vector()
 {
   std::cout << "\nVector<T> destructor.\n";
@@ -116,7 +124,7 @@ Vector<T>::~Vector()
 
 //------------------------------------------------------------------------------
   
-template <class T>
+template <typename T>
 inline
 T& Vector<T>::operator[](unsigned int index)
 {
@@ -128,7 +136,7 @@ T& Vector<T>::operator[](unsigned int index)
 
 //------------------------------------------------------------------------------
   
-template <class T>
+template <typename T>
 inline
 const T& Vector<T>::operator[](unsigned int index)const
 {
@@ -140,26 +148,16 @@ const T& Vector<T>::operator[](unsigned int index)const
 
 //------------------------------------------------------------------------------
   
-template <class T>
-inline
-size_t Vector<T>::size()const
-{
-  return sz;
-}
-
-
-//------------------------------------------------------------------------------
-  
-template <class T>
-std::ostream & operator<<(std::ostream &os , const Vector<T> &obj)
+template <typename T>
+std::ostream & operator<<(std::ostream &os , const Vector<T> &src)
 {
   os << "{";
 
-  if(obj.size()>0)
+  if(src.size()>0)
   {
-    for(size_t loopi=0; loopi < obj.size() - 1; ++loopi)
-      os << " " << obj[loopi] << ",";
-    os << " " << obj[obj.size()-1];
+    for(size_t loopi=0; loopi < src.size() - 1; ++loopi)
+      os << " " << src[loopi] << ",";
+    os << " " << src[src.size()-1];
   }
   
   os << "}";
@@ -170,17 +168,38 @@ std::ostream & operator<<(std::ostream &os , const Vector<T> &obj)
 
 
 /******************************************************************************/
-/* 14.1.2 Partial Specializations of a Class Template */ 
+/* 14.1.2 Partial Specializations of a Class Template 
+
+9) If you specialize a class template, you MUST also specialize all
+   member functions. 
+
+   WARNING  And all data members
+*/ 
 /******************************************************************************/
 
-template <class T>
-class Vector<T*>    // partial specialization
+template <typename T>
+class Vector<T*>    // partial specialization: type is T*
 {
+  friend std::ostream & operator<< <T*>    //!\warning <T*> is required
+    (std::ostream & , const Vector<T*> &); //          (see c++-howto.14.7.1)
+
  public:
 
-  Vector(const Vector<T> & src);
-  Vector<T>& operator=(const Vector<T> & src);
-  ~Vector();
+  explicit Vector(size_t s=100);
+  ~Vector();  
+  Vector(const Vector<T*> & src);
+  Vector<T*>& operator=(const Vector<T*> & src);
+
+  T& operator[](unsigned int index);
+  const T& operator[](unsigned int index)const;
+  size_t size()const {return sz;}
+
+ private:
+  
+  size_t sz = 100;
+  T**buff = nullptr;
+
+  void release();
 
 };
 
@@ -189,14 +208,59 @@ class Vector<T*>    // partial specialization
 /* definitions of Partial Specializations of a Class Template */ 
 /******************************************************************************/
 
+template <typename T>
+inline
+Vector<T*>::Vector(size_t s):
+ sz(s),
+ buff(new T*[s])
+{
+  std::cout << "\nFunction: " << __func__;
+}
 
+//------------------------------------------------------------------------------
+  
+template <typename T>
+inline
+Vector<T*>::~Vector()
+{
+  std::cout << "\nFunction: " << __func__;
+  release();
+}
+
+  
+//------------------------------------------------------------------------------
+    
+template <typename T>
+void Vector<T*>::release()
+{
+  std::cout << "\nFunction: " << __func__;
+
+  for(size_t loopi=0; loopi< sz; ++loopi)
+  {
+    delete(buff[loopi]);
+    buff[loopi] = nullptr;
+  }
+  delete [] buff;
+  buff = nullptr;
+}
+
+//------------------------------------------------------------------------------
+  
+template <typename T>
+Vector<T*>::Vector(const Vector<T*> & src):
+sz(0), buff(nullptr)
+{
+  std::cout << "\nFunction: " << __func__;
+
+  *this = src; //use overloaded operator=
+}
 
 //------------------------------------------------------------------------------
  
-template <class T>
-Vector<T*> & Vector<T*>::operator=(const Vector<T> & src)
+template <typename T>
+Vector<T*> & Vector<T*>::operator=(const Vector<T*> & src)
 {
-  std::cout << "\nVector<T*> operator=()\n";
+  std::cout << "\nFunction: " << __func__;
   
   if(not(this==&src))
   {
@@ -209,39 +273,59 @@ Vector<T*> & Vector<T*>::operator=(const Vector<T> & src)
     //copy element ptr. by element ptr.
     for(size_t loopi=0; loopi< src.sz; ++loopi)
     {
-	buff[loopi] = new T(src[loopi]);
-	assert(buff[loopi]);
+      assert(src[loopi]);
+      buff[loopi] = new T(*(src[loopi]));	      
+      assert(buff[loopi]);
     }
   }
     return *this;
 }
-  
-//------------------------------------------------------------------------------
-    
-template <class T>
-Vector<T*>::~Vector()
-{
-  std::cout << "\nVector<T*> destructor.\n";
- 
-  release();
-}
-  
-//------------------------------------------------------------------------------
-    
-template <class T>
-void Vector<T*>::release()
-{
-  std::cout << "\nVector<T*> release.\n";
 
-  for(size_t loopi=0; loopi< src.sz; ++loopi)
-    {
-      delete(buff[loopi]);
-      buff[loopi] = nullptr;
-    }
-  delete [] buff;
-  buff = nullptr;
+//------------------------------------------------------------------------------
+  
+template <typename T>
+inline
+T& Vector<T*>::operator[](unsigned int index)
+{
+  std::cout << "\nFunction: " << __func__;
+  
+  assert(index < size());
+  assert((buff[index]));
+  return *(buff[index]);
 }
 
+//------------------------------------------------------------------------------
+  
+template <typename T>
+inline
+const T& Vector<T*>::operator[](unsigned int index)const
+{
+  std::cout << "\nFunction: " << __func__;
+  
+  assert(index < size());
+  assert((buff[index]));
+  return *(buff[index]);
+}
+
+//------------------------------------------------------------------------------
+  
+template <typename T>
+std::ostream & operator<<(std::ostream &os , const Vector<T*> &src)
+{
+  os << "{";
+
+  if(src.size()>0)
+  {
+    for(size_t loopi=0; loopi < src.size() - 1; ++loopi)
+      os << " " << src[loopi] << ",";
+    os << " " << src[src.size()-1];
+  }
+  
+  os << "}";
+  
+  return os;
+}
+  
 //------------------------------------------------------------------------------
 
 
