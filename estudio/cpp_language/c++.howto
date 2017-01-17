@@ -7134,10 +7134,33 @@ WARNING always pass a NON-CONST reference to the stream as the first argument
     std::ostream& operator<<(std::ostream &, const T &);
 
 
-- istream
+- istream 
 
   //!\warning 2nd argument MUST NOT be CONST because it is to be modified
   std::istream& operator>>(std::istream &, T &);
+
+
+  [ Example:
+
+  
+  std::istream &operator>>(std::istream &is, Sales_item &obj)
+  {
+   double price;
+   is >> obj.the_isbn >> obj.the_num_sold >> price;
+
+   if (is)  // check that the inputs succeeded
+      obj.the_revenue = price*obj.num_sold();
+   else 
+      obj = Sales_item();  // input failed: reset object to default state
+
+   return is;
+  }
+
+  —end example ]
+
+
+
+
 
 
 c) Standard Input and Output Objects  [k3]
