@@ -10,6 +10,7 @@
 *.zip
 *.tar.gz
 
+
 # html
 *_files/*
 
@@ -33,9 +34,10 @@ save_old_estudio/*
 remote_c++_lib
 
 #ferlib
+!ferlib/logs/logger_2016.tar.gz #exception
 
 #estudio
-#doc
+#estudio-doc
 estudio/cpp_language/doc_references/the_standard
 estudio/cpp_language/doc_references/standard.pdf
 estudio/cpp_language/doc_references/primer/*
