@@ -34,7 +34,7 @@ save_old_estudio/*
 remote_c++_lib
 
 #ferlib
-!ferlib/logs/logger_2016.tar.gz #exception
+!/ferlib/logs/logger_2016.tar.gz #exception
 
 #estudio
 #estudio-doc
