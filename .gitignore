@@ -41,7 +41,7 @@ remote_c++_lib
 estudio/cpp_language/doc_references/the_standard
 estudio/cpp_language/doc_references/standard.pdf
 estudio/cpp_language/doc_references/primer/*
-estudio/cpp_language/doc_references/templates/C++Templates_TheCompleteGuide.pdf
+#estudio/cpp_language/doc_references/templates/templates.pdf
 
 
 #code
