@@ -309,7 +309,7 @@
 
 # todo 29 Atomic operations library
 
-# ... todo 30 Thread sup port library
+# ... todo 30 Thread support library
 
 
 
@@ -348,6 +348,7 @@
 # iteration statements
 # references (lvalue references)
 # constructors
+# tempaltes
 
 
 # Appendix S - New Features 
@@ -360,6 +361,8 @@
 # Appendix W - Remarkable Warnings
 
 # Appendix Y - Non-C++ concepts
+#
+# Y.1 Memory address
 
 # Appendix Z - References
 
@@ -3803,6 +3806,10 @@ hidden pointer in the object called a “virtual-pointer” or “v-pointer.”
 This v-pointer points to a global table called the “virtual-table” or “v-table.”
 
 
+\brief: A 3 step  process: to compile T object.func(), the compiler do
+	    	  	   => object.v_pointer => T::v_table => object.func()
+
+
 a) v-table (one per class)
 
 - The compiler creates exactly one v-table for each class that has at least one
@@ -5324,12 +5331,6 @@ The destructor operates inversely to the constructors:
     not delete the object to which that pointer points => explicitly
     release this pointers on step1.
 
-
-WARNING v-pointer initialization here (10.3.2)
-Before this point, calling a member function is undefined [4_7_8] [k13], so
-from this point, the v-pointer may be defined. 
-
-
 (3) The base classes are (implicitly) destroyed
 
     (Implicit) invocation of the (nontrivial) destructor of each base class.
@@ -6572,7 +6573,7 @@ b) In a call to a function, during argument deduction, array-to-pointer
    upon calling a function template, and that all the template
    parameters must have the same type to be correct.
 
-  [ Example: reference parameters (T&)  // basics/max5.cpp
+  [ Example: reference parameters (T&)  // basics/max5.cpp: passing by reference
 
     template <typename T>
     inline const T& max(const T& a, const T& b)
@@ -6593,7 +6594,7 @@ b) In a call to a function, during argument deduction, array-to-pointer
   —end example ]
 
 
-  [ Example: value parameters (T)   // basics/max6.cpp
+  [ Example: value parameters (T)   // basics/max6.cpp: pasing by value
 
     template <typename T>
     inline const T max(const T a, const T b)
@@ -6847,6 +6848,7 @@ When such a minimal tracer does not generate run-time output, it is
 sometimes called an archetype.
 
 
+
 # 14.6 Basic Template Terminology
 
 # 14.6.1 Template Arguments versus Template Parameters
@@ -6933,9 +6935,12 @@ NOTICE As becomes clear later, this requirement translates into
 
 2) A friend template may be declared within a class or class template.
    A friend function template may be defined within a class or class template.
+
    A friend class template may NOT be defined in a class or class template.
-   In these cases, all specializations of the friend class or friend function
+
+   In these cases, ALL SPECIALIZATIONS of the friend class or friend function
    template are friends of the class or class template granting friendship.
+
 
   [ Example:
   
@@ -6954,16 +6959,16 @@ NOTICE As becomes clear later, this requirement translates into
 
 
 3) A template friend declaration specifies that all specializations of
-   that template, whether they are implicitly instantiated ,
+   that template, whether they are implicitly instantiated,
    partially specialized or explicitly specialized,
    are friends of the class containing the template friend
    declaration.
-
+ 
   [ Example:
 
     class X
     {
-      template<class T> friend struct A;  // All specs. of A are freinds of X
+      template<class T> friend struct A;  // All specs. of A are friends of X
       class Y { };
     };
     template<class T> struct A { X::Y ab; };     // OK
@@ -6993,16 +6998,18 @@ NOTICE As becomes clear later, this requirement translates into
      template<class T> struct A
      {
 	struct B { };
-	void f();
-	struct D {
-	void g();
+	void f();           
+	struct D
+	{
+	 void g();
 	};
-	};
+     };
 
      template<> struct A<int>
      {
 	struct B { };
-	int f();
+	int f();       // different return type => not an specialization
+	               // but a different function
 	struct D
 	{
 	  void g();
@@ -8309,11 +8316,7 @@ c) address size (processor concept)
      than the word size.
 
    - If equal, one memory address to be efficiently stored in one word    
-     e.g. 32-bit computer can address 2**32 = 4GB 
-    
-
-
-       
+     e.g. 32-bit computer can address 2**32 = 4GB   
 
 
 
