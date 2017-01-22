@@ -1,24 +1,67 @@
 
 Function: primary_template_test
 
-Vector<T> explicit ctor(size_t s)
-
+Vector<T>::Vector
 Reading operator[]
 { 0, 0, 0, 0, 0, 0}
 
 Writing operator[]
-Vector<T> operator[]
-{ 3, 0, 0, 0, 0, 0}
+Vector<T>::operator[]{ 3, 0, 0, 0, 0, 0}
 
 Copy constructor
-Vector<T> copy ctor. (warning inside call to operator=)
-Vector<T> operator=()
+Vector<T>::Vector
+Vector<T>::operator=
+Vector<T>::release{ 3, 0, 0, 0, 0, 0}
 
 assignment operator
-Vector<T> operator=()
+Vector<T>::operator=
+Vector<T>::release{ 3, 0, 0, 0, 0, 0}
 
-Vector<T> destructor.
-
-Vector<T> destructor.
+Vector<T>::~Vector
+Vector<T>::release
+Vector<T>::~Vector
+Vector<T>::release
 
 Function: parcial_specialization_test
+
+Vector<T>::Vector
+Vector<T>::operator[]
+Vector<T>::operator[]
+Vector<T>::operator[]{ 11, 3, 0, 1000}
+
+Vector<T*>::Vector{ 0, 0, 0}
+
+Writing operator[]
+Vector<T*>::operator[]
+Vector<T>::operator[]
+Vector<T*>::operator[]
+Vector<T>::operator[]
+Vector<T*>::operator[]
+Vector<T>::operator[]
+Reading operator[]
+{ 11, 3, 0, 1000}
+{ 11, 3, 0}
+
+<T*> Copy constructor
+Vector<T*>::Vector
+Vector<T*>::operator=
+Vector<T*>::release{ 11, 3, 0}
+
+<T*> assignment operator
+Vector<T*>::operator=
+Vector<T*>::release{ 11, 3, 0}
+
+Vector<T*>::Vector{ 0, 0, 0, 0, 0}
+
+Vector<T*>::operator=
+Vector<T*>::release{ 11, 3, 0}
+
+
+Vector<T*>::~Vector
+Vector<T*>::release
+Vector<T*>::~Vector
+Vector<T*>::release
+Vector<T*>::~Vector
+Vector<T*>::release
+Vector<T>::~Vector
+Vector<T>::release

@@ -6085,6 +6085,11 @@ The set of template arguments after the class name is the key.
 
   —end example ]
 
+  \warning Specialization for pointers: we can either use pointers
+  that point to values (no new, delete memory), or create new memory
+  (delete) pointers. [k1401]
+
+
 
 14) Instantiation: If more than one partial specialization matches
     equally well, the declaration is ambiguous.
