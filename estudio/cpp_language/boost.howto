@@ -1,0 +1,322 @@
+# ==============================================================================
+# Summary
+#
+# (following the order in the c++ standard [1_1]; except chapter 14,
+#  following [3_102])
+# 
+# ==============================================================================
+
+# 1 Getting Started
+#
+# 1.1 The Boost Distribution
+# 1.2 Header-Only Libraries
+# 1.3 Build a Simple Program Using Boost
+# 1.4 Prepare to Use a Boost Library Binary
+# 1.5 Link Your Program to a Boost Library
+
+
+# 2 Smart Pointers
+#
+# 2.1 Sole Ownership (boost::scoped_ptr)
+#     2.1.1 scoped_ptr FAQ
+#
+# 2.2 Shared Ownership (boost::shared_ptr)
+#     2.2.1 user-defined deleter
+#     2.2.2 Using boost::shared_array
+#     2.2.3 Using boost::make_shared
+#     2.2.4 boost::shared_ptr with BOOST_SP_USE_QUICK_ALLOCATOR
+#     2.2.5 shared_ptr FAQ
+
+
+# Appendix K - Code examples (./code_examples)
+#
+
+# Appendix Z - References
+#
+
+# ==============================================================================
+
+
+
+# ==============================================================================
+# 1 Getting Started
+# ==============================================================================
+
+# 1.1 The Boost Distribution
+
+# boost path
+
+The path to the boost root directory (often /usr/local/boost_1_64_0)
+is sometimes referred to as $BOOST_ROOT.
+
+   >>echo $BOOST_ROOT
+   /home/swim/development/SWIS_root/toolbox/boost_dist
+
+
+# 1.2 Header-Only Libraries
+
+WARNING
+The only Boost libraries that must be built separately are (see [1_1_1])
+
+
+# 1.3 Build a Simple Program Using Boost [k1]
+
+HINT 
+All of Boost's header files have the .hpp extension
+
+    #include <boost/whatever.hpp>
+
+    or
+
+    #include "boost/whatever.hpp"
+
+
+# compilation
+
+  >> c++ -I path/to/boost_1_64_0 example.cpp -o example
+
+  (i.e. c++ -I $BOOST_ROOT example.cpp -o example)
+
+
+
+# 1.4 Prepare to Use a Boost Library Binary
+
+If you want to use any of the separately-compiled Boost libraries,
+you'll need to acquire library binaries. (see [1_1_1] for details)
+
+
+# 1.5 Link Your Program to a Boost Library
+
+Similar to STL:
+	# LDFLAGS: flags (i.e -g), and library paths (i.e. -L path-lib)
+	# LDLIBS:  library names: (i.e. LDIBS="-lncurses -lm -lsdl")
+
+See [1_1_1] for details.
+
+
+
+# ==============================================================================
+# 2 Smart Pointers
+# ==============================================================================
+
+# 2.1 Sole Ownership (boost::scoped_ptr, boost::scoped_array) [2_2]
+
+#include <boost/scoped_ptr.hpp>   // for pointers to single objects
+#include <boost/scoped_array.hpp> // for pointers to arrays
+
+1) boost::scoped_ptr is a smart pointer that is the sole owner of a
+   dynamically allocated object.
+
+2) boost::scoped_ptr cannot be copied or moved.
+
+3) boost::scoped_ptr require that T be a complete type at destruction
+   time. [2_1]
+
+
+4) Using boost::scoped_ptr
+
+   [ Example
+
+   #include <boost/scoped_ptr.hpp>
+   #include <iostream>
+
+   int main()
+   {
+    boost::scoped_ptr<int> p{new int{1}};
+    std::cout << *p << '\n';
+    p.reset(new int{2});
+    std::cout << *p.get() << '\n';
+    p.reset();
+    std::cout << std::boolalpha << static_cast<bool>(p) << '\n';
+   }
+
+   end example ]
+
+
+# 2.1.1 scoped_ptr FAQ [2_1]
+
+FAQ Are there any advantages of boost::scoped_ptr over std::unique_ptr? 
+    Shall one always prefer the latter while coding on c++11?
+
+    >>> If you see a boost::scoped_ptr in someone's code, you know
+        immediately that the object it owns isn't used outside of the
+        current scope. If you see a std::unique_ptr, you have to look
+        further to find out whether ownership is transferred and the
+        object is used outside of the current scope. (If you know that
+        this other developer knows both boost::scoped_ptr and
+        std::unique_ptr, you can deduce that std::unique_ptr means
+        that ownership will be transferred - otherwise he would have
+        used boost::scoped_ptr.)
+
+
+FAQ Are *p and *p.get() essentially equivalent?
+
+    >>> That's correct. Two minor differences: get() is noexcept, and
+        operator* checks with BOOST_ASSERT whether the pointer is not 0.
+
+
+# ------------------------------------------------------------------------------
+# 2.2 Shared Ownership (boost::shared_ptr) [2_3] [2_1]
+# ------------------------------------------------------------------------------
+
+#include <boost/shared_ptr.hpp>
+
+1) Similar to scoped_ptr BUT boost::shared_ptr is not necessarily the
+   exclusive owner of an object. Ownership can be shared with other
+   smart pointers of type boost::shared_ptr
+
+2) The shared object is not released until the last copy of the shared
+   pointer referencing the object is destroyed.
+
+    reset(): decrements the counter of owners
+    	     IF (counter == 0) THEN object destroyed ENDIF
+
+3) BECAUSE it can share ownership, the smart pointer can be copied, 
+
+4) Shared_ptr does not require that T be a complete type at
+   destruction time. [2_1]
+
+5) Using boost::shared_ptr
+   
+   [ Example
+
+     include <boost/shared_ptr.hpp>
+     #include <iostream>
+
+     int main()
+     {
+       boost::shared_ptr<int> p1{new int{1}};
+       std::cout << *p1 << '\n';
+       boost::shared_ptr<int> p2{p1};    // (*1)
+       p1.reset(new int{2});  	       // (*2)
+       std::cout << *p1.get() << '\n';
+       p1.reset();
+       std::cout << std::boolalpha << static_cast<bool>(p2) << '\n';
+     }
+
+   end example ]
+
+   // (*1) p1 and p2 share THE SAME object
+
+   // (*2) p1 is no longer an owner of the object, but p2 still is =>
+   // 	   object not destroyed
+
+6) Operators
+
+   get()    retrieve the currently stored address
+   reset()  store a new address
+
+
+   Like boost::scoped_ptr, boost::shared_ptr overloads:
+
+   operator bool():  return false if the pointer is NULL
+   operator*():      and checks whether the pointer is not 0. (see 2.1.1)
+   operator->()
+
+# 2.2.1 user-defined deleter
+
+   As a second parameter, a deleter can be passed to the constructor
+   of boost::shared_ptr. The deleter must be a function or function
+   object that accepts as its sole parameter a pointer of the type
+   boost::shared_ptr was instantiated with. The deleter is called in
+   the destructor instead of delete. This makes it possible to manage
+   resources other than dynamically allocated objects in a boost::shared_ptr.
+
+   (see [3_2])
+
+
+# 2.2.2 Using boost::shared_array
+
+NOTICE Since Boost 1.53.0, boost::shared_ptr is an alternative to
+       boost::shared_array
+
+       Since Boost 1.53.0, boost::shared_ptr supports single objects
+       and arrays and detects whether it has to release resources with
+       delete or delete[]. Because boost::shared_ptr also overloads
+       operator[] (since Boost 1.53.0), this smart pointer is an
+       alternative for boost::shared_array.
+
+   [ Example
+
+      #include <boost/shared_array.hpp>
+      #include <iostream>
+
+      int main()
+      {
+        boost::shared_array<int> p1{new int[1]};
+  	{
+	  boost::shared_array<int> p2{p1};
+    	  p2[0] = 1;
+  	}
+  	std::cout << p1[0] << '\n';
+      }
+
+   end example ]
+
+
+# 2.2.3 Using boost::make_shared
+
+   \todo
+
+
+# 2.2.4 boost::shared_ptr with BOOST_SP_USE_QUICK_ALLOCATOR
+
+
+   \todo
+
+
+# 2.2.5 shared_ptr FAQ
+
+\todo 
+
+
+\todo test code for shared_ptr
+
+
+# ==============================================================================
+# Appendix K - Code examples (./code_examples)
+# ==============================================================================
+
+# source path for boost test ("./" from this point):  "./code_examples/boost/"
+
+
+# Init to boost library ./1_init_boost/
+
+[k1] Build a Simple Program Using Boost - ./simple_example
+
+
+
+
+# shared pointer, "./code_examples/boost/shared_ptr
+
+
+
+
+
+# ==============================================================================
+# Appendix Z - References
+# ==============================================================================
+
+
+# ------------------------------------------------------------------------------
+
+[1] General doc
+
+[1_1] Official website - http://www.boost.org/
+
+[1_1_1] Getting started - http://www.boost.org/doc/libs/1_64_0/more/getting_started/unix-variants.html
+
+[1_2] Boost book the boost cpp libraries - https://theboostcpplibraries.com/
+
+# ------------------------------------------------------------------------------
+
+[2] Smart pointers
+
+[2_1] Official website - http://www.boost.org/doc/libs/1_64_0/libs/smart_ptr/smart_ptr.htm
+
+[2_2] theboostcpplibraries sole ownership - https://theboostcpplibraries.com/boost.smartpointers-sole-ownership
+
+[2_3] theboostcpplibraries shared ownership - https://theboostcpplibraries.com/boost.smartpointers-shared-ownership
+
+
+

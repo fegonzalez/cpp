@@ -1,0 +1,20 @@
+
+	est LOCAL static var in a member function: is the variableshared between all the objects of that type? 
+uno :0
+
+dos :1
+
+tres :2
+
+uno :3
+
+dos :4
+
+tres :5
+
+uno :6
+
+dos :7
+
+tres :8
+
