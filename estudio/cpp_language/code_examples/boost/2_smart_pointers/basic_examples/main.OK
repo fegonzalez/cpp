@@ -1,0 +1,36 @@
+
+boost::shared_ptr example
+N5boost10shared_ptrIiEE
+1
+2
+false
+true
+
+boost::shared_array example
+0
+1
+true
+1
+1
+true
+
+BUG boost::shared_array allows out_of_bounds indexing
+100
+0
+false
+
+boost::make_shared example
+N5boost10shared_ptrIiEE
+
+boost::ptr_vector example
+2
+
+boost::ptr_set example
+1
+
+Inserters for boost containers example
+3
+v[0]= 0
+v[1]= 1
+v[2]= 2
+

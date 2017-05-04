@@ -53,8 +53,8 @@ of the initial element of the array.
 
 [Example]
 "int a[10]; "defines an array of size 10, that is, a block of 10 consecutive
-objects named a[0] , a[1] , ..., a[9], where a is equivalent to &a[0]
-Then, a[i] are variables (they have memory reserved); but 'a' doesn't.
+objects named a[0] , a[1] , ..., a[9], where 'a' is equivalent to &a[0]
+Then, a[i] are variables (they have memory reserved); but 'a' isn't.
 
 
 # 5.3 Pointers and Arrays

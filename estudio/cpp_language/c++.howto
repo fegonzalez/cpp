@@ -155,6 +155,7 @@
 #	    8.5.3.4 References as functions parameters
 #	    8.5.3.5 functions returning references
 #       \todo Rvalue References [3_1].13.6.1.  (see examples at [4_2_0])
+#       \todo std::ref
 #
 #     8.5.4 List-initialization (or braced-init-list)
 #
@@ -355,6 +356,7 @@
 #
 # S.1 New Features in C++11
 # S.2 New Features in C++14
+# S.3 New Features in C++17
 
 # Appendix T - Defined Terms
 
@@ -3470,6 +3472,14 @@ a3) Returning a static local variable
 - Obtained: the expected.
 
 - Solution: tricky unusual use (but valid)
+
+
+
+# ------------------------------------------------------------------------------
+\todo std::ref
+# ------------------------------------------------------------------------------
+
+[8_1] [8_2]
 
 
 # ------------------------------------------------------------------------------
@@ -7907,9 +7917,13 @@ Solution: declare the variable as 'extern' (in one or many header
 
   - In-Class Initializers (8.5.5)
 
+  - std::ref:
 
-# S.1 New Features in C++14
+    see
 
+# S.2 New Features in C++14
+
+# S.3 New Features in C++17
 
 
 # ==============================================================================
@@ -8563,6 +8577,13 @@ c) address size (processor concept)
 
 [7_1] Memory_address - https://en.wikipedia.org/wiki/Memory_address
 
+# ------------------------------------------------------------------------------
+
+[8] C++11 and after 
+
+[8_1] std::ref - https://genbattle.bitbucket.io/blog/2016/05/29/Passing-References-to-Deferred-Function-Calls-with-std-ref/
+
+[8_2] std::ref vs C++ referencex - http://stackoverflow.com/questions/33240993/c-difference-between-stdreft-and-t
 
 # ------------------------------------------------------------------------------
 

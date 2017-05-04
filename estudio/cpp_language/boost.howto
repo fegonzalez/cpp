@@ -25,8 +25,15 @@
 #     2.2.2 Using boost::shared_array
 #     2.2.3 Using boost::make_shared
 #     2.2.4 boost::shared_ptr with BOOST_SP_USE_QUICK_ALLOCATOR
-#     2.2.5 shared_ptr FAQ
-
+#
+# 2.3 Special Smart Pointers
+#     2.3.1 bosst::weak_ptr
+#     2.3.2 boost::intrusive_ptr
+#
+# 2.4 Boost.PointerContainer
+#     2.4.2 boost::ptr_vector
+#     2.4.2 boost::ptr_set
+#     2.4.3 Inserters for boost containers
 
 # Appendix K - Code examples (./code_examples)
 #
@@ -156,7 +163,7 @@ FAQ Are *p and *p.get() essentially equivalent?
 
 
 # ------------------------------------------------------------------------------
-# 2.2 Shared Ownership (boost::shared_ptr) [2_3] [2_1]
+# 2.2 Shared Ownership (boost::shared_ptr) [2_3] [2_1] 
 # ------------------------------------------------------------------------------
 
 #include <boost/shared_ptr.hpp>
@@ -176,9 +183,9 @@ FAQ Are *p and *p.get() essentially equivalent?
 4) Shared_ptr does not require that T be a complete type at
    destruction time. [2_1]
 
-5) Using boost::shared_ptr
+5) Using boost::shared_ptr 
    
-   [ Example
+   [ Example [k2_1]
 
      include <boost/shared_ptr.hpp>
      #include <iostream>
@@ -213,6 +220,11 @@ FAQ Are *p and *p.get() essentially equivalent?
    operator*():      and checks whether the pointer is not 0. (see 2.1.1)
    operator->()
 
+7)  A non-initialized shared pointer is like a NULL pointer:
+
+    [ Example:  boost::shared_ptr<int> p; cout << p ; // 0   end example ]
+
+
 # 2.2.1 user-defined deleter
 
    As a second parameter, a deleter can be passed to the constructor
@@ -227,16 +239,19 @@ FAQ Are *p and *p.get() essentially equivalent?
 
 # 2.2.2 Using boost::shared_array
 
-NOTICE Since Boost 1.53.0, boost::shared_ptr is an alternative to
-       boost::shared_array
+1) Operators
+ 
+   get()
+   reset()
+   operator[] 
+   operator bool()
 
-       Since Boost 1.53.0, boost::shared_ptr supports single objects
-       and arrays and detects whether it has to release resources with
-       delete or delete[]. Because boost::shared_ptr also overloads
-       operator[] (since Boost 1.53.0), this smart pointer is an
-       alternative for boost::shared_array.
+ \warning operator*() and operator->() are not overloaded.
 
-   [ Example
+
+2) Using boost::shared_array 
+
+   [ Example [k2_2]
 
       #include <boost/shared_array.hpp>
       #include <iostream>
@@ -254,23 +269,313 @@ NOTICE Since Boost 1.53.0, boost::shared_ptr is an alternative to
    end example ]
 
 
+3) NOTICE Since Boost 1.53.0, boost::shared_ptr is an alternative to
+   	  boost::shared_array: [k2_3]
+
+   Since Boost 1.53.0, boost::shared_ptr supports single objects and
+   arrays and detects whether it has to release resources with delete
+   or delete[]. Because boost::shared_ptr also overloads operator[]
+   (since Boost 1.53.0), this smart pointer is an alternative for
+   boost::shared_array.
+
+   \bug [k2_3] compilation error upon trying operator[] with Boost
+   	1.59.0 and C++98. \todo Try with more modern versions.
+
+4) \bug shared_array allows out_of_bounds indexing [k2_2]
+
+   [ Example     
+   
+     boost::shared_array<int> p1(new int[2]);
+     p1[0]=0; p1[1]=1;
+     p1[100]=77;                    // accepted!!
+     std::cout << p1[100] << '\n';  // prints 77
+     std::cout << p1[2] << '\n';    // prints 0
+   
+   end example ]
+
+5) \warning No length operator available. The size of the pointed
+   array must be manually managed.
+
+
 # 2.2.3 Using boost::make_shared
 
-   \todo
+1) The advantage of boost::make_shared() is that the memory for the
+   object that has to be allocated dynamically and the memory for the
+   reference counter used by the smart pointer internally can be
+   reserved in one chunk (boost::shared_ptr requires two calls).
+
+2) You can use boost::make_shared() for arrays, too.
+
+   [ Example [k2_4]
+
+   #include <boost/make_shared.hpp>
+   #include <typeinfo>
+   #include <iostream>
+   int main()
+   {
+    auto p1 = boost::make_shared<int>(1);
+    std::cout << typeid(p1).name() << '\n';
+
+    //!\error with Boost 1.59.0 and C++98. \todo Try with more modern versions.
+    auto p2 = boost::make_shared<int[]>(10);
+    std::cout << typeid(p2).name() << '\n';
+   }
+
+   end example ]
 
 
-# 2.2.4 boost::shared_ptr with BOOST_SP_USE_QUICK_ALLOCATOR
+# 2.2.4 boost::shared_ptr optimization with macros
+
+1) Boost.SmartPointers supports macros to optimize the behavior of the
+   smart pointers. 
+
+   Idea behind: using macros => boost::shared_ptr >> std::shared_ptr
+
+2) macro BOOST_SP_USE_QUICK_ALLOCATOR to activate an allocator shipped
+   with Boost.SmartPointers. This allocator manages memory chunks to
+   reduce the number of calls to new and delete for reference counters.
 
 
-   \todo
+   \warning In my test (see [k2_5]), the results are not the expected:
+   better without the optimization macro.
 
 
-# 2.2.5 shared_ptr FAQ
+   [ Example [k2_5]
 
-\todo 
+   // measure the time of a loop (computer dependent)
+
+   // the example may run faster with BOOST_SP_USE_QUICK_ALLOCATOR than without
+   
+   #define BOOST_SP_USE_QUICK_ALLOCATOR
+   #include <boost/shared_ptr.hpp>
+   #include <iostream>
+   #include <ctime>
+
+   int main()
+   {
+     boost::shared_ptr<int> p;
+     std::time_t then = std::time(nullptr);
+     for (int i = 0; i < 1000000; ++i)
+     	 p.reset(new int{i});
+     std::time_t now = std::time(nullptr);
+     std::cout << now - then << '\n';
+   }
+
+   end example ]
+
+3) The names of the macros start with BOOST_SP_
+   (i.e. BOOST_SP_ENABLE_DEBUG_HOOKS)
 
 
-\todo test code for shared_ptr
+# 2.3 Special Smart Pointers
+
+# 2.3.1 bosst::weak_ptr
+
+1) Why it is needed?
+
+   Problem: 
+
+   We need to use an existing object (avoid using a pointer already destroyed)
+   BUT  
+   without having any impact on the lifetime of the object (avoid new
+   references to the object).
+
+
+   Solution: boost::weak_ptr 
+
+   boost::weak_ptr makes sense whenever a function is expected to work
+   with an object managed by a shared pointer, but the lifetime of the
+   object does not depend on the function itself. The function can
+   only use the object as long as it is owned by at least one shared
+   pointer somewhere else in the program. In case the shared pointer
+   is reset, the object cannot be kept alive because of an additional
+   shared pointer inside the corresponding function.
+
+   In the example bellow, we only want to print while the actual pointer exists.
+
+  [ Example
+
+    #include <boost/shared_ptr.hpp>
+    #include <boost/weak_ptr.hpp>
+    #include <thread>
+    #include <functional>
+    #include <iostream>
+
+    void reset(boost::shared_ptr<int> &sh)
+    {
+	sh.reset();
+    }
+
+    void print(boost::weak_ptr<int> &w)
+    {
+	boost::shared_ptr<int> sh = w.lock();
+  	if (sh)
+    	   std::cout << *sh << '\n';
+    }
+
+    int main()
+    {
+      boost::shared_ptr<int> sh{new int{99}};
+      boost::weak_ptr<int> w{sh};
+      std::thread t1{reset, std::ref(sh)};
+      std::thread t2{print, std::ref(w)};
+      t1.join();
+      t2.join();
+    }
+
+   end example ]
+
+2) boost::weak_ptr must be initialized with a boost::shared_ptr. 
+
+3) Its most important member function is lock(). lock() returns a
+   boost::shared_ptr that shares ownership with the shared pointer
+   used to initialize the weak pointer.
+
+4) In case the shared pointer is empty, the returned pointer will be
+   empty as well.
+
+
+# 2.3.2 boost::intrusive_ptr
+
+1) In general, boost::intrusive_ptr works the same as
+   boost::shared_ptr. However, while boost::shared_ptr keeps track of
+   the number of shared pointers referencing a particular object, the
+   developer has to do this when using boost::intrusive_ptr. This can
+   make sense if other classes already keep track of references.
+
+   See example on [1_2]
+
+
+# 2.4 Boost.PointerContainer
+
+1) The library Boost.PointerContainer provides containers specialized
+   to manage dynamically allocated objects. 
+
+   Similar to C++11's std::vector<std::unique_ptr<int>>. However, the
+   containers from Boost.PointerContainer can provide some extra comfort.
+
+2) Available containers (they correspond to std containers)
+   
+   boost::ptr_vector
+   boost::ptr_set
+   boost::ptr_deque
+   boost::ptr_list
+   boost::ptr_map
+   boost::ptr_array
+   boost::ptr_unordered_set
+   boost::ptr_unordered_map 
+
+
+# 2.4.1 boost::ptr_vector
+
+1) because boost::ptr_vector knows that it stores dynamically
+   allocated objects, member functions like back() return a reference
+   to a dynamically allocated object and not a pointer.
+
+  [ Example [k2_6]
+
+    #include <boost/ptr_container/ptr_vector.hpp>
+    #include <iostream>
+
+    int main()
+    {
+     boost::ptr_vector<int> v;
+     v.push_back(new int{1});
+     v.push_back(new int{2});
+     std::cout << v.back() << '\n';  // prints 2
+    }
+
+  end example ]
+
+
+# 2.4.2 boost::ptr_set
+
+1) "boost::ptr_set" VS "std::set": with boost::ptr_set, the order of
+   the elements depends on the int values, not on the pointers.
+
+  [ Example [k2_7]
+
+    #include <boost/ptr_container/ptr_set.hpp>
+    #include <iostream>
+
+    int main()
+    {
+     boost::ptr_set<int> s;
+     s.insert(new int{2});
+     s.insert(new int{1});
+     std::cout << *s.begin() << '\n';
+    }
+
+  end example ]
+
+2) HINT To make std::set sort the elements based on int values, the
+   container must be told how to compare elements. (i.e. via
+   boost::indirect_fun provided by Boost.PointerContainer)
+
+  [ Example
+
+    #include <boost/ptr_container/ptr_set.hpp>
+    #include <boost/ptr_container/indirect_fun.hpp>
+    #include <set>
+    #include <memory>
+    #include <functional>
+    #include <iostream>
+
+    int main()
+    {
+     std::set<std::unique_ptr<int>, boost::indirect_fun<std::less<int>>> v;
+     v.insert(std::unique_ptr<int>(new int{2}));
+     v.insert(std::unique_ptr<int>(new int{1}));
+     std::cout << **v.begin() << '\n';
+    }
+
+  end example ]
+
+
+# 2.4.3 Inserters for boost containers
+
+1) Boost.PointerContainer provides inserters for its containers. 
+
+2) Defined under  #include <boost/ptr_container/ptr_inserter.hpp>
+
+3) Available of inserters
+
+   boost::ptr_container::ptr_back_inserter()
+   boost::ptr_container::ptr_front_inserter()
+   boost::ptr_container::ptr_inserter()
+
+4) boost::ptr_container::ptr_back_inserter() example
+   
+   This function creates an inserter of type
+   boost::ptr_container::ptr_back_insert_iterator
+
+   The inserter creates copies with new on the heap and adds the
+   addresses to the container.
+
+  [ Example [k2_8]
+
+    #include <boost/ptr_container/ptr_vector.hpp>
+    #include <boost/ptr_container/ptr_inserter.hpp>
+    #include <array>
+    #include <algorithm>
+    #include <iostream>
+
+    int main()
+    {
+     boost::ptr_vector<int> v;
+
+     //[C++11]
+     std::array<int, 3> a{{0, 1, 2}};
+     std::copy(a.begin(), a.end(), boost::ptr_container::ptr_back_inserter(v));
+     //[C++03]
+     // int a[3] = {0, 1, 2};
+     // std::copy(a, a+3, boost::ptr_container::ptr_back_inserter(v));
+
+     std::cout << v.size() << '\n';
+    }
+
+  end example ]
+
 
 
 # ==============================================================================
@@ -285,18 +590,28 @@ NOTICE Since Boost 1.53.0, boost::shared_ptr is an alternative to
 [k1] Build a Simple Program Using Boost - ./simple_example
 
 
+# smart pointers, "./code_examples/boost/2_smart_pointers
 
+[k2_1] shared_ptr example - basic_examples/
 
-# shared pointer, "./code_examples/boost/shared_ptr
+[k2_2] shared_array example - basic_examples/
 
+[k2_3] shared_ptr used as a shared_array - basic_examples/
 
+[k2_4] boost::make_shared - basic_examples/
 
+[k2_5] boost::shared_ptr optimization with macros - basic_examples/
+
+[k2_6] boost::ptr_vector - basic_examples/
+
+[k2_7] boost::ptr_set - basic_examples/
+
+[k2_8] container inserter - basic_examples/
 
 
 # ==============================================================================
 # Appendix Z - References
 # ==============================================================================
-
 
 # ------------------------------------------------------------------------------
 
@@ -318,5 +633,5 @@ NOTICE Since Boost 1.53.0, boost::shared_ptr is an alternative to
 
 [2_3] theboostcpplibraries shared ownership - https://theboostcpplibraries.com/boost.smartpointers-shared-ownership
 
-
+# ------------------------------------------------------------------------------
 
