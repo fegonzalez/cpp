@@ -202,7 +202,7 @@
 
 # 4.10 Multiple cores
 
-# 4.10.1 False Sharing
+# 4.10.1 False Sharing 
 
 1) Sharing between cores
 
@@ -214,16 +214,27 @@
 2) False sharing occurs when a variable 'a' is modified at
    L1-cache. When this occurs, the shared copies of the variable can
    NOT be used in the other cores, thus the sharing is actually
-   invalid and the extra cores are wasted.
+   invalid and the extra cores are wasted. (See Cache coherence [1_1])
 
 
 # References:
 
   [2_1].44.15
-
+  [1_1]
 
 
 # 4.11 SIMD
+
+1) Def: Single instruction, multiple data (SIMD), is a class of
+   parallel computers. It describes computers with multiple processing
+   elements that perform the same operation on multiple data points
+   simultaneously. Thus, such machines exploit data level parallelism,
+   but not concurrency: there are simultaneous (parallel) computations, 
+   but only a single process (instruction) at a given moment. 
+
+# References:
+
+  https://en.wikipedia.org/wiki/SIMD
 
 
 # ==============================================================================
@@ -351,13 +362,30 @@ C
 
   ...
 
+- cache associativity
+
+  ...
+
+- Cache coherence [1_1]
+
+  Cache coherence is the discipline which ensures that the changes in
+  the values of shared operands(data) are propagated throughout the
+  system in a timely fashion.[1]
+
+  Write Propagation : Changes to the data in any cache must be
+  propagated to other copies(of that cache line) in the peer caches.
+
+  Transaction Serialization : Reads/Writes to a single memory location
+  must be seen by all processors in the same order.
+
+  Theoretically, coherence can be performed at the load/store granularity. 
+  However, in practice it is generally performed at the granularity of 
+  cache blocks.
+
 
 - cacheline
 
   Typically 64 Byte.
-
-
-- cache associativity
 
 
 D
