@@ -579,6 +579,70 @@ FAQ Are *p and *p.get() essentially equivalent?
 
 
 # ==============================================================================
+# Appendix C - cmake file example
+# ==============================================================================
+
+//!\file boost_projectname.cmake
+//
+// importing boost libraries
+
+
+IF( NOT boost_projectname.cmake )
+
+SET ( boost_projectname.cmake TRUE)
+
+  #Boost framework configuration
+
+  #After installing boost libraries manually this directory
+  #should exist
+  SET (BOOST_ROOT $ENV{PROJECTNAME_HOME}/toolbox/boost_dist)
+  SET (BOOST_INCLUDE_PATH ${BOOST_ROOT})
+  SET (BOOST_LIBS_PATH ${BOOST_ROOT}/stage/lib)
+
+  ADD_LIBRARY(boost_unit_test_framework STATIC IMPORTED)
+  SET_TARGET_PROPERTIES(boost_unit_test_framework PROPERTIES IMPORTED_LOCATION ${BOOST_LIBS_PATH}/libboost_unit_test_framework.a)
+
+  ADD_LIBRARY(boost_thread STATIC IMPORTED)
+  SET_TARGET_PROPERTIES(boost_thread PROPERTIES IMPORTED_LOCATION ${BOOST_LIBS_PATH}/libboost_thread.a)
+
+  ADD_LIBRARY(boost_chrono STATIC IMPORTED)
+  SET_TARGET_PROPERTIES(boost_chrono PROPERTIES IMPORTED_LOCATION ${BOOST_LIBS_PATH}/libboost_chrono.a)
+
+  ADD_LIBRARY(boost_system STATIC IMPORTED)
+  SET_TARGET_PROPERTIES(boost_system PROPERTIES IMPORTED_LOCATION ${BOOST_LIBS_PATH}/libboost_system.a)
+
+  ADD_LIBRARY(boost_filesystem STATIC IMPORTED)
+  SET_TARGET_PROPERTIES(boost_filesystem PROPERTIES IMPORTED_LOCATION ${BOOST_LIBS_PATH}/libboost_filesystem.a)
+
+  ADD_LIBRARY(boost_program_options STATIC IMPORTED)
+  SET_TARGET_PROPERTIES(boost_program_options PROPERTIES IMPORTED_LOCATION ${BOOST_LIBS_PATH}/libboost_program_options.a)
+
+  #ADD_LIBRARY(boost_log_setup STATIC IMPORTED)
+  #SET_TARGET_PROPERTIES(boost_log_setup PROPERTIES IMPORTED_LOCATION ${BOOST_LIBS_PATH}/libboost_log_setup.a)
+
+  ADD_LIBRARY(boost_log STATIC IMPORTED)
+  SET_TARGET_PROPERTIES(boost_log PROPERTIES IMPORTED_LOCATION ${BOOST_LIBS_PATH}/libboost_log.a)
+  
+  ADD_LIBRARY(boost_date_time STATIC IMPORTED)
+  SET_TARGET_PROPERTIES(boost_date_time PROPERTIES IMPORTED_LOCATION ${BOOST_LIBS_PATH}/libboost_date_time.a)
+
+  ADD_LIBRARY(boost_serialization STATIC IMPORTED)
+  SET_TARGET_PROPERTIES(boost_serialization PROPERTIES IMPORTED_LOCATION ${BOOST_LIBS_PATH}/libboost_serialization.a)
+    
+  ADD_LIBRARY(boost_regex STATIC IMPORTED)
+  SET_TARGET_PROPERTIES(boost_regex PROPERTIES IMPORTED_LOCATION ${BOOST_LIBS_PATH}/libboost_regex.a)
+    
+  ADD_LIBRARY(boost_iostreams STATIC IMPORTED)
+  SET_TARGET_PROPERTIES(boost_iostreams PROPERTIES IMPORTED_LOCATION ${BOOST_LIBS_PATH}/libboost_iostreams.a)
+
+  INCLUDE_DIRECTORIES(${BOOST_INCLUDE_PATH} ${CMAKE_CURRENT_SOURCE_DIR})
+
+
+ENDIF(NOT boost_projectname.cmake )
+
+
+
+# ==============================================================================
 # Appendix K - Code examples (./code_examples)
 # ==============================================================================
 
