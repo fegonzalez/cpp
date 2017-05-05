@@ -1,0 +1,424 @@
+# ==============================================================================
+# Summary
+# ==============================================================================
+
+# 1 Best Practices
+
+# 2 Data structures
+
+# 3 Traversal Algorithms
+
+# 4 Hardware Architecture
+#
+# 4.1 Data + instruction cache
+# 4.2 Cache Levels (L1, L2, ...)
+# 4.3 Cache lines
+# 4.4 Prefetcher
+# 4.5 Cache associativity
+# 4.6 Pipeline
+# 4.7 Instruction-level paralelism
+# 4.8 Branch predictor
+# 4.9 Memory alignment
+#
+# 4.10 Multiple cores
+#      4.10.1 False Sharing
+#
+# 4.11 SIMD
+
+# 5 Data dependencies
+#
+# 5.1 Loop Vectorization
+
+# 6 Denormals
+
+
+ 
+# Appendix T- Tools
+#
+# T.1 Data access tools
+
+
+# Appendix V - videos [2] summaries and concepts
+
+
+# Appendix Z - References
+
+
+
+# ==============================================================================
+# 1 Best Practices
+# ==============================================================================
+
+1) Select the correct data structure for your problem.
+
+2) Select the correct traversal algorithm to navigate through the data
+   structure.
+
+   (i.e.  matrix navigation:  [2_1]
+   row first (left to right): OK; 
+   col first (up - down): error )
+
+3) Be conscious whether you are bound by data or by computation.
+
+4) Keep data close together IN SPACE
+
+   4.1) Prefer data contiguous in memory
+
+   4.2) If you can't, prefer constant strides than randomness
+
+5) Keep (accesses to same) data close together IN TIME 
+
+6) Avoid data dependencies
+
+   6.1) Avoid dependencies between successive computations.
+ 
+   6.2) Avoid dependencies between two iterations of a loop.
+
+7) Avoid hard-to-predict branches
+
+8) Be aware of cache lines and alignment
+
+9) Minimize the number of cache lines accessed by multiple threads
+   (see 4.10.1 false sharing)
+
+10) Don't be surprised by hardware weirdness (cache associativity,
+    denormals, ...)
+
+
+# ==============================================================================
+# 2 Data structures
+# ==============================================================================
+
+# 2.1 Array/Vector
+
+
+# 2.2 Matrix (2d array)
+
+1) Traversal:
+
+   a) row major traversal (left2righ):  GOOD
+   
+   b) column major traversal (up2down):  BAD
+ 
+   [ Example  ([2.1].7:20)
+
+     int array[n][n];
+     
+     // row major traversal
+     for(int i=0; i<n; ++i)
+        for(int j=0; j<n; ++j)
+           array[i][j] += j;    // benchmark time = 1.0
+
+     // row major traversal
+     for(int i=0; i<n; ++i)
+        for(int j=0; j<n; ++j)
+           array[j][i] += j;    // benchmark time = 35.0
+
+   end example]
+
+# 2.3 List
+
+    BAD: sort, delete  ([2_1].20:00)
+
+# 2.4 Map
+
+    BAD: sort, delete
+
+
+# ==============================================================================
+# 3 Traversal Algorithms
+# ==============================================================================
+
+
+
+# ==============================================================================
+# 4 Hardware Architecture
+# ==============================================================================
+
+# 4.1 Data + instruction cache
+
+
+# 4.2 Cache Levels (L1, L2, ...)
+
+
+# 4.3 Cache lines
+
+
+# 4.4 Prefetcher
+
+
+# 4.5 Cache associativity
+
+
+# 4.6 Pipeline
+
+
+# 4.7 Instruction-level paralelism
+
+
+# 4.8 Branch predictor
+
+   
+  instructions  ------>    CPU CPU 
+                           CPU CPU --------------  branch predictor          
+  data  -------------->    CPU CPU
+                           CPU CPU
+                              |
+                              v
+                           results                         
+ 
+# 4.8.1 Advantages
+
+1) Prediction of the next memory position to be processed =>
+   increase the processing speed.
+
+
+# 4.8.2 Drawbacks
+
+1) They can't predict  random numbers
+
+2) The can't predict virtual functions (actual class of the object ? )
+
+
+# References:
+
+  [2_1].34:30
+
+
+# 4.9 Memory alignment
+
+
+1) How memory really is?
+
+   packed Vs aligned
+
+   word size
+
+2) References:
+
+  [2_1].29:30
+  [2_1].55:45
+
+
+# 4.10 Multiple cores
+
+# 4.10.1 False Sharing
+
+1) Sharing between cores
+
+   MEM  <=>  L3 cache  <=>  L2 cache  <=>  L1  <=> CORE_1
+                                           L1  <=> CORE_2
+                                           ..............
+                                           L1  <=> CORE_N
+
+2) False sharing occurs when a variable 'a' is modified at
+   L1-cache. When this occurs, the shared copies of the variable can
+   NOT be used in the other cores, thus the sharing is actually
+   invalid and the extra cores are wasted.
+
+
+# References:
+
+  [2_1].44.15
+
+
+
+# 4.11 SIMD
+
+
+# ==============================================================================
+# 5 Data dependencies
+# ==============================================================================
+
+1) Remember Best Practices
+
+   6.1) Avoid dependencies between successive computations.
+   6.2) Avoid dependencies between two iterations of a loop.
+  
+
+# 5.1 Loop Vectorization
+
+1) If we avoid dependencies between two iterations of a loop, then we
+   get a vectorized loop that can be solve by sharing the operations
+   between different threads/cores.
+
+
+  [ Example ([2_1].52:40)
+
+    int a[1000], b[1000], c[1000];  // filled with some values
+
+    // BAD: data dependencies
+    for (int i =0; i<=999; ++i)  
+    {
+	a[i]   += b[i];
+	b[i+1] += c[i]; // HERE: a[i+1] can't be calculated 
+                        //       until the next iteration 
+    }
+
+
+    // GOOD: no data dependencies => allows vectorization
+    
+    a[0] += b[0]
+
+    for (int i =1; i<=998; ++i)  
+    {
+	b[i+1] += c[i]; 
+	a[i+1] += b[i+1]; //HERE: a[i] depends on an operation calculated
+	                  //      in the same iteration => vectorization
+    }
+
+    b[999] += c[999]
+
+  end example ]
+
+
+# References:
+
+  [2_1].50.00
+
+
+# ==============================================================================
+# 6 Denormals
+# ==============================================================================
+
+1) Very low values cause calculations to last for a long time.
+
+# References:
+
+  [2_1].57.00
+  https://en.wikipedia.org/wiki/Denormal_number#Performance_issues
+
+
+# ==============================================================================
+# Appendix T- Tools
+# ==============================================================================
+
+# T.1 Time profile tools
+
+1) Xcode instruments ([2.1].15:00)
+
+
+
+# ==============================================================================
+# Appendix V - videos [2] summaries and concepts
+# ==============================================================================
+
+
+# ------------------------------------------------------------------------------
+# V_2_1 : [2_1] CppCon 2016: Timur Doumler “Want fast C++? Know your hardware!
+# ------------------------------------------------------------------------------
+
+# 1 Video sections
+
+# 1.1 Cache (09:10)
+
+  cache
+  cacheline
+  latency time
+  prefetcher
+  code-cache and data-cache
+
+# 1.2 Bound by computation Vs Bound by data access (13:50)
+
+# 1.3 Time profile tools
+
+1) Analysis performed: how many time is your code running in each function?
+
+2) Problem: the part wasted due to data access is not shown.
+
+
+# ==============================================================================
+# Appendix T - Defined Terms
+# ==============================================================================
+
+
+A
+
+- Alignment
+
+
+  C++ alignof
+
+
+B
+
+- Branch predictor
+
+
+C 
+
+- cache
+
+  ...
+
+
+- cacheline
+
+  Typically 64 Byte.
+
+
+- cache associativity
+
+
+D
+
+- Denormals
+
+
+L
+
+- Latency time 
+
+  Time between the moment the data is requested, and the moment the
+  data is received.
+
+
+P
+
+- Pipeline
+
+  Instruction pipelining is a technique that implements a form of
+  parallelism called instruction-level parallelism within a single
+  processor (https://en.wikipedia.org/wiki/Instruction_pipelining)
+
+
+V
+
+- Vectorization
+
+  In mathematics, especially in linear algebra and matrix theory, the
+  vectorization of a matrix is a linear transformation which converts
+  the matrix into a column vector
+  (https://en.wikipedia.org/wiki/Vectorization_(mathematics)
+
+
+W
+
+- Word size
+
+  ...
+
+
+
+# ==============================================================================
+# Appendix Z - References
+# ==============================================================================
+
+
+# ------------------------------------------------------------------------------
+
+[1] Documents
+
+[1_1] https://en.wikipedia.org/wiki/Cache_coherence
+
+# ------------------------------------------------------------------------------
+
+[2] Videos
+
+[2_1] CppCon 2016: Timur Doumler “Want fast C++? Know your hardware!" - https://www.youtube.com/watch?v=BP6NxVxDQIs&t=357s&index=49&list=PLHTh1InhhwT7J5jl4vAhO1WvGHUUFgUQH
+
+[2_2] Taming the Performance Beast - Klaus Iglberger - Meeting C++ 2015 -  https://isocpp.org/blog/2016/08/taming-the-performance-beast-klaus-iglberger-meeting-cpp-2015
+
+[2_3] andrei alexandrescu writing fast code​ - https://www.youtube.com/watch?v=vrfYLlR8X8k      
+
+# ------------------------------------------------------------------------------
