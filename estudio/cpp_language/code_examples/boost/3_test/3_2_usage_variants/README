@@ -1,0 +1,38 @@
+# Differenct modes to use the boost test library
+
+# dir content
+
+  3_2_2_static_lib/
+
+	static link example (3.2.2 bellow)
+
+  3_2_3_shared_lib/
+
+	static link example (3.2.3 bellow)
+	
+
+# document reference
+
+  [doc_1] ../../../../concrete_topics/boost.howto  3.2 Usage Varianst
+
+
+[doc_1] 3.2.1 Single-header usage variant (a.k.a. the included version)
+
+  See ../3_1_basic/ example
+
+
+[doc_1] 3.2.2 Static library usage variant
+
+  \warning Customizing the module's entry point (*) will affect
+   everybody else who is linking against the library. It may be less
+   intrusive to switch to the shared library usage variant instead.
+
+   (See http://www.boost.org/doc/libs/1_64_0/libs/test/doc/html/boost_test/
+   	/adv_scenarios/static_lib_customizations.html for details.)
+
+
+   Therefore, this is not tested here.
+
+
+[doc_1] 3.2.3 Shared library usage variant
+   

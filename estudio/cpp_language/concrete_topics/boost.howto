@@ -14,8 +14,7 @@
 # 1.4 Prepare to Use a Boost Library Binary
 # 1.5 Link Your Program to a Boost Library
 
-
-# 2 Smart Pointers
+# 2 Smart Pointer library
 #
 # 2.1 Sole Ownership (boost::scoped_ptr)
 #     2.1.1 scoped_ptr FAQ
@@ -34,6 +33,20 @@
 #     2.4.2 boost::ptr_vector
 #     2.4.2 boost::ptr_set
 #     2.4.3 Inserters for boost containers
+
+# 3 Test library
+#
+# 3.1 A simple example
+#
+# 3.2 Usage Variants
+#     3.2.1 Single-header usage variant (a.k.a. the included version)
+#     3.2.2 Static library usage variant
+#     3.2.3 Shared library usage variant
+#
+# 3.3 Test cases
+
+# 3.A Test library API
+
 
 # Appendix K - Code examples (./code_examples)
 #
@@ -85,6 +98,11 @@ All of Boost's header files have the .hpp extension
   (i.e. c++ -I $BOOST_ROOT example.cpp -o example)
 
 
+# linkage
+
+  case: #include <boost/test/unit_test.hpp>
+  	LDLIBS = -lboost_unit_test_framework  # in the Makefile
+
 
 # 1.4 Prepare to Use a Boost Library Binary
 
@@ -101,9 +119,8 @@ Similar to STL:
 See [1_1_1] for details.
 
 
-
 # ==============================================================================
-# 2 Smart Pointers
+# 2 Smart Pointer library 
 # ==============================================================================
 
 # 2.1 Sole Ownership (boost::scoped_ptr, boost::scoped_array) [2_2]
@@ -234,7 +251,7 @@ FAQ Are *p and *p.get() essentially equivalent?
    the destructor instead of delete. This makes it possible to manage
    resources other than dynamically allocated objects in a boost::shared_ptr.
 
-   (see [3_2])
+   (see [3_1])
 
 
 # 2.2.2 Using boost::shared_array
@@ -577,6 +594,462 @@ FAQ Are *p and *p.get() essentially equivalent?
   end example ]
 
 
+# ==============================================================================
+# 3 Test library
+# ==============================================================================
+
+Support for simple program testing, full unit testing, and for program
+execution monitoring.
+
+# 3.1 A simple example
+
+  [ Example  (Test case [k3_1]); (Defined at [3_1])
+
+  // 1) code
+  
+  #define BOOST_TEST_MODULE BoostTestHowto        // See 3.A.1
+  #include <boost/test/included/unit_test.hpp>	  // See 3.2.1
+
+  BOOST_AUTO_TEST_CASE(first_test)
+  {
+    int i = 1;
+    BOOST_TEST(i);
+    BOOST_TEST(i == 2);
+  }
+
+  // 2) execution
+
+  >>./main
+  Running 1 test case...
+
+  main.cpp(8): error: in "first_test": check i == 2 has failed [1 != 2]
+
+  *** 1 failure is detected in the test module "BoostTestHowto"
+
+  end example ]
+
+
+# ------------------------------------------------------------------------------
+# 3.2 Usage Variants [3_1]
+# ------------------------------------------------------------------------------
+ 
+# 3.2.1 Single-header usage variant (a.k.a. the included version)
+
+  #define BOOST_TEST_MODULE test module name
+  #include <boost/test/included/unit_test.hpp>
+
+
+1) This includes all (HUGE!) the Unit Test Framework in a "single header mode"
+
+2) It even defines function main, which will call the subsequently
+   defined test cases.
+
+3) Drawback: huge library => very long compilation time
+
+4) Drawback: you can only implement this way test modules with a
+   single translation unit.
+
+
+# 3.2.2 Static library usage variant
+
+1) For most users, who has an access to pre-built static library [1]
+   of the Unit Test Framework or can build it themselves, following
+   usage can be most versatile and simple approach. This usage variant
+   entails two steps.
+
+  1. First add the following line to ALL TRANSLATION UNITS in a test module:
+
+    	#include <boost/test/unit_test.hpp>
+
+     and ONLY ONE translation unit should include following lines:
+
+    	#define BOOST_TEST_MODULE test module name
+    	#include <boost/test/unit_test.hpp>
+
+  2. The second step is to link with the Unit Test Framework static library
+
+     -lboost_unit_test_framework
+
+
+NOTE
+Header <boost/test/unit_test.hpp> is an 'aggregate' header: it includes most of
+the other headers that contains the Unit Test Framework definitions.
+
+
+2) Advantages: short compilation time
+
+3) Drawback: Statically linked: each test module following this usage variant is
+   going to be statically linked with Unit Test Framework, which might
+   be something you interested to avoid (to save space for example).
+
+4) Drawback: Customizing the module's entry point (*) will affect
+   everybody else who is linking against the library. It may be less
+   intrusive to switch to the shared library usage variant instead.
+
+   (See http://www.boost.org/doc/libs/1_64_0/libs/test/doc/html/boost_test/
+   	/adv_scenarios/static_lib_customizations.html for details.)
+
+
+# 3.2.3 Shared library usage variant [k3_2]
+
+1) Solution to waste space problem of static lib. usage. (3.2.3.1)
+
+2) Customizing the module's entry point and the initialization function
+
+   First add the following line to ALL TRANSLATION UNITS in a test module:
+
+	#define BOOST_TEST_DYN_LINK
+	#include <boost/test/unit_test.hpp>
+
+	//
+	// test cases
+	//
+
+
+   and ONLY ONE translation unit should include following lines (3.2.3.1.1):
+
+	/*!\warning Not need anymore if the init function
+		    (init_unit_test()) is defined
+
+        // #define BOOST_TEST_MODULE test module name
+
+	\warning "Master Test Suite" is taken by default
+
+	// #define BOOST_TEST_NO_MAIN  # (its value is irrelevant)
+	*/	
+
+	#define BOOST_TEST_DYN_LINK
+
+	#include <boost/test/unit_test.hpp>
+
+	// (MANUALLY DEFINED) initialization function:
+	bool init_unit_test() { return true; }
+
+	// (MANUALLY DEFINED) entry point:
+	int main(int argc, char* argv[], char* envp[])
+	{
+	return boost::unit_test::unit_test_main( &init_unit_test, argc, argv );
+	}
+ 
+
+  2. The second step is to link with the Unit Test Framework shared library
+
+     LDLIBS = -lboost_unit_test_framework  
+
+
+2) Advantages: short compilation time
+
+3) You will need to make sure the Unit Test Framework shared library
+   is accessible at runtime to a test module.
+
+4) WARNING In Windows, ... (see [3_1] for details)
+
+
+# 3.2.3.1 Shared-library variant customizations [3_3]
+ 
+WARNING
+Macro BOOST_TEST_DYN_LINK (which instructs the compiler/linker to
+dynamically link against a shared library variant) may be implicitly
+defined when macro BOOST_ALL_DYN_LINK is defined.
+
+  Use #ifndef BOOST_TEST_DYN_LINK
+      #define BOOST_TEST_DYN_LINK
+      #endif
+
+
+WARNING
+In order to be able to run a test built with the dynamic variant, the
+operating system should be able to find the dynamic library of the
+Unit Test Framework. This means, for example on Linux and MacOSX
+respectively, setting the environment variable LD_LIBRARY_PATH or
+DYLD_LIBRARY_PATH properly prior to the execution of the test module.
+
+  [ Example echo $LD_LIBRARY_PATH
+
+    /home/swim/development/SWIS_root/toolbox/boost_dist/stage/lib
+
+  end example ]
+
+
+2) Customizing the module's initialization function
+
+In the shared-library variant, it is impossible to customize the
+initialization function without customizing the entry point. We have
+to customize both.
+
+Two options:
+
+Option 1.- customizing the initialization function: 
+
+       // #define BOOST_TEST_MODULE BoostTestHowto_SharedUsageVariant
+       // #define BOOST_TEST_NO_MAIN  //(its value is irrelevant)
+       bool init_unit_test() { return true; }
+
+       Then "Master Test Suite" is taken by default.
+
+
+  [ Example [k3_2]
+ 
+    /* Option 1.- customizing the initialization function: "Master Test Suite"
+       // #define BOOST_TEST_MODULE BoostTestHowto_SharedUsageVariant
+       // #define BOOST_TEST_NO_MAIN  //# (its value is irrelevant)
+
+       bool init_unit_test() { return true; }
+    */
+
+    //!\file main.cpp
+    
+    #ifndef BOOST_TEST_DYN_LINK
+    #define BOOST_TEST_DYN_LINK
+    #endif
+
+    #include <boost/test/unit_test.hpp>
+
+    // (MANUALLY DEFINED) initialization function:
+    bool init_unit_test() { return true; }
+
+    // (MANUALLY DEFINED) entry point:
+    int main(int argc, char* argv[])
+    {return boost::unit_test::unit_test_main( &init_unit_test, argc, argv );}
+
+
+    //!\file test_2.cpp
+    #define BOOST_TEST_DYN_LINK
+    #include <boost/test/unit_test.hpp>
+
+    BOOST_AUTO_TEST_CASE(another_test)
+    { BOOST_CHECK(22 == 3); }
+
+
+    //!\output 
+    Running 2 test cases...
+    main.cpp(75): error in "first_test": check i == 2 failed
+    test_2.cpp(5): error in "another_test": check 22 == 3 failed
+
+    *** 2 failures detected in test suite "Master Test Suite"
+
+  end example  ]
+
+
+Option 2.- NOT customizing the initialization function: 
+
+       #define BOOST_TEST_MODULE  test module name
+       #define BOOST_TEST_NO_MAIN // (its value is irrelevant)
+       //bool init_unit_test() { return true; }
+
+       Then "test module name" is used instead.
+
+
+  [ Example [k3_2]
+ 
+    /* Option 2.- Not customizing the initialization function */
+
+    //!\file main.cpp
+ 
+    #define BOOST_TEST_MODULE BoostTestHowto_SharedUsageVariant
+    #define BOOST_TEST_NO_MAIN  //# (its value is irrelevant)
+
+    #ifndef BOOST_TEST_DYN_LINK
+    #define BOOST_TEST_DYN_LINK
+    #endif
+
+    #include <boost/test/unit_test.hpp>
+
+    int main(int argc, char* argv[])
+    {return boost::unit_test::unit_test_main( &init_unit_test, argc, argv );}
+ 
+    // Test cases here
+    ...
+
+    //!\file test_2.cpp (unchanged)
+    ...
+
+    //!\output 
+    // Same errors detected:
+       ... 
+       *** 2 failures detected in test suite "BoostTestHowto_SharedUsageVariant"
+
+  end example  ]
+
+
+# ------------------------------------------------------------------------------
+# 3.3 Test cases
+# ------------------------------------------------------------------------------
+
+1) Is a unit of execution that is run by the test runner. It contains
+   instructions and assertions (BOOST_TEST, BOOST_CHECK), and its
+   execution is monitored by the Unit Test Framework. Information
+   about the execution is recorded, and a log/report is produced.
+
+2) Preferred APIs will declare the test case and register it
+   automatically in a test tree.
+
+
+# 3.3.1 Test cases without parameters
+
+# 3.3.1.1 Automated registration
+
+     	  BOOST_AUTO_TEST_CASE(test_case_name);
+
+# 3.3.1.2 Manual registration
+
+     	  BOOST_AUTO_TEST_CASE(test_case_name);
+
+1) WARNING A test case can be implemented as a method of a class. See
+   [3_4] for details.
+
+
+# 3.3.2 Data-driven test cases [3_5]
+
+1) Why data-driven test cases? Some tests are required to be repeated
+   for a series of different input parameters.
+
+
+See [3_5] for details.
+
+
+# \todo 3.3.2.1 Datasets
+
+Sample: is a polymorphic tuple. The size of the tuple will be by
+	definition the arity of the sample itself.
+
+Dataset: a (forward iterable & with known size) collection of samples.
+
+Note.- Arity: the number of arguments or operands that a function takes.
+
+
+1) WARNING Only "monomorphic" datasets are supported, which means that
+	all samples in a dataset have the same type and same arity.
+
+
+# \todo 3.3.2.2 Declaring and registering test cases with datasets
+
+# \todo 3.3.2.3 Operations on dataset
+
+    Joins
+    Zips  ( i.e. [0,1] ^ ["lost", "won"] = pairs (0, "lost), (1, "won")  )
+    Grid  (Cartesian products)
+
+# \todo 3.3.2.4 Datasets generators
+
+
+# 3.3.2  Template test cases [3_6]
+
+
+
+
+
+# ------------------------------------------------------------------------------
+# 3.A Test library API
+# ------------------------------------------------------------------------------
+
+# 3.A.1 BOOST_TEST_MODULE
+
+  Defines the name of our program, which will be used in messages.
+  This name can include spaces and does not need to be wrapped in quotes.
+
+  It can be composed of several BOOST_AUTO_TEST_CASE.
+
+  Must be coded before  "#include <boost/test/unit_test.hpp>"
+
+
+# 3.A.2 BOOST_AUTO_TEST_CASE
+
+1) Declares a test case (named).
+
+2) which in turn will run the content of first_test INSIDE the
+   controlled testing environment.
+
+
+
+
+
+
+\todo
+# 3.1.4 Checking error macros
+
+
+# 3.1.4.1 BOOST_TEST macros
+
+1) WARNING Avaliable since boost 1.59 version.
+
+  BOOST_TEST // or BOOST_TEST_CHECK
+  BOOST_TEST_REQUIRE
+  BOOST_TEST_WARN
+
+  Warning
+  To get all the functionalities of BOOST_TEST family of assertions, a
+  C++11 capable compiler is required
+  
+  \doc http://www.boost.org/doc/libs/1_64_0/libs/test/doc/html/boost_test/testing_tools/boost_test_universal_macro.html
+
+
+    3.2.1) BOOST_CHECK macros
+
+     	     BOOST_CHECK
+	     BOOST_CHECK_EQUAL
+	     BOOST_CHECK_MESSAGE
+	     ...
+
+	     a) Check if an error occurs
+	     b) Behavior on error: shows and error message and continues
+
+    3.2.2) BOOST_REQUIRE macros
+
+    	   BOOST_REQUIRE
+	   ...
+
+	   a) Check if an error occurs
+	   b) Behavior on error: throws an exception
+
+3.3) Non-checking error macros
+
+     a) The code to check the error must be explicit (i.e. if(1==2) )
+
+     Then, the macro handle the error:
+
+     3.3.1) BOOST_ERROR
+
+	    b) Behavior on error: shows and error message and continues
+
+     3.3.1) BOOST_FAIL
+
+	    b) Behavior on error: shows and error message throws an exception
+
+
+2) Quick example
+
+   [ Example  [k3_1]
+
+   #define BOOST_TEST_MODULE BoostTestHowto
+   #include <boost/test/unit_test.hpp>
+
+   int add( int i, int j ) { return i+j; }
+
+   BOOST_AUTO_TEST_CASE( my_test )
+   {
+    // seven ways to detect and report the same error:
+    BOOST_CHECK( add( 2,2 ) == 4 );        // #1 show msg & continues on error
+
+    BOOST_REQUIRE( add( 2,2 ) == 4 );      // #2 throws on error
+
+    if( add( 2,2 ) != 4 )
+      BOOST_ERROR( "Ouch..." );            // #3 continues on error
+
+    if( add( 2,2 ) != 4 )
+      BOOST_FAIL( "Ouch..." );             // #4 throws on error
+
+    if( add( 2,2 ) != 4 ) throw "Ouch..."; // #5 throws on error
+
+    BOOST_CHECK_MESSAGE( add( 2,2 ) == 4,  // #6 continues on error
+       "add(..) result: " << add( 2,2 ) );
+
+    BOOST_CHECK_EQUAL( add( 2,2 ), 4 );	  // #7 continues on error
+   } 
+
+   end example ]
+
+
 
 # ==============================================================================
 # Appendix C - cmake file example
@@ -643,34 +1116,43 @@ ENDIF(NOT boost_projectname.cmake )
 
 
 # ==============================================================================
-# Appendix K - Code examples (./code_examples)
+# Appendix K - Code examples (../code_examples)
 # ==============================================================================
 
-# source path for boost test ("./" from this point):  "./code_examples/boost/"
+# source path for boost test:  "../code_examples/boost/"
 
 
-# Init to boost library ./1_init_boost/
+# Init to boost library, "../code_examples/boost/1_init_boost/"
 
 [k1] Build a Simple Program Using Boost - ./simple_example
 
 
-# smart pointers, "./code_examples/boost/2_smart_pointers
+# smart pointer library, "../code_examples/boost/2_smart_pointers/"
 
-[k2_1] shared_ptr example - basic_examples/
+[k2_1] shared_ptr example - ./basic_examples/
 
-[k2_2] shared_array example - basic_examples/
+[k2_2] shared_array example - ./basic_examples/
 
-[k2_3] shared_ptr used as a shared_array - basic_examples/
+[k2_3] shared_ptr used as a shared_array - ./basic_examples/
 
-[k2_4] boost::make_shared - basic_examples/
+[k2_4] boost::make_shared - ./basic_examples/
 
-[k2_5] boost::shared_ptr optimization with macros - basic_examples/
+[k2_5] boost::shared_ptr optimization with macros - ./basic_examples/
 
-[k2_6] boost::ptr_vector - basic_examples/
+[k2_6] boost::ptr_vector - ./basic_examples/
 
-[k2_7] boost::ptr_set - basic_examples/
+[k2_7] boost::ptr_set - ./basic_examples/
 
-[k2_8] container inserter - basic_examples/
+[k2_8] container inserter - ./basic_examples/
+
+
+# test library, "../code_examples/boost/3_test/"
+
+[k3_1] Basic detect and report error detection - ./3_1_basic/
+[k3_2] Shared library usage variant - ./3_2_usage_variants/3_2_3_shared_lib/
+
+
+
 
 
 # ==============================================================================
@@ -689,7 +1171,7 @@ ENDIF(NOT boost_projectname.cmake )
 
 # ------------------------------------------------------------------------------
 
-[2] Smart pointers
+[2] Smart pointer library
 
 [2_1] Official website - http://www.boost.org/doc/libs/1_64_0/libs/smart_ptr/smart_ptr.htm
 
@@ -698,4 +1180,18 @@ ENDIF(NOT boost_projectname.cmake )
 [2_3] theboostcpplibraries shared ownership - https://theboostcpplibraries.com/boost.smartpointers-shared-ownership
 
 # ------------------------------------------------------------------------------
+
+[3] Test library
+
+[3_1] Boost.test official doc - http://www.boost.org/doc/libs/1_64_0/libs/test/doc/html/index.html
+
+[3_2] Select the desired test feature - http://www.boost.org/doc/libs/1_64_0/libs/test/doc/html/boost_test/intro/how_to_read.html
+
+[3_3] Shared-library variant customizations - http://www.boost.org/doc/libs/1_64_0/libs/test/doc/html/boost_test/adv_scenarios/shared_lib_customizations.html
+
+[3_4] Test cases without parameters - http://www.boost.org/doc/libs/1_64_0/libs/test/doc/html/boost_test/tests_organization/test_cases/test_organization_nullary.html
+
+[3_5] Data-driven test cases - http://www.boost.org/doc/libs/1_64_0/libs/test/doc/html/boost_test/tests_organization/test_cases/test_case_generation.html
+
+[3_6]  Template test cases - http://www.boost.org/doc/libs/1_64_0/libs/test/doc/html/boost_test/tests_organization/test_cases/test_organization_templates.html
 

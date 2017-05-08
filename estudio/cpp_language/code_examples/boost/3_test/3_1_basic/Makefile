@@ -76,6 +76,7 @@ EXEC :=  main
 #-- DO-CHANGE-HERE:  header files & paths
 # i.e. HEADERS := a.h: b.h 
 INCLUDE_DIRECTORIES := $(srcdir)
+INCLUDE_DIRECTORIES += $BOOST_ROOT
 # i.e. INCLUDE_DIRECTORIES += $(srcdir)/header
 
 
@@ -102,8 +103,10 @@ INCLUDE_FLAGS = $(addprefix -I ,$(INCLUDE_DIRECTORIES))
 
 # select C++ version: c++03 / c++11 / ...
 #
-CPP_STD_FLAGS =
-#or via command
+# here (CPP_STD_FLAGS), or via command:
+CPP_STD_FLAGS = 
+CPP_STD_FLAGS += -std=c++11
+
 ifeq ($(CPP_STD_FLAGS), -std=c++11)
 WARNING_FLAGS += -Wc++11-compat
 WARNING_FLAGS += -Wno-missing-field-initializers
@@ -133,7 +136,7 @@ required_cxxflags += $(CPP_STD_FLAGS)
 # LDFLAGS: flags (i.e -g), and library paths (i.e. -L path-lib)
 LDFLAGS =
 # LDLIBS:  library names: (i.e. LDIBS="-lncurses -lm -lsdl")
-LDLIBS =
+LDLIBS = -lboost_unit_test_framework
 
 ifdef debug_mode
 CXXFLAGS += $(WARNING_FLAGS)

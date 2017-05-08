@@ -1,0 +1,12 @@
+
+# 3.2.2 Static library usage variant
+
+  \warning Customizing the module's entry point (*) will affect
+   everybody else who is linking against the library. It may be less
+   intrusive to switch to the shared library usage variant instead.
+
+   (See http://www.boost.org/doc/libs/1_64_0/libs/test/doc/html/boost_test/
+   	/adv_scenarios/static_lib_customizations.html for details.)
+
+
+   Therefore, this is not tested here.
