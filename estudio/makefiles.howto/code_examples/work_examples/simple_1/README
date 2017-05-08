@@ -15,3 +15,5 @@
 - Recursive Makefiles
 
 - Auto-dependency
+
+- test rules: runtest, difftest, successtest
