@@ -36,16 +36,62 @@
 
 # 3 Test library
 #
-# 3.1 A simple example
+# 3.1 Introduction to testing with Boost
+#     3.1.1 A simple example
+#     3.1.2 Generic usage recommendations
 #
 # 3.2 Usage Variants
 #     3.2.1 Single-header usage variant (a.k.a. the included version)
 #     3.2.2 Static library usage variant
 #     3.2.3 Shared library usage variant
 #
-# 3.3 Test cases
+#
+###  TEST LIB SECTION: Declaring and organizing tests
+#
+# 3.3 Test suite
+#     3.3.1 Master Test Suite
+#
+# 3.4 Test cases
+#     3.4.1 Test cases without parameters
+#     3.4.2 Data-driven test cases
+#     3.4.3 Template test cases
+#
+# 3.5 Decorators
+#     3.5.1 Test-level decorators
+#     3.5.2 Suite-level decorators
+#     3.5.3 Explicit decorator declaration
+#
+# 3.6 Fixtures
+#
+# 3.6.1 Fixture mdoels
+# 3.6.2 Test case fixture
+# 3.6.3 Test suite entry/exit fixture
+# 3.6.4 Global fixture
 
-# 3.A Test library API
+# 3.7 Managing test dependencies
+# 3.8 Grouping tests into logical units by labels
+# 3.9 Enabling or disabling test unit execution
+# 3.10 Adding semantic to a test
+#
+#
+###  TEST LIB SECTION: Writing unit tests
+#
+###  TEST LIB SECTION: Controlling outputs
+#
+###  TEST LIB SECTION:  Runtime parameters
+#
+###  TEST LIB SECTION: Advanced Usage Scenarios
+#
+###  TEST LIB SECTION: Practical usage recommendations
+#
+
+### TEST LIB SECTION: Test Lib Appendix
+
+# 3.A Unit Test Framework API reference
+#
+# 3.B Frequently Asked Questions
+
+
 
 
 # Appendix K - Code examples (./code_examples)
@@ -601,7 +647,9 @@ FAQ Are *p and *p.get() essentially equivalent?
 Support for simple program testing, full unit testing, and for program
 execution monitoring.
 
-# 3.1 A simple example
+# 3.1 Introduction to testing with Boost
+
+# 3.1.1 A simple example
 
   [ Example  (Test case [k3_1]); (Defined at [3_1])
 
@@ -627,6 +675,7 @@ execution monitoring.
   *** 1 failure is detected in the test module "BoostTestHowto"
 
   end example ]
+
 
 
 # ------------------------------------------------------------------------------
@@ -747,22 +796,20 @@ the other headers that contains the Unit Test Framework definitions.
 
 # 3.2.3.1 Shared-library variant customizations [3_3]
  
-WARNING
-Macro BOOST_TEST_DYN_LINK (which instructs the compiler/linker to
-dynamically link against a shared library variant) may be implicitly
-defined when macro BOOST_ALL_DYN_LINK is defined.
+1) BOOST_TEST_DYN_LINK is required
 
-  Use #ifndef BOOST_TEST_DYN_LINK
-      #define BOOST_TEST_DYN_LINK
-      #endif
+   WARNING
+   Macro BOOST_TEST_DYN_LINK may be implicitly defined when macro
+   BOOST_ALL_DYN_LINK is defined:
 
+   Use #ifndef BOOST_TEST_DYN_LINK
+       #define BOOST_TEST_DYN_LINK
+       #endif
 
-WARNING
-In order to be able to run a test built with the dynamic variant, the
-operating system should be able to find the dynamic library of the
-Unit Test Framework. This means, for example on Linux and MacOSX
-respectively, setting the environment variable LD_LIBRARY_PATH or
-DYLD_LIBRARY_PATH properly prior to the execution of the test module.
+2) The the dynamic library of the Unit Test Framework must be in the path
+
+   Linux: LD_LIBRARY_PATH
+   Mac:   DYLD_LIBRARY_PATH
 
   [ Example echo $LD_LIBRARY_PATH
 
@@ -771,46 +818,47 @@ DYLD_LIBRARY_PATH properly prior to the execution of the test module.
   end example ]
 
 
-2) Customizing the module's initialization function
+3) Customizing the module's initialization function
 
-In the shared-library variant, it is impossible to customize the
-initialization function without customizing the entry point. We have
-to customize both.
+   In the shared-library variant, it is impossible to customize the
+   initialization function without customizing the entry point. We
+   have to customize both:
 
-Two options:
+   a) Automatically Defined entry point and init. function
 
-Option 1.- customizing the initialization function: 
+      #define BOOST_TEST_MODULE any new name  //required
+      
+      #define BOOST_TEST_NO_MAIN              // forbidden
+      bool init_unit_test(){ return true; }   // forbidden
+      int main(int argc, char* argv[])        // forbidden   
+      {return boost::unit_test::unit_test_main( &init_unit_test, argc, argv );}
 
-       // #define BOOST_TEST_MODULE BoostTestHowto_SharedUsageVariant
-       // #define BOOST_TEST_NO_MAIN  //(its value is irrelevant)
-       bool init_unit_test() { return true; }
 
-       Then "Master Test Suite" is taken by default.
+   b) Manually Defined entry point and init. function
+
+      #define BOOST_TEST_MODULE any new nmae  //required
+      
+      #define BOOST_TEST_NO_MAIN              // required
+      bool init_unit_test(){ return true; }   // forbidden
+      int main(int argc, char* argv[])        // required   
+      {return boost::unit_test::unit_test_main( &init_unit_test, argc, argv );}
 
 
-  [ Example [k3_2]
+  [ Example Automatically Defined entry point and init. function  [k3_2] 
  
-    /* Option 1.- customizing the initialization function: "Master Test Suite"
-       // #define BOOST_TEST_MODULE BoostTestHowto_SharedUsageVariant
-       // #define BOOST_TEST_NO_MAIN  //# (its value is irrelevant)
-
-       bool init_unit_test() { return true; }
-    */
-
     //!\file main.cpp
-    
+
+    #define BOOST_TEST_MODULE BoostTestHowto_SharedUsageVariant //required
     #ifndef BOOST_TEST_DYN_LINK
     #define BOOST_TEST_DYN_LINK
     #endif
 
     #include <boost/test/unit_test.hpp>
 
-    // (MANUALLY DEFINED) initialization function:
-    bool init_unit_test() { return true; }
-
-    // (MANUALLY DEFINED) entry point:
-    int main(int argc, char* argv[])
-    {return boost::unit_test::unit_test_main( &init_unit_test, argc, argv );}
+    BOOST_AUTO_TEST_CASE(first_test)
+    {
+      BOOST_CHECK_EQUAL(77, 111);
+    }
 
 
     //!\file test_2.cpp
@@ -823,57 +871,131 @@ Option 1.- customizing the initialization function:
 
     //!\output 
     Running 2 test cases...
-    main.cpp(75): error in "first_test": check i == 2 failed
+    main.cpp(63): error in "first_test": check 77 == 111 failed [77 != 111]
     test_2.cpp(5): error in "another_test": check 22 == 3 failed
 
-    *** 2 failures detected in test suite "Master Test Suite"
-
-  end example  ]
-
-
-Option 2.- NOT customizing the initialization function: 
-
-       #define BOOST_TEST_MODULE  test module name
-       #define BOOST_TEST_NO_MAIN // (its value is irrelevant)
-       //bool init_unit_test() { return true; }
-
-       Then "test module name" is used instead.
-
-
-  [ Example [k3_2]
- 
-    /* Option 2.- Not customizing the initialization function */
-
-    //!\file main.cpp
- 
-    #define BOOST_TEST_MODULE BoostTestHowto_SharedUsageVariant
-    #define BOOST_TEST_NO_MAIN  //# (its value is irrelevant)
-
-    #ifndef BOOST_TEST_DYN_LINK
-    #define BOOST_TEST_DYN_LINK
-    #endif
-
-    #include <boost/test/unit_test.hpp>
-
-    int main(int argc, char* argv[])
-    {return boost::unit_test::unit_test_main( &init_unit_test, argc, argv );}
- 
-    // Test cases here
-    ...
-
-    //!\file test_2.cpp (unchanged)
-    ...
-
-    //!\output 
-    // Same errors detected:
-       ... 
-       *** 2 failures detected in test suite "BoostTestHowto_SharedUsageVariant"
+    *** 2 failures detected in test suite "BoostTestHowto_SharedUsageVariant"
 
   end example  ]
 
 
 # ------------------------------------------------------------------------------
-# 3.3 Test cases
+# 3.3 Test suite
+# ------------------------------------------------------------------------------
+
+1) Test tree concept
+
+   - test cases: leaves  (mandatory)
+   
+   - test suite: branch  (optional)
+
+   - master test suite: root
+
+2) If you do want to construct a hierarchical test suite structure the
+   Unit Test Framework provides both manual and automated test suite
+   creation and registration facilities:
+ 
+
+# 3.4.1 Automated registration
+
+1) namespace like concept in a single compilation unit
+
+   BOOST_AUTO_TEST_SUITE(test_suite_name);
+   ...
+   // test cases here
+   ...
+   BOOST_AUTO_TEST_SUITE_END();
+
+
+2) Test units declared at a test file scope become members of the
+   master test suite (thus, the master test suit is just like the
+   global namespace).
+
+3) There is no limit on depth of test suite inclusion. 
+
+4) Many different test suites can be defined in the same file
+
+
+# 3.4.2 Manual registration
+
+1) BOOST_TEST_SUITE(test_suite_name);
+
+   See [3_1] for details.
+
+
+2) (auto-question) Why use this instead of the automated mode?
+
+   "If you use only free function based test cases advance to the
+   automatic registration facility"  (3.???.1 Generic usage recommendations)
+
+   "If most of your tests are unique, and you're not running the same
+   test repeatedly with different parameters, then you probably won't
+   see any benefit from switching to manual registration." [3_100_1]
+
+
+# 3.4.3 Master Test Suite
+
+1) Each test module built with the Unit Test Framework always has the
+   master test suite defined. All other test units are registered as
+   direct or indirect children of the master test suite.
+
+   My_note.- like the global namespace in C++
+
+2) To access single instance of the master test suite use the
+   following interface:
+
+   boost::unit_test::framework::master_test_suite_t& master_test_suite();
+
+
+# 3.4.3.1 Command line arguments access interface
+
+1) The M.T.S. maintains references to the command arguments passed to
+   the test module. To access the command line arguments use:
+
+   boost::unit_test::framework::master_test_suite().argc
+   boost::unit_test::framework::master_test_suite().argv
+
+2) Example: Command line access in initialization function [3_1]
+
+
+# 3.4.3.2 Naming the Master test suite
+
+1) The master test suite is created with default name Master Test Suite. 
+   There are two methods two reset the name to a different value.
+
+2)  Naming master test suite using the macro BOOST_TEST_MODULE
+
+   	 #define BOOST_TEST_MODULE my master test suite name
+
+   If the macro BOOST_TEST_MODULE is defined, the test module
+   initialization function is automatically generated and the macro
+   value becomes the name of the master test suite. The name may
+   include spaces.
+
+
+3) Naming master test suite explicitly in the test module init. function
+
+   [ Example
+
+     #include <boost/test/included/unit_test.hpp>
+     using namespace boost::unit_test;
+
+     BOOST_AUTO_TEST_CASE( free_test_function )
+     {
+      BOOST_TEST( true /* test assertion */ );
+     }
+
+     test_suite* init_unit_test_suite( int /*argc*/, char* /*argv*/[] )
+     {
+      framework::master_test_suite().p_name.value = "my master test suite name";
+      return 0;
+     }
+
+   end example ]
+
+
+# ------------------------------------------------------------------------------
+# 3.4 Test cases
 # ------------------------------------------------------------------------------
 
 1) Is a unit of execution that is run by the test runner. It contains
@@ -885,13 +1007,13 @@ Option 2.- NOT customizing the initialization function:
    automatically in a test tree.
 
 
-# 3.3.1 Test cases without parameters
+# 3.4.1 Test cases without parameters
 
-# 3.3.1.1 Automated registration
+# 3.4.1.1 Automated registration
 
      	  BOOST_AUTO_TEST_CASE(test_case_name);
 
-# 3.3.1.2 Manual registration
+# 3.4.1.2 Manual registration
 
      	  BOOST_AUTO_TEST_CASE(test_case_name);
 
@@ -899,7 +1021,7 @@ Option 2.- NOT customizing the initialization function:
    [3_4] for details.
 
 
-# 3.3.2 Data-driven test cases [3_5]
+# 3.4.2 Data-driven test cases [3_5]
 
 1) Why data-driven test cases? Some tests are required to be repeated
    for a series of different input parameters.
@@ -908,7 +1030,7 @@ Option 2.- NOT customizing the initialization function:
 See [3_5] for details.
 
 
-# \todo 3.3.2.1 Datasets
+# \todo 3.4.2.1 Datasets
 
 Sample: is a polymorphic tuple. The size of the tuple will be by
 	definition the arity of the sample itself.
@@ -922,43 +1044,375 @@ Note.- Arity: the number of arguments or operands that a function takes.
 	all samples in a dataset have the same type and same arity.
 
 
-# \todo 3.3.2.2 Declaring and registering test cases with datasets
+# \todo 3.4.2.2 Declaring and registering test cases with datasets
 
-# \todo 3.3.2.3 Operations on dataset
+# \todo 3.4.2.3 Operations on dataset
 
     Joins
     Zips  ( i.e. [0,1] ^ ["lost", "won"] = pairs (0, "lost), (1, "won")  )
     Grid  (Cartesian products)
 
-# \todo 3.3.2.4 Datasets generators
+# \todo 3.4.2.4 Datasets generators
 
 
-# 3.3.2  Template test cases [3_6]
+# 3.4.3  Template test cases [3_6]
+
+1) Used to test Template classes
+
+# \todo 3.4.3.1 Test case template with automated registration
+
+# \todo 3.4.3.1 Test case template with manual registration
 
 
+# ------------------------------------------------------------------------------
+# 3.5 Decorators
+# ------------------------------------------------------------------------------
+
+1) WARNING Applied only for the automatically registered test units. 
+
+2) Decorators list (API): [3_7]
+
+
+# 3.5.1 Test case decorators
+
+Define a decorator for a concrete test
+
+1) A list of decorators is applied to a test case by specifying it as
+   the second argument to macro BOOST_AUTO_TEST_CASE or the third
+   argument to macro BOOST_FIXTURE_TEST_CASE.
+
+   BOOST_AUTO_TEST_SUITE(suite1, * utf::label("trivial"))
+
+2) Each decorator in the list is preceded by an asterisk (*)
+
+   (i.e.  * utf::label("trivial") in the test bellow )
+
+3) [ Example [k3_3]
+
+     #define BOOST_TEST_MODULE decorator_01
+     #include <boost/test/included/unit_test.hpp>
+
+     namespace utf = boost::unit_test;
+
+     BOOST_AUTO_TEST_CASE(test_case1, * utf::label("trivial"))
+     {
+       BOOST_TEST(true);
+     }
+
+     BOOST_AUTO_TEST_CASE(test_case2,
+	* utf::label("trivial")
+	* utf::label("cmp")
+	* utf::description("testing equality of ones"))
+     {
+       BOOST_TEST(1 == 1);
+     }
+
+   end example ]
+
+
+# 3.5.2 Suite-level decorators
+
+Define a decorator for the entire suite
+
+1) Similarly to test case it is possible to apply list of decorators
+   to test suite. It is done by specifying a list of decorators as the
+   second argument to the macro BOOST_AUTO_TEST_SUITE or the third
+   argument to the macro BOOST_FIXTURE_TEST_SUITE.
+
+   BOOST_AUTO_TEST_SUITE(suite1, * utf::label("trivial"))
+
+
+# 3.5.3 Explicit decorator declaration
+
+1) WARNING 
+   The above syntax for decorators requires that the compiler supports
+   variadic macros (added in C++11). If you intend for your test
+   program to also work for compilers without variadic macros, use
+   explicit decorator syntax, described below.
+
+2) Macro BOOST_TEST_DECORATOR indicates that its set of decorators is
+   to be applied to the test unit or test case sequence that
+   immediately follows the declaration.
+
+3) [ Example [k3_3]
+
+     #define BOOST_TEST_MODULE decorator_00
+     #include <boost/test/included/unit_test.hpp>
+
+     #include <boost/test/data/test_case.hpp>
+
+     namespace utf  = boost::unit_test;
+     namespace data = boost::unit_test::data;
+
+     BOOST_TEST_DECORATOR(* utf::description("with description"))
+     BOOST_DATA_TEST_CASE(test_1, data::xrange(4))
+     {
+	BOOST_TEST(sample >= 0);
+     }
+
+   end example ]
+
+
+# ------------------------------------------------------------------------------
+# 3.6 Fixtures
+# ------------------------------------------------------------------------------
+
+1) In general terms a test fixture or test context is the collection
+   of one or more of the following items, required to perform the test:
+
+    preconditions
+    particular states of tested units
+    necessary cleanup procedures
+
+2) Test modules may contain hundreds of single assertion test cases,
+   many requiring very similar test setup/cleanup. This is the problem
+   that the test fixture is designed to solve.
+
+
+# 3.6.1 Fixture models
+
+# 3.6.1.1 Fixture class model
+
+  struct <fixture-name>
+  {
+    <fixture-name>();      // setup function
+    ~<fixture-name>();     // teardown function
+  };
+
+  This model is expected from fixtures used with BOOST_FIXTURE_TEST_CASE and 
+  BOOST_FIXTURE_TEST_SUITE.
+
+# 3.6.1.2 Flexible models
+
+  A decorator fixture. 
+
+  See [3_1] for details
+
+
+# 3.6.2 Test case fixture
+
+1) A test case fixture is a fixture consumed by a test case
+
+   a) the fixture setup is called before the test case executes
+
+   b) the fixture teardown is called after the test case finished its
+      execution, INDEPENDENTLY FROM ITS EXECUTION STATE.
+
+
+# 3.6.2.1 Single test case fixture with BOOST_FIXTURE_TEST_CASE
+
+
+  BOOST_FIXTURE_TEST_CASE(test_case_name, fixture_name);
+
+
+1) Equivalent to BOOST_AUTO_TEST_CASE but using 'fixture_name' fixture
+
+2) ONLY ONE FIXTURE can be attached to a test-case.
+
+3) All non- pivate members of the fixture are directly accessible from
+   the test case body.
+
+   HINT Do not make private members in a fixture class, it is absurd.
+
+4) [ Example [k3_4]
+
+     #define BOOST_TEST_MODULE example
+     #include <boost/test/included/unit_test.hpp>
+
+     struct F 
+     {
+	F() : i( 0 ) { BOOST_TEST_MESSAGE( "setup fixture" ); }
+     	~F()         { BOOST_TEST_MESSAGE( "teardown fixture" ); }
+	int i;
+     };
+
+     BOOST_FIXTURE_TEST_CASE( test_case1, F )
+     {
+          BOOST_TEST( i == 1 );
+     	  ++i;  // direct access to the fixture members !
+     }
+
+     BOOST_FIXTURE_TEST_CASE( test_case2, F )
+     {
+	BOOST_CHECK_EQUAL( i, 1 );
+     }
+
+     BOOST_AUTO_TEST_CASE( test_case3 )
+     {
+	BOOST_TEST( true );
+     }
+
+   end example ]
+
+
+# 3.6.2.2 Single test case fixture with fixture decorator
+
+1) Allows attach SEVERAL FIXTURES to a unique test case
+
+   See [3_1] for details.
+
+
+# 3.6.2.3 Fixture for a complete subtree
+
+1) Use BOOST_FIXTURE_TEST_SUITE(suite_name, fixture_name); in place of
+   the macro BOOST_AUTO_TEST_SUITE(suite_name)
+
+2) TIP
+   If necessary you can reset the fixture for a particular test case
+   using the macro BOOST_FIXTURE_TEST_CASE. Similarly you can reset
+   the fixture for a particular sub test suite using BOOST_FIXTURE_TEST_SUITE.
+
+3) Note.- The fixture assignment is deep. (recursive)
+
+4) WARNING
+   The fixture constructor and destructor is called for each test
+   cases (the state of the fixture is not shared among the test cases).
+
+5) [ Example [k3_5]
+
+     #define BOOST_TEST_MODULE fixture_subtree
+     #include <boost/test/included/unit_test.hpp>
+
+     struct F 
+     {
+	F() : the_i( 0 ) { BOOST_TEST_MESSAGE( "setup fixture" ); }
+     	~F()             { BOOST_TEST_MESSAGE( "teardown fixture" ); }
+	int the_i;
+     };
+
+     
+     BOOST_FIXTURE_TEST_SUITE(suite_subtree, F)
+
+     BOOST_AUTO_TEST_CASE(test_case1)
+     {
+	BOOST_TEST_MESSAGE("running test_case1");
+     	BOOST_TEST(the_i == 0);
+     }
+
+     BOOST_AUTO_TEST_CASE(test_case2)
+     {
+	BOOST_TEST_MESSAGE("running test_case2");
+     	BOOST_TEST(the_i == 0);
+     }
+
+     BOOST_AUTO_TEST_SUITE_END()
+
+
+     // Output
+
+      > fixture_02 --log_level=message
+      Running 2 test cases...
+      setup fixture
+      running test_case1
+      teardown fixture
+      setup fixture
+      running test_case2
+      teardown fixture
+
+      *** No errors detected
+
+   end example ]
+
+
+# 3.6.3 Test suite entry/exit fixture
+
+  i) execute the setup function once (upon suite exit)
+  ii) execute all the tests
+  i) execute the teardown function once (upon suite exit)
+
+1) This is facilitated by the decorator fixture  See [3_1]
+
+2) In case of this fixture type, however, it is not possible to access
+   any members of the fixture object.
+
+3) WARNING
+   This is not equivalent to using the method described at 3.6.2.3
+   (Fixture for a complete subtree)
+
+
+# 3.6.4 Global fixture
+
+AKI LO DEJO
+
+# ------------------------------------------------------------------------------
+# 3.7 Managing test dependencies
+# ------------------------------------------------------------------------------
+
+In general, you should make sure that test cases are independent on one another.
+
+# 3.7.1 Declaring a test case dependency
+
+\todo See [3_1] for details
 
 
 
 # ------------------------------------------------------------------------------
-# 3.A Test library API
+# 3.8 Grouping tests into logical units by labels
 # ------------------------------------------------------------------------------
 
-# 3.A.1 BOOST_TEST_MODULE
-
-  Defines the name of our program, which will be used in messages.
-  This name can include spaces and does not need to be wrapped in quotes.
-
-  It can be composed of several BOOST_AUTO_TEST_CASE.
-
-  Must be coded before  "#include <boost/test/unit_test.hpp>"
 
 
-# 3.A.2 BOOST_AUTO_TEST_CASE
+# ------------------------------------------------------------------------------
+# 3.9 Enabling or disabling test unit execution
+# ------------------------------------------------------------------------------
 
-1) Declares a test case (named).
 
-2) which in turn will run the content of first_test INSIDE the
-   controlled testing environment.
+# ------------------------------------------------------------------------------
+# 3.10 Adding semantic to a test
+# ------------------------------------------------------------------------------
+
+
+
+------------------------------------------------------------------------------
+# 3.A Unit Test Framework API reference [3_A_1]
+------------------------------------------------------------------------------
+
+# 3.A.1 Build scenarios and behaviors
+
+#  BOOST_TEST_MODULE
+
+  - (The same as BOOST_MAIN)):
+
+  1) Creates stub for test module initialization (the main function)
+
+  2) WARNING Must be defined before "#include <boost/test/unit_test.hpp>"
+
+  3) WARNING Must be defined exactly for one compilation unit of your
+     	     test module
+
+  - Plus: 
+
+  4) Defines the name defines the name of the master test suite.
+     This name can include spaces and does not need to be wrapped in quotes.
+
+
+# BOOST_TEST_DYN_LINK
+
+  1) Define this flag to link against the Unit Test Framework shared library.
+
+  2) Note.- The same flag is used for the Unit Test Framework and the
+    /Program Execution Monitor components.
+
+
+# BOOST_TEST_NO_MAIN         // required
+
+  1) Prevents the auto generation of the test module initialization
+     functions (bool init_unit_test() is required)
+   
+  2) WARNING This macro is particularly relevant for manually registered tests 
+     	     in conjunction with dynamic variant of the Unit Test Framework.
+
+  3) When defined, a main function registering all the tests should be
+     implemented.
+
+
+
+# 3.A.2 Tests declaration and organization
+
+# BOOST_AUTO_TEST_CASE
+
+  1) Declares and registers automatically a (named) test case.
+     (see 3.4.1.1 Automated registration)
 
 
 
@@ -1048,6 +1502,58 @@ Note.- Arity: the number of arguments or operands that a function takes.
    } 
 
    end example ]
+
+
+# 3.B Frequently Asked Questions
+
+# Q) How to create test case using the Unit Test Framework?
+
+  BOOST_AUTO_TEST_CASE( test_function );
+
+# Q) How to create test suite using the Unit Test Framework?
+
+  BOOST_AUTO_TEST_SUITE( suite_name );
+
+# Q) Linker error: Unresolved external init_unit_test_suite(int, char**).
+
+  The reason for this error is that in your implementation you should
+  specify second argument of init_unit_test_suite exactly as in the
+  specification, i.e.: char* [].
+
+# Q) How can I redirect testing output?
+
+  unit_test_log::instance().set_log_output( std::ostream & )
+
+# Q) I want different default log trace level
+
+  Use environment variable BOOST_TEST_LOG_LEVEL to define desired log trace 
+  level. You still will be able to reset this value from the command line.
+
+# Q) How to set up a CMake project using Unit Test Framework (extended)
+
+  See [3_1]
+
+
+# ------------------------------------------------------------------------------
+# 3.??? Practical usage recommendations
+# ------------------------------------------------------------------------------
+
+# 3.???.1 Generic usage recommendations
+
+[doc] http://www.boost.org/doc/libs/1_50_0/libs/test/doc/html/utf/usage-recommendations/generic.html
+
+1) Prefer offline compiled libraries to the inline included components (3.2)
+
+2) If you use only free function based test cases advance to the
+   automatic registration facility
+
+3) To find location of first error reported by test tool within reused
+   template function, use special hook within framework headers.
+
+4) To test reusable template base component with different template
+   parameter use test case template facility.
+
+5) Prefer BOOST_CHECK_EQUAL to BOOST_CHECK
 
 
 
@@ -1150,8 +1656,10 @@ ENDIF(NOT boost_projectname.cmake )
 
 [k3_1] Basic detect and report error detection - ./3_1_basic/
 [k3_2] Shared library usage variant - ./3_2_usage_variants/3_2_3_shared_lib/
-
-
+[k3_3] decorators - ./3_5_decorators/
+[k3_4] Single test case fixture with BOOST_FIXTURE_TEST_CASE - 
+	./3_6_fixtures/3_6_2_1_single_test_case_with_BOOST_FIXTURE_TEST_CASE/
+[k3_5] Fixture for a complete subtree - ./3_6_fixtures/3_6_2_3_subtree
 
 
 
@@ -1193,5 +1701,13 @@ ENDIF(NOT boost_projectname.cmake )
 
 [3_5] Data-driven test cases - http://www.boost.org/doc/libs/1_64_0/libs/test/doc/html/boost_test/tests_organization/test_cases/test_case_generation.html
 
-[3_6]  Template test cases - http://www.boost.org/doc/libs/1_64_0/libs/test/doc/html/boost_test/tests_organization/test_cases/test_organization_templates.html
+[3_6] Template test cases - http://www.boost.org/doc/libs/1_64_0/libs/test/doc/html/boost_test/tests_organization/test_cases/test_organization_templates.html
 
+[3_7] Decorators list (API) - http://www.boost.org/doc/libs/1_64_0/libs/test/doc/html/boost_test/tests_organization/summary_of_the_api_for_declaring.html
+
+[3_A_1] Test library API - http://www.boost.org/doc/libs/1_64_0/libs/test/doc/html/boost_test/utf_reference.html
+
+
+[3_100] Special section dedicated to manual registration: WHY we need this?
+
+[3_100_1] When/Why to use manual registration in Boost Test library? - http://stackoverflow.com/questions/11860310/when-to-use-manual-registration-in-boost-test-library

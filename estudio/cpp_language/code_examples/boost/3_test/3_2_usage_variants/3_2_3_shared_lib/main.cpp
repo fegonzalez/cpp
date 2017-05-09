@@ -4,71 +4,68 @@
 
 */
 
-
-/*!\warning "can't use testing tools before framework is initialized" error
-
-  #define BOOST_TEST_DYN_LINK 
-
-  without: runtime error:
-  "can't use testing tools before framework is initialized"
-
-  with: compilation error: a main() already exists at unit_test.hpp
-  solution: namespace the test unit.
-  
-*/
+#include <iostream>
 
 
-
-//==============================================================================
-// Customizing the module's entry point
-//==============================================================================
-
-/*!\warning Not need anymore if the init function
-  (init_unit_test()) is defined
-*/	
-#define BOOST_TEST_MODULE BoostTestHowto_SharedUsageVariant
-#define BOOST_TEST_NO_MAIN  //# (its value is irrelevant)
+//#define AUTO_DEFINED
 
 
+//%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+#ifdef AUTO_DEFINED
+//%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+#define BOOST_TEST_MODULE BoostTestHowto_SharedUsageVariant //required
 #ifndef BOOST_TEST_DYN_LINK
 #define BOOST_TEST_DYN_LINK
 #endif
 
 #include <boost/test/unit_test.hpp>
 
-
-//==============================================================================
-// (MANUALLY DEFINED) initialization function:
-//==============================================================================
-
-// bool init_unit_test()
-// {
-//   return true;
-// }
+BOOST_AUTO_TEST_CASE(first_test)
+{
+  BOOST_CHECK_EQUAL(77, 111);
+}
 
 
-//==============================================================================
-// (MANUALLY DEFINED) entry point:
-//==============================================================================
+//%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+#else // AUTO_DEFINED
+//%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
-int main(int argc, char* argv[])
+
+#define BOOST_TEST_MODULE BoostTestHowto_SharedUsageVariant
+#ifndef BOOST_TEST_DYN_LINK
+#define BOOST_TEST_DYN_LINK
+#endif
+
+
+// Manually Defined entry point and init. function
+#define BOOST_TEST_NO_MAIN         // required
+
+
+#include <boost/test/unit_test.hpp>
+
+
+// Manually Defined entry point and init. function
+// Entry point function
+int main(int argc, char* argv[])   // required
 {
   return boost::unit_test::unit_test_main( &init_unit_test, argc, argv );
 }
 
-//==============================================================================
-/*!\test Aby test case 
+// Manually Defined entry point and init. function
+// Initialization function
+// bool init_unit_test() 	    // forbiden
+// { return true; }
 
-Running 1 test case...
-main.cpp(60): error in "first_test": check i == 2 failed
 
-*** 1 failure detected in test suite "BoostTestHowto_SharedUsageVariant"
-
-*/
 BOOST_AUTO_TEST_CASE(first_test)
 {
-  int i = 1;
-  // Before boost 1.59 BOOST_TEST was not yet defined
-  BOOST_CHECK(i);
-  BOOST_CHECK(i == 2);
+  BOOST_CHECK_EQUAL(77, 111);
 }
+
+
+//%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+#endif // AUTO_DEFINED
+//%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+
