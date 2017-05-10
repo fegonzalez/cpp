@@ -83,6 +83,28 @@
 #
 ###  TEST LIB SECTION: Writing unit tests
 #
+# 3.11 Writing unit tests
+#
+# 3.11.1 Assertion severity level
+# 3.11.2 BOOST_TEST: universal and general purpose assertions
+# 3.11.3 Reported information
+#
+# 3.11.4 Extended comparisons support
+# 	 3.11.4.1 Floating point comparison
+# 	 3.11.4.2 Strings and C-strings comparison
+# 	 3.11.4.3 Collections comparison
+# 	 3.11.4.4 Bitwise comparison
+#
+# 3.11.5 Exception correctness
+# 3.11.6 Time-out for test cases
+# 3.11.7 Expected failures specification
+# 3.11.8 Custom predicate support
+# 3.11.9 Output streams testing tool
+# 3.11.10 BOOST_TEST: details on expressions
+# 3.11.11 Debugging the assertions
+# 3.11.12 Summary of the API for writing tests
+#
+#
 ###  TEST LIB SECTION: Controlling outputs
 #
 ###  TEST LIB SECTION:  Runtime parameters
@@ -1022,8 +1044,6 @@ the other headers that contains the Unit Test Framework definitions.
 
 # 3.4.1.2 Manual registration
 
-     	  BOOST_AUTO_TEST_CASE(test_case_name);
-
 1) WARNING A test case can be implemented as a method of a class. See
    [3_4] for details.
 
@@ -1576,9 +1596,376 @@ In general, you should make sure that test cases are independent on one another.
    end example ]
 
 
-------------------------------------------------------------------------------
+#==============================================================================
+# 3.11 Writing unit tests
+#==============================================================================
+
+1) A test case is a sequence of operations in which ASSERTIONS are inserted.
+
+2) Finally reporting failures and/or information in a uniform manner,
+   depending on the LOG LEVEL (*)
+
+3) The toolbox supplied is in most part in a form of macro
+   declarations. An (almost) unique interface to all of them
+   implemented by the macro BOOST_TEST.
+
+4) The granularity of the report depends on the current log level and
+   report level.
+
+5) NOTICE
+   All macros arguments are calculated once, so it's safe to pass
+   complex expressions in their place.
+
+6) All tools automatically supply an error location: a file name and a
+   line number, which can also be overridden.
+
+7) WARNING
+   The testing tools are intended for unit test code rather than
+   library or production code, where throwing exceptions, using
+   assert(), boost::concept_check or BOOST_STATIC_ASSERT() may be more
+   suitable ways to detect and report errors.
+
+8) List of testing tools (see [3.11.12])
+
+
+#------------------------------------------------------------------------------
+# 3.11.1 Assertion severity level
+#------------------------------------------------------------------------------
+
+Table 3.11.1 Assertions severity levels
+
+===========================================================================
+ Level     Test log content                    Errors           Test
+                                               Counter          execution(**)
+===========================================================================
+ WARN(*)   warning in <test-case-name>:        not affected     continues
+           condition <assertion
+           description> is not satisfied 
+---------------------------------------------------------------------------
+ CHECK     error in <test-case-name>: test     increased        continues    
+           <assertion description> failed 
+---------------------------------------------------------------------------
+ REQUIRE   fatal error in <test-case-name>:    increased        aborts
+           critical test <assertion 
+           description> failed 
+===========================================================================
+
+(*) This level of assertion can be used to validate aspects less
+    important then correctness: performance, portability, usability, etc.
+
+(**) Related to the current test case only. Hence "aborts" means that
+     the current test case is aborted, but other test cases in the
+     test tree are still executed.
+
+
+#------------------------------------------------------------------------------
+# 3.11.2 BOOST_TEST: universal and general purpose assertions
+#------------------------------------------------------------------------------
+
+
+	BOOST_TEST(statement);
+	BOOST_TEST_<level>(statement, optional_modifiers)
+
+	where level can be: WARN, CHECK, REQUIRE
+
+
+1) WARNING
+   To get all the functionalities of BOOST_TEST family of assertions,
+   a C++11 capable compiler is required, especially supporting the
+   auto and decltype keywords and the variadic macros. The
+   documentation focuses on these set of compilers.
+
+2) [ Example: BOOST_TEST overview
+
+    BOOST_AUTO_TEST_CASE( test_macro_overview )
+    {
+      BOOST_TEST( a-boolean-expression );
+      ...
+    }
+
+  end example ]
+
+3) Complex Statements
+
+   BOOST_TEST provides an enhanced reporting capability: additional details of 
+   the failing operands and operations are provided in the log:
+
+   [ Example: BOOST_TEST enhanced reporting
+
+     BOOST_AUTO_TEST_CASE( test_op_reportings )
+     {
+      BOOST_TEST( a-boolean-expression );
+      ...
+     }
+
+   end example ]
+
+
+4) Limitations and workaround  [3_8]
+
+   There are a few constructions that are however unsupported, but
+   adding an extra parenthesis usually solves that 
+   
+   (i.e. BOOST_TEST((true || false));
+
+
+#------------------------------------------------------------------------------
+# 3.11.3 Reported information
+#------------------------------------------------------------------------------
+
+1) Default reporting:
+
+   - the body of the statement that failed 
+   - file: name & line 
+   - test case: name
+
+2) Custom messages:
+
+   The BOOST_TEST macro let you override the default message by the
+   use of a second argument: 
+
+   BOOST_TEST(statement, "custom log message");
+
+
+#------------------------------------------------------------------------------
+# 3.11.4 Extended comparisons support
+#------------------------------------------------------------------------------
+
+# 3.11.4.1 Floating point comparison
+
+  1) Enabling tolerance for user-defined types
+
+  2) Tolerance-based comparisons
+
+  3) Theory behind floating point comparisons
+
+# 3.11.4.2 Strings and C-strings comparison
+
+When type of the the pointers are char* or wchar_t*, BOOST_TEST promotes 
+them as null terminated char arrays and string comparison is used.
+
+# 3.11.4.3 Collections comparison
+
+  See [3_1]
+
+# 3.11.4.4 Bitwise comparison
+
+WARNING This feature is not available for non C++11 compilers. 
+
+
+#------------------------------------------------------------------------------
+# 3.11.5 Exception correctness
+#------------------------------------------------------------------------------
+
+1) Any unexpected/uncaught exception raised in the test case body will
+   be intercepted by the Boost.test framework and will result in the
+   termination of the TEST-CASE with the status failed.
+
+2) The Unit Test Framework provides several assertions for testing a
+   code with respect to the exceptions correctness:
+
+   BOOST_<level>_NO_THROW 
+
+      checks that no exception is raised from an expression,
+    
+   BOOST_<level>_THROW 
+
+      checks that an expression raises an exception of a specific type
+    
+   BOOST_<level>_EXCEPTION 
+
+      checks that an expression raises an exception of a specific
+      type, a passes the exception instance to a predicate function
+      for further validation (introspection for instance)
+
+3) WARNING
+   An assert(...) might call abort(): the use of the macros above may
+   not be suitable for testing for assert's in a portable manner.
+
+
+#------------------------------------------------------------------------------
+# 3.11.6 Time-out for test cases
+#------------------------------------------------------------------------------
+
+1) Decorator "timeout": specifies a time-out for a specific test
+   case. If this time is exceeded the test case is forced to stop and
+   is reported as failure.
+
+2) [ Example
+
+   #define BOOST_TEST_MODULE decorator_11
+   #include <boost/test/included/unit_test.hpp>
+   namespace utf = boost::unit_test;
+   BOOST_AUTO_TEST_CASE(test1, * utf::timeout(2))
+   {
+   #ifdef BOOST_SIGACTION_BASED_SIGNAL_HANDLING
+      for(;;) {}
+      BOOST_TEST(true);
+   #else
+      BOOST_TEST(false);
+   #endif
+   }
+
+   // Output
+   > decorator_11
+   Running 1 test case...
+   unknown location(0): fatal error: in "test1": signal: SIGALRM
+   (timeout while executing function)
+   test.cpp(5): last checkpoint: "test1" entry.
+
+   *** 1 failures is detected in test module "decorator_11"
+
+   end example ]
+
+
+3) WARNING Applied at test suite level, this decorator has no effect. 
+
+
+#------------------------------------------------------------------------------
+# 3.11.7 Expected failures specification
+#------------------------------------------------------------------------------
+
+1) CASE OF USE: we want to to temporarily allow a PARTICULAR TEST CASE to fail.
+
+2) This feature allows specifying an expected number of failed
+   assertions per test unit. The value is specified during test tree
+   construction, and CAN NOT be updated during test execution.
+
+3) WARNING
+   If an assertion at fault is fixed and passed while an expected
+   failures specification still present, the number of failures
+   becomes smaller than expected. The test is going to be reported as
+   passed; instead, a warning message will be issued.
+
+
+# 3.11.7.1 Expected failure specification
+
+1) The decorator "expected_failures" defines the number of assertions
+   that are expected to fail within the corresponding test unit.
+
+2) It is reported as failure when the number of failed assertions is
+   greater than the declared expected number of failures. If the
+   number of failed assertions is less than the number of expected
+   failures a message is reported. The total number of expected
+   failures for a given test suite S is the sum of the declared
+   expected failures in S and the sum of expected failures in all
+   nested test units
+
+3) Example [3_1]
+
+
+# 3.11.7.2 Usage with automatically registered test cases
+
+WARNING
+This usage is considered as deprecated. Please consider using the
+expected_failures decorator instead.
+
+For backwards compatibility, it is possible to indicate the expected
+failures with BOOST_AUTO_TEST_CASE_EXPECTED_FAILURES [15] before the
+test case definition.
+
+# 3.11.7.3 Usage with manually registered test cases
+
+WARNING
+Ddeprecated. Please consider using the expected_failures decorator instead.
+
+
+#------------------------------------------------------------------------------
+# 3.11.8 Custom predicate support
+#------------------------------------------------------------------------------
+
+1) CASE OF USE: in some cases you may want to implement and use custom
+   predicate that perform complex check and produce intelligent report
+   on failure.
+
+2) There two layers of custom predicate support implemented by testing
+   tools toolbox: with and without custom error message generation.
+
+   - layer 1: Custom predicate support using BOOST_<level>_PREDICATE
+
+   - layer 2: Custom predicate support using class
+     	   boost::test_tools::predicate_result
+
+[3_1] for details.
+
+
+#------------------------------------------------------------------------------
+# 3.11.9 Output streams testing tool
+#------------------------------------------------------------------------------
+
+1) GOAL: automatic testing std::ostream operations 
+   (i.e. operator<< ( std::ostream &, ... ))
+
+2) boost::test_tools::output_test_stream 
+
+3) All output_test_stream validation member functions by default flush
+   the stream once the check is performed. If you want to perform
+   several checks with the same output, specify parameter flush_stream
+   with value false [16].
+
+# 3.11.9.1 Usage
+
+1) Explicit output checks [3_1]
+
+2) Pattern file matching  [3_1]
+
+
+#------------------------------------------------------------------------------
+# 3.11.10 BOOST_TEST: details on expressions
+#------------------------------------------------------------------------------
+
+Issue: It was already mentioned that the reporting is not symmetrical 
+
+Goal: Fix this issue
+
+
+#------------------------------------------------------------------------------
+# 3.11.11 Debugging the assertions
+#------------------------------------------------------------------------------
+
+Goal: build the test suite to allow debugging.
+
+
+#------------------------------------------------------------------------------
+# 3.11.12 Summary of the API for writing tests
+#------------------------------------------------------------------------------
+
+1) Summary - http://www.boost.org/doc/libs/1_64_0/libs/test/doc/html/boost_test/testing_tools/summary.html
+
+2) Reference API for writing tests
+
+   BOOST_TEST
+   expected_failures (decorator)
+   timeout (decorator)
+   tolerance (decorator)
+   BOOST_<level>
+   BOOST_<level>_BITWISE_EQUAL
+   BOOST_<level>_EQUAL
+   BOOST_<level>_EQUAL_COLLECTIONS
+   BOOST_<level>_CLOSE
+   BOOST_<level>_CLOSE_FRACTION
+   BOOST_<level>_GE
+   BOOST_<level>_GT
+   BOOST_<level>_LE
+   BOOST_<level>_LT
+   BOOST_<level>_MESSAGE
+   BOOST_<level>_NE
+   BOOST_<level>_PREDICATE
+   BOOST_<level>_NO_THROW
+   BOOST_<level>_THROW
+   BOOST_<level>_EXCEPTION
+   BOOST_<level>_SMALL
+   BOOST_AUTO_TEST_CASE_EXPECTED_FAILURES
+   BOOST_ERROR
+   BOOST_FAIL
+   BOOST_IS_DEFINED
+   BOOST_TEST_TOOLS_UNDER_DEBUGGER
+   BOOST_TEST_TOOLS_DEBUGGABLE
+
+
+#------------------------------------------------------------------------------
 # 3.A Unit Test Framework API reference [3_A_1]
-------------------------------------------------------------------------------
+#------------------------------------------------------------------------------
 
 # 3.A.1 Build scenarios and behaviors
 
@@ -1920,6 +2307,10 @@ ENDIF(NOT boost_projectname.cmake )
 [3_6] Template test cases - http://www.boost.org/doc/libs/1_64_0/libs/test/doc/html/boost_test/tests_organization/test_cases/test_organization_templates.html
 
 [3_7] Decorators list (API) - http://www.boost.org/doc/libs/1_64_0/libs/test/doc/html/boost_test/tests_organization/summary_of_the_api_for_declaring.html
+
+[3_8] Limitations and workaround - http://www.boost.org/doc/libs/1_64_0/libs/test/doc/html/boost_test/testing_tools/internal_details.html
+
+
 
 [3_A_1] Test library API - http://www.boost.org/doc/libs/1_64_0/libs/test/doc/html/boost_test/utf_reference.html
 
