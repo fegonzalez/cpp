@@ -63,14 +63,21 @@
 #
 # 3.6 Fixtures
 #
-# 3.6.1 Fixture mdoels
-# 3.6.2 Test case fixture
-# 3.6.3 Test suite entry/exit fixture
-# 3.6.4 Global fixture
-
+#     3.6.1 Fixture models
+#     3.6.2 Test case fixture
+#     3.6.3 Test suite entry/exit fixture
+#     3.6.4 Global fixture
+#
 # 3.7 Managing test dependencies
+#
 # 3.8 Grouping tests into logical units by labels
+#
 # 3.9 Enabling or disabling test unit execution
+#
+#     3.9.1 Unconditional run status       
+#     3.9.2 Compilation-time run status
+#     3.9.3 Runtime status
+#
 # 3.10 Adding semantic to a test
 #
 #
@@ -1254,6 +1261,10 @@ Define a decorator for the entire suite
 
 # 3.6.2.3 Fixture for a complete subtree
 
+
+  BOOST_FIXTURE_TEST_SUITE(suite_name, fixture_name);
+
+
 1) Use BOOST_FIXTURE_TEST_SUITE(suite_name, fixture_name); in place of
    the macro BOOST_AUTO_TEST_SUITE(suite_name)
 
@@ -1332,7 +1343,51 @@ Define a decorator for the entire suite
 
 # 3.6.4 Global fixture
 
-AKI LO DEJO
+1) Though some initialization can be implemented in the test module
+   initialization function, there are several reasons to prefer the
+   global fixture approach. (see [3_1] for details)
+
+2) To define a global test module fixture you need to implement a
+   class that matched generic fixture model and passed it as an
+   argument to the macro BOOST_GLOBAL_FIXTURE.
+
+3) The statement, that performs global fixture definition, has to
+   reside at a test file scope.
+
+4) [ Example
+
+     #define BOOST_TEST_MODULE example
+     #include <boost/test/included/unit_test.hpp>
+     #include <iostream>
+
+     //____________________________________________
+
+     struct MyConfig {
+        MyConfig()   { std::cout << "global setup\n"; }
+        ~MyConfig()  { std::cout << "global teardown\n"; }
+      };
+
+    //____________________________________________
+
+     BOOST_GLOBAL_FIXTURE( MyConfig );
+
+     BOOST_AUTO_TEST_CASE( test_case )
+     {
+       BOOST_TEST( true );
+     }
+
+
+     // Output
+
+     > example
+     global setup
+     Running 1 test case...
+     global teardown
+
+     *** No errors detected
+
+   end example ]
+
 
 # ------------------------------------------------------------------------------
 # 3.7 Managing test dependencies
@@ -1342,25 +1397,183 @@ In general, you should make sure that test cases are independent on one another.
 
 # 3.7.1 Declaring a test case dependency
 
-\todo See [3_1] for details
+1) The test cases must belong to the same suite.
 
+\todo See [3_1] for details
 
 
 # ------------------------------------------------------------------------------
 # 3.8 Grouping tests into logical units by labels
 # ------------------------------------------------------------------------------
 
+1) Explicit FLEXIBLE organization of test by using the decorator "label"
+
+   label(const_string label_name);
+
+   Associates a test unit with label label_name. It is possible to
+   associate more than one label with a test unit.
+
+2) Labels can be associated to test cases and test suites: decorating
+   a test suite with label L is equivalent to decorating every test
+   unit inside with L.
+
+3) Tip: it is possible to list all labels of a test module from the
+   CLI by using the --list_labels switch
+
+4) The label selection is executed through the command line parameter:
+
+   --run_test=@label_name
+
+5) [ Example
+
+     #define BOOST_TEST_MODULE decorator_04
+     #include <boost/test/included/unit_test.hpp>
+     namespace utf = boost::unit_test;
+
+     BOOST_AUTO_TEST_CASE(test1,  * utf::label("l1"))
+     {  BOOST_TEST(false); }
+
+     BOOST_AUTO_TEST_CASE(test2,  * utf::label("l1")  
+     				  * utf::label("l2"))
+     { BOOST_TEST(false); }
+
+     BOOST_AUTO_TEST_CASE(test3)
+     { BOOST_TEST(false); }
+
+     //----------------------------------
+
+      Output
+
+      > decorator_04 # executes all the test ignoring the label decorator
+      Running 3 test cases...
+ 
+      > decorator_04 --run_test=@l1   # executes only label l1 tests
+      Running 2 test cases...
+      test.cpp(8): error: in "test1": check false has failed
+      test.cpp(15): error: in "test2": check false has failed
+
+   end example]
 
 
 # ------------------------------------------------------------------------------
 # 3.9 Enabling or disabling test unit execution
 # ------------------------------------------------------------------------------
+ 
+# 3.9.1 Unconditional run status
+
+1) Setting DEFAULT run status with decorators "disabled" & "enabled"
+
+2) The run status can be overridden by the command line parameters
+
+3) [ Example  [k3_6]
+
+     #define BOOST_TEST_MODULE decorator_05
+     #include <boost/test/included/unit_test.hpp>
+     namespace utf = boost::unit_test;
+
+     BOOST_AUTO_TEST_SUITE(suite1, * utf::disabled())
+
+     BOOST_AUTO_TEST_CASE(test1)
+     { BOOST_TEST(1 != 1); }
+
+     BOOST_AUTO_TEST_CASE(test2, * utf::enabled())
+     { BOOST_TEST(2 != 2); }
+
+     BOOST_AUTO_TEST_SUITE_END()   
+
+     // -------------------------
+
+     Output:
+
+     > decorator_05
+     Only SUITE1/test2 is executed
+
+     > decorator_05 --list_content
+     suite1*
+	test1
+	test2*
+   end example ]
+
+       
+# 3.9.2 Compilation-time run status
+
+1) Decorator enable_if<true>() is equivalent to decorator enabled(). Similarly,
+   enable_if<false>() is equivalent to decorator disabled().
+
+2) [ Example
+
+    #define BOOST_TEST_MODULE decorator_06
+    #include <boost/test/included/unit_test.hpp>
+    namespace utf = boost::unit_test;
+    const bool io_implemented = true;
+    const bool db_implemented = false;
+
+    BOOST_AUTO_TEST_CASE(test_io,
+      * utf::enable_if<io_implemented>())
+    { BOOST_TEST(1 != 1); }
+
+    BOOST_AUTO_TEST_CASE(test_db,
+      * utf::enable_if<db_implemented>())
+    { BOOST_TEST(2 != 2); }
+
+  end example ]
+
+
+# 3.9.3 Runtime status
+
+1) Decorator "precondition" associates a predicate with a test unit. 
+
+2) [ Example (see [3_1] for details)
+
+     /* predicate: evaluates to true if at least one of the two
+     	specified tests passed.
+     */
+     struct if_etither{ ... }
+
+     /* Test case test3 has a precondition that at either test1 or test2 passed.
+        This precondition is checked at runtime.
+     */
+     BOOST_AUTO_TEST_CASE(test3,
+       * utf::precondition(if_either("test1", "test2")))
+     { BOOST_TEST(false); }
+
+   end example ]
 
 
 # ------------------------------------------------------------------------------
 # 3.10 Adding semantic to a test
 # ------------------------------------------------------------------------------
 
+1) Message description added to a test unit.
+
+2) Decorator "description" attaches an arbitrary string to the test unit. 
+
+3) [ Example 
+
+     #define BOOST_TEST_MODULE decorator_09
+     #include <boost/test/included/unit_test.hpp>
+     namespace utf = boost::unit_test;
+
+     BOOST_AUTO_TEST_CASE(test_1,
+	* utf::disabled()
+     	* utf::description("enable only when ODBC is available"))
+     {
+       BOOST_TEST(1 == 1);
+     }
+
+     BOOST_AUTO_TEST_CASE(test_2,
+	* utf::description("descriptions ")
+     	* utf::description("add up"))
+     { BOOST_TEST(2 == 2); }
+
+
+     Output
+
+     > decorator_09 --list_content
+     test_1 : enable only when ODBC is available
+     test_2*: descriptions add up
+
+   end example ]
 
 
 ------------------------------------------------------------------------------
@@ -1660,6 +1873,9 @@ ENDIF(NOT boost_projectname.cmake )
 [k3_4] Single test case fixture with BOOST_FIXTURE_TEST_CASE - 
 	./3_6_fixtures/3_6_2_1_single_test_case_with_BOOST_FIXTURE_TEST_CASE/
 [k3_5] Fixture for a complete subtree - ./3_6_fixtures/3_6_2_3_subtree
+[k3_6] Enabling/disabling test execution - 
+       ./3_9_test_execution/3_9_1_unconditional_run_status
+
 
 
 
