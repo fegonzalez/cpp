@@ -7,6 +7,14 @@
 Index
 
 
+# 3. Using and understanding the Valgrind core: Advanced Topics
+#
+# 3.2. Debugging your program using Valgrind gdbserver and GDB
+#      3.2.1. Quick Start: debugging in 3 steps
+#      3.2.5. Monitor command handling by the Valgrind gdbserver
+#      3.2.8. Limitations of the Valgrind gdbserver
+#      3.2.10. Valgrind monitor commands
+
 
 # 4. Memcheck: a memory error detector
 #
@@ -17,16 +25,10 @@ Index
 #    4. Interpreting Memcheck's output
 #
 # 4.2. Explanation of error messages from Memcheck 
-#   4.2.1. Illegal read / Illegal write errors
-#   4.2.2. Use of uninitialised values
-#   4.2.3. Use of uninitialised or unaddressable values in system calls
-#   4.2.4. Illegal frees
-#   4.2.5. When a heap block is freed with an inappropriate deallocation function
-#   4.2.6. Overlapping source and destination blocks
-#   4.2.7. Fishy argument values
-#   4.2.8. Memory leak detection
+
 
 # 5. Cachegrind: a cache and branch-prediction profiler
+
 
 # 6. Callgrind: a call-graph generating cache and branch prediction profiler
 
@@ -39,6 +41,112 @@ Index
 
 # Appendix Z - References
 
+
+################################################################################
+# 3. Using and understanding the Valgrind core: Advanced Topics
+################################################################################
+
+#===============================================================================
+# 3.2. Debugging your program using Valgrind gdbserver and GDB
+#===============================================================================
+
+1) A program running under Valgrind is not executed directly by the
+   CPU. Instead it runs on a synthetic CPU provided by Valgrind.
+
+2) Debug in a synthetic environment too: Valgrind gdbserver.
+
+   vgdb ("Valgrind to GDB") is a small program that is used as an
+   intermediary between Valgrind and GDB or a shell. (3.2.9. vgdb
+   command line options)
+
+
+# 3.2.1. Quick Start: debugging in 3 steps
+
+1) Run valgrind in a unix shell (i.e. a progma named 'prog')
+
+   >> valgrind --vgdb=yes --vgdb-error=0 prog   #  --vgdb=yes is defaulot value
+
+   --vgdb=yes or --vgdb=full (*1) 
+
+   --vgdb-error=number 
+    
+		# tell the gdbserver only to become active once the
+		# specified number of errors have been shown.
+		# default = 0
+
+2) In ANOTHER shell, start GDB:
+
+   >> gdb prog
+
+3) Then give the following command to GDB:
+
+   (gdb) target remote | vgdb
+
+   You can now debug your program ...
+
+
+# see [1]-3.2.8. for the drawbacks of using --vgdb=full
+
+
+# 3.2.5. Monitor command handling by the Valgrind gdbserver
+
+Additional valgrind-specific functionality
+
+1) Example (from within gdbserver)
+
+   (gdb) monitor leak_check full reachable any
+
+2) Example (from a shell command)
+
+   vgdb --pid=3145 leak_check full reachable any
+
+
+# 3.2.8. Limitations of the Valgrind gdbserver
+
+1) Precision of "stop-at" commands.
+
+  --vgdb=full, --gdb=no, --vgdb=yes 
+
+WARNING With the option --vgdb=yes, the process might not stop at the
+	exact requested instruction.
+ 
+2) Processor registers and flags values.
+
+When Valgrind gdbserver stops on an error, on a breakpoint or when
+single stepping, registers and flags values might not be always up to
+date due to the optimisations done by the Valgrind core.
+
+     --vex-iropt-register-updates=
+     
+3) Breakpoints encountered multiple times.
+
+Some instructions (e.g. x86 "rep movsb") are translated by Valgrind
+using a loop. If a breakpoint is placed on such an instruction, the
+breakpoint will be encountered multiple times -- once for each step of
+the "implicit" loop implementing the instruction.
+
+4) Execution of Inferior function calls by the Valgrind gdbserver.
+
+   i.e  print (a>4)
+
+WARNING Whilst an inferior call is running, the Valgrind tool will
+	report errors as usual. If you do not want to have such errors
+	stop the execution of the inferior call, you can use v.set
+	vgdb-error to set a big value before the call, then manually
+	reset it to its original value when the call is complete.
+
+WARNING In a multithreaded program, all threads are continued, not
+	just the thread instructed to make the inferior call.
+
+5) Changing register values.
+
+The Valgrind gdbserver will only modify the values of the thread's
+registers when the thread is in status Runnable or Yielding.
+
+
+3.2.10. Valgrind monitor commands
+
+See [1] for details
 
 
 
@@ -302,6 +410,17 @@ WARNING (Sometimes gdb will ask if you would like to kill the running
 
 See [1] for details
 
+
+#===============================================================================
+4.6. Memcheck Monitor Commands
+#===============================================================================
+
+block_list
+
+who_points_at <addr> [<len>]
+
+
+See [1] for details
 
 
 ################################################################################
