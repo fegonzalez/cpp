@@ -7402,16 +7402,6 @@ c) EXIT_FAILURE, EXIT_SUCCESS  // #include <cstdlib>
   (i.e.)  valgrind --leak-check=yes ./a.out
 
 
-TOOL SELECTION OPTIONS
-       The single most important option.
-
-       --tool=<toolname> [default: memcheck]
-           Run the Valgrind tool called toolname, e.g. memcheck, cachegrind,
-           callgrind, helgrind, drd, massif, lackey, none, exp-sgcheck,
-           exp-bbv, exp-dhat, etc.
-
-
-
 # ==============================================================================
 # Appendix C - Compilation, Linkage, ...
 # ==============================================================================
