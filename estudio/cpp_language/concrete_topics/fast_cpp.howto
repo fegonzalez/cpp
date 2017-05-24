@@ -10,8 +10,9 @@
 
 # 4 Hardware Architecture
 #
+# 4.0 Cache miss
 # 4.1 Data + instruction cache
-# 4.2 Cache Levels (L1, L2, ...)
+# 4.2 Multi-level caches (L1, L2, ...)
 # 4.3 Cache lines
 # 4.4 Prefetcher
 # 4.5 Cache associativity
@@ -24,6 +25,9 @@
 #      4.10.1 False Sharing
 #
 # 4.11 SIMD
+#
+# 4.12 Tag RAM
+
 
 # 5 Data dependencies
 #
@@ -135,19 +139,84 @@
 # 4 Hardware Architecture
 # ==============================================================================
 
+# 4.0 Cache miss
+
+A cache miss is a failed attempt to read or write a piece of data in
+the cache, which results in a main memory access with much longer
+latency. There are three kinds of cache misses:
+
+- instruction read miss: cause the largest delay, the processor,has to stall.
+- data read miss: smaller delay, other instructions can be executed meanwhile.
+- data write miss: the shortest delay (writes can be queued)
+
+
 # 4.1 Data + instruction cache
 
 
-# 4.2 Cache Levels (L1, L2, ...)
+# 4.2 Multi-level caches (L1, L2, ...)   [1_2]
+
+1) Another issue is the fundamental tradeoff between cache latency and
+   hit rate. Larger caches have better hit rates but longer latency.
+
+2) To address this tradeoff, many computers use multiple levels of
+   cache, with small fast caches backed up by larger, slower caches.
+
+   Multi-level caches generally operate by checking the fastest, level
+   1 (L1) cache first; if it hits, the processor proceeds at high
+   speed. If that smaller cache misses, the next fastest cache (level
+   2, L2) is checked, and so on, before accessing external memory.
 
 
 # 4.3 Cache lines
+
+1) Cache entry structure [1_2]
+
+Cache row entries usually have the following structure:
+      
+      ___________________________________
+      | tag |	data block |  flag bits |
+      |_________________________________|
+
+
+The data block (cache line) contains the actual data fetched from the
+main memory. The tag contains (part of) the address of the actual data
+fetched from the main memory.
 
 
 # 4.4 Prefetcher
 
 
-# 4.5 Cache associativity
+# 4.5 Cache associativity [1_2]
+
+1) The replacement policy decides where in the cache a copy of a
+   particular entry of main memory will go
+
+
+   [My_note] Parking spots example in [2_1]
+
+
+   a) Fully associative: the replacement policy is free to choose any
+      entry in the cache to hold the copy.
+
+   b) Direct mapped: At the other extreme, if each entry in main memory
+      can go in just one place in the cache.
+
+   c) In the middle: Many caches implement a compromise solution between a) b)
+
+
+2) Eventual problem: is a concrete memory location already mapped in the cache?
+
+   Checking more places takes more power and chip area, and potentially more
+   time. On the other hand, caches with more associativity suffer fewer misses.
+
+
+3) In order of worse but simple to better but complex:
+
+   - Direct mapped cache – good best-case time, but flaky in worst case
+   - Two-way set associative cache
+     ...
+   - Fully associative cache – the best miss rates, but practical only
+     for a small number of entries
 
 
 # 4.6 Pipeline
@@ -202,6 +271,15 @@
 
 # 4.10 Multiple cores
 
+Typically, sharing the L1 cache is undesirable because the resulting increase in
+latency would make each core running considerably slower than a single-core chip
+
+However, for the highest-level cache, the last one called before accessing
+memory, having a global cache is desirable for several reasons, ...
+
+  See [1_2].Multi-core chips
+  
+
 # 4.10.1 False Sharing 
 
 1) Sharing between cores
@@ -235,6 +313,13 @@
 # References:
 
   https://en.wikipedia.org/wiki/SIMD
+
+
+# 4.12 Tag RAM [1_2]
+
+In computer engineering, a tag RAM is used to specify which of the
+possible memory locations is currently stored in a CPU cache.
+
 
 
 # ==============================================================================
@@ -372,10 +457,10 @@ C
   the values of shared operands(data) are propagated throughout the
   system in a timely fashion.[1]
 
-  Write Propagation : Changes to the data in any cache must be
+  Write Propagation: Changes to the data in any cache must be
   propagated to other copies(of that cache line) in the peer caches.
 
-  Transaction Serialization : Reads/Writes to a single memory location
+  Transaction Serialization: Reads/Writes to a single memory location
   must be seen by all processors in the same order.
 
   Theoretically, coherence can be performed at the load/store granularity. 
@@ -438,6 +523,8 @@ W
 [1] Documents
 
 [1_1] https://en.wikipedia.org/wiki/Cache_coherence
+
+[1_2] https://en.wikipedia.org/wiki/CPU_cache
 
 # ------------------------------------------------------------------------------
 
