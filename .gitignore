@@ -9,6 +9,8 @@
 *.*~
 *.zip
 *.tar.gz
+cachegrind.out.*
+callgrind.out.*
 
 
 # html
