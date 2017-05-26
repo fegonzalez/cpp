@@ -94,7 +94,7 @@ VPATH := $(INCLUDE_DIRECTORIES)
 ## 3) Compilation & Linkage
 
 WARNING_FLAGS = -Wall -Wextra # enable additional warnings 
-#WARNING_FLAGS += -Werror      # all warnings as errors
+WARNING_FLAGS += -Werror      # all warnings as errors
 
 DEBUG_FLAGS = -g
 OPTIM_FLAGS = -O0 # -O0 is the default value

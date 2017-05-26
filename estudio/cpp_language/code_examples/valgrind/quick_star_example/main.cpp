@@ -1,5 +1,17 @@
 #include <stdlib.h>
 
+void fnonfree()
+{
+  int * kk = new int[10];
+  kk[0]=5;
+
+  delete [] kk;
+  //   kk=0;      // warning: not reset to 0 not detected by memcheck
+  delete [] kk;   // ok: (invalid free) detected
+ 
+}
+
+
 // bad code
 void f(void)
 {
@@ -8,6 +20,7 @@ void f(void)
                     // problem 2: memory leak -- x not freed
   int undef_value;
   x[0] = undef_value;
+  
 }                    
 
 
@@ -27,6 +40,9 @@ void f(void)
 int main(void)
 {
   f();
+  
+  fnonfree();
+ 
   return 0;
 }
 
