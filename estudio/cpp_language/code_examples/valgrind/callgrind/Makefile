@@ -94,7 +94,7 @@ VPATH := $(INCLUDE_DIRECTORIES)
 ## 3) Compilation & Linkage
 
 WARNING_FLAGS = -Wall -Wextra # enable additional warnings 
-#WARNING_FLAGS += -Werror      # all warnings as errors
+WARNING_FLAGS += -Werror      # all warnings as errors
 
 DEBUG_FLAGS = -g
 OPTIM_FLAGS = -O0 # -O0 is the default value
@@ -152,7 +152,7 @@ all_cxxflags = $(required_cxxflags) $(CXXFLAGS)
 # Other non-predef variables
 #===============================================================================
 
-# RM=rm -f
+RM=rm -f
 RM.CORES := $(wildcard core.*)
 RM.EXEC := $(EXEC) a.out
 RM.SAVES :=  $(wildcard *.*~ ) $(wildcard *~)
@@ -161,7 +161,7 @@ RM.OTHER_STUFF := $(wildcard *.h.gch)
 #RM.OTHER_STUFF +=
 RM.OTHER_STUFF += $(EXEC:%=%.last_diff)
 RM.TRASH = $(RM.CORES) $(RM.EXEC) $(RM.SAVES) $(OBJS) $(RM.OTHER_STUFF)
-RM.CALLGRIND := $(wildcard callgrind.out.*)
+RM.VALGRIND = bb.out.* cachegrind.out.* callgrind.out.* massif.out.*
 
 
 
@@ -239,13 +239,10 @@ $(OBJS): %.o: %.cpp
 # phony targets
 #===============================================================================
 
-.PHONY: clean celan_all
+.PHONY: clean clean_all
 
 clean:
 	clear; $(RM) $(RM.TRASH); ls -l
 
-
-.PHONY: clean_all
-
 clean_all:
-	clear; $(RM) $(RM.TRASH) $(RM.CALLGRIND); ls -l
+	clear; $(RM) $(RM.TRASH) $(RM.VALGRIND); ls -l
