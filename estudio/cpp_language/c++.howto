@@ -1813,8 +1813,8 @@ a) Named namespaces (including the global namespace)
 
 # 3.5.2 Internal linkage
 
-(2.2) Only from other scopes of the same translation unit (i.e. names
-      of an unnamed namespace)
+(2.2) Can be referred only from other scopes of the same translation
+      unit (i.e. names of an unnamed namespace)
 
 
 Names with internal linkage:

@@ -742,7 +742,6 @@ execution monitoring.
      and ONLY ONE translation unit should include following lines:
 
     	#define BOOST_TEST_MODULE test module name
-    	#include <boost/test/unit_test.hpp>
 
   2. The second step is to link with the Unit Test Framework static library
 
