@@ -37,7 +37,7 @@ BOOST_AUTO_TEST_CASE(first_test)
 
   //  Just in case before boost 1.59
   BOOST_CHECK(i);
-  BOOST_CHECK(i == 2);
+  //  BOOST_CHECK(i == 2);
 
 }
 
@@ -111,6 +111,13 @@ int add( int i, int j ) { return i+j; }
 BOOST_AUTO_TEST_CASE( k3_1_test )
 {
   BOOST_CHECK( add(2,2) == 4 );  // #1 continues on error 
+}
+
+
+BOOST_AUTO_TEST_CASE( require_test )
+{
+  BOOST_CHECK( add(2,2) == 4 );  // #1 continues on error
+  BOOST_REQUIRE( add( 2,2 ) == 3 );      // #2 throws on error
 }
 
 

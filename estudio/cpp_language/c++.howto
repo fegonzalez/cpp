@@ -118,6 +118,15 @@
 
 # \todo # 5 Expressions
 #
+# 
+# 5.2 Postfix expressions
+#     
+# \todo    5.2.7 Dynamic cast
+# \todo    5.2.8 Type identification
+# \todo    5.2.9 Static cast
+# \todo    5.2.10 Reinterpret cast
+# \todo    5.2.11 Const cast
+
 
 
 # \todo # 6 Statements
@@ -2213,6 +2222,52 @@ d) Examples [k8503]:
 
 
 
+# 3.10 Lvalues and rvalues
+
+1 Expressions are categorized according to the taxonomy in Figure 1
+
+                  expression
+                  |        |
+                  v        v
+              glvalue     rvalue
+              |     |     |    |
+             v       v   v      v
+          lvalue     xvalue    prvalue
+
+
+(1.1) — An lvalue designates a function or an object. 
+
+
+(1.2) — An xvalue (an “eXpiring” value) also refers to an object,
+      	usually near the end of its lifetime (so that its resources
+      	may be moved, for example).
+
+	Certain kinds of expressions involving rvalue references
+	(8.3.2) yield xvalues. [ Example: The result of calling a
+	function whose return type is an rvalue reference to an object
+	type is an xvalue (5.2.2). — end example ]
+
+
+(1.3) — A glvalue (“generalized” lvalue) is an lvalue or an xvalue.
+
+
+(1.4) — An rvalue is an xvalue, a temporary object (12.2) or subobject
+        thereof, or a value that is not associated with an object.
+
+
+1.5) — A prvalue (“pure” rvalue) is an rvalue that is not an xvalue.
+
+       [ Example: The result of calling a function whose return type
+         	  is not a reference is a prvalue.
+
+         	  The value of a literal is also a prvalue. — end example ]
+
+
+FACT_3_10_1 Every expression belongs to EXACTLY ONE of the fundamental
+	    classifications in this taxonomy: lvalue, xvalue, or prvalue.
+	    This property of an expression is called its value category.
+
+
 # ==============================================================================
 # 4 Standard conversions
 # ==============================================================================
@@ -2342,6 +2397,71 @@ explicit operator conversion-type-id 	(2) 	(since C++11)
     signed char c2 = 256; // assuming 8-bit chars, the value of c2 is undefined
 
 
+
+
+# ==============================================================================
+# \todo # 5 Expressions
+# ==============================================================================
+
+# 5.2 Postfix expressions
+
+
+# \brief cast modes  [4_13_1]
+
+Use dynamic_cast for converting pointers/references within an
+inheritance hierarchy.
+
+Use static_cast for ordinary type conversions.
+
+Use reinterpret_cast for low-level reinterpreting of bit patterns. Use
+with extreme caution.
+
+Use const_cast for casting away const/volatile. WARNING Avoid this unless you
+are stuck using a const-incorrect API.
+
+
+
+# \todo    5.2.7 Dynamic cast
+# \todo    5.2.8 Type identification
+# \todo    5.2.9 Static cast
+
+
+# 5.2.10 Reinterpret cast
+
+1 The result of the expression reinterpret_cast<T>(v) is the result of
+  converting the expression v to type T.
+
+2 The reinterpret_cast operator shall not cast away constness (5.2.11).
+
+3 [ Note: The mapping performed by reinterpret_cast might, or might
+   not, produce a representation different from the original value. —
+   end note ]
+
+Note.- Largely, the only guarantee you get with reinterpret_cast is
+       that normally if you cast the result back to the original type,
+       you will get the exact same value (but not if the intermediate
+       type is smaller than the original type). [4_13_1]
+
+
+
+
+# 5.2.11 Const cast  [1_1].114
+
+1 The result of the expression const_cast<T>(v) is of type T.
+
+6 [ Note: Depending on the type of the object, a write operation
+  through the pointer, lvalue or pointer to data member resulting from
+  a const_cast that casts away a const-qualifier MAY PRODUCE UNDEFINED
+  BEHAVIOR (7.1.6.1). — end note ]
+
+9 [ Note: some conversions which involve only changes in
+  cv-qualification cannot be done using const_cast.  For instance,
+  conversions between pointers to functions are not covered because
+  such conversions lead to values whose use causes undefined
+  behavior. For the same reasons, conversions between pointers to
+  member functions, and in particular, the conversion from a pointer
+  to a const member function to a pointer to a non-const member
+  function, are not covered. — end note ]
 
 
 # ==============================================================================
@@ -8521,6 +8641,14 @@ c) address size (processor concept)
 	       
       [4_12_3] user-defined conversion -
                http://en.cppreference.com/w/cpp/language/cast_operator
+
+
+[4_13] 
+
+
+[4_13] Expressions
+ 
+  [4_13_1] What type of cast to use - https://stackoverflow.com/questions/332030/when-should-static-cast-dynamic-cast-const-cast-and-reinterpret-cast-be-used
 
 
 [4_100] Containers
