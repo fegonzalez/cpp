@@ -1,0 +1,255 @@
+
+
+
+It is a C++ Framework
+
+
+# 1 Qt project
+#
+#   1.1 File "project-name.pro"
+#
+#   1.2 File main.cpp
+
+
+
+#   1.1 File "project-name.pro"
+
+    Project configuration (similar to Makefile).
+
+
+
+#   1.2 File main.cpp
+
+1) QApplication / QCoreApplication  (graphic / non-graphic apps)
+
+Execution of threads & events
+
+   [ Example
+
+     #include <QtGui/QApplication>
+     int main (int argc, char *argv[])
+     {
+	QApplication a(argc, argv);
+	...
+	return a.exec();             // execution of threads & events
+     }
+
+   end example ]
+
+
+   [ Example
+
+     #include <QCoreApplication>
+
+     int main (int argc, char *argv[])
+     {
+	QCoreApplication a(argc, argv);
+	...
+	return a.exec();             // execution of threads & events
+     }
+
+   end example ]
+
+
+2) Qdebug
+
+It is a logger, not a debugger
+
+   [ Example
+
+       ...
+       qDebug("some msg.");
+       qDebug() << "msg" << ... ;
+
+   end example ]
+
+
+3) Widgets
+
+   Graphic representation objects.
+
+
+      QObject
+         ^
+         |
+      QWidget
+   
+
+   -> QTdesigner tool.
+
+
+   a) Buddies & TAB order
+
+      Associate a "label" to other components and set the tab order.
+      
+   b) setWindowFlags
+
+      Select window type (modal, ...)
+
+      This is done in the constructor of the Object.
+
+      Reference: "Windows flag example" at Qt documentation.
+
+4) Signal & Slots.
+
+   This is a mechanism of communication among objects.
+
+   [ Example.- In a form with user & pass fields, and a login button, we want that
+     something happen after the user press the button => we need signals & slots ]
+
+
+   - "emit": associate slot to a user defined function.
+
+
+5) CSS & Resources
+
+   - CSS is a property of the QWidget Object => "styleSheet"
+
+   Note.- placeholder property of text fields (HTML5. i.e. login & pass)
+
+   Note.- Resources: edit/add-new/qt/qt-resource/:  docs, images, ...
+
+
+6) Login window example
+
+
+7) Actions
+
+   Use: creating contextual(righ-click)  menus (e.g. copy, paste, ...)
+   
+   Impl: Object: MainApp/centralwidget
+   	 Class:  QMainwindow/QWidget
+
+
+   How: linking actions to form elements.
+
+
+8) Deploying an application
+
+   Warning: Qt libraries are required => get them form the Qt installation.
+
+   Hint: Dependency Walker: app. that check and shows the lib. dependencies.
+
+
+9) QString
+
+   QString::isNull(): instantiated without any value assigned.
+
+   QString::isEmpty: "" assigned.
+
+   Append: operator+=
+   	   QString.append()
+	   QString.prepend()
+
+   QString::insert()
+
+   QString::number(7).toDouble:  string-number conversions
+
+   ...
+
+   
+10)  QStringList (lista de strings)
+   
+   Similar to python's lists.
+
+   Iteration: iterators
+   	      foreach (const loop-variable, container)
+
+   [ Example
+
+     #include <QStringList>
+
+     int main (int argc, char *argv[])
+     {
+     	QCoreApplication a(argc, argv);
+
+	// QStringList == QList<QString>
+	QStringList actions; actions << "eat" << "run" << "sleep";		
+
+	return a.exec();             // execution of threads & events
+     }
+
+    end example ]
+
+   
+11) QList
+
+   [ Example
+
+     #include <QStringList>
+
+     int main (int argc, char *argv[])
+     {
+     	QCoreApplication a(argc, argv);
+
+	QList<int> actions;
+	QListIterator<int> it(actions);
+	while(it.hashNext()
+	{
+	  qDebug << it.next();
+	}
+
+	return a.exec();             // execution of threads & events
+     }
+
+    end example ]
+
+   
+11) Stack /FILO) and Queue (FIFO)
+
+11.1) Qstack
+
+      Header:	#include <QStack>
+      Inherits:	QVector<T>
+
+
+   [ Example
+
+     #include <QStringList>
+
+     int main (int argc, char *argv[])
+     {
+     	QCoreApplication a(argc, argv);
+
+	Qstack<int> pila;
+
+	pila.push();   // add to the top
+	pila.append(); // inherited from QVector => idem push
+	l¡pila.top();
+	pia.pop();
+
+	return a.exec();             // execution of threads & events
+     }
+
+    end example ]
+
+
+11.2) QQueue
+
+      Header:	#include <QQueue>
+      qmake:	QT += core
+      Inherits:	QList
+
+1) T QQueue::dequeue()
+
+   Removes the head item in the queue and returns it. This function
+   assumes that the queue isn't empty.
+
+2) void QQueue::enqueue(const T &t)
+
+   Adds value t to the tail of the queue.
+
+3) T &QQueue::head()
+
+   Returns a reference to the queue's head item. This function assumes
+   that the queue isn't empty.
+
+4) bool QList::isEmpty() const
+
+   Returns true if the list contains no items; otherwise returns false.
+
+
+
+11) QMap & QMultimap
+
+    

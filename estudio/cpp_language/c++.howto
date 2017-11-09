@@ -358,7 +358,7 @@
 # iteration statements
 # references (lvalue references)
 # constructors
-# tempaltes
+# templates
 
 
 # Appendix S - New Features 
@@ -370,6 +370,8 @@
 # Appendix T - Defined Terms
 
 # Appendix W - Remarkable Warnings
+
+# Appendix X - C++ techniques
 
 # Appendix Y - Non-C++ concepts
 #
@@ -8418,6 +8420,17 @@ that is declared in a base that is somehow dependent on a template
 parameter with "this->" or with "Base<T>::". If you want to avoid
 all uncertainty, you may consider qualifying all member access (in templates)
 
+
+# ==============================================================================
+# Appendix X - C++ techniques
+# ==============================================================================
+
+# X.1 Erase-remove idiom
+
+The erase–remove idiom is a common C++ technique to eliminate elements
+that fulfill a certain criterion from a C++ Standard Library container
+
+https://en.wikipedia.org/wiki/Erase%E2%80%93remove_idiom
 
 
 # ==============================================================================
