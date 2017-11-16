@@ -331,8 +331,13 @@
 
 # Appendix B - Debug, memory, ...
 #
-# B.2 memory analysis - valgrind 
-
+# B.1 Aids for Debugging: assert and NDEBUG [3_1].6.5.3
+#
+# B.2 gdb
+#     B.2.1 Handling cores
+#
+# B.3 memory analysis
+#     B.3.1 valgrind tool
 
 
 # Appendix C - Compilation, Linkage, ...
@@ -7515,9 +7520,41 @@ c) EXIT_FAILURE, EXIT_SUCCESS  // #include <cstdlib>
    -end example ]
 
 
-# B.2 memory analysis 
- 
-# valgrind tool
+# ------------------------------------------------------------------------------
+# B.2 gdb
+# ------------------------------------------------------------------------------
+
+B.2.1 Handling cores
+
+1 Use gdb to analyze the core in offline mode:
+
+  gdb <program-that-cause-the-core> <core-file>
+
+  [ Example
+
+    gdb ./../pruebas_rman/rman core_rman_SDS-1_15997
+
+  end example ]
+
+
+2 You can find out where the program is, i.e. where the segmentation
+  fault occurred, using the where command. This gives a function call
+  trace of how you got to this point and shows line numbers inside files.
+
+  [ Example
+
+    (gdb) where
+    #0  0x2350 in DoOperation (ptrs=0x18bc0) at gdbprog.cc:24
+    #1  0x24b0 in main () at gdbprog.cc:45
+
+  ]
+
+
+# ------------------------------------------------------------------------------
+# B.3 memory analysis 
+# ------------------------------------------------------------------------------
+
+# B.3.1 valgrind tool
 
   valgrind [valgrind-options] [your-program] [your-program-options]
 
@@ -7883,6 +7920,7 @@ Solution: declare the variable as 'extern' (in one or many header
 
     Warn when a literal ‘0’ is used as null pointer constant. This can
     be useful to facilitate the conversion to nullptr in C++11.
+
 
 
 
