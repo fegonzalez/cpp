@@ -1,0 +1,2 @@
+break LrgStreamBuf::overflow
+break LrgStreamBuf::xsputn

@@ -1,0 +1,104 @@
+
+FACT_1) Llamar al destructor no provoca que se vuelque el contenido
+	del buffer al fichero.
+
+FACT_2)	Si se mata el programa, aunque se haya llamado al destructor
+	del objeto buffer el fichero se queda vacío.
+
+
+FACT_3) Si se llena el buffer, NO lo vuelca automáticamente al fichero
+
+   	a) El fichero se vuelca mediante orden explícita: (ofstream::flush)
+	   
+	   Está orden no se ejecuta sobre el buffer (objeto std::streambuf),
+	   sino sobre el objeto std::oftream (envoltorio del fichero)
+
+	   std::streambuf the_buffer; // array de datos
+
+	   std::ofstream the_file;    // sobre el que se vuelca el buffer
+
+
+	   // aquí se vuelcan datos del buffer al ofstream
+	   // PERO NO se escriben inmediatamente al fichero!!
+	   //
+	   the_file.write (const char* s, streamsize n);
+
+	   //flush: vuelca contenido del objeto ofstream al fichero
+	   the_file.flush();
+
+
+   	b) O, el fichero se vuelca  cuando se cierra (ofstream::close)
+
+
+       	c) O, el fichero se vuelca cuando el buffer INTERNO del objeto
+       	   std::ofstream se llena!
+
+
+	  std::ofstream
+	  {
+	    private:
+	  
+	    std::filebuf    // size?, it is an implementation detail.
+	    		    //        check with streambuf::in_avail ?
+
+	    public:
+
+	    filebuf* rdbuf() const; // returns a pointer to the internal 
+	    	     	     	    // filebuf object
+	  }
+	  
+
+	  [doc: http://www.cplusplus.com/reference/fstream/filebuf/]
+
+	  std::filebuf  
+
+	  These buffers are synchronized with the contents of the file
+
+	  - ONCE FILLED UP, 
+
+	  - when explicitly requested to do so (sync),
+
+	  - or when the object is closed.
+
+     
+
+
+        d) El buffer interno se puede sustituir por uno propio
+
+
+	  [Doc https://stackoverflow.com/questions/10449772/does-c-ofstream-file-writing-use-a-buffer ]
+
+	  #include <fstream>
+	  #include <vector>
+
+	  int main () 
+	  {
+	    std::vector<char> vec(512);
+
+	    std::fstream fs;
+	    fs.rdbuf()->pubsetbuf(&vec.front(), vec.size()); //HERE SUBS.
+
+	    // operations with file stream here.
+	    fs << "Hello, World!\n";
+
+	   return 0;
+	  }
+
+
+
+FACT_4) Opción: unbuffered files "std::filebuf::setbuf(0,0)"
+
+	[doc: http://www.cplusplus.com/reference/fstream/filebuf/]
+
+	Objects of this class may be explicitly made unbuffered by
+	calling member pubsetbuf with both arguments set to zero (see
+	member setbuf): Unbuffered file stream buffers perform the i/o
+	operations directly on the file, without an intermediate
+	buffer.
+
+
+
+FACT_5) kill del proceso tras close() (ver FACT_4) deja el fichero
+	completo y correcto.
+
+
