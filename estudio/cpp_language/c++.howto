@@ -369,6 +369,9 @@
 # Appendix S - New Features 
 #
 # S.1 New Features in C++11
+# S.1.1 Strongly typed enums
+# S.1.2 Lambda functions (closures)
+#
 # S.2 New Features in C++14
 # S.3 New Features in C++17
 
@@ -8069,8 +8072,27 @@ Solution: declare the variable as 'extern' (in one or many header
 
   - std::ref:
 
+# S.1.1 Strongly typed enums
 
-# S.1 Lambda functions (closures)
+https://www.cprogramming.com/c++11/c++11-nullptr-strongly-typed-enum-class.html
+
+	
+// this code will compile (if your compiler supports C++11 strongly typed enums)
+enum class Color {RED, GREEN, BLUE}; 
+enum class Feelings {EXCITED, MOODY, BLUE}; //C++98 error: BLUE already defined
+
+
+Strongly typed enums, enum classes, also have better scoping. Each
+enum value is scoped within the name of the enum class.
+	
+Color color = Color::GREEN;
+if ( Color::RED == color )
+{
+    // the color is red
+}
+
+
+# S.1.2 Lambda functions (closures)
 
 http://en.cppreference.com/w/cpp/language/lambda
 
@@ -8514,6 +8536,53 @@ As a rule of thumb, we recommend that you ALWAYS qualify any symbol
 that is declared in a base that is somehow dependent on a template
 parameter with "this->" or with "Base<T>::". If you want to avoid
 all uncertainty, you may consider qualifying all member access (in templates)
+
+
+
+WARNING_10
+Overriding of methods with parameters of polymorphic classes.
+
+1) In overriding, all function parameters MUST be of the same type as
+in the base class (example bellow: ParamBase). Overriding does not
+accept an inherited type (example bellow: ParamDerived)
+
+[ Example
+
+  class ParamBase{};
+  class ParamDerived:: public ParamBase{}
+
+  struct Base
+  {
+    virtual void f1 (ParamBase *) = 0; 
+  };
+
+  struct DerivedGood { void f1 (ParamBase *); // overriding Base::f1()  };
+
+  struct DerivedBad
+  {
+    /**@warning This is not the method overriding of Base::f1(), but a
+       different overloaded function.
+
+       In overriding, all function parameters MUST be of the same type
+       as in the base class (here: ParamBase). Overriding does not
+       accept an inherited type (here: ParamDerived)
+    */
+    void f1 (ParamDerived *);
+
+    // correct overriding of Base::f1() here
+   // void f1 (ParamBase *);
+  };
+
+  main()
+  {
+   DerivedBad var1; // error: cannot declare variable ‘var1’ to be of
+  		    // abstract type ‘DerivedBad’
+                    // abstract => DerivedBad miss some overriding
+
+   DerivedGood var2;  // ok
+  }
+
+end example ]
 
 
 # ==============================================================================
