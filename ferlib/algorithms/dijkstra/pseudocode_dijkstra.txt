@@ -1,0 +1,123 @@
+
+
+/** \todo  */
+class Vertex:
+    id
+    Vector<Edge*>   // OPTIMIZACIÓN: para acceso rápido a los nodos vecinos
+
+    
+/** \todo  */
+class Edge:
+    from
+    to
+    weight
+    direction: // OPTIMIZACIÓN: en grafos no dirigidos evitamos usar 2
+	       // Edges idénticos
+	       // enum {START2END, END2START, // grafos dirigidos
+	       // BOTH}
+    
+
+[DONE] class Distance # typedef double Distance
+
+
+/** @todo Matriz de adyacencias: */
+unordered_multi_map<Vertex, Edge> outwards
+unordered_multi_map<Vertex, Edge> inwards 
+
+
+/** @todo @return result_path: list of nodes from the src to the sink node. 
+
+	e.g. wikipedia:  1 -> 3 -> 6 -> 5
+
+    - pseudo:  Vector
+    - yo_digo: List
+
+    - EN ESE_VIEJO_PRO: class BasePath
+         {       
+            double m_weight; // Total Weight to traverse this path
+	    std::vector<BaseVertex*> m_vertices; // Ordered list of vertices 
+	    			     		 // that conform this path
+         };
+*/
+Vector<Vertex> the_result_path; // e.g. wikipedia:  1 -> 3 -> 6 -> 5
+
+
+
+
+/** @todo distances: current total distance from the src vertex to all 
+    the rest. */
+Map<Vertex, Distance> distances;
+
+
+
+
+/** \todo  MIO */
+
+Entrada a Dijkstra:  Dikstra <G, F> //  {grafo, fn_optimización}
+
+
+# Initialization step
+
+//
+// for each node N, distances[N] = weight(initial node, N)
+// e.g. wikipedia: {0, 7, 9, 20, 20, 11}
+//
+distances.fill(all_nodes, INFINITE)
+distances[start] = 0
+
+
+/** @todo previous vertex: current prev. vertex in the optimal path
+    for every vertex in the graph.
+
+    @todo OPTIM: usar map para ir metiendo SOLAMENE los nodos visitados
+    // pasasr a usar map 
+
+//
+// e.g. wikipedia: 1: null
+//    		   2: 1
+//		   3: 1
+//		   4: 3
+//		   5: 6
+//		   6: 3
+
+*/
+Map<Vertex, Vertex> previous
+previous[start] = null
+
+
+///@param candidates: next nodes to visit (recommended: priority_queue)
+priority_queue<Vertex, Distance> candidates
+candidates.push(start, 0)
+
+bool target_found = false
+
+
+
+# Discovery step
+
+while !candidates.empty:
+  candidate = candidates.pop_min()
+    
+    # not part of standard Dijkstra
+    if candidate == target:
+        target_found = true
+        break
+        
+    # candidate.next() can have additional filtering
+    for neighbour in candidate.next():
+        # distance(node, node) can also have internal logic
+        neigh_distance = distances[candidate] + distance(candidate, neighbour)
+        if neigh_distance < distances[neighbour]:
+            distances[neighbour] = neighbour_distance
+            previous[neighbour] = candidate
+            candidates.push(neighbour, neigh_distance)
+          
+# Rebuild step
+          
+if target_found:    
+    n = target
+    while n:
+        path.insert(0, n) # prepend
+        n = previous[n]
+        
+return path

@@ -1,0 +1,190 @@
+Reference: https://www.geeksforgeeks.org/dijkstras-shortest-path-algorithm-using-priority_queue-stl/
+
+
+##############################################################################
+
+FASE 1.-  probar un algoritmo básico
+
+     COMPLETADA
+
+##############################################################################
+
+FASE 2.-  optimizar y adecuar el algoritmo básico
+
+
+
+\todo RETORNAR "user_ids" en lugar de "inner_ids" => map interno.
+\test Add user_ids test
+
+\todo Pasar valgrind
+
+
+
+##############################################################################
+
+FASE 3.- aplicar est. datos del pseudocódigo
+
+
+\todo  Vertex, ..., outwards, ...
+
+
+
+\todo Modificar data struct para que acepte cualquier ID de nodo
+      	(ahora debe empezar por 0)
+	
+	=> dejarlo para FASE 3 pq. es cosa de las est. datos.
+
+
+\todo_4 Generalizar dijstra(all, all) = for (dijkstra(src_node, dest_node) )
+
+
+##############################################################################
+
+FASE 4  Templatizar
+
+
+\todo Función de optimización:   std::function<void (int)> func
+
+@WARNING clase Dijkstra requiere template. No funciona la herencia de
+las funciones 'shortest...' pq dependen de la impl. interna de las
+est. datos (i.e. adj en Fase2)
+
+
+\todo   Dijstra: Cambiar mimimizar por F_OPTIM = {F_MIN, F_MAX}.:
+	Dijkstra(G, V, F):  {grafo, initial vertex, optimization function}
+	class F que implemente: 
+	      operator() 
+	      operator<() 
+	      >() 
+	      ==()
+	      <=()
+	      >=()
+
+	 class W:  operator() que retorne un valor numérico
+
+	       	   <, >, ==, <=, >=
+
+	
+	 En ESE_VIEJO_PRO:  template<class T> class WeightLess  (GraphElements.h)
+
+##############################################################################
+
+FASE 5  Llamarlo desde cliente (e.g. MAN)
+
+
+##############################################################################
+
+
+FASE 6 NiceTOHAve
+
+\todo Cambiar asserts por excepciones?
+
+
+##############################################################################
+
+GRAPH ESE_VIEJO_PRO
+
+\todo  Use: class Vertex & class Edge
+
+1a) add_vertex(Vertex * newval); 
+    // required: valid pointer.
+    // warning: the received pointer will be deleted within Graph.
+1b) add_vertex(list of vertex parameers); 
+    // creating a Vertex and adding it to the Graph.
+
+
+2a) add_edge(const VertexId &from, const VertexId &to, const W &weight);
+[OPTIONAL_IF_TRIVIAL]  2b) add_edge(Vertex * from, Vertex * to, const W &weight);
+
+
+Vertex:   typedef unsigned int VertexId;
+	  VertexId the_id;
+	  [OPTIONAL] std::string the_name = the_id.to_string(); //default val
+
+
+Edge<W>:	  (pseudocodigo mío)
+	  
+	  //typedef double W;
+	  VertexId the_from;
+	  VertexId the_to;
+    	  W the_weight
+	  direction: // OPTIMIZACIÓN: en grafos no dirigidos evitamos usar 2
+	       // Edges idénticos
+	       // enum {START2END, ENT2START, // grafos dirigidos
+	       // BOTH}
+
+
+- En ESE_VIEJO_PRO
+
+// AlgorithmGraph.h
+//
+2a) AlgorithmGraph::addLink(const int &startVertexId, const int &endVertexId,
+        const double &weight)
+
+
+Vertex: (GraphElements.h)
+	BaseVertex
+	struct BaseVertexWeightComp
+	struct BaseVertexIdComp
+
+
+Edge:
+
+
+
+#-----------------------------------------------------------------------------
+
+
+
+\todo  generalize: Graph<V, W>
+
+       nicetohave: DijkstraGraph: public Graph t.q. no permita pesos
+       negtivos.
+
+\todo  generalize: Dijkstra (Graph, OptimFunction)
+
+\todo  compilar como librería para usarse como COT
+
+
+##############################################################################
+
+
+Reference: https://www.geeksforgeeks.org/dijkstras-shortest-path-algorithm-using-priority_queue-stl/
+
+
+STL's priority queue:  
+
+      typedef std::pair<int, int> iPair;
+      priority_queue< iPair, vector <iPair> , greater<iPair> > pq;
+
+
+1) Initialize distances of all vertices as infinite.
+
+2) Create an empty priority_queue pq.  Every item
+   of pq is a pair (weight, vertex). Weight (or 
+   distance) is used used as first item  of pair
+   as first item is by default used to compare
+   two pairs
+
+3) Insert source vertex into pq and make its
+   distance as 0.
+
+4) While either pq doesn't become empty
+    a) Extract minimum distance vertex from pq. 
+       Let the extracted vertex be u.
+    b) Loop through all adjacent of u and do 
+       following for every vertex v.
+
+           // If there is a shorter path to v
+           // through u. 
+           If dist[v] > dist[u] + weight(u, v)
+
+               (i) Update distance of v, i.e., do
+                     dist[v] = dist[u] + weight(u, v)
+               (ii) Insert v into the pq (Even if v is
+                    already there)
+               
+5) Print distance array dist[] to print all shortest
+   paths. 
+
+//===========================================================================
