@@ -90,7 +90,7 @@ MAIN_FILE :=
 #source files
 SOURCES := $(wildcard *.$(CPP_SUFFIX))
 EXEC_SOURCE := $(MAIN_FILE)
-TEST_SOURCES := $(filter %test.$(CPP_SUFFIX),$(SOURCES))
+TEST_SOURCES := $(filter %_test.$(CPP_SUFFIX),$(SOURCES))
 MODULE_SOURCES := $(filter-out $(TEST_SOURCES),$(SOURCES))
 MODULE_SOURCES := $(filter-out $(EXEC_SOURCE),$(MODULE_SOURCES))
 
@@ -116,11 +116,11 @@ TEST_EXECS := $(TEST_SOURCES:%.$(CPP_SUFFIX)=%)
 #file expecific option values (MUST be set manually)
 #-- DO-CHANGE-HERE
 
-fase2test.input_options = 
-fase2test.run_options = 
-fase2test.runtest_output_options = 
-fase2test.successtest_output_options = > fase2test.OK
-fase2test.difftest_output_options = > fase2test.last_diff
+fase2_singledist_test.input_options = 
+fase2_singledist_test.run_options = 
+fase2_singledist_test.runtest_output_options = 
+fase2_singledist_test.successtest_output_options = > fase2_singledist_test.OK
+fase2_singledist_test.difftest_output_options = > fase2_singledist_test.last_diff
 
 
 #header files & paths # i.e. HEADERS := a.$(HEADER_SUFFIX): b.$(HEADER_SUFFIX)
@@ -239,8 +239,10 @@ RM.TRASH = $(RM.CORES) \
 .PHONY: all exec test runexec runtest successtest difftest
 	@echo '$*'
 
-all: $(TEST_EXECS) $(EXEC)
+# all: $(TEST_EXECS) $(EXEC)  # tests are in ./test
+all: $(OBJS)
 	@echo 'Building target: $@'
+
 
 exec: $(EXEC)
 	@echo 'Building target: $@'
@@ -365,25 +367,39 @@ $(DIFF.TEST_TARGETS): diff.%: %
 #------------------
 
 
-
-HEADER_OBJS:=$(subst $(EXEC).$(OBJ_SUFFIX),,$(OBJS)) 
-$(HEADER_OBJS): %.$(OBJ_SUFFIX): %.$(HEADER_SUFFIX)
+# cada  .o (que no es un test) depende de su .h
+$(MODULE_OBJS): %.$(OBJ_SUFFIX): %.$(HEADER_SUFFIX)
 
 COMMON_HEADERS:= common.$(HEADER_SUFFIX) graph.$(HEADER_SUFFIX)
 $(OBJS): %.$(OBJ_SUFFIX): $(COMMON_HEADERS)
 
-DIJKSTRA_SOURCES := $(filter dijkstra_%.$(CPP_SUFFIX),$(SOURCES))
+DIJKSTRA_SOURCES := $(filter dijkstra%.$(CPP_SUFFIX),$(SOURCES))
 DIJKSTRA_OBJS := $(DIJKSTRA_SOURCES:%.$(CPP_SUFFIX)=%.$(OBJ_SUFFIX))
 $(DIJKSTRA_OBJS): %.$(OBJ_SUFFIX): dijkstra.$(HEADER_SUFFIX)
 
+
+
 # main.$(OBJ_SUFFIX): dijkstra.$(HEADER_SUFFIX)
 
-# $(TEST_OBJS): %test.$(OBJ_SUFFIX): %.hpp
+# $(TEST_OBJS): %_test.$(OBJ_SUFFIX): %.hpp
 
 
 #------------------------------------------------------------------------
 # 2) recipe rules
 #------------------------------------------------------------------------
+
+
+# dummy: 
+# 	@echo 'Building target DIJ_OBS: $(DIJKSTRA_OBJS)'
+# 	@echo 'Building target OBJs: $(OBJS)'
+# 	@echo 'Building target MODULE_OBJS: $(MODULE_OBJS)'
+# 	@echo 'Building target  EXEC: $(EXEC)'
+# 	@echo 'oooodddd'
+# 	@echo 'main.$(OBJ_SUFFIX)'
+# 	@echo 'exec = $(EXEC)'
+# 	@echo 'test_execs = $(TEST_EXECS)'
+
+
 
 
 #------------------
@@ -399,6 +415,7 @@ $(OBJS): %.$(OBJ_SUFFIX): %.$(CPP_SUFFIX)
 #------------------
 # b) linking
 #------------------
+
 
 $(EXEC):$(EXEC_OBJ) $(MODULE_OBJS)
 	@echo ''

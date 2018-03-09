@@ -11,14 +11,13 @@ using namespace dijkstra_algorithm;
 // Test functions 
 
 
-//void example1();
-
-
 /// min. path from 'start' vertex to 'target' vertex.
 void example_wiki();
 
 /// min. path from the  'start' vertex to all the others.
-void example_wiki_all2all();
+//void example_wiki_all2all();
+//void example1();
+
 
 
 int main()
@@ -65,74 +64,35 @@ int main()
 
   // start -> ALL vertex
 
-  start = std::chrono::steady_clock::now();   // record start time
+  // start = std::chrono::steady_clock::now();   // record start time
 
-  for (auto times = 0; times < TEST_NUM_ITERATIONS; ++times) 
-  {
-    example_wiki_all2all();
+  // for (auto times = 0; times < TEST_NUM_ITERATIONS; ++times) 
+  // {
+  //   example_wiki_all2all();
 
 
-    // RESULTADOS (time)
-    //
-    // fase-1: 
-    // Time after 1e+07 examples (sin imprimir resultados): 54.3812
-    //
-    // fase-2: 
-    // Time after 1e+06 examples (sin imprimir resultados): ????
-    // Time after 1e+07 examples (sin imprimir resultados): ????
-  }
+  //   // RESULTADOS (time)
+  //   //
+  //   // fase-1: 
+  //   // Time after 1e+07 examples (sin imprimir resultados): 54.3812
+  //   //
+  //   // fase-2: 
+  //   // Time after 1e+06 examples (sin imprimir resultados): ????
+  //   // Time after 1e+07 examples (sin imprimir resultados): ????
+  // }
 
-  // record end time
-  end = std::chrono::steady_clock::now();
-  diff = end-start;
-  std::clog << "\nTime after " << TEST_NUM_ITERATIONS 
-	    << " examples (sin imprimir resultados): "
-	    << diff.count() <<  std::endl;
+  // // record end time
+  // end = std::chrono::steady_clock::now();
+  // diff = end-start;
+  // std::clog << "\nTime after " << TEST_NUM_ITERATIONS 
+  // 	    << " examples (sin imprimir resultados): "
+  // 	    << diff.count() <<  std::endl;
 
 
 
  
-  return 0;
+  // return 0;
 }
-
-//---------------------------------------------------------------------------
-
-// void example1()
-// {
-//     int n_vertex = 9;
-//     Graph g(n_vertex);    
-//     g.add_edge(0, 1, 4);
-//     g.add_edge(0, 7, 8);
-//     g.add_edge(1, 2, 8);
-//     g.add_edge(1, 7, 11);
-//     g.add_edge(2, 3, 7);
-//     g.add_edge(2, 8, 2);
-//     g.add_edge(2, 5, 4);
-//     g.add_edge(3, 4, 9);
-//     g.add_edge(3, 5, 14);
-//     g.add_edge(4, 5, 10);
-//     g.add_edge(5, 6, 2);
-//     g.add_edge(6, 7, 1);
-//     g.add_edge(6, 8, 6);
-//     g.add_edge(7, 8, 7);
-
-//     Dijkstra alg; 
-//     alg.shortest_paths(g, 0);
-
-    // Output :
-
-    // Vertex    Distance from Source
-    // 0          0
-    // 1          4
-    // 2          12
-    // 3          19
-    // 4          21
-    // 5          11
-    // 6          9
-    // 7          8
-    // 8          14
-
-//}
 
 //---------------------------------------------------------------------------
 
@@ -196,7 +156,7 @@ void example_wiki()
 
 
 //---------------------------------------------------------------------------
-
+/*
 /// min. path from the  'start' vertex to all the others.
 void example_wiki_all2all()
 {
@@ -257,3 +217,45 @@ void example_wiki_all2all()
     // 6		 11
 
 }
+
+
+//---------------------------------------------------------------------------
+
+// void example1()
+// {
+//     int n_vertex = 9;
+//     Graph g(n_vertex);    
+//     g.add_edge(0, 1, 4);
+//     g.add_edge(0, 7, 8);
+//     g.add_edge(1, 2, 8);
+//     g.add_edge(1, 7, 11);
+//     g.add_edge(2, 3, 7);
+//     g.add_edge(2, 8, 2);
+//     g.add_edge(2, 5, 4);
+//     g.add_edge(3, 4, 9);
+//     g.add_edge(3, 5, 14);
+//     g.add_edge(4, 5, 10);
+//     g.add_edge(5, 6, 2);
+//     g.add_edge(6, 7, 1);
+//     g.add_edge(6, 8, 6);
+//     g.add_edge(7, 8, 7);
+
+//     Dijkstra alg; 
+//     alg.shortest_paths(g, 0);
+
+    // Output :
+
+    // Vertex    Distance from Source
+    // 0          0
+    // 1          4
+    // 2          12
+    // 3          19
+    // 4          21
+    // 5          11
+    // 6          9
+    // 7          8
+    // 8          14
+
+//}
+
+*/
