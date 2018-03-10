@@ -11,14 +11,7 @@ FASE 1.-  probar un algoritmo básico
 
 FASE 2.-  optimizar y adecuar el algoritmo básico
 
-
-
-\todo RETORNAR "user_ids" en lugar de "inner_ids" => map interno.
-\test Add user_ids test
-
-\todo Pasar valgrind
-
-
+     COMPLETADA
 
 ##############################################################################
 
@@ -35,8 +28,16 @@ FASE 3.- aplicar est. datos del pseudocódigo
 	=> dejarlo para FASE 3 pq. es cosa de las est. datos.
 
 
+
+\todo RETORNAR "user_ids" en lugar de "inner_ids" => map interno.
+\test Add user_ids test
+
+\todo Pasar valgrind
+
+
 \todo_4 Generalizar dijstra(all, all) = for (dijkstra(src_node, dest_node) )
 
+\todo Pasar valgrind
 
 ##############################################################################
 
