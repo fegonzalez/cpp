@@ -220,13 +220,15 @@ RM.CORES := $(wildcard core.*)
 RM.EXEC := $(EXEC) a.out $(TEST_EXECS) $(MODULE_SOURCES:%.$(CPP_SUFFIX)=%)
 RM.SAVES :=  $(wildcard *.*~ ) $(wildcard *~)
 RM.OTHER_STUFF := $(wildcard *.$(HEADER_SUFFIX).gch)
+RM.VALGRIND := vgrind.*.out
 #-- DO-CHANGE-HERE
 RM.OTHER_STUFF += $(TEST_EXECS:%=%.last_diff)
 RM.TRASH = $(RM.CORES) \
 	   $(RM.EXEC)  \
 	   $(RM.SAVES) \
 	   $(OBJS) \
-	   $(RM.OTHER_STUFF)
+	   $(RM.OTHER_STUFF) \
+           $(RM.VALGRIND)
 
 
 
@@ -442,3 +444,17 @@ $(TEST_EXECS): %: %.$(OBJ_SUFFIX) \
 clean:
 	clear; $(RM) $(RM.TRASH); ls -l
 
+
+#===============================================================================
+# valgrind targets
+#===============================================================================
+
+.PHONY: memcheck valgrind
+
+memcheck:
+	@echo 'Building target: $@'
+	./scripts/memcheck_to_each_test.sh
+
+valgrind:
+	@echo 'Building target: $@'
+	./scripts/memcheck_to_each_test.sh
