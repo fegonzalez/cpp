@@ -6,6 +6,7 @@
 #include <iosfwd>
 #include <unordered_map>
 #include <vector>
+#include <cassert>
 
 
 namespace dijkstra_algorithm {
@@ -14,6 +15,7 @@ namespace dijkstra_algorithm {
   struct ConcreteEdge;
   struct ConcreteVertex;
 
+  
 
   /**************************************************************************/
   /** @struct ConcreteVertex
@@ -152,8 +154,23 @@ namespace dijkstra_algorithm {
     bool validUserVertex(const UserVertexId &id)const
     {return (the_useridskeyed_map.find(id) not_eq the_useridskeyed_map.end());}
 
-    /* InnerVertexId validUserVertex(const UserVertexId &id)const */
-    /* {return (the_useridskeyed_map.find(id) not_eq the_useridskeyed_map.end());} */
+
+    InnerVertexId get_inner_id(const UserVertexId &id)const
+    {
+      auto search = the_useridskeyed_map.find(id);
+      assert(search not_eq the_useridskeyed_map.end());
+      return search->second;
+    }
+
+
+    UserVertexId get_user_id(const InnerVertexId &id)const
+    {
+      auto search = the_inneridskeyed_map.find(id);
+      assert(search not_eq the_inneridskeyed_map.end());
+      return search->second;
+    }
+
+
     
   protected:
 

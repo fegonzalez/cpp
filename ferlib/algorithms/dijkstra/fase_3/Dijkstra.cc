@@ -35,6 +35,40 @@ namespace dijkstra_algorithm {
       e.g. wikipedia:  1 -> 3 -> 6 -> 5
 
       @ error is start or target are not nodes of the graph.
+
+
+      //////////////////////////////////////
+      // for each neighbor of new_candidate
+
+     
+
+      step 1: tengo InnerVertexID: new_candidate
+
+modo-1:  1) the_vertex_map[new_candidate] : BaseVertex *  'cand_vertex'
+             
+            O(1)
+
+         2) cand_vertex->neighbors():  todos los Edges que salen del nodo
+             
+            O(1)
+
+         3) Para cada edge (ptr)           O(n)
+            {
+	      insertar pair(to(), weight()) en la cola de prioridad    O(cola)
+            }
+
+
+
+
+ESTE - ESTE - ESTE
+
+             
+modo-2  1) Para cada  Edge* en 
+           the_adjacency_data.the_outward_edges[new_candidate]        O(n)
+	   {
+	     insertar pair(to(), weight()) en la cola de prioridad    O(cola)
+	   }
+
   */
   DijkstraSolution DijkstraConcrete::shortest_path
    (const ConcreteGraph &graph,
@@ -47,17 +81,16 @@ namespace dijkstra_algorithm {
 
     
     // 1) initialization step 
-    
+
+    typedef std::pair<InnerVertexId, TypeDistance> AdjPair;  
     //  typedef std::pair<BaseVertex&, TypeDistance> AdjPair;
-    typedef std::pair<InnerVertexId, TypeDistance> AdjPair;
+    
 
     DijkstraSolution retval;
 
-    /// @todo quitarlo. Usar getters en la clasee
-    ConcreteGraph &graph_noconst = const_cast<ConcreteGraph&>(graph);
-    InnerVertexId start = graph_noconst.the_useridskeyed_map[user_start];
-    InnerVertexId target = graph_noconst.the_useridskeyed_map[user_target];
-	
+    InnerVertexId start = graph.get_inner_id(user_start);
+    InnerVertexId target = graph.get_inner_id(user_target);
+
     // distances: current total distance from the src vertex to all the rest.
     /// @todo OPTIM: ir metiendo SOLAMENE los nodos visitados
     std::unordered_map<InnerVertexId, TypeDistance> distances{};
@@ -95,7 +128,7 @@ namespace dijkstra_algorithm {
     //optimization: avoid process vertex already visited (old candidates)
     std::unordered_set<InnerVertexId> visited;
 
-
+    
     
     // 2) Discovery step: find best path
 
@@ -144,6 +177,7 @@ namespace dijkstra_algorithm {
       }
 
 
+      
 #ifdef DEBUG_MODE_DIJKSTRA
       std::clog << "new_candidate: " << new_candidate << std::endl;
 #endif
@@ -159,42 +193,6 @@ namespace dijkstra_algorithm {
 	break;
       }
 
-
-
-      // for each neighbor of new_candidate
-
-      /*
-
-      step 1: tengo InnerVertexID: new_candidate
-
-modo-1:  1) the_vertex_map[new_candidate] : BaseVertex *  'cand_vertex'
-             
-            O(1)
-
-         2) cand_vertex->neighbors():  todos los Edges que salen del nodo
-             
-            O(1)
-
-         3) Para cada edge (ptr)           O(n)
-            {
-	      insertar pair(to(), weight()) en la cola de prioridad    O(cola)
-            }
-
-
-
-
-ESTE - ESTE - ESTE
-
-             
-modo-2  1) Para cada  Edge* en 
-           the_adjacency_data.the_outward_edges[new_candidate]        O(n)
-	   {
-	     insertar pair(to(), weight()) en la cola de prioridad    O(cola)
-	   }
-      */
-
-      
-      
 	
       // for (auto itr = graph.adjac()[new_candidate].cbegin();
       // 	   itr != graph.adjac()[new_candidate].cend();
@@ -233,12 +231,20 @@ modo-2  1) Para cada  Edge* en
 #endif
 	}
 
-
       }//end_for
+
+
+
+      //  dentro del while en alguna parte, casca
+      //      assert(false);
+
+      
+      
+
+
+
+      
     }//end_while
-
-
-
     
     // 3) Rebuild (set-solution) step
     retval.set_distance(distances[target]);
@@ -270,10 +276,10 @@ modo-2  1) Para cada  Edge* en
   std::ostream& operator<<(std::ostream &out, 
 			   const BaseDijkstraSolution &value)
   {
-        out << "Distance (cost): " << value.total_distance() << std::endl;
+    out << "Distance (cost): " << value.total_distance() << std::endl;
     out << "Shortest-Path's size (n. of vertex): " << value.path()->size() 
 	<< std::endl;
-    out << "Shortest-Path: ";
+    out << "Shortest-Path: ERROR!!! sacando inners-ids:   ";
      
     VertexId last_element = NOVERTEXID;
     if(not value.path()->empty())
@@ -285,7 +291,7 @@ modo-2  1) Para cada  Edge* en
 		  std::end(*value.path()),
 		  [&out, last_element](const VertexId & id)
     {
-            static int num_veces = 0;	/// @todo removeme por si hay infinite loops
+      static int num_veces = 0;	/// @todo removeme por si hay infinite loops
 
       out << id;
       if(not (id==last_element)) { out << " -> "; }

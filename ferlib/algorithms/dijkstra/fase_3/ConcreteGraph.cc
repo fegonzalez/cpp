@@ -220,23 +220,68 @@ namespace dijkstra_algorithm {
 
   std::ostream& operator<<(std::ostream &out, const ConcreteGraph &g)
   {
+    auto print_edge = [&out](const InnerVertexId &from,
+    			     const InnerVertexId &to,
+    			     const TypeDistance  &weight)
+      {out << " " << from << "\t" << to << "\t" << weight << std::endl;};
+
+    
     out << "Nodes: " << g.num_vertex() << std::endl;
+
+    out << "----------------" << std::endl;
+    out << " User IDs" << std::endl;
+    out << "----------------" << std::endl;
     out << "FROM\tTO\tWEIGHT" << std::endl;
+    
+    // for(auto citer = g.the_vertex_map.cbegin();
+    // 	citer != g.the_vertex_map.cend();
+    // 	++citer)
 
-    // auto print_edge = [](const int & from, const AdjPair& p) 
-    //   {std::cout << " " << from << "\t" << p.first << "\t"
-    //    << p.second << std::endl;};
+    for(auto citer = g.the_inneridskeyed_map.cbegin();
+     	citer != g.the_inneridskeyed_map.cend();
+     	++citer)
+    {
+      const auto range =
+	g.the_adjacency_data.the_outward_edges.equal_range(citer->first);
+      for (auto local_itr = range.first;
+      	   local_itr != range.second;
+      	   ++local_itr)
+	{
 
-    // for (unsigned int loopi=0; loopi<g.num_vertex();++loopi)
-    // {
-    //   std::for_each(std::begin(g.adjac()[loopi]),
-    // 		    std::end(g.adjac()[loopi]), 
-    // 		    std::bind(print_edge, loopi, std::placeholders::_1));
-    // }
+	  //	  const InnerVertexId from_inner_id = the_useridskeyed_map[from]
+
+		
+	  // const InnerVertexId aux = local_itr->second->to();
+	  print_edge(citer->second, //user id
+		     //		     g.get_user_id(citer->first),
+		     g.get_user_id(local_itr->second->to()),
+		     local_itr->second->weight());
+	
+	// print_edge(citer->first,     
+	// 	   local_itr->second->to(),
+	// 	   local_itr->second->weight());
+      }
+  }
 
     return out;
   }
-
+  /*
+  for(auto citer = g.the_inneridskeyed_map.cbegin();
+	citer != g.the_vertex_map.cend();
+	++citer)
+    {
+      const auto range =
+	g.the_adjacency_data.the_outward_edges.equal_range(citer->first);
+      for (auto local_itr = range.first;
+      	   local_itr != range.second;
+      	   ++local_itr)
+      {
+	// print_edge(citer->second, //user id
+	// 	   g.the_inneridskeyed_map[local_itr->second->to()],
+	// 	   local_itr->second->weight());
+      }
+    }
+  */
 
   /**************************************************************************/
   /** DirectedConcreteGraph  impl.
@@ -278,8 +323,6 @@ namespace dijkstra_algorithm {
        INVARIANT_NCHANGES);
     assert (invariant);
   }
-
-  //--------------------------------------------------------------------------
 
 
   /**************************************************************************/

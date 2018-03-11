@@ -8173,7 +8173,7 @@ b) inline def & call
      {
 	std::for_each(std::begin(int_vect),
 		      std::end(int_vect), 
-     		      std::bind(loopi, std::placeholders::_1));
+     		      std::bind(sum, loopi, std::placeholders::_1));
      }
    ]
   
