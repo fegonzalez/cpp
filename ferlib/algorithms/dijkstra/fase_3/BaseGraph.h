@@ -81,8 +81,7 @@ namespace dijkstra_algorithm {
     virtual void add_edge
       (const UserVertexId &from, 
        const UserVertexId &to, 
-       const TypeDistance & weight,
-       const EdgeDirection & dir = EdgeDirection::FROM_TO)=0;
+       const TypeDistance & weight)=0;
 
 
    /**	

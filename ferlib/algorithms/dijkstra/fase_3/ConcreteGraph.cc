@@ -15,12 +15,17 @@
 
 namespace dijkstra_algorithm {
    
-  //--------------------------------------------------------------------------
+
+  /**************************************************************************/
+  /*  ConcreteGraph  impl.
+      Common data and functions to implement a directed/undirected  graph: 
+  */
+  /**************************************************************************/
+  
 
   void ConcreteGraph::add_edge(const UserVertexId &from,
 			       const UserVertexId &to, 
-			       const TypeDistance & weight,
-			       const EdgeDirection & dir)
+			       const TypeDistance & weight)
   {
     bool invariant = not repeated_user_edge(from, to);
     assert(invariant);
@@ -43,8 +48,7 @@ namespace dijkstra_algorithm {
       //actions
       InnerVertexId from_inner_id = num_inner_indexes() + 1;
       InnerVertexId to_inner_id = from_inner_id + 1; 
-      BaseEdgePtr new_edge = insert_edge(from_inner_id,
-					 to_inner_id, weight, dir);
+      BaseEdgePtr new_edge = insert_edge(from_inner_id, to_inner_id, weight);
       //adding 'from' vertex
       the_useridskeyed_map[from] = from_inner_id;
       the_inneridskeyed_map[from_inner_id] = from;
@@ -78,8 +82,7 @@ namespace dijkstra_algorithm {
       //actions
       InnerVertexId from_inner_id = the_useridskeyed_map[from];
       InnerVertexId to_inner_id = num_inner_indexes() + 1;
-      BaseEdgePtr new_edge = insert_edge(from_inner_id,
-					 to_inner_id, weight, dir);
+      BaseEdgePtr new_edge = insert_edge(from_inner_id, to_inner_id, weight);
       the_vertex_map[from_inner_id]->add_neighbor(new_edge); // updating 'from'
       the_useridskeyed_map[to] = to_inner_id; //adding 'to' vertex
       the_inneridskeyed_map[to_inner_id] = to;
@@ -107,8 +110,7 @@ namespace dijkstra_algorithm {
       //actions
       InnerVertexId to_inner_id = the_useridskeyed_map[to];
       InnerVertexId from_inner_id = num_inner_indexes() + 1;
-      BaseEdgePtr new_edge = insert_edge(from_inner_id,
-					 to_inner_id, weight, dir);      
+      BaseEdgePtr new_edge = insert_edge(from_inner_id, to_inner_id, weight);
       the_useridskeyed_map[from] = from_inner_id; //adding 'from' vertex
       the_inneridskeyed_map[from_inner_id] = from;
       the_vertex_map[from_inner_id] =
@@ -136,8 +138,7 @@ namespace dijkstra_algorithm {
       //actions
       InnerVertexId from_inner_id = the_useridskeyed_map[from];
       InnerVertexId to_inner_id = the_useridskeyed_map[to];
-      BaseEdgePtr new_edge = insert_edge(from_inner_id,
-					 to_inner_id, weight, dir);
+      BaseEdgePtr new_edge = insert_edge(from_inner_id, to_inner_id, weight);
       the_vertex_map[from_inner_id]->add_neighbor(new_edge);
       the_vertex_map[to_inner_id]->add_neighbor(new_edge);
       insert_adjacency(from_inner_id, to_inner_id, new_edge);
@@ -217,55 +218,7 @@ namespace dijkstra_algorithm {
       
     return retval;
   }
-  
-  //--------------------------------------------------------------------------
 
-  BaseEdgePtr ConcreteGraph::insert_edge(const InnerVertexId &from,
-					 const InnerVertexId &to, 
-					 const TypeDistance & weight,
-					 const EdgeDirection & dir)
-  {
-    auto invariant = num_edges();
-    BaseEdgePtr new_value(new ConcreteEdge(from, to, weight, dir));
-    the_edge_map[num_edges() + 1] = new_value;
-    assert(invariant == num_edges()-1);
-    return new_value;
-  }
-     
-  //--------------------------------------------------------------------------
-
-  // @todo void DirectedConcreteGraph::insert_adjacency(...
-  // @todo void UndirectedConcreteGraph::insert_adjacency(...
-  // @todo virtual void ConcreteGraph::insert_adjacency(...) = 0;
-  //
-  void ConcreteGraph::insert_adjacency(const InnerVertexId &from,
-				       const InnerVertexId &to, 
-				       const AdjacEdge &edge)
-  {
-    const auto INVARIANT_OUTSIZE = the_adjacency_data.the_outward_edges.size();
-    const auto INVARIANT_INSIZE = the_adjacency_data.the_inward_edges.size();
-    unsigned int INVARIANT_NCHANGES = 1;
-
-      
-    the_adjacency_data.the_outward_edges.insert(std::make_pair(from, edge));
-    the_adjacency_data.the_inward_edges.insert(std::make_pair(to, edge));
-  
-    if(edge->direction() == EdgeDirection::BOTH)
-    {
-      the_adjacency_data.the_outward_edges.insert(std::make_pair(to, edge));
-      the_adjacency_data.the_inward_edges.insert(std::make_pair(from, edge));
-
-      INVARIANT_NCHANGES++;
-    }
-	    
-    bool invariant =
-      (INVARIANT_OUTSIZE == the_adjacency_data.the_outward_edges.size() -
-       INVARIANT_NCHANGES) and
-      (INVARIANT_INSIZE == the_adjacency_data.the_inward_edges.size() -
-       INVARIANT_NCHANGES);
-    assert (invariant);
-  }
- 
   //--------------------------------------------------------------------------
 
   std::ostream& operator<<(std::ostream &out, const ConcreteGraph &g)
@@ -287,8 +240,95 @@ namespace dijkstra_algorithm {
     return out;
   }
 
+
+  /**************************************************************************/
+  /** DirectedConcreteGraph  impl.
+
+      Directed graph specialization of a ConcreteGraph.
+  */
+  /**************************************************************************/
+  
+  BaseEdgePtr DirectedConcreteGraph::insert_edge(const InnerVertexId &from,
+						 const InnerVertexId &to, 
+						 const TypeDistance & weight)
+  {
+    auto invariant = num_edges();
+
+    BaseEdgePtr new_value(new ConcreteEdge(from, to, weight,
+					   EdgeDirection::FROM_TO));    
+    the_edge_map[num_edges() + 1] = new_value;
+    assert(invariant == num_edges()-1);
+    return new_value;
+  }
+     
   //--------------------------------------------------------------------------
 
+  void DirectedConcreteGraph::insert_adjacency(const InnerVertexId &from,
+					       const InnerVertexId &to, 
+					       const AdjacEdge &edge)
+  {
+    const auto INVARIANT_OUTSIZE = the_adjacency_data.the_outward_edges.size();
+    const auto INVARIANT_INSIZE = the_adjacency_data.the_inward_edges.size();
+    unsigned int INVARIANT_NCHANGES = 1;
+      
+    the_adjacency_data.the_outward_edges.insert(std::make_pair(from, edge));
+    the_adjacency_data.the_inward_edges.insert(std::make_pair(to, edge));
+  	    
+    bool invariant =
+      (INVARIANT_OUTSIZE == the_adjacency_data.the_outward_edges.size() -
+       INVARIANT_NCHANGES) and
+      (INVARIANT_INSIZE == the_adjacency_data.the_inward_edges.size() -
+       INVARIANT_NCHANGES);
+    assert (invariant);
+  }
+
+  //--------------------------------------------------------------------------
+
+
+  /**************************************************************************/
+  /** UndirectedConcreteGraph  impl.
+
+      Undirected graph specialization of a ConcreteGraph.
+  */
+  /**************************************************************************/
+  
+  BaseEdgePtr UndirectedConcreteGraph::insert_edge(const InnerVertexId &from,
+						 const InnerVertexId &to, 
+						 const TypeDistance & weight)
+  {
+    auto invariant = num_edges();
+    
+    BaseEdgePtr new_value(new ConcreteEdge(from, to, weight,
+					   EdgeDirection::BOTH));
+    the_edge_map[num_edges() + 1] = new_value;
+    assert(invariant == num_edges()-1);
+    return new_value;
+  }
+     
+  //--------------------------------------------------------------------------
+
+  void UndirectedConcreteGraph::insert_adjacency(const InnerVertexId &from,
+					       const InnerVertexId &to, 
+					       const AdjacEdge &edge)
+  {
+    const auto INVARIANT_OUTSIZE = the_adjacency_data.the_outward_edges.size();
+    const auto INVARIANT_INSIZE = the_adjacency_data.the_inward_edges.size();
+    unsigned int INVARIANT_NCHANGES = 2;
+  
+    the_adjacency_data.the_outward_edges.insert(std::make_pair(from, edge));
+    the_adjacency_data.the_inward_edges.insert(std::make_pair(to, edge));
+    the_adjacency_data.the_outward_edges.insert(std::make_pair(to, edge));
+    the_adjacency_data.the_inward_edges.insert(std::make_pair(from, edge));
+	    
+    bool invariant =
+      (INVARIANT_OUTSIZE == the_adjacency_data.the_outward_edges.size() -
+       INVARIANT_NCHANGES) and
+      (INVARIANT_INSIZE == the_adjacency_data.the_inward_edges.size() -
+       INVARIANT_NCHANGES);
+    assert (invariant);
+  }
+
+  //--------------------------------------------------------------------------
 
 
 } //end-of namespace dijkstra_algorithm
