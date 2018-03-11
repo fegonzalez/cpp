@@ -1,0 +1,23 @@
+
+
+1) pseudocode
+
+//    std::unordered_map<InnerVertexId, TypeDistance> distances
+
+Map<Vertex, Distance> distances;
+distances.fill(all_nodes, INFINITE)
+distances[start] = 0
+
+
+
+DUDA_1: Si el grafo es gigante, no es ineficiente inicializar distancia a TODOS?
+
+	Puede que todo el camino sea un subgrafo pequeño.
+
+OPTIM	¿no se pueden ir inicializando solo los nodos por los que pase el alg.?
+
+
+
+
+
+
