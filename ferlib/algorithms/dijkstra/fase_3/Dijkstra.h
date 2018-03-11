@@ -8,9 +8,12 @@ namespace dijkstra_algorithm {
   
   class BaseGraph;
   class ConcreteGraph;
+  class DirectedConcreteGraph;
+  class UndirectedConcreteGraph;
   struct BaseDijkstraSolution;
   struct DijkstraSolution;;
 
+  
   /* Data struct returning a list of vertex following a path, where
      the first value is the first node of the path */
   typedef std::list<VertexId> VertexPath;
@@ -22,48 +25,6 @@ namespace dijkstra_algorithm {
   /* Función de optimización:   std::function<void (int)> func */
 
   
-  /**************************************************************************/
-  /** @class Dijkstra
-
-     @brief Dijkstra algorithm implementation.
-
-
-
-@warning clase Dijkstra requiere template. No funciona la herencia de
-las funciones 'shortest...' pq dependen de la impl. interna de las
-est. datos (i.e. adj en Concrete)
-
-  */
-  /*
-  class Dijkstra
-  {
-  public:
-
-    //@ brief Calculation of all the shortest paths from start
-    //	to all the other vertex of the graph.
-    ////
-    //@param graph the graph to apply Dijkstra.
-    //	@param start the initial vertex of the path
-    //	@return The distance from start to all the other vertex.
-    
-       virtual void shortest_path(const BaseGraph &graph, 
-		       const VertexId &start,
-		       const VertexId &target)=0;
-       //    @fn void shortest_paths(const BaseGraph &graph, int start);
-       //	
-       //	@ brief Calculation of all the shortest paths from start
-       //	to all the other vertex of the graph.
-
-       //	@param graph the graph to apply Dijkstra.
-       //	@param start the initial vertex of the path
-       //	@return The distance from start to all the other vertex.
-    virtual void shortest_paths
-      (const BaseGraph &graph, const VertexId &start)=0;
-
-  };
-*/
-
-
   /**************************************************************************/
   /** @class DijkstraConcrete
 
@@ -88,29 +49,8 @@ est. datos (i.e. adj en Concrete)
 	@return The distance from start to all the other vertex.
     */
     DijkstraSolution shortest_path(const ConcreteGraph &graph, 
-				   const VertexId &start,
-				   const VertexId &target);
-
-
-    /** @fn void shortest_paths(const BaseGraph &graph, int start);
-	
-	@ brief Calculation of all the shortest paths from start
-	to all the other vertex of the graph.
-
-	@param graph the graph to apply Dijkstra.
-	@param start the initial vertex of the path
-	@return The distance from start to all the other vertex.
-    */
-    // void shortest_paths(const ConcreteGraph &graph, const VertexId &start);
-
-
-    /* see waring above */
-    /* void shortest_paths(const BaseGraph &graph, const VertexId &start) */
-    /* { */
-    /*   (void) graph; */
-    /*   (void) start; */
-    /* } */
-
+				   const UserVertexId &start,
+				   const UserVertexId &target);
   };
 
 
@@ -176,6 +116,48 @@ est. datos (i.e. adj en Concrete)
     VertexPath the_path;
   };
 
+
+
+  /**************************************************************************/
+  /** @class Dijkstra
+
+     @brief Dijkstra algorithm implementation.
+
+
+
+@warning clase Dijkstra requiere template. No funciona la herencia de
+las funciones 'shortest...' pq dependen de la impl. interna de las
+est. datos (i.e. adj en Concrete)
+
+  */
+  /*
+  class Dijkstra
+  {
+  public:
+
+    //@ brief Calculation of all the shortest paths from start
+    //	to all the other vertex of the graph.
+    ////
+    //@param graph the graph to apply Dijkstra.
+    //	@param start the initial vertex of the path
+    //	@return The distance from start to all the other vertex.
+    
+       virtual void shortest_path(const BaseGraph &graph, 
+		       const VertexId &start,
+		       const VertexId &target)=0;
+       //    @fn void shortest_paths(const BaseGraph &graph, int start);
+       //	
+       //	@ brief Calculation of all the shortest paths from start
+       //	to all the other vertex of the graph.
+
+       //	@param graph the graph to apply Dijkstra.
+       //	@param start the initial vertex of the path
+       //	@return The distance from start to all the other vertex.
+    virtual void shortest_paths
+      (const BaseGraph &graph, const VertexId &start)=0;
+
+  };
+*/
 
 
   /**************************************************************************/

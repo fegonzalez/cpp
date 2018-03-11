@@ -9,9 +9,6 @@
 #include <utility>     // std::pair
 
 
-//#include <list>
-
-
 
 namespace dijkstra_algorithm {
    

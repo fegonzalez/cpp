@@ -1,8 +1,7 @@
 #include "common.h"
 #include "BaseGraph.h"
-#include "Dijkstra.h"
 #include "ConcreteGraph.h"
-
+#include "Dijkstra.h"
 #include <iostream>
 #include <algorithm>
 #include <iterator>    // std::begin
@@ -34,19 +33,41 @@ namespace dijkstra_algorithm {
   /** @return result_path: list of nodes from the src to the target node. 
 
       e.g. wikipedia:  1 -> 3 -> 6 -> 5
-  */
 
-  DijkstraSolution DijkstraConcrete::shortest_path(const ConcreteGraph &graph, 
-						const VertexId &start,
-						const VertexId &target)
+      @ error is start or target are not nodes of the graph.
+  */
+  DijkstraSolution DijkstraConcrete::shortest_path
+   (const ConcreteGraph &graph,
+    const UserVertexId &user_start,
+    const UserVertexId &user_target)
   {
+    bool invariant = (graph.validUserVertex(user_start) and
+		      graph.validUserVertex(user_target));
+    assert(invariant);
+
+    
     // 1) initialization step 
     
+    //  typedef std::pair<BaseVertex&, TypeDistance> AdjPair;
+    typedef std::pair<InnerVertexId, TypeDistance> AdjPair;
+
     DijkstraSolution retval;
 
+    /// @todo quitarlo. Usar getters en la clasee
+    ConcreteGraph &graph_noconst = const_cast<ConcreteGraph&>(graph);
+    InnerVertexId start = graph_noconst.the_useridskeyed_map[user_start];
+    InnerVertexId target = graph_noconst.the_useridskeyed_map[user_target];
+	
     // distances: current total distance from the src vertex to all the rest.
-    std::vector<TypeDistance> distances(graph.num_vertex(), 
-					TYPEDISTANCE_INFINITE);
+    /// @todo OPTIM: ir metiendo SOLAMENE los nodos visitados
+    std::unordered_map<InnerVertexId, TypeDistance> distances{};
+
+    for(auto citer = graph.the_vertex_map.cbegin();
+	citer != graph.the_vertex_map.cend();
+	++citer)
+    {
+      distances[citer->first] = TYPEDISTANCE_INFINITE;
+    }
     distances[start] = TYPEDISTANCE_ZERO;
 
 
@@ -54,29 +75,26 @@ namespace dijkstra_algorithm {
     //           vertex in the graph.
     //
     /// @todo OPTIM: usar map para ir metiendo SOLAMENE los nodos visitados
-    // pasar a usar map 
-    std::vector<VertexId> previous (graph.num_vertex(), NOVERTEXID);
+    //
+    // @bug REquiere map, no por optim, sino pq vvector usa pos. 0
+    // 
+    std::vector<InnerVertexId> previous (graph.num_vertex(), NOVERTEXID);
 
 
     ///@param candidates: next nodes to visit (priority_queue)
-    ///
-    ///   @todo VERIFICAR el orden de los params y su uso [2].commentarios
-    ///
     std::priority_queue< AdjPair,
 			 std::vector <AdjPair> , 
 			 std::greater<AdjPair> > candidates;
 
-
     // optimization: only insert the first vertex to visit (start)
-    candidates.push(std::make_pair(0.0, start));  // AL REVEŚ ???
-
+    candidates.push(std::make_pair(TYPEDISTANCE_ZERO, start));
 
     // optimization: exit upon success
     bool target_found = false;
 
-
     //optimization: avoid process vertex already visited (old candidates)
-    std::unordered_set<VertexId> visited;
+    std::unordered_set<InnerVertexId> visited;
+
 
     
     // 2) Discovery step: find best path
@@ -88,26 +106,27 @@ namespace dijkstra_algorithm {
 
     while (!candidates.empty())
     {
+      
 #ifdef DEBUG_MODE_DIJKSTRA
       std::clog << "\ncandidates:" ;
       std::clog << "\nsize: " << candidates.size();
       std::clog << " ; top (most priority): " << candidates.top().second;
       std::clog << "\ndistances:" ;
       std::for_each(std::begin(distances), std::end(distances), 
-		    [](const TypeDistance &val){std::clog << " " << val; }); 
+		    [](const std::pair<InnerVertexId, TypeDistance> &val)
+		    {std::clog << " " << val.second; });      
       std::clog << std::endl ;
+      
       std::clog << "previous: " ;
       std::for_each(std::begin(previous), std::end(previous), 
-		    [](const VertexId &val) { std::clog << " " << val; }); 
+		    [](const InnerVertexId &val) { std::clog << " " << val; }); 
       std::clog << std::endl ;
 #endif
-      // The first vertex in pair is the minimum distance
-      // vertex, extract it from priority queue.
-      // vertex label is stored in second of pair (it
-      // has to be done this way to keep the vertices
-      // sorted distance (distance must be first item
-      // in pair)
-      VertexId new_candidate = candidates.top().second; // VertexId
+
+
+      // The first vertex in pair is the minimum distance vertex
+      // (note.- distance must be first item in pair)
+      InnerVertexId new_candidate = candidates.top().second; // InnerVertexId
       candidates.pop();
      
       auto citr_visited = visited.find(new_candidate);
@@ -125,26 +144,10 @@ namespace dijkstra_algorithm {
       }
 
 
-
-
-
 #ifdef DEBUG_MODE_DIJKSTRA
       std::clog << "new_candidate: " << new_candidate << std::endl;
 #endif
       
-	///@todo 
-	//
-	// if (already_visited(neighbor)))
-	// continue;
-	//
-	///\todo VERIFICAR OPTIMIZACIÓN siguiente:
-	// 
-	// if(visited[new_candidate])  // aquí, no en candidate pq empiezo solo con 'start' como candidato.
-	// 	continue;
-	// visited[new_candidate]=true;
-
-
-
 
       //optimization: stop if target vertex reached
       if(new_candidate == target)
@@ -155,13 +158,7 @@ namespace dijkstra_algorithm {
 	target_found = true;
 	break;
       }
-      
-      //
-      ///\todo VERIFICAR OPTIMIZACIÓN siguiente:
-      // 
-      // if(visited[new_candidate])
-      // 	continue;
-      // visited[new_candidate]=true;
+
 
 
       // for each neighbor of new_candidate
@@ -196,16 +193,21 @@ modo-2  1) Para cada  Edge* en
 	   }
       */
 
-
       
       
-      for (auto itr = graph.adjac()[new_candidate].cbegin();
-	   itr != graph.adjac()[new_candidate].cend();
-	   ++itr)
+	
+      // for (auto itr = graph.adjac()[new_candidate].cbegin();
+      // 	   itr != graph.adjac()[new_candidate].cend();
+      // 	   ++itr)
+      const auto range =
+	graph.the_adjacency_data.the_outward_edges.equal_range(new_candidate);
+      for (auto itr = range.first;
+      	   itr != range.second;
+      	   ++itr)      
       {
 	// extracting the current minimum
-	VertexId neighbor = (*itr).first;
-	TypeDistance weight = (*itr).second;
+	InnerVertexId neighbor =  itr->second->to();
+	TypeDistance weight = itr->second->weight();
 
 #ifdef DEBUG_MODE_DIJKSTRA
 	std::clog << "+ neighbor " << neighbor << " ; ";
@@ -230,100 +232,45 @@ modo-2  1) Para cada  Edge* en
 	  std::clog << ", " << neighbor << ")"  << std::endl;
 #endif
 	}
-      }
+
+
+      }//end_for
     }//end_while
 
 
+
+    
     // 3) Rebuild (set-solution) step
     retval.set_distance(distances[target]);
     
     if(target_found)
     {
-      VertexId current = target;
+      InnerVertexId current = target;
       while (current != start)
       {
-	///@todo almacenar user_id, no inner_id = user_map.find(current)
-	retval.push_front(current);
-	current = previous[current];
+    	///@todo almacenar user_id, no inner_id = user_map.find(current)
+    	retval.push_front(current);
+    	current = previous[current];
 
-	assert(retval.path()->size() < 10);
+
+	/// @todo removeme por si hay infinite loops
+    	assert(retval.path()->size() < 100);
+
+	
       }
       retval.push_front(start);     
     }
+
     
      return retval;
   }
-
-
-  //--------------------------------------------------------------------------
-  /* FOM source to ALL the rest */
-  /*
-  void DijkstraConcrete::shortest_paths(const ConcreteGraph &graph, 
-				     const VertexId &start)
-  {
-    // next nodes to visit: priority_queue
-    std::priority_queue< AdjPair, 
-			 std::vector <AdjPair> , 
-			 std::greater<AdjPair> > candidates;
- 
-    // Create a vector for distancesances and initialize all
-    // distancesances as infinite (TYPEDISTANCE_INFINITE)
-    std::vector<TypeDistance> distances(graph.num_vertex(), 
-					TYPEDISTANCE_INFINITE);
- 
-    // Insert source itself in priority queue and initialize
-    // its distance as 0.
-    candidates.push(std::make_pair(0.0, start));
-    distances[start] = 0;
- 
-    // Discovery step: find best path
-    while (!candidates.empty())
-      {
-	// The first vertex in pair is the minimum distance
-	// vertex, extract it from priority queue.
-	// vertex label is stored in second of pair (it
-	// has to be done this way to keep the vertices
-	// sorted distance (distance must be first item
-	// in pair)
-      VertexId new_candidate = candidates.top().second;
-      candidates.pop();
-
- 
-	// 'itr' is used to get all adjacent vertices of a vertex
-	for (auto itr = graph.adjac()[new_candidate].cbegin();  //, end = v.end();
-	     itr != graph.adjac()[new_candidate].cend();        // itr != end;
-	     ++itr)
-	  {
-	    // Get vertex label and weight of current adjacent of u.
-	    VertexId v = (*itr).first;
-	    TypeDistance weight = (*itr).second;
-	    //assert(weight >0); //!\warning weights MUST be non-negative [1]
-	
- 
-	    //  If there is shorted path to v through u.
-	    if (distances[v] > distances[new_candidate] + weight)
-	      {
-		// Updating distance of v
-		distances[v] = distances[new_candidate] + weight;
-		candidates.push(std::make_pair(distances[v], v));
-	      }
-	  }
-      }
- 
-    // Get solution:
-    std::cout << "Vertex   Distance from Source" << std::endl;
-    for (unsigned int loopi = 0; loopi < graph.num_vertex(); ++loopi)
-      std::cout << loopi << "\t\t " << distances[loopi] << std::endl;
-
-  }
-  */
 
   //--------------------------------------------------------------------------
 
   std::ostream& operator<<(std::ostream &out, 
 			   const BaseDijkstraSolution &value)
   {
-    out << "Distance (cost): " << value.total_distance() << std::endl;
+        out << "Distance (cost): " << value.total_distance() << std::endl;
     out << "Shortest-Path's size (n. of vertex): " << value.path()->size() 
 	<< std::endl;
     out << "Shortest-Path: ";
@@ -338,14 +285,17 @@ modo-2  1) Para cada  Edge* en
 		  std::end(*value.path()),
 		  [&out, last_element](const VertexId & id)
     {
-      //      static int num_veces = 0;
+            static int num_veces = 0;	/// @todo removeme por si hay infinite loops
+
       out << id;
       if(not (id==last_element)) { out << " -> "; }
-      //      assert(++num_veces < 30);
+
+      
+      assert(++num_veces < 30);	/// @todo removeme por si hay infinite loops
+
     });
-    
+  
     return out;
   }
     
-
 } //end-of dijkstra_algorithm

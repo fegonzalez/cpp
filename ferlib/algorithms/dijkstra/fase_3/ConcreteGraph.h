@@ -11,13 +11,6 @@
 namespace dijkstra_algorithm {
 
 
-  /**************************************************************************/
-
-  ///@todo FIXME: use the proper adj. data structure
-  //
-  //  typedef std::pair<BaseVertex&, TypeDistance> AdjPair;
-  //  typedef std::pair<InnerVertexId, TypeDistance> AdjPair;
-
   struct ConcreteEdge;
   struct ConcreteVertex;
 
@@ -138,16 +131,17 @@ namespace dijkstra_algorithm {
   {
 
     friend std::ostream& operator<<(std::ostream &, const ConcreteGraph &);
-
+    friend class DijkstraConcrete;
+  
   public:
     
     
-    virtual void add_edge
+    void add_edge
       (const UserVertexId &from, 
        const UserVertexId &to, 
        const TypeDistance & weight);
     
-    virtual void add_vertex(const UserVertexId &id);
+    void add_vertex(const UserVertexId &id);
  
     
     /// @return the number of vertex of the Graph
@@ -155,7 +149,12 @@ namespace dijkstra_algorithm {
 
     //std::list<AdjPair> *adjac() const {return adj;};
 
+    bool validUserVertex(const UserVertexId &id)const
+    {return (the_useridskeyed_map.find(id) not_eq the_useridskeyed_map.end());}
 
+    /* InnerVertexId validUserVertex(const UserVertexId &id)const */
+    /* {return (the_useridskeyed_map.find(id) not_eq the_useridskeyed_map.end());} */
+    
   protected:
 
     typedef BaseVertexPtr VertexValue;
@@ -221,7 +220,9 @@ namespace dijkstra_algorithm {
   {
 
     friend std::ostream& operator<<(std::ostream &, const ConcreteGraph &);
+    friend class DijkstraConcrete;
 
+    
   public:
     
     explicit DirectedConcreteGraph() = default;
@@ -244,7 +245,7 @@ namespace dijkstra_algorithm {
      */
     inline void insert_adjacency(const InnerVertexId &from,
 				 const InnerVertexId &to, 
-				 const AdjacEdge &edge) final;
+				 const AdjacEdge &edge);
   };
 
   
@@ -259,6 +260,7 @@ namespace dijkstra_algorithm {
   {
 
     friend std::ostream& operator<<(std::ostream &, const ConcreteGraph &);
+    friend class DijkstraConcrete;
 
   public:
     
@@ -282,7 +284,7 @@ namespace dijkstra_algorithm {
      */
     inline void insert_adjacency(const InnerVertexId &from,
 				 const InnerVertexId &to, 
-				 const AdjacEdge &edge) final;
+				 const AdjacEdge &edge);
   };
   
     
