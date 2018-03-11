@@ -68,13 +68,28 @@ namespace dijkstra_algorithm {
     virtual ~BaseGraph(){};
  
 
-    /**	@warning Generic Graph, thus negative weight are allowed */
+   /**	@brief add a new edge between to vertexes of the graph.
+
+	@error If an edge between the two vertexes already exists.
+
+	@warning If any of the vertex 'from' and/or 'to' does not
+	exists yet, they also are created, thus this is the fastest
+	way to fill the graph.	
+
+	@warning Generic Graph, thus negative weight are allowed 	
+   */    
     virtual void add_edge
       (const UserVertexId &from, 
        const UserVertexId &to, 
        const TypeDistance & weight,
        const EdgeDirection & dir = EdgeDirection::FROM_TO)=0;
 
+
+   /**	
+	@warning Recommended to add isolated vertex to the graph.
+
+	@error If the vertex already exists.
+   */        
     virtual void add_vertex(const UserVertexId &id)=0;
 
 
@@ -99,7 +114,9 @@ namespace dijkstra_algorithm {
     
     virtual UserVertexId user_id()const = 0;
 
-    
+    /// @brief (Optimization) Add an edge to connect to a neighbor vertex
+    virtual void add_neighbor(BaseEdgePtr edge) = 0;
+
     /// @todo
     //    virtual const std::shared_ptr<TypeNeighbors> neighbors()const = 0;
 

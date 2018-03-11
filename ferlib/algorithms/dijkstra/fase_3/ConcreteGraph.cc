@@ -6,7 +6,7 @@
 #include <algorithm>
 #include <iterator>    // std::begin
 #include <functional>  // std::bind
-#include <utility> // std::pair
+#include <utility>     // std::pair
 
 
 //#include <list>
@@ -14,13 +14,6 @@
 
 
 namespace dijkstra_algorithm {
-
-  //--------------------------------------------------------------------------
-
-  ConcreteGraph::ConcreteGraph()
-    :the_num_vertex(0)
-  {
-  }
    
   //--------------------------------------------------------------------------
 
@@ -29,77 +22,173 @@ namespace dijkstra_algorithm {
 			       const TypeDistance & weight,
 			       const EdgeDirection & dir)
   {
-    (void) dir;
-    (void) from;
-    (void) to;
-    (void) weight;
-    
     bool invariant = not repeated_user_edge(from, to);
     assert(invariant);
-    
-AKI LKO DEJO
-    add   from   // si no existe
-
-    add to   // si no existe
-      
-    
-    
-    /*
-    
-   assert( not (edge ya existe)); // existe from y tiene a 'to' como vecino OR 
-      // viceversa
-
-      update mapa de ids (inner, user)
-      
-      #crear nodo from
-      a) inner id = nxt id = num_nodos +1
-      b) the_vertexid_map[inner]=user
-
-      crear nodo to
 
     
-      crear Edge data struct
-
-      (void) dir;
-
-    */
-
-
+    const auto search_to = the_useridskeyed_map.find(to);
+    const auto search_from = the_useridskeyed_map.find(from);
     
-    /** @info undirected graph */
-    // adj[from].push_back(std::make_pair(to, weight));
-    // adj[to].push_back(std::make_pair(from, weight));
+    // case: none vertex exists
+    if(search_from == the_useridskeyed_map.end() and
+       search_to == the_useridskeyed_map.end())
+    {
+      //just to check the goals
+      const auto INVARIANT_N_USERS = the_useridskeyed_map.size();  // +2 expect
+      const auto INVARIANT_N_INNERS = the_inneridskeyed_map.size();// +2 expect
+      const auto INVARIANT_N_EDGES = num_edges(); // +1 expect
+      const auto INVARIANT_N_VERTEX = num_inner_indexes(); // +2 expect
+      //INVARIANT_ADJACENCY checked inside insert_adjacency() = f(g. direction)
+    
+      //actions
+      InnerVertexId from_inner_id = num_inner_indexes() + 1;
+      InnerVertexId to_inner_id = from_inner_id + 1; 
+      BaseEdgePtr new_edge = insert_edge(from_inner_id,
+					 to_inner_id, weight, dir);
+      //adding 'from' vertex
+      the_useridskeyed_map[from] = from_inner_id;
+      the_inneridskeyed_map[from_inner_id] = from;
+      the_vertex_map[from_inner_id] =
+	VertexValue(new ConcreteVertex(from_inner_id, from));
+      the_vertex_map[from_inner_id]->add_neighbor(new_edge);
+      //adding 'to' vertex
+      the_useridskeyed_map[to] = to_inner_id;
+      the_inneridskeyed_map[to_inner_id] = to;
+      the_vertex_map[to_inner_id] =
+	VertexValue(new ConcreteVertex(to_inner_id, to));
+      the_vertex_map[to_inner_id]->add_neighbor(new_edge);
+      // adjacency data
+      insert_adjacency(from_inner_id, to_inner_id, new_edge);
+   
+      assert((INVARIANT_N_USERS  + 2 == the_useridskeyed_map.size()) and
+	     (INVARIANT_N_INNERS + 2 == the_inneridskeyed_map.size()) and
+	     (INVARIANT_N_EDGES  + 1 == num_edges()) and
+	     (INVARIANT_N_VERTEX + 2 == num_inner_indexes()));
+    }
 
+    // case: 'from' vertex exists / 'to' dosen't
+    else if(search_to == the_useridskeyed_map.end())
+    {
+      //just to check the goals
+      const auto INVARIANT_N_USERS = the_useridskeyed_map.size();  // +1 expect
+      const auto INVARIANT_N_INNERS = the_inneridskeyed_map.size();// +1 expect
+      const auto INVARIANT_N_EDGES = num_edges(); // +1 expect
+      const auto INVARIANT_N_VERTEX = num_inner_indexes(); // +1 expect      
 
+      //actions
+      InnerVertexId from_inner_id = the_useridskeyed_map[from];
+      InnerVertexId to_inner_id = num_inner_indexes() + 1;
+      BaseEdgePtr new_edge = insert_edge(from_inner_id,
+					 to_inner_id, weight, dir);
+      the_vertex_map[from_inner_id]->add_neighbor(new_edge); // updating 'from'
+      the_useridskeyed_map[to] = to_inner_id; //adding 'to' vertex
+      the_inneridskeyed_map[to_inner_id] = to;
+      the_vertex_map[to_inner_id] =
+	VertexValue(new ConcreteVertex(to_inner_id, to));
+      the_vertex_map[to_inner_id]->add_neighbor(new_edge);
+      insert_adjacency(from_inner_id, to_inner_id, new_edge);
 
+      // verifying invariant 
+      assert((INVARIANT_N_USERS  + 1 == the_useridskeyed_map.size()) and
+	     (INVARIANT_N_INNERS + 1 == the_inneridskeyed_map.size()) and
+	     (INVARIANT_N_EDGES  + 1 == num_edges()) and
+	     (INVARIANT_N_VERTEX + 1 == num_inner_indexes()));      
+    }
+
+    // case: 'to' vertex exists / 'from' dosen't
+    else if(search_from == the_useridskeyed_map.end())
+    {
+      //just to check the goals
+      const auto INVARIANT_N_USERS = the_useridskeyed_map.size();  // +1 expect
+      const auto INVARIANT_N_INNERS = the_inneridskeyed_map.size();// +1 expect
+      const auto INVARIANT_N_EDGES = num_edges(); // +1 expect
+      const auto INVARIANT_N_VERTEX = num_inner_indexes(); // +1 expect      
+
+      //actions
+      InnerVertexId to_inner_id = the_useridskeyed_map[to];
+      InnerVertexId from_inner_id = num_inner_indexes() + 1;
+      BaseEdgePtr new_edge = insert_edge(from_inner_id,
+					 to_inner_id, weight, dir);      
+      the_useridskeyed_map[from] = from_inner_id; //adding 'from' vertex
+      the_inneridskeyed_map[from_inner_id] = from;
+      the_vertex_map[from_inner_id] =
+	VertexValue(new ConcreteVertex(from_inner_id, from));
+      the_vertex_map[from_inner_id]->add_neighbor(new_edge);
+      the_vertex_map[to_inner_id]->add_neighbor(new_edge); // updating 'to'
+      insert_adjacency(from_inner_id, to_inner_id, new_edge);
+
+      // verifying invariant 
+      assert((INVARIANT_N_USERS  + 1 == the_useridskeyed_map.size()) and
+	     (INVARIANT_N_INNERS + 1 == the_inneridskeyed_map.size()) and
+	     (INVARIANT_N_EDGES  + 1 == num_edges()) and
+	     (INVARIANT_N_VERTEX + 1 == num_inner_indexes()));
+    }
+
+    // both vertexes already exists
+    else
+    {
+      //just to check the goals
+      const auto INVARIANT_N_USERS = the_useridskeyed_map.size();  // +0 expect
+      const auto INVARIANT_N_INNERS = the_inneridskeyed_map.size();// +0 expect
+      const auto INVARIANT_N_EDGES = num_edges(); // +1 expect
+      const auto INVARIANT_N_VERTEX = num_inner_indexes(); // +0 expect      
+
+      //actions
+      InnerVertexId from_inner_id = the_useridskeyed_map[from];
+      InnerVertexId to_inner_id = the_useridskeyed_map[to];
+      BaseEdgePtr new_edge = insert_edge(from_inner_id,
+					 to_inner_id, weight, dir);
+      the_vertex_map[from_inner_id]->add_neighbor(new_edge);
+      the_vertex_map[to_inner_id]->add_neighbor(new_edge);
+      insert_adjacency(from_inner_id, to_inner_id, new_edge);
+	    
+      // verifying invariant 
+      assert((INVARIANT_N_USERS  + 0 == the_useridskeyed_map.size()) and
+	     (INVARIANT_N_INNERS + 0 == the_inneridskeyed_map.size()) and
+	     (INVARIANT_N_EDGES  + 1 == num_edges()) and
+	     (INVARIANT_N_VERTEX + 0 == num_inner_indexes()));      
+    }
     
   }
-
 
   //--------------------------------------------------------------------------
 
-  void ConcreteGraph::add_vertex(const VertexId &id)
+  void ConcreteGraph::add_vertex(const UserVertexId &id)
   {
-    (void) id;
-    assert(false); /// @todo implement me
+    const auto search_id = the_useridskeyed_map.find(id);
 
-    // assert(id not already in the graph);
+    bool invariant = (search_id == the_useridskeyed_map.end());
+    assert(invariant);
+    const auto INVARIANT_N_USERS = the_useridskeyed_map.size();  // +1 expect
+    const auto INVARIANT_N_INNERS = the_inneridskeyed_map.size();// +1 expect
+    const auto INVARIANT_N_VERTEX = num_inner_indexes();         // +1 expect
 
-
+    //adding 'from' vertex
+    InnerVertexId id_inner_id = num_inner_indexes() + 1;
+    the_useridskeyed_map[id] = id_inner_id;
+    the_inneridskeyed_map[id_inner_id] = id;
+    the_vertex_map[id_inner_id] =
+      VertexValue(new ConcreteVertex(id_inner_id, id));
+    
+    invariant = invariant and 
+      ((INVARIANT_N_USERS  + 1 == the_useridskeyed_map.size()) and
+       (INVARIANT_N_INNERS + 1 == the_inneridskeyed_map.size()) and
+       (INVARIANT_N_VERTEX + 1 == num_inner_indexes()));
+    assert(invariant);
   }
-
   
   //--------------------------------------------------------------------------
 
+  // Idem for DIRECTED & UNDIRECTED graphs
+  //
   bool ConcreteGraph::repeated_user_edge(const UserVertexId &from,
 					 const UserVertexId to)const
   {
-    (void) from;
-    (void) to;
     const bool REPEATED = true;
     const bool NOT_REPEATED = false;
     bool retval = NOT_REPEATED;
     bool invariant = (retval == NOT_REPEATED);
+    
     const auto search_to = the_useridskeyed_map.find(to);
     if(search_to == the_useridskeyed_map.end())
       return NOT_REPEATED;
@@ -128,7 +217,55 @@ AKI LKO DEJO
       
     return retval;
   }
+  
+  //--------------------------------------------------------------------------
 
+  BaseEdgePtr ConcreteGraph::insert_edge(const InnerVertexId &from,
+					 const InnerVertexId &to, 
+					 const TypeDistance & weight,
+					 const EdgeDirection & dir)
+  {
+    auto invariant = num_edges();
+    BaseEdgePtr new_value(new ConcreteEdge(from, to, weight, dir));
+    the_edge_map[num_edges() + 1] = new_value;
+    assert(invariant == num_edges()-1);
+    return new_value;
+  }
+     
+  //--------------------------------------------------------------------------
+
+  // @todo void DirectedConcreteGraph::insert_adjacency(...
+  // @todo void UndirectedConcreteGraph::insert_adjacency(...
+  // @todo virtual void ConcreteGraph::insert_adjacency(...) = 0;
+  //
+  void ConcreteGraph::insert_adjacency(const InnerVertexId &from,
+				       const InnerVertexId &to, 
+				       const AdjacEdge &edge)
+  {
+    const auto INVARIANT_OUTSIZE = the_adjacency_data.the_outward_edges.size();
+    const auto INVARIANT_INSIZE = the_adjacency_data.the_inward_edges.size();
+    unsigned int INVARIANT_NCHANGES = 1;
+
+      
+    the_adjacency_data.the_outward_edges.insert(std::make_pair(from, edge));
+    the_adjacency_data.the_inward_edges.insert(std::make_pair(to, edge));
+  
+    if(edge->direction() == EdgeDirection::BOTH)
+    {
+      the_adjacency_data.the_outward_edges.insert(std::make_pair(to, edge));
+      the_adjacency_data.the_inward_edges.insert(std::make_pair(from, edge));
+
+      INVARIANT_NCHANGES++;
+    }
+	    
+    bool invariant =
+      (INVARIANT_OUTSIZE == the_adjacency_data.the_outward_edges.size() -
+       INVARIANT_NCHANGES) and
+      (INVARIANT_INSIZE == the_adjacency_data.the_inward_edges.size() -
+       INVARIANT_NCHANGES);
+    assert (invariant);
+  }
+ 
   //--------------------------------------------------------------------------
 
   std::ostream& operator<<(std::ostream &out, const ConcreteGraph &g)
