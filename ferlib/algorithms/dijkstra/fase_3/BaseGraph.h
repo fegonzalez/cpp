@@ -62,9 +62,7 @@ namespace dijkstra_algorithm {
   /**************************************************************************/
   class BaseGraph
   {
-
     //    friend std::ostream& operator<<(std::ostream &, const BaseGraph &);
-
   public:
     
     virtual ~BaseGraph(){};
@@ -79,40 +77,9 @@ namespace dijkstra_algorithm {
 
     virtual void add_vertex(const UserVertexId &id)=0;
 
-    
-    /* ????  add_vertex required   ??? */
-
-    // getters
 
     /** @return the number of vertex of the Graph */
     virtual unsigned int num_vertex()const=0;
-
-
-    /**
-     * Tries to return a pointer to the vertex referenced by user_id
-     *
-     * @param user_id: id known by the user (creator) of the Vertex. 
-     *        Used to communications User-Graph.
-     *
-     * @return a pointer to the vertex.
-     */
-    //BaseVertex* get_vertex(const UserVertexId & user_id)=0;
-    /** ESE_VIEJO_PRO impl. */
-    /* BaseVertex* AlgorithmGraph::getVertex(const int &nodeId) */
-    /* { */
-    /*     BaseVertex &v_vertex = m_vertices[nodeId]; */
-    /*     if (v_vertex.getId() != 0) */
-    /*     { */
-    /*         // Vertex already existed, return it, if it's open */
-    /*         return v_vertex.isOpen() ? &v_vertex : 0; */
-    /*     } else */
-    /*     { */
-    /*         // Vertex didn't exist until fetch, upate its id */
-    /*         v_vertex.setId(nodeId); */
-    /*         // Default vertex state is open, there's no need to check */
-    /*         return &v_vertex; */
-    /*     } */
-    /* } */
 
   };
 

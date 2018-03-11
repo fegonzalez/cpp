@@ -18,8 +18,7 @@ FASE 2.-  optimizar y adecuar el algoritmo básico
 FASE 3.- aplicar est. datos del pseudocódigo
 
 
-\todo  Vertex, ..., outwards, ...
-
+\todo    test  add_edge()   repetido
 
 
 \todo Modificar data struct para que acepte cualquier ID de nodo

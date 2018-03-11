@@ -183,6 +183,11 @@ modo-1:  1) the_vertex_map[new_candidate] : BaseVertex *  'cand_vertex'
 	      insertar pair(to(), weight()) en la cola de prioridad    O(cola)
             }
 
+
+
+
+ESTE - ESTE - ESTE
+
              
 modo-2  1) Para cada  Edge* en 
            the_adjacency_data.the_outward_edges[new_candidate]        O(n)

@@ -2,76 +2,67 @@
 #include "ConcreteGraph.h"
 
 #include <iostream>
+#include <cassert>
 #include <algorithm>
 #include <iterator>    // std::begin
 #include <functional>  // std::bind
-
-
-#include <list>
 #include <utility> // std::pair
+
+
+//#include <list>
+
+
 
 namespace dijkstra_algorithm {
 
   //--------------------------------------------------------------------------
 
-  // Allocates memory for adjacency list
-  ConcreteGraph::ConcreteGraph(unsigned int num_vertex)
+  ConcreteGraph::ConcreteGraph()
+    :the_num_vertex(0)
   {
-    this->the_num_vertex = num_vertex;
-    //adj = new std::list<AdjPair> [num_vertex];
   }
-
-  //--------------------------------------------------------------------------
- 
-  ConcreteGraph::~ConcreteGraph()
-  {
-    //    delete [] adj;
-  }
-
-  //--------------------------------------------------------------------------
-
-  // void ConcreteGraph::add_vertex(const VertexId &id)
-  // {
-  //   assert(id not already in the graph);
-
-  //   ConcreteVertex
-  // }
    
-
   //--------------------------------------------------------------------------
 
-  void ConcreteGraph::add_edge(const VertexId &from, 
-			    const VertexId &to, 
-			    const TypeDistance & weight,
-			    const EdgeDirection & dir)
+  void ConcreteGraph::add_edge(const UserVertexId &from,
+			       const UserVertexId &to, 
+			       const TypeDistance & weight,
+			       const EdgeDirection & dir)
   {
     (void) dir;
     (void) from;
     (void) to;
     (void) weight;
-    /*
-    buscar from 
-
-    buscar to
-
     
-    assert( not (edge ya existe)); // existe from y tiene a 'to' como vecino OR 
-                                   // viceversa
+    bool invariant = not repeated_user_edge(from, to);
+    assert(invariant);
+    
+AKI LKO DEJO
+    add   from   // si no existe
 
-    update mapa de ids (inner, user)
+    add to   // si no existe
       
-    #crear nodo from
-    a) inner id = nxt id = num_nodos +1
-    b) the_vertexid_map[inner]=user
+    
+    
+    /*
+    
+   assert( not (edge ya existe)); // existe from y tiene a 'to' como vecino OR 
+      // viceversa
 
-    crear nodo to
+      update mapa de ids (inner, user)
+      
+      #crear nodo from
+      a) inner id = nxt id = num_nodos +1
+      b) the_vertexid_map[inner]=user
+
+      crear nodo to
 
     
-    crear Edge data struct
+      crear Edge data struct
 
-    (void) dir;
+      (void) dir;
 
-*/
+    */
 
 
     
@@ -82,6 +73,60 @@ namespace dijkstra_algorithm {
 
 
     
+  }
+
+
+  //--------------------------------------------------------------------------
+
+  void ConcreteGraph::add_vertex(const VertexId &id)
+  {
+    (void) id;
+    assert(false); /// @todo implement me
+
+    // assert(id not already in the graph);
+
+
+  }
+
+  
+  //--------------------------------------------------------------------------
+
+  bool ConcreteGraph::repeated_user_edge(const UserVertexId &from,
+					 const UserVertexId to)const
+  {
+    (void) from;
+    (void) to;
+    const bool REPEATED = true;
+    const bool NOT_REPEATED = false;
+    bool retval = NOT_REPEATED;
+    bool invariant = (retval == NOT_REPEATED);
+    const auto search_to = the_useridskeyed_map.find(to);
+    if(search_to == the_useridskeyed_map.end())
+      return NOT_REPEATED;
+
+    const auto search_from = the_useridskeyed_map.find(from);
+    if(search_from == the_useridskeyed_map.end())
+      return NOT_REPEATED;
+
+
+    // from -> to exists ?
+    InnerVertexId from_inner_id = search_from->second; 
+    const auto from_outward_edges_range =
+      the_adjacency_data.the_outward_edges.equal_range(from_inner_id);
+    for(auto next_edge = from_outward_edges_range.first;
+	next_edge != from_outward_edges_range.second;
+	++next_edge)
+    {
+      if(next_edge->second->to() == search_to->second) 
+      {
+	retval = REPEATED;
+	return retval;;
+      }
+    }
+    invariant = (retval == NOT_REPEATED);
+    assert(invariant);
+      
+    return retval;
   }
 
   //--------------------------------------------------------------------------

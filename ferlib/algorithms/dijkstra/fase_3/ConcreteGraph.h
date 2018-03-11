@@ -5,14 +5,7 @@
 
 #include <iosfwd>
 #include <unordered_map>
-//#include <unordered_multimap>
 #include <vector>
-
-//#include <utility> // std::pair
-
-
-
-#include <list>
 
 
 namespace dijkstra_algorithm {
@@ -48,9 +41,10 @@ namespace dijkstra_algorithm {
 
   public:
     
-    ConcreteGraph(unsigned int num_vertex);  // Constructor
-
-    ~ConcreteGraph();
+    explicit ConcreteGraph();
+    explicit ConcreteGraph(const ConcreteGraph&) = delete;
+ 
+    //    ~ConcreteGraph();
     
    /**	@warning If any of the vertex 'from' and/or 'to' does not
 	exists yet, they also are created, thus this is the fastest
@@ -77,7 +71,12 @@ namespace dijkstra_algorithm {
 
   protected:
 
-    unsigned int next_inner_index()const {return the_num_vertex;}
+    /// @todo FIXME
+    unsigned int next_inner_index()const {return the_num_vertex + 1;}
+    //    unsigned int next_inner_index()const {return ++the_num_vertex;}
+
+    bool repeated_user_edge(const UserVertexId &from,
+			    const UserVertexId to)const;
 
     
     // data area
@@ -88,23 +87,24 @@ namespace dijkstra_algorithm {
 
     // Keeping the relation between user & inner vertex_ids
     // Two maps to optimize the searchs operations.
-    std::unordered_map<UserVertexId, InnerVertexId> the_useridskeyed_map;
-    std::unordered_map<InnerVertexId, UserVertexId> the_inneridskeyed_map;
+    std::unordered_map<UserVertexId, InnerVertexId> the_useridskeyed_map{};
+    std::unordered_map<InnerVertexId, UserVertexId> the_inneridskeyed_map{};
 
     // vertex storage, keyed by their id.
     typedef BaseVertexPtr VertexValue;
-    std::unordered_map<InnerVertexId, VertexValue> the_vertex_map;
+    std::unordered_map<InnerVertexId, VertexValue> the_vertex_map{};
 
     // edge storage, keyed by edge id.
     typedef BaseEdgePtr EdgeValue;
-    std::unordered_map<EdgeId, EdgeValue> the_edge_map;
+    std::unordered_map<EdgeId, EdgeValue> the_edge_map{};
   
     // The adjacency data
     typedef BaseEdgePtr AdjacEdge;  
-    typedef struct
+
+    struct
     {
-      std::unordered_multimap<InnerVertexId, AdjacEdge> the_outward_edges;
-      std::unordered_multimap<InnerVertexId, AdjacEdge> the_inward_edges;
+      std::unordered_multimap<InnerVertexId, AdjacEdge> the_outward_edges{};
+      std::unordered_multimap<InnerVertexId, AdjacEdge> the_inward_edges{};
     } the_adjacency_data;
     //
     // std::list<AdjPair> *adj; // edges: adjacency list 
@@ -114,7 +114,7 @@ namespace dijkstra_algorithm {
 
     
   /**************************************************************************/
-  /** @struct BaseVertex
+  /** @struct ConcreteVertex
 
       @brief A Graph's Vertex.
 
@@ -128,20 +128,18 @@ namespace dijkstra_algorithm {
     friend class ConcreteGraph;
     
   public:
-    
+	
     UserVertexId user_id()const {return the_user_id;}
 
     /// @todo
     /* const std::shared_ptr<TypeNeighbors> neighbors()const */
     /* { return the_neighbourhood; } */
-
     
   protected:
     
     InnerVertexId inner_id()const {return the_inner_id;}
 	
-    
-
+   
     // data area
 	
   private:	
@@ -158,12 +156,13 @@ namespace dijkstra_algorithm {
    */
   struct ConcreteEdge : public BaseEdge
   {
+  public:
+
     InnerVertexId from()const { return the_from;}
     InnerVertexId to()const { return the_to;}
     TypeDistance weight()const { return the_weight;} 
     EdgeDirection direction()const { return the_direction;}
 
-    
     // data area 
 
   private: 
@@ -172,7 +171,6 @@ namespace dijkstra_algorithm {
     TypeDistance the_weight;      
     EdgeDirection the_direction = EdgeDirection::FROM_TO;
   };
-
 
 
 } //end-of dijkstra_algorithm

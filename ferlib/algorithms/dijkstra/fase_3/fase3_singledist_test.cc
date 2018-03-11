@@ -58,11 +58,13 @@ int main()
 
 void example_wiki()
 {
-
+  ConcreteGraph g;
+  g.add_edge(1, 2, 7.0);
+      
         /*
     const unsigned_int N_VERTEX = 7;
 
-    ConcreteGraph g();
+    ConcreteGraph g;
 
     // add_vertex solo recomendado para vertex aislados
     // for (auto loopi=1; loopi<=N_VERTEX; ++loopi)
