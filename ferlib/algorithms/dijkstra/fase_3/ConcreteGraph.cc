@@ -9,6 +9,8 @@
 #include <utility>     // std::pair
 
 
+//#define DEBUG_MODE_DIJKSTRA true
+
 
 namespace dijkstra_algorithm {
    
@@ -146,6 +148,131 @@ namespace dijkstra_algorithm {
 	     (INVARIANT_N_EDGES  + 1 == num_edges()) and
 	     (INVARIANT_N_VERTEX + 0 == num_inner_indexes()));      
     }
+
+
+    
+#ifdef DEBUG_MODE_DIJKSTRA
+    
+    std::clog << "\n########En: " << __FILE__
+	      << " : in function " << __func__
+	      << " at line " << __LINE__ << std::endl;
+
+
+    //the_useridskeyed_map
+    std::clog << "\nthe_useridskeyed_map<UserVertexId, InnerVertexId>:";
+    std::for_each(std::begin(the_useridskeyed_map),
+		  std::end(the_useridskeyed_map),
+		  [] (const std::pair<UserVertexId, InnerVertexId> &val)
+		  {
+		    std::clog << "\nthe_useridskeyed_map[" << val.first
+			      << "] = " << val.second;
+		  });
+    std::clog << std::endl;
+
+    
+    std::clog << "\nthe_inneridskeyed_map<InnerVertexId, UserVertexId>:";
+    std::for_each(std::begin(the_inneridskeyed_map),
+		  std::end(the_inneridskeyed_map),
+		  [] (const std::pair<InnerVertexId, UserVertexId> &val)
+		  {
+		    std::clog << "\nthe_inneridskeyed_map[" << val.first
+			      << "] = " << val.second;
+		  });
+    std::clog << std::endl;
+
+    
+    //the_vertex_map
+    std::clog << "\nthe_vertex_map<InnerVertexId, VertexValue>:";
+    std::for_each(std::begin(the_vertex_map),
+		  std::end(the_vertex_map),
+		  [] (const std::pair<InnerVertexId, VertexValue> &val)
+		  {
+		    std::clog << "\nthe_vertex_map[" << val.first
+			      << "] = "
+			      << "(" << val.second->user_id() << ", "
+		      	      << val.second->inner_id() << ")";
+		  });
+    std::clog << std::endl;
+
+
+    // the_edge_map
+    std::clog << "\nthe_edge_map<EdgeId, EdgeValue>:";
+    std::for_each(std::begin(the_edge_map),
+		  std::end(the_edge_map),
+		  [] (const std::pair<EdgeId, EdgeValue> &val)
+		  {
+		    std::clog
+		      << "\nthe_edge_map[" << val.first
+		      << "] = "
+		      << val.second->from()
+		      << ", " << val.second->to()
+		      << ", " << val.second->weight()
+		      << ", ";
+		    const EdgeDirection & aux_dir = val.second->direction();
+		    if (aux_dir==EdgeDirection::FROM_TO)
+		      std::clog << "FROM_TO";
+		    else
+		      std::clog<< "BOTH";
+		  });
+    std::clog << std::endl;
+
+
+    // The adjacency data
+    // struct
+    // {
+    //   std::unordered_multimap<InnerVertexId, AdjacEdge> the_outward_edges{};
+    //   std::unordered_multimap<InnerVertexId, AdjacEdge> the_inward_edges{};
+    // } the_adjacency_data;
+    std::clog
+      << "\nthe_adjacency_data.the_outward_edges<InnerVertexId, AdjacEdge>:";
+    std::for_each(std::begin(the_adjacency_data.the_outward_edges),
+		  std::end(the_adjacency_data.the_outward_edges),
+		  [] (const std::pair<InnerVertexId, AdjacEdge> &val)
+		  {
+		    std::clog
+		      << "\nthe_adjacency_data.the_outward_edges["
+		      << val.first << "] = "
+		      << val.second->from()
+		      << ", " << val.second->to()
+		      << ", " << val.second->weight()
+		      << ", ";
+		    const EdgeDirection & aux_dir = val.second->direction();
+		    if (aux_dir==EdgeDirection::FROM_TO)
+		      std::clog << "FROM_TO";
+		    else
+		      std::clog<< "BOTH";
+		  });
+    std::clog << std::endl;
+
+    
+    std::clog
+      << "\nthe_adjacency_data.the_inward_edges<InnerVertexId, AdjacEdge>:";
+    std::for_each(std::begin(the_adjacency_data.the_inward_edges),
+		  std::end(the_adjacency_data.the_inward_edges),
+		  [] (const std::pair<InnerVertexId, AdjacEdge> &val)
+		  {
+		    std::clog
+		      << "\nthe_adjacency_data.the_inward_edges["
+		      << val.first << "] = "
+		      << val.second->from()
+		      << ", " << val.second->to()
+		      << ", " << val.second->weight()
+		      << ", ";
+		    const EdgeDirection & aux_dir = val.second->direction();
+		    if (aux_dir==EdgeDirection::FROM_TO)
+		      std::clog << "FROM_TO";
+		    else
+		      std::clog<< "BOTH";
+		  });
+    std::clog << std::endl;
+
+
+
+    
+    std::clog << "\n##################\n" << std::endl;
+    
+#endif
+
     
   }
 
@@ -176,9 +303,6 @@ namespace dijkstra_algorithm {
   }
   
   //--------------------------------------------------------------------------
-
-  // Idem for DIRECTED & UNDIRECTED graphs
-  //
   bool ConcreteGraph::repeated_user_edge(const UserVertexId &from,
 					 const UserVertexId to)const
   {
@@ -215,73 +339,24 @@ namespace dijkstra_algorithm {
       
     return retval;
   }
-
+  
   //--------------------------------------------------------------------------
 
-  std::ostream& operator<<(std::ostream &out, const ConcreteGraph &g)
+  InnerVertexId ConcreteGraph::get_inner_id(const UserVertexId &id)const
   {
-    auto print_edge = [&out](const InnerVertexId &from,
-    			     const InnerVertexId &to,
-    			     const TypeDistance  &weight)
-      {out << " " << from << "\t" << to << "\t" << weight << std::endl;};
-
-    
-    out << "Nodes: " << g.num_vertex() << std::endl;
-
-    out << "----------------" << std::endl;
-    out << " User IDs" << std::endl;
-    out << "----------------" << std::endl;
-    out << "FROM\tTO\tWEIGHT" << std::endl;
-    
-    // for(auto citer = g.the_vertex_map.cbegin();
-    // 	citer != g.the_vertex_map.cend();
-    // 	++citer)
-
-    for(auto citer = g.the_inneridskeyed_map.cbegin();
-     	citer != g.the_inneridskeyed_map.cend();
-     	++citer)
-    {
-      const auto range =
-	g.the_adjacency_data.the_outward_edges.equal_range(citer->first);
-      for (auto local_itr = range.first;
-      	   local_itr != range.second;
-      	   ++local_itr)
-	{
-
-	  //	  const InnerVertexId from_inner_id = the_useridskeyed_map[from]
-
-		
-	  // const InnerVertexId aux = local_itr->second->to();
-	  print_edge(citer->second, //user id
-		     //		     g.get_user_id(citer->first),
-		     g.get_user_id(local_itr->second->to()),
-		     local_itr->second->weight());
-	
-	// print_edge(citer->first,     
-	// 	   local_itr->second->to(),
-	// 	   local_itr->second->weight());
-      }
+    auto search = the_useridskeyed_map.find(id);
+    assert(search not_eq the_useridskeyed_map.end());
+    return search->second;
+  }
+  
+  //--------------------------------------------------------------------------
+  UserVertexId ConcreteGraph::get_user_id(const InnerVertexId &id)const
+  {
+    auto search = the_inneridskeyed_map.find(id);
+    assert(search not_eq the_inneridskeyed_map.end());
+    return search->second;
   }
 
-    return out;
-  }
-  /*
-  for(auto citer = g.the_inneridskeyed_map.cbegin();
-	citer != g.the_vertex_map.cend();
-	++citer)
-    {
-      const auto range =
-	g.the_adjacency_data.the_outward_edges.equal_range(citer->first);
-      for (auto local_itr = range.first;
-      	   local_itr != range.second;
-      	   ++local_itr)
-      {
-	// print_edge(citer->second, //user id
-	// 	   g.the_inneridskeyed_map[local_itr->second->to()],
-	// 	   local_itr->second->weight());
-      }
-    }
-  */
 
   /**************************************************************************/
   /** DirectedConcreteGraph  impl.
@@ -368,6 +443,101 @@ namespace dijkstra_algorithm {
     assert (invariant);
   }
 
+
+  //--------------------------------------------------------------------------
+
+  std::ostream& operator<<(std::ostream &out, const ConcreteGraph &g)
+  {
+    auto print_edge = [&out](const UserVertexId &edge_src,
+			     const UserVertexId &from,
+    			     const UserVertexId &to,
+    			     const TypeDistance  &weight,
+			     const EdgeDirection &direction)
+      {
+	if(direction==EdgeDirection::FROM_TO)
+	  out << "\t" << from << "\t" << to << "\t" << weight << std::endl;
+	else
+	{
+	  if (edge_src == from)
+	    out << "\t" << from << "\t" << to << "\t" << weight << std::endl;
+	  else
+	    out << "\t" << to << "\t" << from << "\t" << weight << std::endl;
+	}
+      };
+
+    
+    out << "Nodes: " << g.num_vertex() << std::endl;
+
+    out << "----------------" << std::endl;
+    out << " (InnerId)\tUser IDs" << std::endl;
+    out << "----------------" << std::endl;
+    out << "(inner)\tFROM\tTO\tWEIGHT" << std::endl;
+    
+    for(auto citer = g.the_inneridskeyed_map.cbegin();
+     	citer != g.the_inneridskeyed_map.cend();
+     	++citer)
+    {
+      out << "(" << citer->first << ")"; //inner_id
+      const auto range =
+	g.the_adjacency_data.the_outward_edges.equal_range(citer->first);
+      for (auto local_itr = range.first;
+      	   local_itr != range.second;
+      	   ++local_itr)
+	{
+	  print_edge(g.get_user_id(citer->first),
+		     g.get_user_id(local_itr->second->from()),
+		     g.get_user_id(local_itr->second->to()),
+		     local_itr->second->weight(),
+		     local_itr->second->direction());
+      }
+  }
+    out << "----------------" << std::endl;
+    return out;
+  }
+  
+  //--------------------------------------------------------------------------
+
+  // std::ostream& operator<<(std::ostream &out, const EdgeDirection& value)
+  // {
+  //   out << "\n";
+  //   if (value==EdgeDirection::FROM_TO)
+  //     out << "FROM_TO";
+  //   else
+  //     out << "BOTH";
+  //   out << std::endl;
+    
+  //   return out;
+  // }
+  
+  //--------------------------------------------------------------------------
+
+  std::ostream& operator<<(std::ostream &out, const BaseVertex &vertex)
+  {
+    out << "\nuser: " << vertex.user_id()
+	<< "\tinner: " << vertex.inner_id()
+	<< std::endl;
+    
+    return out;
+  }
+  
+  //--------------------------------------------------------------------------
+
+  std::ostream& operator<<(std::ostream &out, const BaseEdgePtr &edge)
+  {
+    out << "\n" << edge->from()
+    	<< "\t" << edge->to()
+    	<< "\t"	<< edge->weight()
+    	<< "\t";
+    const EdgeDirection & aux_dir = edge->direction();
+    if (aux_dir==EdgeDirection::FROM_TO)
+      out << "FROM_TO";
+    else
+      out << "BOTH";
+    out << std::endl;
+
+    return out;
+  }
+  
   //--------------------------------------------------------------------------
 
 

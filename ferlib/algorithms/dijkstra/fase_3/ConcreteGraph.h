@@ -30,12 +30,15 @@ namespace dijkstra_algorithm {
   struct ConcreteVertex: public BaseVertex
   {
     friend class ConcreteGraph;
+    friend std::ostream& operator<<(std::ostream &, const BaseVertex &);
+
     /* friend class DirectedConcreteGraph; */
     /* friend class UnirectedConcreteGraph; */
     
   public:
 	
     UserVertexId user_id()const {return the_user_id;}
+    InnerVertexId inner_id()const {return the_inner_id;}
 
     void add_neighbor(BaseEdgePtr edge)
     { the_neighbourhood.push_back(edge); }
@@ -45,9 +48,7 @@ namespace dijkstra_algorithm {
     /* { return the_neighbourhood; } */
 	
   protected:
-    
-    InnerVertexId inner_id()const {return the_inner_id;}
-	
+    	
     /* ConcreteVertex(InnerVertexId inner, */
     /* 		   UserVertexId user, */
     /* 		   BaseEdgePtr edge) */
@@ -95,6 +96,10 @@ namespace dijkstra_algorithm {
    */
   struct ConcreteEdge : public BaseEdge
   {
+
+    friend std::ostream& operator<<(std::ostream &, const BaseEdge &);
+
+    
   public:
 
     InnerVertexId from()const { return the_from;}
@@ -133,7 +138,8 @@ namespace dijkstra_algorithm {
   {
 
     friend std::ostream& operator<<(std::ostream &, const ConcreteGraph &);
-    friend class DijkstraConcrete;
+	
+    friend class Dijkstra;
   
   public:
     
@@ -152,25 +158,15 @@ namespace dijkstra_algorithm {
     //std::list<AdjPair> *adjac() const {return adj;};
 
     bool validUserVertex(const UserVertexId &id)const
-    {return (the_useridskeyed_map.find(id) not_eq the_useridskeyed_map.end());}
-
-
-    InnerVertexId get_inner_id(const UserVertexId &id)const
     {
-      auto search = the_useridskeyed_map.find(id);
-      assert(search not_eq the_useridskeyed_map.end());
-      return search->second;
+      return(the_useridskeyed_map.find(id) not_eq the_useridskeyed_map.end());
     }
 
 
-    UserVertexId get_user_id(const InnerVertexId &id)const
-    {
-      auto search = the_inneridskeyed_map.find(id);
-      assert(search not_eq the_inneridskeyed_map.end());
-      return search->second;
-    }
+    //inline 
+    InnerVertexId get_inner_id(const UserVertexId &id)const;
 
-
+    inline UserVertexId get_user_id(const InnerVertexId &id)const;
     
   protected:
 
@@ -237,7 +233,7 @@ namespace dijkstra_algorithm {
   {
 
     friend std::ostream& operator<<(std::ostream &, const ConcreteGraph &);
-    friend class DijkstraConcrete;
+    friend class Dijkstra;
 
     
   public:
@@ -277,7 +273,7 @@ namespace dijkstra_algorithm {
   {
 
     friend std::ostream& operator<<(std::ostream &, const ConcreteGraph &);
-    friend class DijkstraConcrete;
+    friend class Dijkstra;
 
   public:
     

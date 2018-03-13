@@ -2,21 +2,32 @@
 
 1) pseudocode
 
-//    std::unordered_map<InnerVertexId, TypeDistance> distances
-
-Map<Vertex, Distance> distances;
-distances.fill(all_nodes, INFINITE)
-distances[start] = 0
 
 
 
-DUDA_1: Si el grafo es gigante, no es ineficiente inicializar distancia a TODOS?
+DUDA_1: Eficiencia del uso de la est.datos "distances"
+
+	PROBLEMA: ¿Si el grafo es gigante, no es ineficiente
+	          inicializar distancia a TODOS?
 
 	Puede que todo el camino sea un subgrafo pequeño.
 
-OPTIM	¿no se pueden ir inicializando solo los nodos por los que pase el alg.?
+	OPTIM:  ¿no se pueden ir inicializando solo los nodos por los
+	que pase el alg.?
 
 
+	Map<Vertex, Distance> distances;
+	distances.fill(all_nodes, INFINITE)
+	distances[start] = 0
+
+	- distances[nodo] = distancia (OPTIMA) TOTAL desde el nodo 'start' 
+
+
+DUDA_2: Idem DUDA_1 con la est.datos "previous": 
+
+	Map<Vertex, Vertex> previous:  
+
+	- previous[nodo] = nodo previo en el mim. path
 
 
 

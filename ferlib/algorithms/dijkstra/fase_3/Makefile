@@ -120,11 +120,18 @@ TEST_EXECS := $(TEST_SOURCES:%.$(CPP_SUFFIX)=%)
 #file expecific option values (MUST be set manually)
 #-- DO-CHANGE-HERE
 
-fase3_singledist_test.input_options = 
-fase3_singledist_test.run_options = 
-fase3_singledist_test.runtest_output_options = 
-fase3_singledist_test.successtest_output_options = > fase3_singledist_test.OK
-fase3_singledist_test.difftest_output_options = >fase3_singledist_test.last_diff
+directed_dijkstra_test.input_options = 
+directed_dijkstra_test.run_options = 
+directed_dijkstra_test.runtest_output_options = 
+directed_dijkstra_test.successtest_output_options = > directed_dijkstra_test.OK
+directed_dijkstra_test.difftest_output_options = >directed_dijkstra_test.last_diff
+
+
+undirected_dijkstra_test.input_options = 
+undirected_dijkstra_test.run_options = 
+undirected_dijkstra_test.runtest_output_options = 
+undirected_dijkstra_test.successtest_output_options = > undirected_dijkstra_test.OK
+undirected_dijkstra_test.difftest_output_options = >undirected_dijkstra_test.last_diff
 
 
 #header files & paths # i.e. HEADERS := a.$(HEADER_SUFFIX): b.$(HEADER_SUFFIX)

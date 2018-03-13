@@ -6,7 +6,7 @@
 
 namespace dijkstra_algorithm {
   
-  class BaseGraph;
+  //  class BaseGraph;
   class ConcreteGraph;
   class DirectedConcreteGraph;
   class UndirectedConcreteGraph;
@@ -16,7 +16,7 @@ namespace dijkstra_algorithm {
   
   /* Data struct returning a list of vertex following a path, where
      the first value is the first node of the path */
-  typedef std::list<VertexId> VertexPath;
+  typedef std::list<InnerVertexId> VertexPath;
 
   const TypeDistance TYPEDISTANCE_INFINITE = 
     std::numeric_limits<TypeDistance>::infinity();
@@ -26,18 +26,12 @@ namespace dijkstra_algorithm {
 
   
   /**************************************************************************/
-  /** @class DijkstraConcrete
+  /** @class Dijkstra
 
       @brief Dijkstra algorithm implementation.
-
-@warning clase Dijkstra requiere template. No funciona la herencia de
-las funciones 'shortest...' pq dependen de la impl. interna de las
-est. datos (i.e. adj en Concrete)
-
   */
 
-  //  class DijkstraConcrete: public Dijkstra // see waring above
-  class DijkstraConcrete
+  class Dijkstra
   {
   public:
 
@@ -78,12 +72,12 @@ est. datos (i.e. adj en Concrete)
   {    
   public:
     virtual TypeDistance total_distance()const = 0;
+
     virtual const VertexPath * path()const = 0;
-    /* virtual const VertexPath path()const = 0; */
 
     virtual void set_distance(const TypeDistance &newval) = 0;
 
-    virtual void push_front(const VertexId & newval) = 0;
+    virtual void push_front(const InnerVertexId & newval) = 0;
 
     virtual ~BaseDijkstraSolution() {}
   };
@@ -102,62 +96,18 @@ est. datos (i.e. adj en Concrete)
 
     TypeDistance total_distance()const { return the_total_distance;}
     const VertexPath *path()const { return &the_path;}
-    //const VertexPath path()const { return the_path;}
-
     
     void set_distance(const TypeDistance &newval) 
     { the_total_distance = newval; }
 
-    void push_front(const VertexId & newval) {the_path.push_front(newval);}
+    void push_front(const InnerVertexId & newval) 
+    { the_path.push_front(newval); }
 
   private:
 
     TypeDistance the_total_distance;
     VertexPath the_path;
   };
-
-
-
-  /**************************************************************************/
-  /** @class Dijkstra
-
-     @brief Dijkstra algorithm implementation.
-
-
-
-@warning clase Dijkstra requiere template. No funciona la herencia de
-las funciones 'shortest...' pq dependen de la impl. interna de las
-est. datos (i.e. adj en Concrete)
-
-  */
-  /*
-  class Dijkstra
-  {
-  public:
-
-    //@ brief Calculation of all the shortest paths from start
-    //	to all the other vertex of the graph.
-    ////
-    //@param graph the graph to apply Dijkstra.
-    //	@param start the initial vertex of the path
-    //	@return The distance from start to all the other vertex.
-    
-       virtual void shortest_path(const BaseGraph &graph, 
-		       const VertexId &start,
-		       const VertexId &target)=0;
-       //    @fn void shortest_paths(const BaseGraph &graph, int start);
-       //	
-       //	@ brief Calculation of all the shortest paths from start
-       //	to all the other vertex of the graph.
-
-       //	@param graph the graph to apply Dijkstra.
-       //	@param start the initial vertex of the path
-       //	@return The distance from start to all the other vertex.
-    virtual void shortest_paths
-      (const BaseGraph &graph, const VertexId &start)=0;
-
-  };
-*/
 
 
   /**************************************************************************/

@@ -67,10 +67,6 @@ Entrada a Dijkstra:  Dikstra <G, F> //  {grafo, fn_optimización}
 
 
 
-
-
-
-
 # Initialization step
 
 //

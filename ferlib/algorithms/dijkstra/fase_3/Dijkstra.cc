@@ -9,6 +9,7 @@
 #include <utility> // std::pair
 #include <queue>
 #include <unordered_set>
+#include <unordered_map>
 #include <list>
 #include <cassert>
 //#include <limits>       // std::numeric_limits
@@ -40,11 +41,23 @@ namespace dijkstra_algorithm {
       //////////////////////////////////////
       // for each neighbor of new_candidate
 
-     
 
       step 1: tengo InnerVertexID: new_candidate
+     
 
-modo-1:  1) the_vertex_map[new_candidate] : BaseVertex *  'cand_vertex'
+ESTE - ESTE - ESTE
+             
+modo-1  1) Para cada  Edge* en 
+           the_adjacency_data.the_outward_edges[new_candidate]        O(n)
+	   {
+	     insertar pair(to(), weight()) en la cola de prioridad    O(cola)
+	   }
+
+
+
+
+
+modo-2:  1) the_vertex_map[new_candidate] : BaseVertex *  'cand_vertex'
              
             O(1)
 
@@ -57,27 +70,14 @@ modo-1:  1) the_vertex_map[new_candidate] : BaseVertex *  'cand_vertex'
 	      insertar pair(to(), weight()) en la cola de prioridad    O(cola)
             }
 
-
-
-
-ESTE - ESTE - ESTE
-
-             
-modo-2  1) Para cada  Edge* en 
-           the_adjacency_data.the_outward_edges[new_candidate]        O(n)
-	   {
-	     insertar pair(to(), weight()) en la cola de prioridad    O(cola)
-	   }
-
   */
-  DijkstraSolution DijkstraConcrete::shortest_path
+  DijkstraSolution Dijkstra::shortest_path
    (const ConcreteGraph &graph,
     const UserVertexId &user_start,
     const UserVertexId &user_target)
   {
-    bool invariant = (graph.validUserVertex(user_start) and
-		      graph.validUserVertex(user_target));
-    assert(invariant);
+    assert(graph.validUserVertex(user_start) and
+	   graph.validUserVertex(user_target));
 
     
     // 1) initialization step 
@@ -91,7 +91,7 @@ modo-2  1) Para cada  Edge* en
     InnerVertexId start = graph.get_inner_id(user_start);
     InnerVertexId target = graph.get_inner_id(user_target);
 
-    // distances: current total distance from the src vertex to all the rest.
+    // distances: total (OPTIMAL) distance from 'start' to all the rest.
     /// @todo OPTIM: ir metiendo SOLAMENE los nodos visitados
     std::unordered_map<InnerVertexId, TypeDistance> distances{};
 
@@ -104,14 +104,16 @@ modo-2  1) Para cada  Edge* en
     distances[start] = TYPEDISTANCE_ZERO;
 
 
-    /// previous: current prev. vertex in the optimal path for every
-    //           vertex in the graph.
-    //
-    /// @todo OPTIM: usar map para ir metiendo SOLAMENE los nodos visitados
-    //
-    // @bug REquiere map, no por optim, sino pq vvector usa pos. 0
-    // 
-    std::vector<InnerVertexId> previous (graph.num_vertex(), NOVERTEXID);
+    /// previous: prev-vertex in the optimal-path for every vertex in graph.
+    /// @todo OPTIM: ir metiendo SOLAMENE los nodos visitados
+    std::unordered_map<InnerVertexId, InnerVertexId> previous{};
+
+    for(auto citer = graph.the_vertex_map.cbegin();
+	citer != graph.the_vertex_map.cend();
+	++citer)
+    {
+      previous[citer->first] = NOVERTEXID;
+    }
 
 
     ///@param candidates: next nodes to visit (priority_queue)
@@ -137,7 +139,7 @@ modo-2  1) Para cada  Edge* en
 #endif
 
 
-    while (!candidates.empty())
+    while (not candidates.empty())
     {
       
 #ifdef DEBUG_MODE_DIJKSTRA
@@ -152,14 +154,15 @@ modo-2  1) Para cada  Edge* en
       
       std::clog << "previous: " ;
       std::for_each(std::begin(previous), std::end(previous), 
-		    [](const InnerVertexId &val) { std::clog << " " << val; }); 
+		    [](const std::pair<InnerVertexId, InnerVertexId> &val)
+		    { std::clog << " " << val.second; }); 
       std::clog << std::endl ;
 #endif
 
 
       // The first vertex in pair is the minimum distance vertex
       // (note.- distance must be first item in pair)
-      InnerVertexId new_candidate = candidates.top().second; // InnerVertexId
+      InnerVertexId new_candidate = candidates.top().second;
       candidates.pop();
      
       auto citr_visited = visited.find(new_candidate);
@@ -216,6 +219,9 @@ modo-2  1) Para cada  Edge* en
 
 			
 	// relax phase: update shortest path (new_candidate -> neighbor)
+
+	assert(distances.find(new_candidate) not_eq distances.end());
+	assert(distances.find(neighbor) not_eq distances.end());
         TypeDistance neighbor_distance = distances[new_candidate] + weight;
 	if (neighbor_distance < distances[neighbor])
 	{
@@ -247,15 +253,19 @@ modo-2  1) Para cada  Edge* en
     }//end_while
     
     // 3) Rebuild (set-solution) step
+
+    assert(distances.find(target) not_eq distances.end());
     retval.set_distance(distances[target]);
     
     if(target_found)
     {
       InnerVertexId current = target;
-      while (current != start)
+      while (current not_eq start)
       {
     	///@todo almacenar user_id, no inner_id = user_map.find(current)
     	retval.push_front(current);
+
+	assert(previous.find(current) not_eq previous.end());
     	current = previous[current];
 
 
@@ -279,9 +289,9 @@ modo-2  1) Para cada  Edge* en
     out << "Distance (cost): " << value.total_distance() << std::endl;
     out << "Shortest-Path's size (n. of vertex): " << value.path()->size() 
 	<< std::endl;
-    out << "Shortest-Path: ERROR!!! sacando inners-ids:   ";
+    out << "Shortest-Path:   ";
      
-    VertexId last_element = NOVERTEXID;
+    InnerVertexId last_element = NOVERTEXID;
     if(not value.path()->empty())
     {
       last_element = value.path()->back();
@@ -289,10 +299,11 @@ modo-2  1) Para cada  Edge* en
 
     std::for_each(std::begin(*value.path()),
 		  std::end(*value.path()),
-		  [&out, last_element](const VertexId & id)
+		  [&out, last_element](const InnerVertexId & id)
     {
       static int num_veces = 0;	/// @todo removeme por si hay infinite loops
 
+      //      out << get_user_id(id);
       out << id;
       if(not (id==last_element)) { out << " -> "; }
 

@@ -60,50 +60,43 @@ void example_wiki()
 {
   DirectedConcreteGraph g;
       
-  //add_edge incluye add_vertex implícitamente
-  // g.add_edge(1, 2, 7.0);
-  // g.add_edge(1, 3, 9.0);
-  // g.add_edge(1, 6, 14.0);
-  // g.add_edge(2, 3, 10.0);
-  // g.add_edge(2, 4, 15.0);
-  // g.add_edge(3, 4, 11.0);  
-  // g.add_edge(3, 6, 2.0);
+  /// @warning add_edge incluye add_vertex implícitamente
 
-  // g.add_edge(4, 5, 6.0);
+  //warning: ejemplo wiki es grafo no dirigido => doble edge en grafo dirigido
   
-  // g.add_edge(5, 6, 9.0);
-  // std::cout << g << std::endl;    
-  // DijkstraConcrete alg; 
-  // DijkstraSolution solution = alg.shortest_path(g, 1, 5);
+  g.add_edge(11, 22, 7.0);   g.add_edge(22, 11, 7.0);
 
-  /*
-  g.add_edge(1, 2, 7.0);
-  g.add_edge(1, 3, 9.0);
-  g.add_edge(1, 6, 14.0);
-  g.add_edge(2, 3, 10.0);
-  g.add_edge(2, 4, 15.0);
-  g.add_edge(3, 4, 11.0);
-  g.add_edge(3, 6, 2.0);
-  g.add_edge(4, 5, 6.0); // CORE DUMPED
-  std::cout << g << std::endl;    
-  DijkstraConcrete alg; 
-  //DijkstraSolution solution = alg.shortest_path(g, 1, 4); // OK
-  DijkstraSolution solution = alg.shortest_path(g, 1, 5);  // CORE DUMPED
-  */
+  g.add_edge(11, 33, 9.0);   g.add_edge(33, 11, 9.0);
 
-  g.add_edge(1, 2, 7.0);
-  // g.add_edge(1, 6, 14.0); // CORE DUMPED
-  g.add_edge(2, 3, 10.0);
-  g.add_edge(2, 4, 15.0);
-  g.add_edge(4, 5, 6.0); 
+  g.add_edge(22, 44, 15.0);  g.add_edge(44, 22, 15.0);
+
+  g.add_edge(44, 55, 6.0);   g.add_edge(55, 44, 6.0);
+  
+  g.add_edge(11, 66, 14.0);  g.add_edge(66, 11, 14.0);
+  g.add_edge(22, 33, 10.0);  g.add_edge(33, 22, 10.0);
+  g.add_edge(33, 44, 11.0);  g.add_edge(44, 33, 11.0);
+  g.add_edge(33, 66, 2.0);   g.add_edge(66, 33, 2.0);
+  g.add_edge(55, 66, 9.0);   g.add_edge(66, 55, 9.0);
   std::cout << g << std::endl;    
-  DijkstraConcrete alg; 
-  DijkstraSolution solution = alg.shortest_path(g, 1, 5);
+  Dijkstra alg; 
+  DijkstraSolution solution = alg.shortest_path(g, 11, 55);
+  //  DijkstraSolution solution = alg.shortest_path(g, 11, 22);
   
   
   std::cout << "Vertex Distance from Source" << std::endl;
   std::cout << solution << std::endl;
 
-    
+//   Solución esperada:
+// Vertex Distance from Source
+// Distance (cost): 20
+// Shortest-Path's size (n. of vertex): 4
+// Shortest-Path: 1 -> 3 -> 6 -> 5
+
+//  OBTENIDA:
+// Vertex Distance from Source
+// Distance (cost): 20
+// Shortest-Path's size (n. of vertex): 4
+// Shortest-Path:   1 -> 3 -> 6 -> 5
+  
 }
 

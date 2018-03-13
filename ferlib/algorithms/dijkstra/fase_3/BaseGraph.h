@@ -37,6 +37,7 @@ namespace dijkstra_algorithm {
   const TypeDistance TYPEDISTANCE_ZERO = 0.0;
 
 
+  
   /**************************************************************************/
   /** class BaseGraph 
 
@@ -112,7 +113,8 @@ namespace dijkstra_algorithm {
   public:
     
     virtual UserVertexId user_id()const = 0;
-
+    virtual InnerVertexId inner_id()const = 0;
+    
     /// @brief (Optimization) Add an edge to connect to a neighbor vertex
     virtual void add_neighbor(BaseEdgePtr edge) = 0;
 
@@ -121,9 +123,7 @@ namespace dijkstra_algorithm {
 
     virtual ~BaseVertex(){}
 
-  protected:
     
-    virtual InnerVertexId inner_id()const = 0;
   };
  
   /**************************************************************************/
@@ -138,8 +138,7 @@ namespace dijkstra_algorithm {
       - direction(): direction of the edge (directed or undirected G.)
   */
   struct BaseEdge
-  {
-
+  {    
     virtual InnerVertexId from()const = 0;
     virtual InnerVertexId to()const = 0;
     virtual TypeDistance weight()const = 0;      
