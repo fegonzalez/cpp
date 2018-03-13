@@ -1,3 +1,7 @@
+
+
+Wikipedia's Dijkstra example on an UN-DIRECTED graph.
+
 Nodes: 6
 ----------------
  (InnerId)	User IDs
@@ -26,4 +30,4 @@ Nodes: 6
 Vertex Distance from Source
 Distance (cost): 20
 Shortest-Path's size (n. of vertex): 4
-Shortest-Path:   1 -> 3 -> 6 -> 5
+Shortest-Path:   11 -> 33 -> 66 -> 55

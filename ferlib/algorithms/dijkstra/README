@@ -17,17 +17,7 @@ FASE 2.-  optimizar y adecuar el algoritmo básico
 
 FASE 3.- aplicar est. datos del pseudocódigo
 
-
-@warning  std::ostream& operator<<(std::ostream &out, 
-			   const BaseDijkstraSolution &value)
-
-          imprime inner_ids  => sin acceso a grafo para obneter: get_user_id(id)
-
-
-@todo Pasar valgrind
-
-	 13 marzo OK:  No Memory errors
-	      	       No Memory leaks
+     COMPLETADA
 
 
 ##############################################################################
@@ -35,14 +25,29 @@ FASE 3.- aplicar est. datos del pseudocódigo
 FASE 4 Generalizar Función de optimización
 
 
+@test Pasar más ejemplos que el de wikipedia.
+
+
 \todo Función de optimización:   std::function<void (int)> func
 
       Dijstra: Cambiar mimimizar por F_OPTIM = {F_MIN, F_MAX}.:
+
+@todo Pasar valgrind
+
+	 13 marzo OK:  No Memory errors
+	      	       No Memory leaks
+
+
+
 
 ##############################################################################
 
 FASE 5  Llamarlo desde cliente (e.g. MAN)
 
+@todo Pasar valgrind
+
+	 13 marzo OK:  No Memory errors
+	      	       No Memory leaks
 
 
 ##############################################################################

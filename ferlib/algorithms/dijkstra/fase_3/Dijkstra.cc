@@ -24,16 +24,14 @@
 //#define DEBUG_MODE_DIJKSTRA true
 
 
-namespace dijkstra_algorithm {
+namespace path_finding {
 
   /** @return result_path: list of nodes from the src to the target node. 
-
-      e.g. wikipedia:  1 -> 3 -> 6 -> 5
 
       @ error is start or target are not vertex of the graph.
   */
   DijkstraSolution Dijkstra::shortest_path
-   (const ConcreteGraph &graph,
+   (const Graph &graph,
     const UserVertexId &user_start,
     const UserVertexId &user_target)
   {
@@ -44,7 +42,6 @@ namespace dijkstra_algorithm {
     // 1) initialization step 
 
     typedef std::pair<InnerVertexId, TypeDistance> AdjPair;  
-    //  typedef std::pair<BaseVertex&, TypeDistance> AdjPair;
     
     DijkstraSolution retval;
 
@@ -131,7 +128,6 @@ namespace dijkstra_algorithm {
 
 
       // The first vertex in pair is the minimum distance vertex
-      // (note.- distance must be first item in pair)
       InnerVertexId new_candidate = candidates.top().second;
       candidates.pop();
 
@@ -180,10 +176,10 @@ namespace dijkstra_algorithm {
 	   The reasons are:
 	   
 	   a) Because the current logic is correct: it will never end in the
-	   re-addition of a former candidate.
+	      re-addition of a former candidate.
 
 	   b) And the cost of this detection could be greater than
-	     the current calculations.
+	      the current calculations.
 	 */
 	InnerVertexId neighbor = NOVERTEXID;
 
@@ -246,15 +242,11 @@ namespace dijkstra_algorithm {
       InnerVertexId current = target;
       while (current not_eq start)
       {
-    	///@todo almacenar user_id, no inner_id = user_map.find(current)
-    	retval.push_front(current);
+    	retval.push_front(graph.get_user_id(current));
 	assert(previous.find(current) not_eq previous.end());
     	current = previous[current];
-
-	/// @todo removeme por si hay infinite loops
-	//    	assert(retval.path()->size() < 100);
       }
-      retval.push_front(start);     
+      retval.push_front(user_start);
     }
 
      return retval;
@@ -270,27 +262,19 @@ namespace dijkstra_algorithm {
 	<< std::endl;
     out << "Shortest-Path:   ";
      
-    InnerVertexId last_element = NOVERTEXID;
+    UserVertexId last_element = NOVERTEXID;
     if(not value.path()->empty())
-    {
       last_element = value.path()->back();
-    }
 
     std::for_each(std::begin(*value.path()),
 		  std::end(*value.path()),
-		  [&out, last_element](const InnerVertexId & id)
+		  [&out, last_element](const UserVertexId & id)
     {
-      // static int num_veces = 0; /// @todo removeme: prevent infinite loops
-
-      /// @bug Printing inner ids,  user ids required (get_user_id(id);)
       out << id;
-      if(not (id==last_element)) { out << " -> "; }
-      
-      // assert(++num_veces < 30); /// @todo removeme: prevent infinite loops
+      if(not (id==last_element)) { out << " -> "; }      
     });
   
     return out;
   }
 
-    
-} //end-of dijkstra_algorithm
+} //end-of path_finding

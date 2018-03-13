@@ -7,12 +7,12 @@
 #include <memory> // std::shared_ptr
 
 
-namespace dijkstra_algorithm {
+namespace path_finding {
 
   struct BaseVertex;
   struct BaseEdge;
-  struct ConcreteEdge;
-  struct ConcreteVertex;
+  struct Edge;
+  struct Vertex;
 
   
   typedef unsigned int VertexId;
@@ -84,21 +84,24 @@ namespace dijkstra_algorithm {
     /** @return the number of vertex of the Graph */
     virtual unsigned int num_vertex()const=0;
 
+    /// @return true: if the vertex, as is known by the user of the
+    /// algorithm, exists in the graph.
+    virtual bool validUserVertex(const UserVertexId &id)const=0;    
   };
 
 
   
   /**************************************************************************/
-  /** class ConcreteGraph 
+  /** class Graph 
 
       Common data and functions to implement a directed/undirected graph
       Abstract class.
   */
   /**************************************************************************/
-  class ConcreteGraph: public BaseGraph
+  class Graph: public BaseGraph
   {
 
-    friend std::ostream& operator<<(std::ostream &, const ConcreteGraph &);
+    friend std::ostream& operator<<(std::ostream &, const Graph &);
 	
     friend class Dijkstra;
   
@@ -121,7 +124,7 @@ namespace dijkstra_algorithm {
     }
 
     InnerVertexId get_inner_id(const UserVertexId &id)const;
-    inline UserVertexId get_user_id(const InnerVertexId &id)const;
+    UserVertexId get_user_id(const InnerVertexId &id)const;
     
   protected:
 
@@ -174,24 +177,24 @@ namespace dijkstra_algorithm {
 
   
   /**************************************************************************/
-  /** class DirectedConcreteGraph 
+  /** class DirectedGraph 
 
-      Directed graph specialization of a ConcreteGraph.
+      Directed graph specialization of a Graph.
   */
   /**************************************************************************/
 
-  class DirectedConcreteGraph: public ConcreteGraph
+  class DirectedGraph: public Graph
   {
 
-    friend std::ostream& operator<<(std::ostream &, const ConcreteGraph &);
+    friend std::ostream& operator<<(std::ostream &, const Graph &);
     friend class Dijkstra;
 
     
   public:
     
-    explicit DirectedConcreteGraph() = default;
-    explicit DirectedConcreteGraph(const DirectedConcreteGraph&) = delete;
-    DirectedConcreteGraph& operator=(const DirectedConcreteGraph&) = delete;
+    explicit DirectedGraph() = default;
+    explicit DirectedGraph(const DirectedGraph&) = delete;
+    DirectedGraph& operator=(const DirectedGraph&) = delete;
     
   protected:
     
@@ -206,23 +209,23 @@ namespace dijkstra_algorithm {
 
   
   /**************************************************************************/
-  /** class UndirectedConcreteGraph 
+  /** class UndirectedGraph 
 
-      Undirected graph specialization of a ConcreteGraph.
+      Undirected graph specialization of a Graph.
   */
   /**************************************************************************/
 
-  class UndirectedConcreteGraph: public ConcreteGraph
+  class UndirectedGraph: public Graph
   {
 
-    friend std::ostream& operator<<(std::ostream &, const ConcreteGraph &);
+    friend std::ostream& operator<<(std::ostream &, const Graph &);
     friend class Dijkstra;
 
   public:
     
-    explicit UndirectedConcreteGraph() = default;
-    explicit UndirectedConcreteGraph(const UndirectedConcreteGraph&) = delete;
-    UndirectedConcreteGraph& operator=(const UndirectedConcreteGraph&) = delete;
+    explicit UndirectedGraph() = default;
+    explicit UndirectedGraph(const UndirectedGraph&) = delete;
+    UndirectedGraph& operator=(const UndirectedGraph&) = delete;
 
   protected:
     
@@ -285,11 +288,11 @@ namespace dijkstra_algorithm {
 
 
   /**************************************************************************/
-  /** @struct ConcreteVertex
+  /** @struct Vertex
   */
-  struct ConcreteVertex: public BaseVertex
+  struct Vertex: public BaseVertex
   {
-    friend class ConcreteGraph;
+    friend class Graph;
     friend std::ostream& operator<<(std::ostream &, const BaseVertex &);
     
   public:
@@ -307,7 +310,7 @@ namespace dijkstra_algorithm {
 	
   protected:
     
-    ConcreteVertex(InnerVertexId inner,
+    Vertex(InnerVertexId inner,
     		   UserVertexId user)
       :the_inner_id(inner), the_user_id(user) {}
 
@@ -340,9 +343,9 @@ namespace dijkstra_algorithm {
 
 
   /**************************************************************************/
-  /** @struct ConcreteEdge : public BaseEdge
+  /** @struct Edge : public BaseEdge
    */
-  struct ConcreteEdge : public BaseEdge
+  struct Edge : public BaseEdge
   {
     friend std::ostream& operator<<(std::ostream &, const BaseEdge &);
     
@@ -353,7 +356,7 @@ namespace dijkstra_algorithm {
     TypeDistance weight()const { return the_weight;} 
     EdgeDirection direction()const { return the_direction;}
 
-    ConcreteEdge(InnerVertexId from,
+    Edge(InnerVertexId from,
 		 InnerVertexId to,
 		 TypeDistance weight,
 		 EdgeDirection direction)
@@ -374,6 +377,6 @@ namespace dijkstra_algorithm {
   
   /**************************************************************************/
 
-} //end-of dijkstra_algorithm
+} //end-of path_finding
  
 #endif

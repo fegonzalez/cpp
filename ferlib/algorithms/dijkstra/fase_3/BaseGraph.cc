@@ -12,17 +12,17 @@
 //#define DEBUG_MODE_DIJKSTRA true
 
 
-namespace dijkstra_algorithm {
+namespace path_finding {
    
 
   /**************************************************************************/
-  /*  ConcreteGraph  impl.
+  /*  Graph  impl.
       Common data and functions to implement a directed/undirected  graph: 
   */
   /**************************************************************************/
   
 
-  void ConcreteGraph::add_edge(const UserVertexId &from,
+  void Graph::add_edge(const UserVertexId &from,
 			       const UserVertexId &to, 
 			       const TypeDistance & weight)
   {
@@ -37,7 +37,7 @@ namespace dijkstra_algorithm {
     if(search_from == the_useridskeyed_map.end() and
        search_to == the_useridskeyed_map.end())
     {
-      //just to check the goals
+      // invariant = check the correction of the code
       const auto INVARIANT_N_USERS = the_useridskeyed_map.size();  // +2 expect
       const auto INVARIANT_N_INNERS = the_inneridskeyed_map.size();// +2 expect
       const auto INVARIANT_N_EDGES = num_edges(); // +1 expect
@@ -52,13 +52,13 @@ namespace dijkstra_algorithm {
       the_useridskeyed_map[from] = from_inner_id;
       the_inneridskeyed_map[from_inner_id] = from;
       the_vertex_map[from_inner_id] =
-	VertexValue(new ConcreteVertex(from_inner_id, from));
+	VertexValue(new Vertex(from_inner_id, from));
       the_vertex_map[from_inner_id]->add_neighbor(new_edge);
       //adding 'to' vertex
       the_useridskeyed_map[to] = to_inner_id;
       the_inneridskeyed_map[to_inner_id] = to;
       the_vertex_map[to_inner_id] =
-	VertexValue(new ConcreteVertex(to_inner_id, to));
+	VertexValue(new Vertex(to_inner_id, to));
       the_vertex_map[to_inner_id]->add_neighbor(new_edge);
       // adjacency data
       insert_adjacency(from_inner_id, to_inner_id, new_edge);
@@ -72,7 +72,6 @@ namespace dijkstra_algorithm {
     // case: 'from' vertex exists / 'to' dosen't
     else if(search_to == the_useridskeyed_map.end())
     {
-      //just to check the goals
       const auto INVARIANT_N_USERS = the_useridskeyed_map.size();  // +1 expect
       const auto INVARIANT_N_INNERS = the_inneridskeyed_map.size();// +1 expect
       const auto INVARIANT_N_EDGES = num_edges(); // +1 expect
@@ -86,7 +85,7 @@ namespace dijkstra_algorithm {
       the_useridskeyed_map[to] = to_inner_id; //adding 'to' vertex
       the_inneridskeyed_map[to_inner_id] = to;
       the_vertex_map[to_inner_id] =
-	VertexValue(new ConcreteVertex(to_inner_id, to));
+	VertexValue(new Vertex(to_inner_id, to));
       the_vertex_map[to_inner_id]->add_neighbor(new_edge);
       insert_adjacency(from_inner_id, to_inner_id, new_edge);
 
@@ -100,7 +99,6 @@ namespace dijkstra_algorithm {
     // case: 'to' vertex exists / 'from' dosen't
     else if(search_from == the_useridskeyed_map.end())
     {
-      //just to check the goals
       const auto INVARIANT_N_USERS = the_useridskeyed_map.size();  // +1 expect
       const auto INVARIANT_N_INNERS = the_inneridskeyed_map.size();// +1 expect
       const auto INVARIANT_N_EDGES = num_edges(); // +1 expect
@@ -113,7 +111,7 @@ namespace dijkstra_algorithm {
       the_useridskeyed_map[from] = from_inner_id; //adding 'from' vertex
       the_inneridskeyed_map[from_inner_id] = from;
       the_vertex_map[from_inner_id] =
-	VertexValue(new ConcreteVertex(from_inner_id, from));
+	VertexValue(new Vertex(from_inner_id, from));
       the_vertex_map[from_inner_id]->add_neighbor(new_edge);
       the_vertex_map[to_inner_id]->add_neighbor(new_edge); // updating 'to'
       insert_adjacency(from_inner_id, to_inner_id, new_edge);
@@ -128,7 +126,6 @@ namespace dijkstra_algorithm {
     // both vertexes already exists
     else
     {
-      //just to check the goals
       const auto INVARIANT_N_USERS = the_useridskeyed_map.size();  // +0 expect
       const auto INVARIANT_N_INNERS = the_inneridskeyed_map.size();// +0 expect
       const auto INVARIANT_N_EDGES = num_edges(); // +1 expect
@@ -218,11 +215,6 @@ namespace dijkstra_algorithm {
 
 
     // The adjacency data
-    // struct
-    // {
-    //   std::unordered_multimap<InnerVertexId, AdjacEdge> the_outward_edges{};
-    //   std::unordered_multimap<InnerVertexId, AdjacEdge> the_inward_edges{};
-    // } the_adjacency_data;
     std::clog
       << "\nthe_adjacency_data.the_outward_edges<InnerVertexId, AdjacEdge>:";
     std::for_each(std::begin(the_adjacency_data.the_outward_edges),
@@ -265,20 +257,16 @@ namespace dijkstra_algorithm {
 		      std::clog<< "BOTH";
 		  });
     std::clog << std::endl;
-
-
-
     
     std::clog << "\n##################\n" << std::endl;
     
 #endif
-
     
   }
 
   //--------------------------------------------------------------------------
 
-  void ConcreteGraph::add_vertex(const UserVertexId &id)
+  void Graph::add_vertex(const UserVertexId &id)
   {
     const auto search_id = the_useridskeyed_map.find(id);
 
@@ -293,7 +281,7 @@ namespace dijkstra_algorithm {
     the_useridskeyed_map[id] = id_inner_id;
     the_inneridskeyed_map[id_inner_id] = id;
     the_vertex_map[id_inner_id] =
-      VertexValue(new ConcreteVertex(id_inner_id, id));
+      VertexValue(new Vertex(id_inner_id, id));
     
     invariant = invariant and 
       ((INVARIANT_N_USERS  + 1 == the_useridskeyed_map.size()) and
@@ -303,7 +291,7 @@ namespace dijkstra_algorithm {
   }
   
   //--------------------------------------------------------------------------
-  bool ConcreteGraph::repeated_user_edge(const UserVertexId &from,
+  bool Graph::repeated_user_edge(const UserVertexId &from,
 					 const UserVertexId to)const
   {
     const bool REPEATED = true;
@@ -342,7 +330,7 @@ namespace dijkstra_algorithm {
   
   //--------------------------------------------------------------------------
 
-  InnerVertexId ConcreteGraph::get_inner_id(const UserVertexId &id)const
+  InnerVertexId Graph::get_inner_id(const UserVertexId &id)const
   {
     auto search = the_useridskeyed_map.find(id);
     assert(search not_eq the_useridskeyed_map.end());
@@ -350,7 +338,7 @@ namespace dijkstra_algorithm {
   }
   
   //--------------------------------------------------------------------------
-  UserVertexId ConcreteGraph::get_user_id(const InnerVertexId &id)const
+  UserVertexId Graph::get_user_id(const InnerVertexId &id)const
   {
     auto search = the_inneridskeyed_map.find(id);
     assert(search not_eq the_inneridskeyed_map.end());
@@ -359,19 +347,19 @@ namespace dijkstra_algorithm {
 
 
   /**************************************************************************/
-  /** DirectedConcreteGraph  impl.
+  /** DirectedGraph  impl.
 
-      Directed graph specialization of a ConcreteGraph.
+      Directed graph specialization of a Graph.
   */
   /**************************************************************************/
   
-  BaseEdgePtr DirectedConcreteGraph::insert_edge(const InnerVertexId &from,
+  BaseEdgePtr DirectedGraph::insert_edge(const InnerVertexId &from,
 						 const InnerVertexId &to, 
 						 const TypeDistance & weight)
   {
     auto invariant = num_edges();
 
-    BaseEdgePtr new_value(new ConcreteEdge(from, to, weight,
+    BaseEdgePtr new_value(new Edge(from, to, weight,
 					   EdgeDirection::FROM_TO));    
     the_edge_map[num_edges() + 1] = new_value;
     assert(invariant == num_edges()-1);
@@ -380,7 +368,7 @@ namespace dijkstra_algorithm {
      
   //--------------------------------------------------------------------------
 
-  void DirectedConcreteGraph::insert_adjacency(const InnerVertexId &from,
+  void DirectedGraph::insert_adjacency(const InnerVertexId &from,
 					       const InnerVertexId &to, 
 					       const AdjacEdge &edge)
   {
@@ -401,19 +389,19 @@ namespace dijkstra_algorithm {
 
 
   /**************************************************************************/
-  /** UndirectedConcreteGraph  impl.
+  /** UndirectedGraph  impl.
 
-      Undirected graph specialization of a ConcreteGraph.
+      Undirected graph specialization of a Graph.
   */
   /**************************************************************************/
   
-  BaseEdgePtr UndirectedConcreteGraph::insert_edge(const InnerVertexId &from,
+  BaseEdgePtr UndirectedGraph::insert_edge(const InnerVertexId &from,
 						 const InnerVertexId &to, 
 						 const TypeDistance & weight)
   {
     auto invariant = num_edges();
     
-    BaseEdgePtr new_value(new ConcreteEdge(from, to, weight,
+    BaseEdgePtr new_value(new Edge(from, to, weight,
 					   EdgeDirection::BOTH));
     the_edge_map[num_edges() + 1] = new_value;
     assert(invariant == num_edges()-1);
@@ -422,7 +410,7 @@ namespace dijkstra_algorithm {
      
   //--------------------------------------------------------------------------
 
-  void UndirectedConcreteGraph::insert_adjacency(const InnerVertexId &from,
+  void UndirectedGraph::insert_adjacency(const InnerVertexId &from,
 					       const InnerVertexId &to, 
 					       const AdjacEdge &edge)
   {
@@ -446,7 +434,7 @@ namespace dijkstra_algorithm {
 
   //--------------------------------------------------------------------------
 
-  std::ostream& operator<<(std::ostream &out, const ConcreteGraph &g)
+  std::ostream& operator<<(std::ostream &out, const Graph &g)
   {
     auto print_edge = [&out](const UserVertexId &edge_src,
 			     const UserVertexId &from,
@@ -497,20 +485,6 @@ namespace dijkstra_algorithm {
   
   //--------------------------------------------------------------------------
 
-  // std::ostream& operator<<(std::ostream &out, const EdgeDirection& value)
-  // {
-  //   out << "\n";
-  //   if (value==EdgeDirection::FROM_TO)
-  //     out << "FROM_TO";
-  //   else
-  //     out << "BOTH";
-  //   out << std::endl;
-    
-  //   return out;
-  // }
-  
-  //--------------------------------------------------------------------------
-
   std::ostream& operator<<(std::ostream &out, const BaseVertex &vertex)
   {
     out << "\nuser: " << vertex.user_id()
@@ -541,4 +515,4 @@ namespace dijkstra_algorithm {
   //--------------------------------------------------------------------------
 
 
-} //end-of namespace dijkstra_algorithm
+} //end-of namespace path_finding

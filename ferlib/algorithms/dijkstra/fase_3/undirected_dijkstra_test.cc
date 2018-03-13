@@ -6,7 +6,7 @@
 #include <iostream>
 #include <chrono>
 
-using namespace dijkstra_algorithm;
+using namespace path_finding;
 
 
 // Test functions 
@@ -18,7 +18,6 @@ void example_wiki();
 int main()
 {
   const auto TEST_NUM_ITERATIONS = 1; //1e7;
-
 
   // start -> target
 
@@ -58,27 +57,27 @@ int main()
 
 void example_wiki()
 {
-  UndirectedConcreteGraph g;
+  std::cout << "\n\nWikipedia's Dijkstra example on an UN-DIRECTED graph.\n"
+	    <<  std::endl;
+
+  UndirectedGraph g;
       
   /// @warning add_edge incluye add_vertex implícitamente
 
   g.add_edge(11, 22, 7.0);
   g.add_edge(11, 33, 9.0);
-
   g.add_edge(22, 44, 15.0);
-
   g.add_edge(44, 55, 6.0);
-  
   g.add_edge(11, 66, 14.0);
   g.add_edge(22, 33, 10.0);  
   g.add_edge(33, 44, 11.0);  
   g.add_edge(33, 66, 2.0);
   g.add_edge(55, 66, 9.0);
+  
   std::cout << g << std::endl;    
+
   Dijkstra alg; 
   DijkstraSolution solution = alg.shortest_path(g, 11, 55);
-  //  DijkstraSolution solution = alg.shortest_path(g, 11, 22);
-  
   
   std::cout << "Vertex Distance from Source" << std::endl;
   std::cout << solution << std::endl;
@@ -87,7 +86,7 @@ void example_wiki()
 // Vertex Distance from Source
 // Distance (cost): 20
 // Shortest-Path's size (n. of vertex): 4
-// Shortest-Path: 1 -> 3 -> 6 -> 5
+// Shortest-Path: 11 -> 33 -> 66 -> 55
   
 }
 

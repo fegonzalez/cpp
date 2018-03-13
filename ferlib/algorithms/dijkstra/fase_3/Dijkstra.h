@@ -4,19 +4,16 @@
 #include <limits>       // std::numeric_limits
 #include <list>
 
-namespace dijkstra_algorithm {
+namespace path_finding {
   
-  //  class BaseGraph;
-  class ConcreteGraph;
-  class DirectedConcreteGraph;
-  class UndirectedConcreteGraph;
+  class Graph;
   struct BaseDijkstraSolution;
-  struct DijkstraSolution;;
+  struct DijkstraSolution;
 
   
   /* Data struct returning a list of vertex following a path, where
      the first value is the first node of the path */
-  typedef std::list<InnerVertexId> VertexPath;
+  typedef std::list<UserVertexId> VertexPath;
 
   const TypeDistance TYPEDISTANCE_INFINITE = 
     std::numeric_limits<TypeDistance>::infinity();
@@ -42,7 +39,7 @@ namespace dijkstra_algorithm {
 	@param start the initial vertex of the path
 	@return The distance from start to all the other vertex.
     */
-    DijkstraSolution shortest_path(const ConcreteGraph &graph, 
+    DijkstraSolution shortest_path(const Graph &graph, 
 				   const UserVertexId &start,
 				   const UserVertexId &target);
   };
@@ -77,7 +74,7 @@ namespace dijkstra_algorithm {
 
     virtual void set_distance(const TypeDistance &newval) = 0;
 
-    virtual void push_front(const InnerVertexId & newval) = 0;
+    virtual void push_front(const UserVertexId & newval) = 0;
 
     virtual ~BaseDijkstraSolution() {}
   };
@@ -100,7 +97,7 @@ namespace dijkstra_algorithm {
     void set_distance(const TypeDistance &newval) 
     { the_total_distance = newval; }
 
-    void push_front(const InnerVertexId & newval) 
+    void push_front(const UserVertexId & newval) 
     { the_path.push_front(newval); }
 
   private:
@@ -115,6 +112,6 @@ namespace dijkstra_algorithm {
   std::ostream& operator<<(std::ostream &, const BaseDijkstraSolution &);
 
   
-} //end-of dijkstra_algorithm
+} //end-of path_finding
 
 #endif
