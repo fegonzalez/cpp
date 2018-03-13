@@ -1,5 +1,5 @@
-#include "common.h"
-#include "ConcreteGraph.h"
+
+#include "BaseGraph.h"
 
 #include <iostream>
 #include <cassert>

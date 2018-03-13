@@ -1,15 +1,18 @@
-#ifndef GRAPH_H
-#define GRAPH_H
+#ifndef BASEGRAPH_H
+#define BASEGRAPH_H
 
-#include "common.h"
 #include <iosfwd>
 #include <vector>
+#include <unordered_map>
 #include <memory> // std::shared_ptr
+
 
 namespace dijkstra_algorithm {
 
   struct BaseVertex;
   struct BaseEdge;
+  struct ConcreteEdge;
+  struct ConcreteVertex;
 
   
   typedef unsigned int VertexId;
@@ -41,29 +44,14 @@ namespace dijkstra_algorithm {
   /**************************************************************************/
   /** class BaseGraph 
 
-      Directed or undirected  graph: 
-      - vertex:                    TODO
-      - edges: adjacency list      TODO
-
-      [ Example directed graph
-      
-        // two edges required: because weight could be different
-	// Can be optimized in concrete Graph sub-classes.
-
-	v1 -> v2: add_edge(v1, v2, weight_v1_v2, FROM_TO)
-	v2 -> v1: add_edge(v2, v1, weight_v2_v1, FROM_TO)
-      end example ]
-
-
-      [ Example undirected graph
-        v1 -- v2: add_edge(v1, v2, weight_v1_v2, BOTH)
-      end example ]
+      Interface for Directed or undirected graphs used as inputs for
+      path-finding algorithms.
 
   */
   /**************************************************************************/
   class BaseGraph
   {
-    //    friend std::ostream& operator<<(std::ostream &, const BaseGraph &);
+
   public:
     
     virtual ~BaseGraph(){};
@@ -98,6 +86,155 @@ namespace dijkstra_algorithm {
 
   };
 
+
+  
+  /**************************************************************************/
+  /** class ConcreteGraph 
+
+      Common data and functions to implement a directed/undirected graph
+      Abstract class.
+  */
+  /**************************************************************************/
+  class ConcreteGraph: public BaseGraph
+  {
+
+    friend std::ostream& operator<<(std::ostream &, const ConcreteGraph &);
+	
+    friend class Dijkstra;
+  
+  public:
+       
+    void add_edge
+      (const UserVertexId &from, 
+       const UserVertexId &to, 
+       const TypeDistance & weight);
+
+    void add_vertex(const UserVertexId &id);
+
+    unsigned int num_vertex()const {return the_vertex_map.size();}
+
+
+    /// @return true: if the vertex exists in the graph.
+    bool validUserVertex(const UserVertexId &id)const
+    {
+      return(the_useridskeyed_map.find(id) not_eq the_useridskeyed_map.end());
+    }
+
+    InnerVertexId get_inner_id(const UserVertexId &id)const;
+    inline UserVertexId get_user_id(const InnerVertexId &id)const;
+    
+  protected:
+
+    typedef BaseVertexPtr VertexValue;
+    typedef BaseEdgePtr EdgeValue;
+    typedef BaseEdgePtr AdjacEdge;  
+
+    unsigned int num_inner_indexes()const {return the_vertex_map.size();}
+    unsigned int num_edges()const { return the_edge_map.size(); }
+    bool repeated_user_edge(const UserVertexId &from,
+			    const UserVertexId to)const;
+
+
+    /** @brief create & add a NEW edge to the data structures.
+    */
+    virtual BaseEdgePtr insert_edge(const InnerVertexId &from,
+				    const InnerVertexId &to, 
+				    const TypeDistance & weight) = 0;
+
+
+    /** @brief create & add the adjacency information to the data structures
+     */
+    virtual void insert_adjacency(const InnerVertexId &from,
+				 const InnerVertexId &to, 
+				 const AdjacEdge &edge) = 0;
+    
+    // data area
+    
+  protected:
+
+    // Keeping the relation between user & inner vertex_ids
+    // Two maps to optimize the search operations.
+    std::unordered_map<UserVertexId, InnerVertexId> the_useridskeyed_map{};
+    std::unordered_map<InnerVertexId, UserVertexId> the_inneridskeyed_map{};
+
+    // edge storage, keyed by edge id.
+    std::unordered_map<EdgeId, EdgeValue> the_edge_map{};
+
+    // vertex storage, keyed by their id.
+    std::unordered_map<InnerVertexId, VertexValue> the_vertex_map{};
+    
+    struct
+    {
+      std::unordered_multimap<InnerVertexId, AdjacEdge> the_outward_edges{};
+      std::unordered_multimap<InnerVertexId, AdjacEdge> the_inward_edges{};
+    } the_adjacency_data;
+
+  };
+
+
+  
+  /**************************************************************************/
+  /** class DirectedConcreteGraph 
+
+      Directed graph specialization of a ConcreteGraph.
+  */
+  /**************************************************************************/
+
+  class DirectedConcreteGraph: public ConcreteGraph
+  {
+
+    friend std::ostream& operator<<(std::ostream &, const ConcreteGraph &);
+    friend class Dijkstra;
+
+    
+  public:
+    
+    explicit DirectedConcreteGraph() = default;
+    explicit DirectedConcreteGraph(const DirectedConcreteGraph&) = delete;
+    DirectedConcreteGraph& operator=(const DirectedConcreteGraph&) = delete;
+    
+  protected:
+    
+    BaseEdgePtr insert_edge(const InnerVertexId &from,
+			    const InnerVertexId &to, 
+			    const TypeDistance & weight);
+
+    inline void insert_adjacency(const InnerVertexId &from,
+				 const InnerVertexId &to, 
+				 const AdjacEdge &edge);
+  };
+
+  
+  /**************************************************************************/
+  /** class UndirectedConcreteGraph 
+
+      Undirected graph specialization of a ConcreteGraph.
+  */
+  /**************************************************************************/
+
+  class UndirectedConcreteGraph: public ConcreteGraph
+  {
+
+    friend std::ostream& operator<<(std::ostream &, const ConcreteGraph &);
+    friend class Dijkstra;
+
+  public:
+    
+    explicit UndirectedConcreteGraph() = default;
+    explicit UndirectedConcreteGraph(const UndirectedConcreteGraph&) = delete;
+    UndirectedConcreteGraph& operator=(const UndirectedConcreteGraph&) = delete;
+
+  protected:
+    
+    BaseEdgePtr insert_edge(const InnerVertexId &from,
+			    const InnerVertexId &to, 
+			    const TypeDistance & weight);
+
+    inline void insert_adjacency(const InnerVertexId &from,
+				 const InnerVertexId &to, 
+				 const AdjacEdge &edge);
+  };
+  
   
   /**************************************************************************/
   /** @struct BaseVertex
@@ -112,18 +249,17 @@ namespace dijkstra_algorithm {
   {
   public:
     
+    virtual ~BaseVertex(){}
+
     virtual UserVertexId user_id()const = 0;
     virtual InnerVertexId inner_id()const = 0;
     
     /// @brief (Optimization) Add an edge to connect to a neighbor vertex
     virtual void add_neighbor(BaseEdgePtr edge) = 0;
 
-    /// @todo
-    //    virtual const std::shared_ptr<TypeNeighbors> neighbors()const = 0;
 
-    virtual ~BaseVertex(){}
-
-    
+    /// @todo ?
+    //  virtual const std::shared_ptr<TypeNeighbors> neighbors()const = 0;
   };
  
   /**************************************************************************/
@@ -146,6 +282,97 @@ namespace dijkstra_algorithm {
 
     virtual ~BaseEdge(){};
   };
+
+
+  /**************************************************************************/
+  /** @struct ConcreteVertex
+  */
+  struct ConcreteVertex: public BaseVertex
+  {
+    friend class ConcreteGraph;
+    friend std::ostream& operator<<(std::ostream &, const BaseVertex &);
+    
+  public:
+	
+    UserVertexId user_id()const {return the_user_id;}
+    InnerVertexId inner_id()const {return the_inner_id;}
+
+    void add_neighbor(BaseEdgePtr edge)
+    { the_neighbourhood.push_back(edge); }
+
+    /// @todo?
+    /* const std::shared_ptr<TypeNeighbors> neighbors()const */
+    /* { return the_neighbourhood; } */
+
+	
+  protected:
+    
+    ConcreteVertex(InnerVertexId inner,
+    		   UserVertexId user)
+      :the_inner_id(inner), the_user_id(user) {}
+
+    
+    // data area
+	
+  private:
+    
+    InnerVertexId the_inner_id = NOVERTEXID;
+    UserVertexId the_user_id = the_inner_id;
+
+    /** @brief OPTIMIZATION: quick access to neighbors
+
+	- undirected-graph edges: edge.direction() == EdgeDirection::BOTH
+	
+	- directed-graph edges: edge.direction() == EdgeDirection::BOTH
+	
+	   - outward edge iff: edge.from() == the_inner_id
+
+	   - inward edge iff: edge.to() == the_inner_id
+
+        - loop edge (both directed & undirected): edge.from() == edge.to()
+
+
+	// optional optim: split the_neighbourhood in three vectors: 
+	// inwards_only, outwards_only, undirected
+    */
+    TypeNeighbors the_neighbourhood{};
+  };
+
+
+  /**************************************************************************/
+  /** @struct ConcreteEdge : public BaseEdge
+   */
+  struct ConcreteEdge : public BaseEdge
+  {
+    friend std::ostream& operator<<(std::ostream &, const BaseEdge &);
+    
+  public:
+
+    InnerVertexId from()const { return the_from;}
+    InnerVertexId to()const { return the_to;}
+    TypeDistance weight()const { return the_weight;} 
+    EdgeDirection direction()const { return the_direction;}
+
+    ConcreteEdge(InnerVertexId from,
+		 InnerVertexId to,
+		 TypeDistance weight,
+		 EdgeDirection direction)
+      :the_from(from),
+      the_to(to),
+      the_weight(weight),      
+      the_direction(direction)
+      { }
+
+    // data area 
+
+  private: 
+    InnerVertexId the_from;
+    InnerVertexId the_to;
+    TypeDistance the_weight;      
+    EdgeDirection the_direction;
+  };
+  
+  /**************************************************************************/
 
 } //end-of dijkstra_algorithm
  

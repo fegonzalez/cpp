@@ -94,7 +94,7 @@ TEST_SOURCES := $(filter %_test.$(CPP_SUFFIX),$(SOURCES))
 MODULE_SOURCES := $(filter-out $(TEST_SOURCES),$(SOURCES))
 MODULE_SOURCES := $(filter-out $(EXEC_SOURCE),$(MODULE_SOURCES))
 
-FN_BASE := common
+#common/base headers
 FN_BASEGRAPH := BaseGraph
 FN_DIJKSTRA:= Dijkstra
 
@@ -383,7 +383,7 @@ $(DIFF.TEST_TARGETS): diff.%: %
 # cada  .o (que no es un test) depende de su .h
 $(MODULE_OBJS): %.$(OBJ_SUFFIX): %.$(HEADER_SUFFIX)
 
-COMMON_HEADERS:= $(FN_BASE).$(HEADER_SUFFIX) $(FN_BASEGRAPH).$(HEADER_SUFFIX)
+COMMON_HEADERS:=  $(FN_BASEGRAPH).$(HEADER_SUFFIX)
 $(OBJS): %.$(OBJ_SUFFIX): $(COMMON_HEADERS)
 
 DIJKSTRA_SOURCES := $(filter $(FN_DIJKSTRA)%.$(CPP_SUFFIX),$(SOURCES))

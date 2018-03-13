@@ -1,6 +1,13 @@
-#include "common.h"
+
+  /** @file Dijkstra.cc
+
+      @brief Implementation of Dijkstra algorithm 
+
+      (https://en.wikipedia.org/wiki/Dijkstra%27s_algorithm)
+  */
+
+
 #include "BaseGraph.h"
-#include "ConcreteGraph.h"
 #include "Dijkstra.h"
 #include <iostream>
 #include <algorithm>
@@ -12,9 +19,6 @@
 #include <unordered_map>
 #include <list>
 #include <cassert>
-//#include <limits>       // std::numeric_limits
-//#include <memory> // std::unique_ptr , std::shared_ptr
-
 
 
 //#define DEBUG_MODE_DIJKSTRA true
@@ -22,54 +26,11 @@
 
 namespace dijkstra_algorithm {
 
-
-  /** Reference docs:
-      [1] https://en.wikipedia.org/wiki/Dijkstra%27s_algorithm
-
-      [2] https://www.geeksforgeeks.org/dijkstras-shortest-path-algorithm-using-priority_queue-stl/
-  */
-  //--------------------------------------------------------------------------
-
-
   /** @return result_path: list of nodes from the src to the target node. 
 
       e.g. wikipedia:  1 -> 3 -> 6 -> 5
 
-      @ error is start or target are not nodes of the graph.
-
-
-      //////////////////////////////////////
-      // for each neighbor of new_candidate
-
-
-      step 1: tengo InnerVertexID: new_candidate
-     
-
-ESTE - ESTE - ESTE
-             
-modo-1  1) Para cada  Edge* en 
-           the_adjacency_data.the_outward_edges[new_candidate]        O(n)
-	   {
-	     insertar pair(to(), weight()) en la cola de prioridad    O(cola)
-	   }
-
-
-
-
-
-modo-2:  1) the_vertex_map[new_candidate] : BaseVertex *  'cand_vertex'
-             
-            O(1)
-
-         2) cand_vertex->neighbors():  todos los Edges que salen del nodo
-             
-            O(1)
-
-         3) Para cada edge (ptr)           O(n)
-            {
-	      insertar pair(to(), weight()) en la cola de prioridad    O(cola)
-            }
-
+      @ error is start or target are not vertex of the graph.
   */
   DijkstraSolution Dijkstra::shortest_path
    (const ConcreteGraph &graph,
@@ -85,7 +46,6 @@ modo-2:  1) the_vertex_map[new_candidate] : BaseVertex *  'cand_vertex'
     typedef std::pair<InnerVertexId, TypeDistance> AdjPair;  
     //  typedef std::pair<BaseVertex&, TypeDistance> AdjPair;
     
-
     DijkstraSolution retval;
 
     InnerVertexId start = graph.get_inner_id(user_start);
@@ -138,14 +98,15 @@ modo-2:  1) the_vertex_map[new_candidate] : BaseVertex *  'cand_vertex'
     std::clog << "\nDiscovery step: find best path" << std::endl;
 #endif
 
-
     while (not candidates.empty())
     {
       
 #ifdef DEBUG_MODE_DIJKSTRA
-      std::clog << "\ncandidates:" ;
-      std::clog << "\nsize: " << candidates.size();
+      std::clog << "\ncandidates:   " ;
+      std::clog << "size: " << candidates.size();
       std::clog << " ; top (most priority): " << candidates.top().second;
+      //warning: iteration over a priority queue without pop() is not possible
+
       std::clog << "\ndistances:" ;
       std::for_each(std::begin(distances), std::end(distances), 
 		    [](const std::pair<InnerVertexId, TypeDistance> &val)
@@ -157,6 +118,15 @@ modo-2:  1) the_vertex_map[new_candidate] : BaseVertex *  'cand_vertex'
 		    [](const std::pair<InnerVertexId, InnerVertexId> &val)
 		    { std::clog << " " << val.second; }); 
       std::clog << std::endl ;
+
+      std::clog << "visited: " ;
+      std::for_each(std::begin(visited), std::end(visited), 
+		    [](const InnerVertexId &val)
+		    { std::clog << " " << val; }); 
+      std::clog << std::endl ;
+
+      // std::clog << "\n Press ENTER ... " << std::flush;  
+      // std::cin.ignore();
 #endif
 
 
@@ -164,6 +134,10 @@ modo-2:  1) the_vertex_map[new_candidate] : BaseVertex *  'cand_vertex'
       // (note.- distance must be first item in pair)
       InnerVertexId new_candidate = candidates.top().second;
       candidates.pop();
+
+#ifdef DEBUG_MODE_DIJKSTRA
+      std::clog << "new_candidate: " << new_candidate << std::endl;
+#endif
      
       auto citr_visited = visited.find(new_candidate);
       if(citr_visited == visited.end())
@@ -175,16 +149,8 @@ modo-2:  1) the_vertex_map[new_candidate] : BaseVertex *  'cand_vertex'
 #ifdef DEBUG_MODE_DIJKSTRA
 	std::clog << "already visited: " << new_candidate << std::endl;
 #endif
-
 	continue;
       }
-
-
-      
-#ifdef DEBUG_MODE_DIJKSTRA
-      std::clog << "new_candidate: " << new_candidate << std::endl;
-#endif
-      
 
       //optimization: stop if target vertex reached
       if(new_candidate == target)
@@ -195,11 +161,7 @@ modo-2:  1) the_vertex_map[new_candidate] : BaseVertex *  'cand_vertex'
 	target_found = true;
 	break;
       }
-
 	
-      // for (auto itr = graph.adjac()[new_candidate].cbegin();
-      // 	   itr != graph.adjac()[new_candidate].cend();
-      // 	   ++itr)
       const auto range =
 	graph.the_adjacency_data.the_outward_edges.equal_range(new_candidate);
       for (auto itr = range.first;
@@ -207,7 +169,41 @@ modo-2:  1) the_vertex_map[new_candidate] : BaseVertex *  'cand_vertex'
       	   ++itr)      
       {
 	// extracting the current minimum
-	InnerVertexId neighbor =  itr->second->to();
+
+	/**@warning It has been discarded a possible optimization
+	   based on detect and ignore neighbors already handle in the
+	   opposite direction:
+
+	   - i.e. the other vertex in an unordered graph.
+	   - i.e. previous directed vertex: neighbor->new_candidate.
+
+	   The reasons are:
+	   
+	   a) Because the current logic is correct: it will never end in the
+	   re-addition of a former candidate.
+
+	   b) And the cost of this detection could be greater than
+	     the current calculations.
+	 */
+	InnerVertexId neighbor = NOVERTEXID;
+
+	// case: directed graph
+	if(itr->second->direction() == EdgeDirection::FROM_TO)
+	{
+	  neighbor = itr->second->to();
+	}
+	else // case: undirected graph
+	{
+	  if(itr->second->from() == new_candidate)
+	  {
+	    neighbor = itr->second->to();
+	  }
+	  else
+	  {
+	    neighbor = itr->second->from();
+	  }
+	}
+
 	TypeDistance weight = itr->second->weight();
 
 #ifdef DEBUG_MODE_DIJKSTRA
@@ -236,22 +232,10 @@ modo-2:  1) the_vertex_map[new_candidate] : BaseVertex *  'cand_vertex'
 	  std::clog << ", " << neighbor << ")"  << std::endl;
 #endif
 	}
-
-      }//end_for
-
-
-
-      //  dentro del while en alguna parte, casca
-      //      assert(false);
-
-      
-      
-
-
-
-      
+      }
     }//end_while
     
+
     // 3) Rebuild (set-solution) step
 
     assert(distances.find(target) not_eq distances.end());
@@ -264,20 +248,15 @@ modo-2:  1) the_vertex_map[new_candidate] : BaseVertex *  'cand_vertex'
       {
     	///@todo almacenar user_id, no inner_id = user_map.find(current)
     	retval.push_front(current);
-
 	assert(previous.find(current) not_eq previous.end());
     	current = previous[current];
 
-
 	/// @todo removeme por si hay infinite loops
-    	assert(retval.path()->size() < 100);
-
-	
+	//    	assert(retval.path()->size() < 100);
       }
       retval.push_front(start);     
     }
 
-    
      return retval;
   }
 
@@ -301,18 +280,17 @@ modo-2:  1) the_vertex_map[new_candidate] : BaseVertex *  'cand_vertex'
 		  std::end(*value.path()),
 		  [&out, last_element](const InnerVertexId & id)
     {
-      static int num_veces = 0;	/// @todo removeme por si hay infinite loops
+      // static int num_veces = 0; /// @todo removeme: prevent infinite loops
 
-      //      out << get_user_id(id);
+      /// @bug Printing inner ids,  user ids required (get_user_id(id);)
       out << id;
       if(not (id==last_element)) { out << " -> "; }
-
       
-      assert(++num_veces < 30);	/// @todo removeme por si hay infinite loops
-
+      // assert(++num_veces < 30); /// @todo removeme: prevent infinite loops
     });
   
     return out;
   }
+
     
 } //end-of dijkstra_algorithm
