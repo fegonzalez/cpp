@@ -1,0 +1,192 @@
+
+
+
+// WARNING: también habría que generalizar TypeDistance en Graph:
+
+   template <typename TypeDistance = double> class BaseGraph;
+
+
+
+// relax phase: update shortest path (new_candidate -> neighbor)
+
+// WARNING: habría que cambiar también el criterio de la cola de prioridad
+   
+   el criterio de la cola de prioridad
+
+
+
+current Foptim_value== euclidean_distance
+
+current Foptim_comparation_operation aplied over Foptim_value:    "<"
+
+current distance value = edge's distance (double VALUE)
+
+current  COMPARATOR cola prioridad = std::greater<AdjPair>
+
+
+Nota.- ahora no se me ocurre nada maś que "<" ">" pero, solo se trata
+de dejar código ¿templatizado? en función de eso. En futuro se haría
+una especialización par alago más raro.
+
+
+1) OPTIMIZAR el criterio de la cola de prioridad ??
+
+// class Compare = less<typename Container::value_type>
+
+
+	// 2) aki generalizar el "+" ¿COMO?:
+	//     F1_NEW_FOPTIM_VALUE(base, increment) ??
+	//     TypeDistance F1(TypeDistance, TypeDistance):
+	//
+	// TypeDistance neighbor_distance = F1(distances[new_candidate], weight)
+	//
+	
+        TypeDistance neighbor_distance = distances[new_candidate] + weight;
+
+
+
+	// 3) aki generalizar el "<"  ¿COMO?
+	//     F2_FOPTIM_COMPARE_OPERATION(new_value, current_value) ?
+	//     bool F2((TypeDistance new, TypeDistance current)
+	//     { return true: if 'new' is optimal tan 'current'}
+	//
+	//  if(F2(new_value, current_value))
+	//
+	
+	if (neighbor_distance < distances[neighbor])
+	{
+	  distances[neighbor] = neighbor_distance;
+	  previous[neighbor] = new_candidate;
+	  candidates.push(std::make_pair(distances[neighbor], neighbor));
+	}
+
+
+Total:
+
+// Optimization Function
+// when shortest means "the optimal or the best" rather than literally the short
+//
+template <class T = double>
+class BaseShortestPathOptimizationFunction  
+{
+  public:
+
+  bool optimal(const T &new, const T &current) const = 0;
+
+  T new_distance(const T &value1, const T &value2) const = 0;
+
+};
+
+
+
+// F1
+template <class T = double>
+class BaseNewValueFunc
+{
+  T operator()(const T &value1, const T &value2) const = 0;
+  
+  // e.g. euclidean dist:   return value1 + value2;
+}
+
+
+// F2
+template <class T = double>
+class BaseCompareValueFunc
+{
+  bool operator()(const T &new, const T &current) const = 0;
+
+  // e.g. minimum euclidean dist :   return (new < current);
+
+}
+
+
+template <class T = double,
+	 class BaseNewValueFunction<T>,
+	 class BaseCompareValueFunction<T> >
+class ShortestPathOptimFuncImpl
+      public BaseShortestPathOptimizationFunction
+{
+  public:
+
+  bool optimal(const T &new, const T &current) const
+  { return the_compare_func(new, current); }
+
+  T new_distance(const T &value1, const T &value2) const
+  { return the_new_func(value1, value2); }
+
+
+private:
+  BaseNewValueFunc<T>  the_new_func;
+  BaseCompareValueFunc<T>  the_compare_func;
+};
+
+
+
+// F1
+template <class T = double>
+class MinEuclideanNewValueFunc : public   BaseNewValueFunc
+{
+  T operator()(const T &value1, constT &value2) const
+  { return value1 + value2; }
+}
+
+// F2
+template <class T = double>
+class MinEuclideanCompareValueFunc : public BaseCompareValueFunc
+{
+  bool operator()(const T &new, const T &current) const
+  {  return (new < current); }
+}
+
+
+template <class T = double >
+class MinEuclideanDistanceOptimFunc : public ShortestPathOptimFuncImpl
+{
+  public:
+
+  MinEuclideanDistanceOptimFunc()=default;
+
+  bool optimal(const T &new, const T &current) const
+  { return the_compare_func(new, current); }
+
+  T new_distance(const T &value1, const T &value2) const
+  { return the_new_func(value1, value2); }
+
+
+private:
+  BaseCompareValueFunc<T>  the_compare_func = MinEuclideanCompareValueFunc;
+  BaseNewValueFunc<T>  the_new_func = MinEuclideanNewValueFunc;
+};
+
+
+// mi llamada sería...  (nota.- tomando T=double)
+
+DirectedGraph g;
+// ... rellenar g ...
+
+Dijstra(g, MinEuclideanDistanceOptimFunc) ??
+XOR
+Dijkstra<
+
+
+
+
+//////////
+
+template
+class  < BaseShortestPathOptimizationFunction<class TypeDistance = double>,
+	class Compare = less<typename Container::value_type>, // priority_queue
+	class TypeDistance = double>
+Dijsktra
+{
+
+
+    // DijkstraSolution shortest_path(const Graph<T> &graph, 
+    // 				   const UserVertexId &start,
+    // 				   const UserVertexId &target);
+
+    DijkstraSolution operator()(const Graph<T> &graph, 
+				const UserVertexId &start,
+				const UserVertexId &target);
+}
+
