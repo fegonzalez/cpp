@@ -64,20 +64,20 @@ void example_wiki()
       
   /// @warning add_edge incluye add_vertex implícitamente
 
-  g.add_edge(11, 22, 7.0);
-  g.add_edge(11, 33, 9.0);
-  g.add_edge(22, 44, 15.0);
-  g.add_edge(44, 55, 6.0);
-  g.add_edge(11, 66, 14.0);
-  g.add_edge(22, 33, 10.0);  
-  g.add_edge(33, 44, 11.0);  
-  g.add_edge(33, 66, 2.0);
-  g.add_edge(55, 66, 9.0);
+  g.add_edge("11", "22", 7.0);
+  g.add_edge("11", "33", 9.0);
+  g.add_edge("22", "44", 15.0);
+  g.add_edge("44", "55", 6.0);
+  g.add_edge("11", "66", 14.0);
+  g.add_edge("22", "33", 10.0);  
+  g.add_edge("33", "44", 11.0);  
+  g.add_edge("33", "66", 2.0);
+  g.add_edge("55", "66", 9.0);
   
   std::cout << g << std::endl;    
 
   Dijkstra alg; 
-  DijkstraSolution solution = alg.shortest_path(g, 11, 55);
+  DijkstraSolution solution = alg.shortest_path(g, "11", "55");
   
   std::cout << "Vertex Distance from Source" << std::endl;
   std::cout << solution << std::endl;

@@ -262,7 +262,7 @@ namespace path_finding {
 	<< std::endl;
     out << "Shortest-Path:   ";
      
-    UserVertexId last_element = NOVERTEXID;
+    UserVertexId last_element = NOVERTEXUSERID;
     if(not value.path()->empty())
       last_element = value.path()->back();
 

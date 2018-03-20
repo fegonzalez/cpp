@@ -17,7 +17,7 @@ namespace path_finding {
   
   typedef unsigned int VertexId;
   typedef unsigned int EdgeId;
-  typedef double TypeDistance;
+  typedef long double TypeDistance;
 
   // alias
   typedef VertexId UserVertexId;      // any value
@@ -37,7 +37,7 @@ namespace path_finding {
   // initialization
   const VertexId NOVERTEXID = 0;
   const EdgeId NOEDGEID = 0;
-  const TypeDistance TYPEDISTANCE_ZERO = 0.0;
+  const TypeDistance TYPEDISTANCE_ZERO = static_cast<TypeDistance>(0);
 
 
   

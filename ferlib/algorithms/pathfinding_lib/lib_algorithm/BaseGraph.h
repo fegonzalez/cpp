@@ -2,6 +2,7 @@
 #define BASEGRAPH_H
 
 #include <iosfwd>
+#include <string>
 #include <vector>
 #include <unordered_map>
 #include <memory> // std::shared_ptr
@@ -20,7 +21,8 @@ namespace path_finding {
   typedef double TypeDistance;
 
   // alias
-  typedef VertexId UserVertexId;      // any value
+  //  typedef VertexId UserVertexId;      // any value
+  typedef std::string UserVertexId;      // any value
   typedef VertexId InnerVertexId;     // 1, 2, ... (0 reserved as NOVERTEXID)
   //  typedef InnerVertexId FromVertexId; // 1, 2, ...
   typedef std::shared_ptr<BaseEdge> BaseEdgePtr;
@@ -35,9 +37,10 @@ namespace path_finding {
                            BOTH};   // undirected graph
     
   // initialization
-  const VertexId NOVERTEXID = 0;
+  const InnerVertexId NOVERTEXID = 0;
+  const UserVertexId NOVERTEXUSERID = "0";
   const EdgeId NOEDGEID = 0;
-  const TypeDistance TYPEDISTANCE_ZERO = 0.0;
+  const TypeDistance TYPEDISTANCE_ZERO = static_cast<TypeDistance>(0);
 
 
   
@@ -320,7 +323,7 @@ namespace path_finding {
   private:
     
     InnerVertexId the_inner_id = NOVERTEXID;
-    UserVertexId the_user_id = the_inner_id;
+    UserVertexId the_user_id = std::to_string(the_inner_id);
 
     /** @brief OPTIMIZATION: quick access to neighbors
 
