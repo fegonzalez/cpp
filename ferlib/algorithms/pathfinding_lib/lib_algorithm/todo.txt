@@ -1,0 +1,51 @@
+DONE: alg. OK para DIrected & Undirected Graphs
+
+@todo 1 conectar con RMAN
+
+    - eliminar de los Makefiles todas las referencias a NOVA
+
+
+    
+
+
+@todo 2 Ajustes del algoritmo
+
+2-a  usar desde la interfaz:  add tests para directed/undirected
+
+
+2-b optim data structs
+IDEA:  No encontrar un valor en el map :
+            - NO es interpreta como error.
+            - SI se interpreta como que aún no se ha inicializado =>
+	      => init en ese momento.
+
+
+2-c Add  id (inner_id) to edges 
+
+  /// @todo aquí añadir el campo edge_id (std::string)
+  BaseEdgePtr DirectedGraph::insert_edge(const InnerVertexId &from,
+					 const InnerVertexId &to, 
+					 const TypeDistance & weight)
+
+
+2-d Crear "PositiveWeighGraph" (Directed/Undirected) = D/U Graph que
+    solo acepta valores de pesos positivos.
+
+    Luego:  typedef PositiveWeighDirectedGraph   DikstraDirectedGraph;
+            typedef PositiveWeighUnirectedGraph   DikstraUndirectedGraph;
+
+
+@todo 3-a compilar como librería (.so) y probar a usar como COT de RMAN
+
+​
+* FUTURO (nicetohave)
+
+@todo DijkstradirectedGraph :.  DG  t.q. no acepta pesos negativos
+
+@todo Reajustar la estructura de directorios de "path-finding"
+             - mover Todo lo de Graph a  carpeta \types
+
+@todo generalizar la F. de optimización del algoritmo
+
+​@todo 3-b gestión de errores: ahora assert​
+​

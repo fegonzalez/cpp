@@ -1,4 +1,5 @@
 
+#include "types.h"
 #include "BaseGraph.h"
 #include "Dijkstra.h"
 

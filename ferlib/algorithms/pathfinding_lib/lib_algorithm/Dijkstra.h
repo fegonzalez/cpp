@@ -11,10 +11,6 @@ namespace path_finding {
   struct DijkstraSolution;
 
   
-  /* Data struct returning a list of vertex following a path, where
-     the first value is the first node of the path */
-  typedef std::list<UserVertexId> VertexPath;
-
   const TypeDistance TYPEDISTANCE_INFINITE = 
     std::numeric_limits<TypeDistance>::infinity();
 

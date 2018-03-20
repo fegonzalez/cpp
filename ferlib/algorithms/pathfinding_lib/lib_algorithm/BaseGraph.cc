@@ -23,8 +23,8 @@ namespace path_finding {
   
 
   void Graph::add_edge(const UserVertexId &from,
-			       const UserVertexId &to, 
-			       const TypeDistance & weight)
+		       const UserVertexId &to, 
+		       const TypeDistance & weight)
   {
     bool invariant = not repeated_user_edge(from, to);
     assert(invariant);
@@ -280,8 +280,7 @@ namespace path_finding {
     InnerVertexId id_inner_id = num_inner_indexes() + 1;
     the_useridskeyed_map[id] = id_inner_id;
     the_inneridskeyed_map[id_inner_id] = id;
-    the_vertex_map[id_inner_id] =
-      VertexValue(new Vertex(id_inner_id, id));
+    the_vertex_map[id_inner_id] = VertexValue(new Vertex(id_inner_id, id));
     
     invariant = invariant and 
       ((INVARIANT_N_USERS  + 1 == the_useridskeyed_map.size()) and
@@ -352,15 +351,16 @@ namespace path_finding {
       Directed graph specialization of a Graph.
   */
   /**************************************************************************/
-  
+
+  /// @todo aquí añadir el campo edge_id (std::string)
   BaseEdgePtr DirectedGraph::insert_edge(const InnerVertexId &from,
-						 const InnerVertexId &to, 
-						 const TypeDistance & weight)
+					 const InnerVertexId &to, 
+					 const TypeDistance & weight)
   {
     auto invariant = num_edges();
 
     BaseEdgePtr new_value(new Edge(from, to, weight,
-					   EdgeDirection::FROM_TO));    
+				   EdgeDirection::FROM_TO));    
     the_edge_map[num_edges() + 1] = new_value;
     assert(invariant == num_edges()-1);
     return new_value;

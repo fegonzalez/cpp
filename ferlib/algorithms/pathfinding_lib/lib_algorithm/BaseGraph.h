@@ -8,6 +8,8 @@
 #include <memory> // std::shared_ptr
 
 
+#include "types.h"
+
 namespace path_finding {
 
   struct BaseVertex;
@@ -18,11 +20,9 @@ namespace path_finding {
   
   typedef unsigned int VertexId;
   typedef unsigned int EdgeId;
-  typedef double TypeDistance;
+  //  typedef double TypeDistance;
 
   // alias
-  //  typedef VertexId UserVertexId;      // any value
-  typedef std::string UserVertexId;      // any value
   typedef VertexId InnerVertexId;     // 1, 2, ... (0 reserved as NOVERTEXID)
   //  typedef InnerVertexId FromVertexId; // 1, 2, ...
   typedef std::shared_ptr<BaseEdge> BaseEdgePtr;
@@ -38,7 +38,6 @@ namespace path_finding {
     
   // initialization
   const InnerVertexId NOVERTEXID = 0;
-  const UserVertexId NOVERTEXUSERID = "0";
   const EdgeId NOEDGEID = 0;
   const TypeDistance TYPEDISTANCE_ZERO = static_cast<TypeDistance>(0);
 
@@ -198,6 +197,8 @@ namespace path_finding {
     explicit DirectedGraph() = default;
     explicit DirectedGraph(const DirectedGraph&) = delete;
     DirectedGraph& operator=(const DirectedGraph&) = delete;
+    explicit DirectedGraph(const DirectedGraph&&) = delete;
+    DirectedGraph& operator=(const DirectedGraph&&) = delete;
     
   protected:
     
@@ -229,6 +230,8 @@ namespace path_finding {
     explicit UndirectedGraph() = default;
     explicit UndirectedGraph(const UndirectedGraph&) = delete;
     UndirectedGraph& operator=(const UndirectedGraph&) = delete;
+    explicit UndirectedGraph(const UndirectedGraph&&) = delete;
+    UndirectedGraph& operator=(const UndirectedGraph&&) = delete;
 
   protected:
     
