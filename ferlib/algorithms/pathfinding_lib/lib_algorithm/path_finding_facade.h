@@ -1,6 +1,6 @@
 /** @file path_finding_facade.h
 
-    @brief Basic path_finding_facade (facade) of the path_finding library. 
+    @brief Basic path_finding_facade (interface) of the path_finding library. 
 */
 #ifndef PATH_FINDING_FACADE_H
 #define PATH_FINDING_FACADE_H

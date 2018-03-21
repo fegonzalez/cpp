@@ -9,8 +9,6 @@
 # Content
 ################################################################################
 
-# doc/
-
 # scripts/memcheck_to_each_test.sh
 	
   Executing valgrind (memcheck) over the Dijkstra code.
@@ -33,7 +31,19 @@
 	UndirectedGraph as inputs.
 
 
-	
+
+  types.h 
+
+	Basic types of the path_finding library. Types required by the
+    	external users of the library (through the library interface)
+
+
+
+  path_finding_facade.h  
+
+	Basic path_finding_facade (interface) of the path_finding library. 
+
+
   *_test.cc
   *_test.OK	
 
