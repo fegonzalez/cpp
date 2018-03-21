@@ -232,6 +232,7 @@
 #
 #   12.8 Copying and moving class objects
 #       12.8.1 copy-constructor & assignment-operator
+# \todo #       12.8.2 move-constructor & move-operator
 
 
 # \todo # 13 Overloading
@@ -5632,6 +5633,12 @@ Use Member Initialization Lists in the copy-constructor ([k5].Passbyref) .
 
 
 
+# 12.8.2 move-constructor & move-operator
+
+\todo 
+[4_8_2]
+
+
 # ==============================================================================
 # 13 Overloading
 # ==============================================================================
@@ -8840,6 +8847,8 @@ c) address size (processor concept)
 
       [4_8_1] Bitcopy versus initialization - http://www.drbio.cornell.edu/pl47/programming/TICPP-2nd-ed-Vol-one-html/Chapter11.html
 
+
+      [4_8_2] Move semantics and rvalue references in C++11 - https://www.cprogramming.com/c++11/rvalue-references-and-move-semantics-in-c++11.html
 
 
 [4_9] destructors
