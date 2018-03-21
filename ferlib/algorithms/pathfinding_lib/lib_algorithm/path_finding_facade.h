@@ -7,6 +7,8 @@
 
 #include "types.h"
 
+#include <vector>
+
 namespace path_finding {
 
 
@@ -29,7 +31,7 @@ namespace path_finding {
   PathFindingSolutionData dijkstra_shortest_path_directed_graph
     (const UserVertexId &start_node,
      const UserVertexId &target_node,
-     const vector<TypeEdgeData> & edges) 
+     const std::vector<TypeEdgeData> & edges);
 
 
     /** @brief Applies the Dijkstra algorithm on an undirected graph
@@ -38,7 +40,7 @@ namespace path_finding {
     PathFindingSolutionData dijkstra_shortest_path_undirected_graph
     (const UserVertexId &start_node,
      const UserVertexId &target_node,
-     const vector<TypeEdgeData> & edge_list) 
+     const std::vector<TypeEdgeData> & edges);
 
          
     } //end-of path_finding

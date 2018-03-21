@@ -74,6 +74,9 @@ namespace path_finding {
        const UserVertexId &to, 
        const TypeDistance & weight)=0;
 
+    virtual void add_edge
+      (const TypeEdgeData &edge)=0;
+
 
    /**	
 	@warning Recommended to add isolated vertex to the graph.
@@ -113,6 +116,9 @@ namespace path_finding {
       (const UserVertexId &from, 
        const UserVertexId &to, 
        const TypeDistance & weight);
+
+    virtual void add_edge
+      (const TypeEdgeData &edge);
 
     void add_vertex(const UserVertexId &id);
 

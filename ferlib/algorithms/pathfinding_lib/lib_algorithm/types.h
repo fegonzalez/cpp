@@ -35,25 +35,28 @@ namespace path_finding {
       @param to: destination vertex of the edge in directed graphs;
       one of the two edges in undirected.		 
   */
-  typedef struct
+  struct TypeEdgeData
   {
+  TypeEdgeData(const UserVertexId &from,
+	       const UserVertexId &to,
+	       const TypeDistance &weight,
+	       const UserEdgeId &id):
+    from(from), to(to), weight(weight), id(id)
+    {}
+
+    
     UserVertexId from;
     UserVertexId to;
     TypeDistance weight;
     UserEdgeId id;
-  } TypeEdgeData;
+  };
 
 
-  typedef struct 
+  struct PathFindingSolutionData
   {
     TypeDistance the_total_distance;
     VertexPath the_path;
-
-    /** @todo Edge id list ??
-	typedef std::vector<UserEdgeId> EdgePath;
-	EdgePath the_edges;
-     */
-  }PathFindingSolutionData;
+  };
 
 
   //
@@ -62,6 +65,13 @@ namespace path_finding {
   
   const UserVertexId NOVERTEXUSERID = "";
 
+
+  //
+  // fns. section
+  //
+
+  std::ostream& operator<<(std::ostream &out, 
+			   const PathFindingSolutionData &value);
 
   
 } //end-of path_finding

@@ -20,8 +20,15 @@ namespace path_finding {
       Common data and functions to implement a directed/undirected  graph: 
   */
   /**************************************************************************/
-  
 
+
+  void Graph::add_edge(const TypeEdgeData &edge)
+  {
+    add_edge(edge.from, edge.to, edge.weight);
+  }
+
+  //--------------------------------------------------------------------------
+  
   void Graph::add_edge(const UserVertexId &from,
 		       const UserVertexId &to, 
 		       const TypeDistance & weight)

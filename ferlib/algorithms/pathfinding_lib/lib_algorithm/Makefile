@@ -126,13 +126,21 @@ directed_dijkstra_test.run_options =
 directed_dijkstra_test.runtest_output_options = 
 directed_dijkstra_test.successtest_output_options = > directed_dijkstra_test.OK
 directed_dijkstra_test.difftest_output_options = >directed_dijkstra_test.last_diff
-
-
 undirected_dijkstra_test.input_options = 
 undirected_dijkstra_test.run_options = 
 undirected_dijkstra_test.runtest_output_options = 
 undirected_dijkstra_test.successtest_output_options = > undirected_dijkstra_test.OK
 undirected_dijkstra_test.difftest_output_options = >undirected_dijkstra_test.last_diff
+directed_iface_test.input_options = 
+directed_iface_test.run_options = 
+directed_iface_test.runtest_output_options = 
+directed_iface_test.successtest_output_options = > directed_iface_test.OK
+directed_iface_test.difftest_output_options = >directed_iface_test.last_diff
+undirected_iface_test.input_options = 
+undirected_iface_test.run_options = 
+undirected_iface_test.runtest_output_options = 
+undirected_iface_test.successtest_output_options = > undirected_iface_test.OK
+undirected_iface_test.difftest_output_options = >undirected_iface_test.last_diff
 
 
 #header files & paths # i.e. HEADERS := a.$(HEADER_SUFFIX): b.$(HEADER_SUFFIX)
