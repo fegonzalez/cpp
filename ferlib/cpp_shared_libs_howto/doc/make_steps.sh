@@ -1,3 +1,8 @@
+
+###############################################################################
+# I. In the library 
+###############################################################################
+
 /** Step 1: Compiling with Position Independent Code (PIC):
 
  -fpic   compilation option
@@ -15,6 +20,7 @@ library in memory will vary from program to program.
 
 # generated:  foo.o  
 
+
 /** Step 2: Creating a shared library from an object file
 
  -shared   compilation option
@@ -27,15 +33,21 @@ library in memory will vary from program to program.
 # generated:  libfoo.so
 
 
+
+###############################################################################
+# II. In the client (user) of the library
+###############################################################################
+
 /** Step 3: Linking (the test / user of the library) with a shared library
 
     Required: Telling GCC where to find the shared library
 
-    -L   linkage option
+    -L   linkage option:
 
-    -L/lib-path
+          -L/lib-path    # path to the .so/.a file
+                         # path may be absolute or relative
 
-     -l linker option: lib-name without "lib" prefix & ".so" suffix	 
+    -l linker option: lib-name without "lib" prefix & ".so" suffix	 
  
 */
     
@@ -73,6 +85,26 @@ library in memory will vary from program to program.
 
 >> ./test
 
+
+
+
+
+
+# Nota: estructura directorios
+
+# en la librería  some_lib
+src/  # src & headers of the lib.
+
+
+# en el cliente ./test/
+test/include/  # .h de las librerías
+test/lib/      # .so/.a librerías
+
+
+
+
+
+d lib  SIMPLE_ALLINONE_DIR  src  test
 
 
 
