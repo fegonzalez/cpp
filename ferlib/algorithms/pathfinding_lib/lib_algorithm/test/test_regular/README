@@ -1,0 +1,1 @@
+Invalid test because the library to be tested has been generated as a sharedlibrary (libpathfinding.so). Use "../test_as_lib" instead.

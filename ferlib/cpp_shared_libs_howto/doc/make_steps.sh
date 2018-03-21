@@ -27,7 +27,7 @@ library in memory will vary from program to program.
 
 */
 
->> g++ -shared  foo.o -o libfoo.so
+>> g++ -shared  -o libfoo.so  foo.o 
 
 
 # generated:  libfoo.so
@@ -48,7 +48,10 @@ library in memory will vary from program to program.
                          # path may be absolute or relative
 
     -l linker option: lib-name without "lib" prefix & ".so" suffix	 
- 
+
+
+    WARNING: esta orden es incompleta => se sobreescribe en step 4
+             (tmabién podemos ir directamente a 4)
 */
     
 >> g++ -L`pwd` -Wall -o test test.cc  -lfoo

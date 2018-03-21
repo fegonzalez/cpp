@@ -54,9 +54,10 @@
 
   Makefile
 
-	Makefile for BaseGraph
-	Makefile for Dijkstra
-	Makefile for the Dijkstra's tests
+	make lib: to generate a shared library  (libpathfinding.so)
+	
+
+
 
 
 ################################################################################

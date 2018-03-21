@@ -1,0 +1,23 @@
+Required: shared library must exists => execute 'make lib' on the src code.
+
+
+################################################################################
+# How to run the tests.
+################################################################################
+
+# (from the console window, at "lib_algorithm" dir)
+
+# Individually, 
+
+  # Run tests:
+
+    make run.directed_iface_test
+    make run.undirected_iface_test
+
+
+  # Diff tests: check validation after any code changes.
+
+    make diff.directed_iface_test
+    make diff.undirected_iface_test
+
+

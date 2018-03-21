@@ -1,7 +1,8 @@
 
-#include "types.h"
-#include "BaseGraph.h"
-#include "Dijkstra.h"
+#include <types.h>
+#include <BaseGraph.h>
+#include <Dijkstra.h>
+
 
 #include <string>
 #include <iostream>
@@ -19,6 +20,7 @@ void example_wiki();
 int main()
 {
   const auto TEST_NUM_ITERATIONS = 1; //1e7;
+
 
   // start -> target
 
@@ -58,24 +60,26 @@ int main()
 
 void example_wiki()
 {
-  std::cout << "\n\nWikipedia's Dijkstra example on an UN-DIRECTED graph.\n"
-	    <<  std::endl;
+  std::cout << "\n\nWikipedia's Dijkstra example on a DIRECTED graph.\n"
+  	    <<  std::endl;
 
-  UndirectedGraph g;
+  DirectedGraph g;
       
   /// @warning add_edge incluye add_vertex implícitamente
 
-  g.add_edge("11", "22", 7.0);
-  g.add_edge("11", "33", 9.0);
-  g.add_edge("22", "44", 15.0);
-  g.add_edge("44", "55", 6.0);
-  g.add_edge("11", "66", 14.0);
-  g.add_edge("22", "33", 10.0);  
-  g.add_edge("33", "44", 11.0);  
-  g.add_edge("33", "66", 2.0);
-  g.add_edge("55", "66", 9.0);
+  //warning: ejemplo wiki es grafo no dirigido => doble edge en grafo dirigido
   
-  std::cout << g << std::endl;    
+  g.add_edge("11", "22", 7.0);   g.add_edge("22", "11", 7.0);
+  g.add_edge("11", "33", 9.0);   g.add_edge("33", "11", 9.0);
+  g.add_edge("22", "44", 15.0);  g.add_edge("44", "22", 15.0);
+  g.add_edge("44", "55", 6.0);   g.add_edge("55", "44", 6.0);
+  g.add_edge("11", "66", 14.0);  g.add_edge("66", "11", 14.0);
+  g.add_edge("22", "33", 10.0);  g.add_edge("33", "22", 10.0);
+  g.add_edge("33", "44", 11.0);  g.add_edge("44", "33", 11.0);
+  g.add_edge("33", "66", 2.0);   g.add_edge("66", "33", 2.0);
+  g.add_edge("55", "66", 9.0);   g.add_edge("66", "55", 9.0);
+
+   std::cout << g << std::endl;    
 
   Dijkstra alg; 
   DijkstraSolution solution = alg.shortest_path(g, "11", "55");
