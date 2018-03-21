@@ -72,7 +72,8 @@ namespace path_finding {
     virtual void add_edge
       (const UserVertexId &from, 
        const UserVertexId &to, 
-       const TypeDistance & weight)=0;
+       const TypeDistance & weight,
+       const UserEdgeId &edge_user_id)=0;
 
     virtual void add_edge
       (const TypeEdgeData &edge)=0;
@@ -115,7 +116,8 @@ namespace path_finding {
     void add_edge
       (const UserVertexId &from, 
        const UserVertexId &to, 
-       const TypeDistance & weight);
+       const TypeDistance & weight,
+       const UserEdgeId &edge_user_id);
 
     virtual void add_edge
       (const TypeEdgeData &edge);
@@ -150,7 +152,8 @@ namespace path_finding {
     */
     virtual BaseEdgePtr insert_edge(const InnerVertexId &from,
 				    const InnerVertexId &to, 
-				    const TypeDistance & weight) = 0;
+				    const TypeDistance & weight,
+				    const UserEdgeId &edge_user_id) = 0;
 
 
     /** @brief create & add the adjacency information to the data structures
@@ -210,7 +213,8 @@ namespace path_finding {
     
     BaseEdgePtr insert_edge(const InnerVertexId &from,
 			    const InnerVertexId &to, 
-			    const TypeDistance & weight);
+			    const TypeDistance & weight,
+			    const UserEdgeId &edge_user_id);
 
     inline void insert_adjacency(const InnerVertexId &from,
 				 const InnerVertexId &to, 
@@ -243,7 +247,8 @@ namespace path_finding {
     
     BaseEdgePtr insert_edge(const InnerVertexId &from,
 			    const InnerVertexId &to, 
-			    const TypeDistance & weight);
+			    const TypeDistance & weight,
+			    const UserEdgeId &edge_user_id);
 
     inline void insert_adjacency(const InnerVertexId &from,
 				 const InnerVertexId &to, 

@@ -24,6 +24,15 @@ namespace path_finding {
     		    out << id;
     		    if(not (id==last_element)) { out << " -> "; }      
     		  });
+
+    out << "\nShortest-Path edges:   ";
+    std::for_each(std::begin(value.the_path_edges),
+    		  std::end(value.the_path_edges),
+    		  [&out](const UserEdgeId & id)
+    		  {
+    		    out << id << " ";
+    		  });
+
     return out;
   }
 

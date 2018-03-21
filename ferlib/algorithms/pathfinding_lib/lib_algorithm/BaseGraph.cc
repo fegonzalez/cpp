@@ -24,14 +24,15 @@ namespace path_finding {
 
   void Graph::add_edge(const TypeEdgeData &edge)
   {
-    add_edge(edge.from, edge.to, edge.weight);
+    add_edge(edge.from, edge.to, edge.weight, edge.id);
   }
 
   //--------------------------------------------------------------------------
   
   void Graph::add_edge(const UserVertexId &from,
 		       const UserVertexId &to, 
-		       const TypeDistance & weight)
+		       const TypeDistance &weight,
+		       const UserEdgeId &edge_user_id)
   {
     bool invariant = not repeated_user_edge(from, to);
     assert(invariant);
@@ -54,7 +55,8 @@ namespace path_finding {
       //actions
       InnerVertexId from_inner_id = num_inner_indexes() + 1;
       InnerVertexId to_inner_id = from_inner_id + 1; 
-      BaseEdgePtr new_edge = insert_edge(from_inner_id, to_inner_id, weight);
+      BaseEdgePtr new_edge = insert_edge(from_inner_id, to_inner_id, weight,
+					 edge_user_id);
       //adding 'from' vertex
       the_useridskeyed_map[from] = from_inner_id;
       the_inneridskeyed_map[from_inner_id] = from;
@@ -87,7 +89,8 @@ namespace path_finding {
       //actions
       InnerVertexId from_inner_id = the_useridskeyed_map[from];
       InnerVertexId to_inner_id = num_inner_indexes() + 1;
-      BaseEdgePtr new_edge = insert_edge(from_inner_id, to_inner_id, weight);
+      BaseEdgePtr new_edge = insert_edge(from_inner_id, to_inner_id, weight,
+					 edge_user_id);
       the_vertex_map[from_inner_id]->add_neighbor(new_edge); // updating 'from'
       the_useridskeyed_map[to] = to_inner_id; //adding 'to' vertex
       the_inneridskeyed_map[to_inner_id] = to;
@@ -114,7 +117,8 @@ namespace path_finding {
       //actions
       InnerVertexId to_inner_id = the_useridskeyed_map[to];
       InnerVertexId from_inner_id = num_inner_indexes() + 1;
-      BaseEdgePtr new_edge = insert_edge(from_inner_id, to_inner_id, weight);
+      BaseEdgePtr new_edge = insert_edge(from_inner_id, to_inner_id, weight,
+					 edge_user_id);
       the_useridskeyed_map[from] = from_inner_id; //adding 'from' vertex
       the_inneridskeyed_map[from_inner_id] = from;
       the_vertex_map[from_inner_id] =
@@ -141,7 +145,8 @@ namespace path_finding {
       //actions
       InnerVertexId from_inner_id = the_useridskeyed_map[from];
       InnerVertexId to_inner_id = the_useridskeyed_map[to];
-      BaseEdgePtr new_edge = insert_edge(from_inner_id, to_inner_id, weight);
+      BaseEdgePtr new_edge = insert_edge(from_inner_id, to_inner_id, weight,
+					 edge_user_id);
       the_vertex_map[from_inner_id]->add_neighbor(new_edge);
       the_vertex_map[to_inner_id]->add_neighbor(new_edge);
       insert_adjacency(from_inner_id, to_inner_id, new_edge);
@@ -362,8 +367,11 @@ namespace path_finding {
   /// @todo aquí añadir el campo edge_id (std::string)
   BaseEdgePtr DirectedGraph::insert_edge(const InnerVertexId &from,
 					 const InnerVertexId &to, 
-					 const TypeDistance & weight)
+					 const TypeDistance & weight,
+					 const UserEdgeId &edge_user_id)
   {
+    (void) edge_user_id;
+    
     auto invariant = num_edges();
 
     BaseEdgePtr new_value(new Edge(from, to, weight,
@@ -403,13 +411,16 @@ namespace path_finding {
   /**************************************************************************/
   
   BaseEdgePtr UndirectedGraph::insert_edge(const InnerVertexId &from,
-						 const InnerVertexId &to, 
-						 const TypeDistance & weight)
+					   const InnerVertexId &to, 
+					   const TypeDistance & weight,
+					   const UserEdgeId &edge_user_id)
   {
+    (void) edge_user_id;
+	
     auto invariant = num_edges();
     
     BaseEdgePtr new_value(new Edge(from, to, weight,
-					   EdgeDirection::BOTH));
+				   EdgeDirection::BOTH));
     the_edge_map[num_edges() + 1] = new_value;
     assert(invariant == num_edges()-1);
     return new_value;

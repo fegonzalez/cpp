@@ -26,6 +26,11 @@ namespace path_finding {
   typedef std::list<UserVertexId> VertexPath;
 
   
+  /* Data struct returning a list of edges following a path, where
+     the first value is the first edge of the path */
+  typedef std::list<UserEdgeId> EdgePath;
+
+  
   /** @struct TypeEdgeData
 
       @brief Edge's data.
@@ -56,6 +61,7 @@ namespace path_finding {
   {
     TypeDistance the_total_distance;
     VertexPath the_path;
+    EdgePath the_path_edges;
   };
 
 
