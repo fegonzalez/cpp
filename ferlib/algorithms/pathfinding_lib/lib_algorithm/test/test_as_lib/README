@@ -1,11 +1,12 @@
-Required: shared library must exists => execute 'make lib' on the src code.
-
 
 ################################################################################
 # How to run the tests.
 ################################################################################
 
-# (from the console window, at "lib_algorithm" dir)
+WARNING Required: the library must exists => execute 'make lib' on the
+	source code (i.e. cd ../.. && make lib).
+
+
 
 # Individually, 
 

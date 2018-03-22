@@ -9,11 +9,6 @@
 # Content
 ################################################################################
 
-# scripts/memcheck_to_each_test.sh
-	
-  Executing valgrind (memcheck) over the Dijkstra code.
-
-
 # sources
 
   BaseGraph.cc
@@ -44,10 +39,12 @@
 	Basic path_finding_facade (interface) of the path_finding library. 
 
 
-  *_test.cc
-  *_test.OK	
+# ./test
+
+  ./test/test_as_lib/
 
 	src code & resources for every test of the Dijkstra implementation.
+	See its README file.
 
 
 # makefiles
@@ -58,38 +55,25 @@
 	
 
 
+# (DEPRECATED)  scripts/memcheck_to_each_test.sh
+	
+  Executing valgrind (memcheck) over the Dijkstra code.
+
+
 
 
 ################################################################################
 # How to run the tests.
 ################################################################################
 
-# (from the console window, at "lib_algorithm" dir)
-
-# Individually, 
-
-  # Run tests:
-
-    make run.directed_dijkstra_test
-    make run.undirected_dijkstra_test
-
-
-  # Diff tests: check validation after any code changes.
-
-    make diff.directed_dijkstra_test
-    make diff.undirected_dijkstra_test
-
-
-# All
-
-  make runtest
-
-  make difftest
+See ./test/test_as_lib/README
 
 
 ################################################################################
 # Executing valgrind (memcheck) over the Dijkstra code.
 ################################################################################
+
+(DEPRECATED) 
 
 # (from the console window, at "lib_algorithm" dir)
 
