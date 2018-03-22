@@ -207,7 +207,7 @@ namespace path_finding {
 	std::clog << "dist(" << new_candidate << ", " << neighbor << "): ";
 	std::clog << weight << std::endl;
 #endif
-	assert(weight > TYPEDISTANCE_ZERO); //Dijkstra restriction [1]
+	assert(weight >= TYPEDISTANCE_ZERO); //Dijkstra restriction [1]
 
 			
 	// relax phase: update shortest path (new_candidate -> neighbor)

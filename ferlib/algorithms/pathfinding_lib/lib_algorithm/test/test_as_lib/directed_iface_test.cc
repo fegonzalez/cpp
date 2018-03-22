@@ -81,6 +81,9 @@ void example_wiki()
   edges.push_back(path_finding::TypeEdgeData("66", "33", 2.0, "edge66_33"));
   edges.push_back(path_finding::TypeEdgeData("55", "66", 9.0, "edge55_66"));
   edges.push_back(path_finding::TypeEdgeData("66", "55", 9.0, "edge66_55"));
+  //added additional vertex (of the optimal path) to check weights of value 0.
+  edges.push_back(path_finding::TypeEdgeData("66", "77", 0.0, "edge66_77"));
+
 
   path_finding::PathFindingSolutionData solution =
     dijkstra_shortest_path_directed_graph("11", "55", edges);
