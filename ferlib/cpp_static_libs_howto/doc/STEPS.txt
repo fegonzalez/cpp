@@ -1,0 +1,66 @@
+
+###############################################################################
+# I. In the library 
+###############################################################################
+
+/** Step 1: Compiling
+*/
+
+>> g++ -c -Wall -Werror foo.cc
+>> g++ -c -Wall -Werror foo2.cc
+
+# generated: foo.o  foo2.o
+
+
+/** Step 2: Creating an static library: bundle multiple object files using 'ar'
+
+After this, the static library is ready to use. At this point we could
+just copy the lib file (.a) somewhere else to use it.
+
+*/
+
+>> ar rcs lib_foos.a foo.o foo2.o
+
+# generated: lib_foos.a
+
+
+###############################################################################
+# II. In the client (user) of the library
+###############################################################################
+
+/** Step 3: Compiling the test/user of the library.
+*/
+    
+>> g++ -c -Wall -Werror test.cc
+
+# generated: test.o
+
+
+/** Step 4: Linking (the test / user of the library) with an static library
+*/
+    
+>> g++ 
+
+# generated: 
+
+
+
+
+# Nota: estructura directorios
+
+# en la librería  some_lib
+
+
+# en el cliente ./test/
+
+
+
+
+# NOTA proyectos => ar genera las libs en  ./obj/
+
+ar: creating obj/libRmanCommunications.a
+
+
+
+
+

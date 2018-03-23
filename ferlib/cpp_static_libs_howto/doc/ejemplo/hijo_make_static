@@ -1,0 +1,52 @@
+include ../../make/Common.mk
+
+#Dirs
+DIR_LIBS_BASE = ../../../../lib/linux_x86/rman
+DIR_LIB_THIS = $(DIR_LIBS_BASE)/lib_RmanInterface
+DIR_RMAN_SRC = ../..
+
+#Executables and libraries
+LIB_THIS = $(DIR_OBJ)/libpathfinding.a
+
+
+
+ #Sources and objects
+SRC =   BaseGraph.cc \
+Dijkstra.cc \
+path_finding_facade.cc \
+types.cc
+
+
+
+#Includes
+# INCLUDES += -I$(DIR_RMAN_SRC)/lib_RmanSchedules \
+#             -I$(DIR_RMAN_SRC)/lib_RmanLogStream/log \
+
+#INCLUDES += -I$(DIR_RMAN_SRC)/lib_RmanSchedules
+
+CXXFLAGS += -std=c++11
+
+#Targets
+all: $(LIB_THIS)
+
+$(LIB_THIS): $(OBJS)
+	ar rv $@ $^
+	ranlib $@
+	$(MAKE_DIR_LIB_THIS_GUARD)
+	cp $(LIB_THIS) $(DIR_LIB_THIS)
+	$(MAKE_DIR_DEP_GUARD)
+	mv $(DIR_OBJ)/*.d $(DIR_DEP)
+
+$(DIR_OBJ)/%.o: %.cc
+	$(MAKE_DIR_OBJ_GUARD)
+	$(CXX) $(CXXFLAGS) $(CXXDEPENDS) $(RELEASE) $(DEBUG)  $< $(INCLUDES) -o $@
+
+
+link:
+
+clean:
+	rm -rf $(DIR_OBJ)
+	rm -rf $(DIR_DEP)
+
+## incluyen los archivos de la dependencia
+-include $(DEPENDS)
