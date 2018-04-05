@@ -1,5 +1,0 @@
-src & headers  of the library (.cc & .h)
-
-the header files required ti call the lib. functions must be copied at ../includes
-
-
