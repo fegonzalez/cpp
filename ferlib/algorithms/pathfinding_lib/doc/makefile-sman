@@ -1,0 +1,202 @@
+BOOST_HOME = /opt/COTS_SESAR_R4/boost_1_55
+
+#Compiler
+CXX = g++
+CXXFLAGS = -c -std=gnu++0x -Wall -fPIC
+CXXDEPENDS = -MMD -MP
+debug: DEBUG = -O2 -D__TRACE__=1 -g -D__DEBUG__
+all: RELEASE = -O2 -D__TRACE__=3
+
+#Dirs
+DIR_LIBS_BASE =../../lib/linux_x86
+DIR_LIB_THIS = $(DIR_LIBS_BASE)/pathfinding_lib/
+DIR_OBJ = ./obj
+DIR_DEP = ./dep
+HOME_LIB = ../../../lib/linux_x86/
+HOME_SRC = ../..
+
+#Guards:
+MAKE_DIR_LIB_THIS_GUARD = @mkdir -p $(DIR_LIB_THIS)
+MAKE_DIR_OBJ_GUARD = @mkdir -p $(DIR_OBJ)
+MAKE_DIR_DEP_GUARD = @mkdir -p $(DIR_DEP) 
+
+#Defines
+DEFINES = -D_REENTRANT -D__STL__ -DGNU_C
+
+#Executables and libraries
+LIB_STATIC = $(DIR_OBJ)/libPathFinding.a
+LIB_DYNAMIC = $(DIR_OBJ)/libPathFinding.so
+
+#Sources and objects
+
+SRC_TYPES = ./lib_types/ConvertTypes.cc \
+		 ./lib_types/FocusArea.cc \
+		 ./lib_types/Node.cc \
+                 ./lib_types/Position.cc \
+                 ./lib_types/Segment.cc \
+ 	         ./lib_types/GeneratedRoute.cc \
+	         ./lib_types/MobileCharacteristics.cc \
+	         ./lib_types/RouteRequest.cc \
+	         ./lib_types/RouteResponse.cc \
+	         ./lib_types/SegmentState.cc \
+		 ./lib_types/LinkPoints.cc \
+	         ./lib_types/WaitingArea.cc \
+	         ./lib_types/ParallelTaxiwayConstraint.cc \
+	         ./lib_types/StandManoeuvre.cc \
+	         ./lib_types/ProposalContext.cc \
+	         ./lib_types/ConflictDeletionCandidate.cc \
+	         ./lib_types/WaitingAreaOccupance.cc \
+	         ./lib_types/StandardRoute.cc
+
+SRC_LOGS = ./lib_logs/Log.cc \
+	   ./lib_logs/Error.cc
+
+SRC_ALGORITHM = ./lib_algorithm/AlgorithmGraph.cc \
+                ./lib_algorithm/DijkstraShortestPathAlg.cc \
+                ./lib_algorithm/YenTopKShortestPathsAlg.cc
+
+SRC_GRAPH = ./lib_graph/Graph.cc
+
+SRC_ROUTES = ./lib_routes/RouteChecks.cc \
+             ./lib_routes/RoutingParams.cc \
+             ./lib_routes/RouteCalculations.cc 
+             
+SRC_UTILS = ./lib_utils/Utils.cc
+
+SRC_INTERFACES = ./lib_interfaces/PathFindingFacade.cc \
+			 ./lib_interfaces/COptimalRSScheduleFacade.cc
+
+SRC_TRAJECTORIES = ./lib_trajectories/TrajectoryCalculation.cc \
+				 ./lib_trajectories/Trajectory.cc \
+				 ./lib_trajectories/TrajectoriesAuxiliar.cc \
+				 ./lib_trajectories/CurveStep.cc \
+				 ./lib_trajectories/RectStep.cc
+
+SRC_DATA = ./lib_data/WaitingAreasMap.cc \
+                    ./lib_data/FocusAreasMap.cc \
+                    ./lib_data/SurfaceRoutesDB.cc \
+                    ./lib_data/ParallelTaxiConstraintMap.cc \
+                    ./lib_data/StandManoeuvresMap.cc \
+                    ./lib_data/StandardRoutes.cc
+
+SRC_CONFLICTS = ./lib_conflicts/Conflict.cc \
+		./lib_conflicts/ConflictDetector.cc \
+		./lib_conflicts/ConflictsDB.cc 
+
+SRC_STATS = ./lib_stats/GlobalStats.cc \
+		./lib_stats/MobileStats.cc \
+		./lib_stats/StatisticsGestor.cc 
+
+OBJS =  $(patsubst ./lib_types/%.cc,$(DIR_OBJ)/%.o,$(SRC_TYPES)) \
+	  	$(patsubst ./lib_logs/%.cc,$(DIR_OBJ)/%.o,$(SRC_LOGS)) \
+       	$(patsubst ./lib_algorithm/%.cc,$(DIR_OBJ)/%.o,$(SRC_ALGORITHM)) \
+	    $(patsubst ./lib_graph/%.cc,$(DIR_OBJ)/%.o,$(SRC_GRAPH)) \
+	    $(patsubst ./lib_routes/%.cc,$(DIR_OBJ)/%.o,$(SRC_ROUTES)) \
+	    $(patsubst ./lib_trajectories/%.cc,$(DIR_OBJ)/%.o,$(SRC_TRAJECTORIES)) \
+	    $(patsubst ./lib_utils/%.cc,$(DIR_OBJ)/%.o,$(SRC_UTILS)) \
+	    $(patsubst ./lib_data/%.cc,$(DIR_OBJ)/%.o,$(SRC_DATA)) \
+	    $(patsubst ./lib_stats/%.cc,$(DIR_OBJ)/%.o,$(SRC_STATS)) \
+	    $(patsubst ./lib_conflicts/%.cc,$(DIR_OBJ)/%.o,$(SRC_CONFLICTS)) \
+	    $(patsubst ./lib_interfaces/%.cc,$(DIR_OBJ)/%.o,$(SRC_INTERFACES)) 
+	   
+DEPENDS =  $(patsubst ./lib_types/%.cc,$(DIR_DEP)/%.o,$(SRC_TYPES)) \
+		   $(patsubst ./lib_logs/%.cc,$(DIR_DEP)/%.o,$(SRC_LOGS)) \
+           $(patsubst ./lib_algorithm/%.cc,$(DIR_DEP)/%.o,$(SRC_ALGORITHM)) \
+	       $(patsubst ./lib_graph/%.cc,$(DIR_DEP)/%.o,$(SRC_GRAPH)) \
+	       $(patsubst ./lib_routes/%.cc,$(DIR_DEP)/%.o,$(SRC_ROUTES)) \
+           $(patsubst ./lib_trajectories/%.cc,$(DIR_DEP)/%.o,$(SRC_TRAJECTORIES)) \
+	       $(patsubst ./lib_utils/%.cc,$(DIR_DEP)/%.o,$(SRC_UTILS)) \
+	       $(patsubst ./lib_data/%.cc,$(DIR_DEP)/%.o,$(SRC_DATA)) \
+	       $(patsubst ./lib_stats/%.cc,$(DIR_DEP)/%.o,$(SRC_STATS)) \
+	       $(patsubst ./lib_conflicts/%.cc,$(DIR_DEP)/%.o,$(SRC_CONFLICTS)) \
+	       $(patsubst ./lib_interfaces/%.cc,$(DIR_DEP)/%.o,$(SRC_INTERFACES)) 
+
+#Includes
+INCLUDES =  -I$(BOOST_HOME)/include \
+            -I./lib_types \
+            -I./lib_logs \
+            -I./lib_graph \
+            -I./lib_algorithm \
+            -I./lib_routes \
+            -I./lib_trajectories \
+            -I./lib_utils \
+            -I./lib_data \
+            -I./lib_stats \
+            -I./lib_conflicts \
+            -I./lib_interfaces 
+
+#Libraries
+LDFLAGS = -shared
+
+#Dependencies
+LIBS_DEPEND = 
+
+#Targets
+all debug:: $(LIBS_DEPEND) $(LIB_DYNAMIC) $(LIB_STATIC)
+
+$(LIB_DYNAMIC): $(OBJS)
+	g++ -shared -o $@ $^
+	$(MAKE_DIR_LIB_THIS_GUARD)
+	cp $(LIB_DYNAMIC) $(DIR_LIB_THIS)
+
+ 
+$(LIB_STATIC): $(OBJS)
+	ar rv $@ $^
+	ranlib $@
+	$(MAKE_DIR_LIB_THIS_GUARD)
+	cp $(LIB_STATIC) $(DIR_LIB_THIS)
+	$(MAKE_DIR_DEP_GUARD)
+	mv $(DIR_OBJ)/*.d $(DIR_DEP)
+	
+$(DIR_OBJ)/%.o: ./lib_types/%.cc
+	$(MAKE_DIR_OBJ_GUARD)
+	$(CXX) $(CXXFLAGS) $(CXXDEPENDS) $(RELEASE) $(DEBUG) $(INCLUDES) $(LDFLAGS) $< -o $@
+
+$(DIR_OBJ)/%.o: ./lib_logs/%.cc
+	$(MAKE_DIR_OBJ_GUARD)
+	$(CXX) $(CXXFLAGS) $(CXXDEPENDS) $(RELEASE) $(DEBUG) $(INCLUDES) $(LDFLAGS) $< -o $@
+
+$(DIR_OBJ)/%.o: ./lib_graph/%.cc
+	$(MAKE_DIR_OBJ_GUARD)
+	$(CXX) $(CXXFLAGS) $(CXXDEPENDS) $(RELEASE) $(DEBUG) $(INCLUDES) $(LDFLAGS) $< -o $@
+
+$(DIR_OBJ)/%.o: ./lib_algorithm/%.cc
+	$(MAKE_DIR_OBJ_GUARD)
+	$(CXX) $(CXXFLAGS) $(CXXDEPENDS) $(RELEASE) $(DEBUG) $(INCLUDES) $(LDFLAGS) $< -o $@
+    
+$(DIR_OBJ)/%.o: ./lib_routes/%.cc
+	$(MAKE_DIR_OBJ_GUARD)
+	$(CXX) $(CXXFLAGS) $(CXXDEPENDS) $(RELEASE) $(DEBUG) $(INCLUDES) $(LDFLAGS) $< -o $@
+
+$(DIR_OBJ)/%.o: ./lib_trajectories/%.cc
+	$(MAKE_DIR_OBJ_GUARD)
+	$(CXX) $(CXXFLAGS) $(CXXDEPENDS) $(RELEASE) $(DEBUG) $(INCLUDES) $(LDFLAGS) $< -o $@
+
+$(DIR_OBJ)/%.o: ./lib_utils/%.cc
+	$(MAKE_DIR_OBJ_GUARD)
+	$(CXX) $(CXXFLAGS) $(CXXDEPENDS) $(RELEASE) $(DEBUG) $(INCLUDES) $(LDFLAGS) $< -o $@
+
+$(DIR_OBJ)/%.o: ./lib_data/%.cc
+	$(MAKE_DIR_OBJ_GUARD)
+	$(CXX) $(CXXFLAGS) $(CXXDEPENDS) $(RELEASE) $(DEBUG) $(INCLUDES) $(LDFLAGS) $< -o $@
+
+$(DIR_OBJ)/%.o: ./lib_conflicts/%.cc
+	$(MAKE_DIR_OBJ_GUARD)
+	$(CXX) $(CXXFLAGS) $(CXXDEPENDS) $(RELEASE) $(DEBUG) $(INCLUDES) $(LDFLAGS) $< -o $@
+
+$(DIR_OBJ)/%.o: ./lib_stats/%.cc
+	$(MAKE_DIR_OBJ_GUARD)
+	$(CXX) $(CXXFLAGS) $(CXXDEPENDS) $(RELEASE) $(DEBUG) $(INCLUDES) $(LDFLAGS) $< -o $@
+
+$(DIR_OBJ)/%.o: ./lib_interfaces/%.cc
+	$(MAKE_DIR_OBJ_GUARD)
+	$(CXX) $(CXXFLAGS) $(CXXDEPENDS) $(RELEASE) $(DEBUG) $(INCLUDES) $(LDFLAGS) $< -o $@
+        
+link:
+
+clean::
+	rm -rf $(DIR_OBJ)
+	rm -rf $(DIR_DEP)
+	
+#Dependency files are included
+-include $(DEPENDS)

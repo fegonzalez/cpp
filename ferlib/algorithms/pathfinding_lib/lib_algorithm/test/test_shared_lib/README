@@ -1,0 +1,41 @@
+
+@info Testing the use of the pathfinding library as a dynamic (shared) library.
+
+
+
+################################################################################
+# How to run the tests.
+################################################################################
+
+@warning Required: the library must exists => execute 'make shlib' on the
+	 source code (i.e. cd ../.. && make shlib).
+
+
+
+# Individually, 
+
+  # Run tests:
+
+    make run.directed_iface_test
+    make run.undirected_iface_test
+
+
+  # Diff tests: check validation after any code changes.
+
+    make diff.directed_iface_test
+    make diff.undirected_iface_test
+
+
+
+# Size of the binaries:
+
+  - Using the dynamic (shared) library: 
+
+    directed_iface_test:   32 K
+    undirected_iface_test: 32 K
+ 
+
+  - Using the static library: 
+
+    directed_iface_test:   106 K
+    undirected_iface_test: 106 K

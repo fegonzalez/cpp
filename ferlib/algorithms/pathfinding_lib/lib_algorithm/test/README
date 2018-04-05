@@ -1,0 +1,25 @@
+test_shared_lib/
+
+    @info Testing the use of the pathfinding library as a dynamic
+    	  (shared) library.
+
+    @warning Required: the library must exists => execute 'make shlib'
+	     on the source code (i.e. cd ../.. && make shlib).
+
+
+
+test_static_lib/
+
+    @info Testing the use of the pathfinding library as an static library.
+
+    @warning Required: the library must exists => execute 'make
+	     staticlib' on the source code (i.e. cd ../.. && make
+	     staticlib).
+
+
+
+test_generating_lib/
+
+    @info First, generates the library if necessary, then uses it as an
+    	  static library.
+

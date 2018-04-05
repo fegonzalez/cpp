@@ -1,0 +1,16 @@
+
+# doc references
+
+[priority_queue] http://www.cplusplus.com/reference/queue/priority_queue/
+[priority_queue-bis] en.cppreference.com/w/cpp/container/priority_queue
+
+[dijkstra-simulator] https://www-m9.ma.tum.de/graph-algorithms/spp-dijkstra/index_en.html
+
+[compare-pathfinding-algs-exec] https://qiao.github.io/PathFinding.js/visual/
+
+[alg-visualization] https://visualgo.net/en
+
+[priority_queue-binary_heap] A priority queue implemented with a binary heap - https://doc.rust-lang.org/std/collections/binary_heap/index.html
+
+
+[std::priority_queue] https://www.geeksforgeeks.org/dijkstras-shortest-path-algorithm-using-priority_queue-stl/

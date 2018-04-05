@@ -1,0 +1,385 @@
+
+### INDEX
+
+# 1) Encontrar puntos de llamada al algoritmo dese RMAN
+#    a) Código en RMAN
+#    b) Código en NOVA
+
+# 2) Obtener/Estudiar los parámetros que RMAN ENVÍA al algoritmo
+
+# 3) Obtener/Estudiar los parámetros que RMAN RECIBE del algoritmo
+
+# 4) Test RMAN
+
+# 5) Dudas
+# 5.1) ¿Cómo se usa en el algoritmo el campo RSTransitionSegment::RSSegmentType de r_transitions?
+# 5.2) ¿Qué campos de RMANInterface::RSScheduleRequest utiliza el algoritmo (convertidos en la interfaz)?
+# 5.3) ¿Para que se utiliza en los algoritmos SMAN el camp "num_schedules"?
+# 5.4) En la respuesta del schedule (r_algorithm_result), ¿para que se utiliza el campo segments_?
+
+# 6) Solution
+# 6.1) FASE 1: aislar RMAN de las interfaces
+
+
+# ANEXO A.- ejemplo de salida del algoritmo SMAN
+
+
+
+###############################################################################
+# 1) Encontrar puntos de llamada al algoritmo dese RMAN
+###############################################################################
+
+# a) Código en RMAN
+
+RMAN: se llama desde varios sitios (*), pero siempre se llama a lo mismo.
+
+
+CALL) LrsAbstractSchedulesGenerator::generateSchedules()   =>  Dentro CALLING   NOVA::algorithms
+
+Usada en:
+//LrdBusinessLogicFacade.cc
+LrdBusinessLogicFacade::generateSchedulesForAllIntervals(void)
+LrdBusinessLogicFacade::generateSchedulesForLastInterval(string new_interval)
+LrdBusinessLogicFacade::generateSchedulesForClock(int minutesFrozenForClock)
+//LrsAbstractSchedulesGenerator.cc
+LrbAlternativeSchedule LrsAbstractSchedulesGenerator::generateAlternativeSchedul(const LriOptimizationCriteria & criteria)
+>
+
+
+
+        //LrdBusinessLogicFacade.cc
+     -->  generateSchedulesForAllIntervals()
+               |
+	       |
+	       | //LrsAbstractSchedulesGenerator.cc    // preparación interna, no se llama a NOVA::algoritmo
+	       ---------> createGraph()
+	       |
+	       |	       : aquí tengo creados los nodos (r_nodes) y los edges con sus pesos (r_transitions)
+	       |                 PROBLEMA: r_nodes y r_transitions son data structs definidas dentro de librería NOVA
+	       |
+	       |
+	       | //LrsAbstractSchedulesGenerator.cc
+CALL)	       ---------> generateSchedules(string initial_node, int number_of_schedules) //nota. en RMAN el 2º parámetro siempre se pasa como '1'
+                                 |
+                                 |
+                                 |
+                                 | // ((NOVA))  COptimalRSScheduleFacade.cc
+				 ----> initializeNodesAndSegments(r_nodes, r_transitions);       AKI USARE MI LIB !!!
+                                 |
+                                 |
+                                 |
+                                 | // ((NOVA))  COptimalRSScheduleFacade.cc
+				 ----> processRSScheduleRequest(request, r_algorithm_result);    AKI USARE MI LIB !!!
+
+
+
+
+// e.g. LrdBusinessLogicFacade::generateSchedulesForAllIntervals(void)
+	  {
+
+	   _schedules_generator->createGraph(runway_systems,intervals,initial_node            // preparación interna
+
+	   _schedules_generator->generateSchedules(initial_node, 1);                          // CALL) SE LLAMA a NOVA::algoritmo
+
+	  }	  
+
+
+
+
+CONTENIDO RMAN
+
+En RMAN se incluye el header y se llaman
+
+
+/// @file lib_RmanSchedules/LrsAbstractSchedulesGenerator.cc
+
+    #include <COptimalRSScheduleFacade.h>
+
+    COptimalRSScheduleFacade::getInstance().initializeNodesAndSegments(r_nodes, r_transitions);
+
+    COptimalRSScheduleFacade::getInstance().processRSScheduleRequest(request, r_algorithm_result);
+
+
+/// @file rman/lib_RmanSchedules/dep/LrsAbstractSchedulesGenerator.d   # fichero que lista las dependencias
+
+    rsAbstractSchedulesGenerator.d: /export/home/novadev/ws/sesar-rman-r11/nova2000/include/linux86-opt/COptimalRSScheduleFacade.h \
+    LrsAbstractSchedulesGenerator.d:/export/home/novadev/ws/sesar-rman-r11/nova2000/include/linux86-opt/COptimalRSScheduleFacade.h:
+
+
+    == $NOVA_INC   !!!1
+
+    >>echo $NOVA_INC
+    /export/home/novadev/ws/sesar-rman-r11/nova2000/include/linux86-opt
+
+
+
+# b) Código en NOVA
+
+
+/// @file lib_interfaces/COptimalRSScheduleFacade.cc
+//
+/// @fn COptimalRSScheduleFacade::initializeNodesAndSegments         @warning  ESTA DENTRO de NOVA!!! (lo puedo ver en el código de SMAN)!
+//
+///  =>  AKI AKI init. grafo
+
+
+/// @file lib_interfaces/COptimalRSScheduleFacade.cc
+//
+/// @fn COptimalRSScheduleFacade::processRSScheduleRequest         @warning  ESTA DENTRO de NOVA!!! (lo puedo ver en el código de SMAN)!
+//
+///  =>  AKI llama al algoritmo ?
+
+
+
+
+
+###############################################################################
+# 2) Obtener/Estudiar los parámetros que RMAN ENVÍA al algoritmo
+###############################################################################
+
+///@file LrsAbstractSchedulesGenerator.h
+
+class LrsAbstractSchedulesGenerator
+{
+...
+
+   /// data structs de uso interno de RMAN
+
+
+   /// data structs definidos dentro de NOVA lib.  =>  NOVA  code
+
+      vector<RMANInterface::RSNode> r_nodes;                          //  RMAN => NOVA : nodos del grafo antes de cada llamada al algoritmo
+      vector<RMANInterface::RSTransitionSegment> r_transitions;	      //  RMAN => NOVA : edges con sus pesos antes de cada llamada al algoritmo
+
+...
+}
+
+struct RSScheduleRequest   //NOV code
+{
+ std::string id_;                                              // NO NECESARIO
+ int num_schedules_; // The number of schedules to generate.   // NO NECESARIO
+
+ std::string start_node_id_;
+ std::string end_node_id_;
+};
+     
+
+
+
+
+
+///@test ./test/mainSchedulesGeneratorPhase2.cc
+
+///@todo remove them and use DijkstraIface data structs
+
+
+
+D_1) Pero que datos tiene realmente RMAN?:   X
+
+      // datos usados para crear nodos y ejes y pesos durante createGraph() 
+      vector<string> r_runway_systems;   // RW_1 ... RW_n
+      vector<string> r_time_intervals;   // t0, t1, ..., tm
+      LrsTransitionSegmentCollection r_transition_segments; //temporary weight storage
+
+
+
+
+D_2) Conversión  X => r_nodes  &  r_transitions
+
+
+     IDEA: re-codificar los tipos de r_nodes  &  r_transitions  dentro de RMAN, en vez de en la interfaz => RMAN indep. librería algoritmo.
+
+
+                                            ??input
+     	   RMAN (r_nodes & r_transitions)   =======>   Dijkstra (Graph)
+
+
+	   ??input = InterfazRmanDijkstra:    a) acepta tipos de datos de RMAN (r_nodes & r_transitions)
+                     			      b) los convierte a los tipos que entiende lib_dijkstra
+
+
+                                            ??output
+     	   RMAN (r_nodes & r_transitions)   <=======   Dijkstra (Graph)
+
+
+	   ??input = InterfazRmanDijkstra:    c) recoge el resultado de lib_dijkstra  (path y total_cost)
+					      d) lo convierte a los tipos que entiende RMAN (r_algorithm_result?)
+
+
+
+
+###############################################################################
+# 3) Obtener/Estudiar los parámetros que RMAN RECIBE del algoritmo
+###############################################################################
+
+
+CALL:  initializeNodesAndSegments(r_nodes, r_transitions);       AKI USARE MI LIB !!!
+
+       Dentro de NOVA:   {r_nodes, r_transitions} => 1) (/interfaz/types(ConvertTypes.h): se convienrten a est. datos que entiende el algoritmo 
+       	      	 	 	   		     2) se genera el grafo 
+
+
+
+CALL:  processRSScheduleRequest(request, r_algorithm_result);    AKI USARE MI LIB !!!
+
+       RECIBE:  r_algorithm_result   // RMAN  <-- NOVA
+
+
+
+HINT En mi versión RMAn hará una única llamada que unirá las acciones de initializeNodesAndSegments + processRSScheduleRequest
+
+
+RETURN:   vector<RMANInterface::RSScheduleResponse>  ===> r_algorithm_result
+
+
+	  class LrsAbstractSchedulesGenerator
+	  {
+	   ...
+	    // NOVA code
+	    vector<RMANInterface::RSScheduleResponse>  r_algorithm_result;   // RMAN  <-- NOVA    // nota.- es vector, pero siempre se recibe una sola ruta.
+	    ...
+	  }
+
+
+	  // Output data from a schedule request
+	  struct RSScheduleResponse
+	  {
+             // ID of the schedule
+             std::string id_;                                        /// @warning Se recibe siempre vacío => OK
+
+             // Vector of schedule node IDs for this schedule
+             std::vector<std::string> nodes_;                        /// @warning lista de nodos de la ruta => mi path()  de "user_ids"  => OK
+
+             // Vector of schedule segment IDs for this schedule     /// @warning lista de edges:    NO LO TENGO. Mis edges no tienen id
+             std::vector<std::string> segments_;
+          };
+
+
+
+HINT En mi versión el (interfaz del) algortimo retornará una única ruta (shortest_path) a RMAN.
+
+
+
+
+///@file LrsAbstractSchedulesGenerator.h
+
+///@test ./test/mainSchedulesGeneratorPhase2.cc
+
+
+
+###############################################################################
+# 4) Test RMAN
+###############################################################################
+
+
+
+LrsAbstractSchedulesGenerator::printInputInterface
+LrsAbstractSchedulesGenerator::printOutputInterface()
+LrsDynamicDemandSchedulesGenerator::printTransitionMatrix ()
+
+
+
+
+###############################################################################
+# 5) Dudas
+###############################################################################
+
+
+# 5.1) ¿Cómo se usa en el algoritmo el campo RSTransitionSegment::RSSegmentType de r_transitions?
+
+     r_transitions
+
+     RSTransitionSegment
+     {
+        // Possible types of a route segment
+        enum RSSegmentType
+        {
+            Normal, Frozen
+        };
+
+        // The type of the route segment
+        RSSegmentType type_;
+     }
+
+
+RESPUESTA)   No se utiliza!!   (ver PathFindingInterface::Segment ConvertTypes::mapSegment)
+
+
+# 5.2) ¿Qué campos de RMANInterface::RSScheduleRequest utiliza el algoritmo (convertidos en la interfaz)?
+
+RESPUESTA) std::string start_node_id_;
+           std::string end_node_id_;
+
+
+# 5.3) ¿Para que se utiliza en los algoritmos SMAN el camp "num_schedules"?
+
+WARNING En RMAN no se usa, siempre es 1. Es por curiosidad.
+
+
+# 5.4) En la respuesta del schedule (r_algorithm_result), ¿para que se utiliza el campo segments_?
+
+
+RESPUESTA) Solamente para couts de debug:  void LrsAbstractSchedulesGenerator::printOutputInterface()
+
+
+
+###############################################################################
+# 6) Solution
+###############################################################################
+
+
+# 6.1) FASE 1: aislar RMAN de las interfaces
+
+      vector<RMANInterface::RSNode> r_nodes;                          //  RMAN => NOVA : nodos del grafo antes de cada llamada al algoritmo
+      vector<RMANInterface::RSTransitionSegment> r_transitions;	      //  RMAN => NOVA : edges con sus pesos antes de cada llamada al algoritmo
+    
+      vector<RMANInterface::RSScheduleResponse>  r_algorithm_result;   // RMAN  <-- NOVA    // nota.- es vector, pero siempre se recibe una sola ruta.
+
+
+
+###############################################################################
+# ANEXO A.- ejemplo de salida del algoritmo SMAN
+###############################################################################
+
+
+[RESPONSE]
+Number of schedules: 1
+Schedule: [ID:  | NUM_NODES: 17 | NUM_SEGMENTS: 16
+[NODES]:
+Node: BEGIN
+Node: ELR-t0
+Node: ELR-t1
+Node: ENR-t2
+Node: ENL-t3
+Node: ENL-t4
+Node: ENL-t5
+Node: ENL-t6
+Node: ENL-t7
+Node: ENL-t8
+Node: ENL-t9
+Node: ENL-t10
+Node: ENL-t11
+Node: ENL-t12
+Node: ENL-t13
+Node: ENL-t14
+Node: END
+[SEGMENTS]:
+Segment: 2
+Segment: 26
+Segment: 174
+Segment: 364
+Segment: 484
+Segment: 628
+Segment: 772
+Segment: 916
+Segment: 1060
+Segment: 1204
+Segment: 1348
+Segment: 1492
+Segment: 1636
+Segment: 1780
+Segment: 1924
+Segment: 2032
+]
+
+

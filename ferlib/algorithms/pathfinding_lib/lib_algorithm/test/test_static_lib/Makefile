@@ -1,24 +1,4 @@
 #===============================================================================
-# 
-# Basic GENERIC (*) Makefile for C++ valid for any program (static
-# pattern & implicit rules used)
-#
-# Default configuration = using DEBUG options
-#
-# (*) Do changes (if necessary) only after this label:  DO-CHANGE-HERE
-#
-#===============================================================================
-#
-# c++11 support
-#
-# make "CPP_STD_FLAGS = -std=c++11" all
-#
-# c++14 support
-#
-# make "CPP_STD_FLAGS = -std=c++14" all
-#
-# Optional : Parallel Execution: make -j4 ...
-#===============================================================================
 #
 # INFO Automatic Variables meaning
 #
@@ -71,10 +51,6 @@ HEADER_SUFFIX := h
 
 ## 2) Select project files & paths: VPATH, vpath, sources, objects, headers, ...
 
-#-- DO-CHANGE-HERE
-#MAIN_FILE := main.$(CPP_SUFFIX)
-MAIN_FILE := 
-
 #project-particular variables
 
 
@@ -89,10 +65,7 @@ MAIN_FILE :=
 
 #source files
 SOURCES := $(wildcard *.$(CPP_SUFFIX))
-EXEC_SOURCE := $(MAIN_FILE)
 TEST_SOURCES := $(filter %_test.$(CPP_SUFFIX),$(SOURCES))
-MODULE_SOURCES := $(filter-out $(TEST_SOURCES),$(SOURCES))
-MODULE_SOURCES := $(filter-out $(EXEC_SOURCE),$(MODULE_SOURCES))
 
 #common/base headers
 FN_TYPES:= types
@@ -100,22 +73,33 @@ FN_FACADE:= path_finding_facade
 
 #object files
 OBJS := $(SOURCES:%.$(CPP_SUFFIX)=%.$(OBJ_SUFFIX))
-EXEC_OBJ := $(EXEC_SOURCE:%.$(CPP_SUFFIX)=%.$(OBJ_SUFFIX))
 TEST_OBJS := $(TEST_SOURCES:%.$(CPP_SUFFIX)=%.$(OBJ_SUFFIX))
-MODULE_OBJS := $(MODULE_SOURCES:%.$(CPP_SUFFIX)=%.$(OBJ_SUFFIX))
+
+
+
+#############################################################################
+#pathfinding library
+#############################################################################
+
+PATHFINDING_INCLUDE_DIR:=include
+PATHFINDING_LIB_DIR:=lib
+PATHFINDING_RELPATH:=../..
+# PATHFINDING_ABSPATH:=
+PATHFINDING_PATH:=$(PATHFINDING_RELPATH)
+
 
 #-- DO-CHANGE-HERE
-#shared lib files
-SHLIB_PATHFINDING_NAME:=pathfinding
-SHLIB_PATHFINDING_RELPATH:=../..
-SHLIB_PATHFINDING_ABSPATH:=
-SHLIB_PATHFINDING_PATH:=$(SHLIB_PATHFINDING_RELPATH)
-SHLIB :=
-#static lib files
+#lib headers
+PATHFINDING_INCLUDES_PATH:=$(PATHFINDING_PATH)/$(PATHFINDING_INCLUDE_DIR)
+#lib files
+LIB_PATHFINDING_NAME:=pathfinding_static # STLIB_NAME parameter
+LIB_PATHFINDING_PATH:=$(PATHFINDING_PATH)/$(PATHFINDING_LIB_DIR)
+
+#############################################################################
+
 
 
 #exec files
-EXEC := $(EXEC_SOURCE:%.$(CPP_SUFFIX)=%)
 #-- DO-CHANGE-HERE
 EXEC_OPTIONS =
 #EXEC_OPTIONS = <./data/add_item 
@@ -146,8 +130,8 @@ undirected_iface_test.difftest_output_options = >undirected_iface_test.last_diff
 #header files & paths # i.e. HEADERS := a.$(HEADER_SUFFIX): b.$(HEADER_SUFFIX)
 #-- DO-CHANGE-HERE:  
 INCLUDE_DIRECTORIES := $(srcdir)
-#adding shared/static libraries
-INCLUDE_DIRECTORIES += $(SHLIB_PATHFINDING_PATH)
+#adding shared/static librarie headers
+INCLUDE_DIRECTORIES += $(PATHFINDING_INCLUDES_PATH)
 
 
 # i.e. INCLUDE_DIRECTORIES += $(srcdir)/header
@@ -161,6 +145,8 @@ INCLUDE_DIRECTORIES += $(SHLIB_PATHFINDING_PATH)
 #   iii) VPATH directories.
 #
 #-- DO-CHANGE-HERE
+
+
 VPATH := $(INCLUDE_DIRECTORIES)
 #vpath := 
 
@@ -208,7 +194,6 @@ CXX := g++
 # preprocessor flags: CPPFLAGS
 CPPFLAGS =
 # compilation flags: optional flags (CXXFLAGS) + required flags
-# -fpic to create a shared library
 CXXFLAGS =
 required_cxxflags += $(INCLUDE_FLAGS)
 required_cxxflags += $(CPP_STD_FLAGS)
@@ -216,12 +201,12 @@ required_cxxflags += $(CPP_STD_FLAGS)
 # Linking #-- DO-CHANGE-HERE
 #
 # LDFLAGS: flags (i.e -g), and library paths (i.e. -L path-lib)
-RPATH_LINKER_OPTS := -Wl,-rpath=$(SHLIB_PATHFINDING_PATH)
-LDFLAGS = -L$(SHLIB_PATHFINDING_PATH)
+RPATH_LINKER_OPTS := 
+LDFLAGS = -L$(LIB_PATHFINDING_PATH)
 LDFLAGS += $(RPATH_LINKER_OPTS)
 LDFLAGS += $(CPP_STD_FLAGS)
 # LDLIBS:  library names: (i.e. LDIBS="-lncurses -lm -lsdl")
-LDLIBS = -l$(SHLIB_PATHFINDING_NAME)
+LDLIBS = -l$(LIB_PATHFINDING_NAME)
 
 ifdef debug_mode
 CXXFLAGS += $(WARNING_FLAGS)
@@ -243,8 +228,8 @@ all_cxxflags = $(required_cxxflags) $(CXXFLAGS)
 
 # RM=rm -f
 RM.CORES := $(wildcard core.*)
-RM.EXEC := $(EXEC) a.out $(TEST_EXECS) $(MODULE_SOURCES:%.$(CPP_SUFFIX)=%)
-RM.LIBS := lib$(SHLIB).so ib$(SHLIB).a
+RM.EXEC :=  $(TEST_EXECS)
+RM.LIBS :=
 RM.SAVES :=  $(wildcard *.*~ ) $(wildcard *~)
 RM.OTHER_STUFF := $(wildcard *.$(HEADER_SUFFIX).gch)
 RM.VALGRIND := vgrind.*.out
@@ -266,22 +251,18 @@ RM.TRASH = $(RM.CORES) \
 # default target = all
 #===============================================================================
 
-.PHONY: all exec test runexec runtest successtest difftest
+.PHONY: all runtest successtest difftest
 	@echo '$*'
 
-# all: $(TEST_EXECS) $(EXEC)  # tests are in ./test
-all: $(OBJS)
-	@echo 'Building target: $@'
+# .PHONY: test
+# #WARNING A phony target SHOULD NOT be a prerequisite of a real target file.
 
 
-exec: $(EXEC)
+all: test
 	@echo 'Building target: $@'
 
 test: $(TEST_EXECS)
 
-
-lib: $(SHLIB)
-	@echo 'Building target: $@'
 
 #-------------------------------------------------------------------------------
 # rules to execute test/main programs
@@ -289,9 +270,6 @@ lib: $(SHLIB)
 
 #!\warning EOLINE is not expanded, so ';' is required to separate
 # commands over the shell console.
-
-RUNEXEC_COMMAND = ./$(exec_unit) $(EXEC_OPTIONS)
-
 
 RUNTEST_COMMAND = \
 		./$(test_unit) \
@@ -313,15 +291,6 @@ DIFFTEST_COMMAND = \
 		echo '\ndiff result on: $(test_unit)' ; \
 		diff $(test_unit).last_diff $(test_unit).OK ;
 
-
-#------------------
-# main-program execution
-#------------------
-
-runexec:exec
-	@echo 'Building target: $@'
-	$(foreach exec_unit,$(EXEC),$(RUNEXEC_COMMAND))
-	@echo 'Finished building: $@'
 
 
 #------------------
@@ -391,9 +360,6 @@ $(DIFF.TEST_TARGETS): diff.%: %
 # a) compilation
 #------------------
 
-# cada  .o (que no es un test) depende de su .h
-$(MODULE_OBJS): %.$(OBJ_SUFFIX): %.$(HEADER_SUFFIX)
-
 # además cada  .o  depende de $(COMMON_HEADERS)
 COMMON_HEADERS:=  $(FN_TYPES).$(HEADER_SUFFIX)
 COMMON_HEADERS+=  $(FN_FACADE).$(HEADER_SUFFIX)
@@ -420,23 +386,8 @@ $(OBJS): %.$(OBJ_SUFFIX): %.$(CPP_SUFFIX)
 # b) linking
 #------------------
 
-$(SHLIB):$(MODULE_OBJS)
-	@echo ''
-	@echo 'Building target: $@'
-	$(CXX) -shared $(LDFLAGS) -o lib$@.so $^ $(LDLIBS)
-
-
-
-$(EXEC):$(EXEC_OBJ) $(MODULE_OBJS)
-	@echo ''
-	@echo 'Building target: $@'
-	$(CXX) $(LDFLAGS) -o $@ $^ $(LDLIBS)
-
-
 # each test executable depends on its obj file...
-# ... and in any of the module objects.
-$(TEST_EXECS): %: %.$(OBJ_SUFFIX) \
-              $(MODULE_OBJS)  
+$(TEST_EXECS): %: %.$(OBJ_SUFFIX)
 	@echo ''
 	@echo 'Building target: $@'
 	$(CXX) $(LDFLAGS) -o $@ $^ $(LDLIBS)
@@ -457,15 +408,16 @@ clean:
 # valgrind targets
 #===============================================================================
 
-.PHONY: memcheck valgrind
+# .PHONY: memcheck valgrind
 
-memcheck:
-	@echo 'Building target: $@'
-	./scripts/memcheck_to_each_test.sh
+# memcheck:
+# 	@echo 'Building target: $@'
+# 	./scripts/memcheck_to_each_test.sh
 
-valgrind:
-	@echo 'Building target: $@'
-	./scripts/memcheck_to_each_test.sh
+# valgrind:
+# 	@echo 'Building target: $@'
+# 	./scripts/memcheck_to_each_test.sh
+
 
 #just to check values
 # dummy:

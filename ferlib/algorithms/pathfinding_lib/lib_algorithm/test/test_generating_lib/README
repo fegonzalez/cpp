@@ -1,11 +1,12 @@
 
+@info First, generates the library if necessary, then uses it as an
+      static library.
+
+
+
 ################################################################################
 # How to run the tests.
 ################################################################################
-
-WARNING Required: the library must exists => execute 'make lib' on the
-	source code (i.e. cd ../.. && make lib).
-
 
 
 # Individually, 
@@ -22,3 +23,16 @@ WARNING Required: the library must exists => execute 'make lib' on the
     make diff.undirected_iface_test
 
 
+
+# Size of the binaries:
+
+  - Using the dynamic (shared) library: 
+
+    directed_iface_test:   32 K
+    undirected_iface_test: 32 K
+ 
+
+  - Using the static library: 
+
+    directed_iface_test:   106 K
+    undirected_iface_test: 106 K
