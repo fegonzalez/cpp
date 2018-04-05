@@ -1,0 +1,71 @@
+
+@info The eventual linkage used in the eventual client-executable
+	 ONLY depends in how the library was generated:
+
+	 ar          => generates an static lib
+	 
+	 g++ -shared => generates a dynamic lib
+
+      FACT: For the same linkage instruction in the client (-L, -l),
+      	    the resultant exec will be different according to how the
+      	    library was generated.
+
+      FACT: the extension of the file (".a", ".so") is ignored by the
+            compiler/linker, and it is only a reference for the human user.
+      
+
+
+STATIC LIBS [1]
+
+1. For a static library, the actual code is extracted from the library
+   by the linker and used to build the final executable at the point
+   you compile/build your application.
+
+2. Each process gets its own copy of the code and data. Where as in
+   case of dynamic libraries it is only code shared, data is specific
+   to each process. For static libraries memory footprints are
+   larger. For example, if all the window system tools were statically
+   linked, several tens of megabytes of RAM would be wasted for a
+   typical user, and the user would be slowed down by a lot of paging.
+
+3. Since library code is connected at compile time, the final
+   executable has no dependencies on the the library at run time
+   i.e. no additional run-time loading costs, it means that you don’t
+   need to carry along a copy of the library that is being used and
+   you have everything under your control and there is no dependency.
+
+4. In static libraries, once everything is bundled into your
+   application, you don’t have to worry that the client will have the
+   right library (and version) available on their system.
+
+5. One drawback of static libraries is, for any change(up-gradation)
+   in the static libraries, you have to recompile the main program
+   every time.
+
+6. One major advantage of static libraries being preferred even now
+   “is speed”. There will be no dynamic querying of symbols in static
+   libraries. Many production line software use static libraries even
+   today.
+
+See more: [2]
+
+
+SHARED LIBS 
+
+Dynamic Linking doesn’t require the code to be copied, it is done by
+just placing name of the library in the binary file. The actual
+linking happens when the program is run, when both the binary file and
+the library are in memory. Examples of Dynamic libraries (libraries
+which are linked at run-time) are, .so in Linux and .dll in Windows. [1]
+
+
+See more: [3] 
+
+
+##------------------------------------------------------------------------------
+
+[1] https://www.geeksforgeeks.org/static-vs-dynamic-libraries/
+
+[2] ./static_howto/doc/
+
+[3] ./shared_howto/doc/

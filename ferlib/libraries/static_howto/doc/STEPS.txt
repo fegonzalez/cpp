@@ -1,0 +1,91 @@
+
+@info The eventual linkage used in the eventual client-executable
+	 ONLY depends in how the library was generated:
+
+	 ar          => generates an static lib
+	 
+	 g++ -shared => generates a dynamic lib
+
+      FACT: For the same linkage instruction in the client (-L, -l),
+      	    the resultant exec will be different according to how the
+      	    library was generated.
+
+      FACT: the extension of the file (".a", ".so") is ignored by the
+            compiler/linker, and it is only a reference for the human user.
+      
+
+
+
+
+
+doc: https://www.geeksforgeeks.org/static-vs-dynamic-libraries/
+
+###############################################################################
+# I. In the library 
+###############################################################################
+
+/** Step 1: Compiling
+*/
+
+>> g++ -c -Wall -Werror foo.cc
+>> g++ -c -Wall -Werror foo2.cc
+
+# generated: foo.o  foo2.o
+
+
+/** Step 2: Creating an static library: bundle multiple object files using 'ar'
+
+After this, the static library is ready to use. At this point we could
+just copy the lib file (.a) somewhere else to use it.
+
+
+ar options:
+
+v: verbose
+
+s: @warning  Running 'ar s' on an archive is equivalent to running ranlib on it.
+
+   e.g. ar rcsv  lib_foos.a  == ar rcv lib_foos.a && ranlib lib_foos.a
+
+*/
+
+>> ar rcsv lib_foos.a foo.o foo2.o
+
+# generated: lib_foos.a
+
+
+###############################################################################
+# II. In the client (user) of the library
+###############################################################################
+
+/** Step 3: Compiling the test/user of the library.
+*/
+    
+>> g++ -c -Wall -Werror test.cc
+
+# generated: test.o
+
+
+/** Step 4: Linking (the test / user of the library) with an static library
+
+    Link option:   -L:   -Lthe-library-path
+    
+    Link option:   -l:   -lthe_library_name
+    	 	   	 # the_library_name without 'lib' prefix
+			 # the_library_name without '.a' suffix
+
+   [ Example   the-library-path = current directory =>  -L.   end-example ]
+
+   [ Example   library name is 'lib_foos.a' =>  -l_foos       end-example ]
+
+ 
+   @warning the order is important, -L and -l must be after -o
+
+
+*/
+
+
+>> g++ -o test1 test.o  -L. -l_foos
+
+# generated: test1
+

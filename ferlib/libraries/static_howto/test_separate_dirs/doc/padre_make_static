@@ -1,0 +1,27 @@
+SUBDIRS = types \
+          schedule_algorithms \
+          lib_algorithm
+
+RMAKE_DIRS = $(SUBDIRS:%=rmake-%)
+LINK_DIRS = $(SUBDIRS:%=link-%)
+CLEAN_DIRS = $(SUBDIRS:%=clean-%)
+
+all: rmake
+
+rmake: $(RMAKE_DIRS)
+$(RMAKE_DIRS):
+	@$(MAKE) -C $(@:rmake-%=%)
+	
+link: $(LINK_DIRS)
+$(LINK_DIRS):
+	@$(MAKE) -C $(@:link-%=%) link
+	
+clean: $(CLEAN_DIRS)
+$(CLEAN_DIRS):
+	@$(MAKE) -C $(@:clean-%=%) clean
+
+.PHONY: subdirs $(SUBDIRS)
+.PHONY: subdirs $(DOMAKE_DIRS)
+.PHONY: subdirs $(CLEAN_DIRS)
+.PHONY: all rmake link clean
+

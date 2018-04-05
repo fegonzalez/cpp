@@ -1,0 +1,14 @@
+
+# Nota: estructura directorios
+
+# en la librería  some_lib
+
+
+# en el cliente ./test/
+
+
+
+
+# NOTA proyectos => ar genera las libs en  ./obj/
+
+ar: creating obj/libRmanCommunications.a
