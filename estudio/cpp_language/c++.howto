@@ -350,6 +350,8 @@
 # C.4. Compilation options
 # C.5. Linkage
 # C.6. C++11 compilation options  [6]
+# C.7. Static libraries
+# C.8. Shared libraries
 
 
 # Appendix I - Undocumented Issues
@@ -7932,6 +7934,13 @@ Solution: declare the variable as 'extern' (in one or many header
     be useful to facilitate the conversion to nullptr in C++11.
 
 
+# C.7. Static libraries  [6_4]
+
+Details: see ../../ferlib/libraries/static_howto/
+
+# C.8. Shared libraries
+
+Details: see ../../ferlib/libraries/shared_howto/
 
 
 # ==============================================================================
@@ -8933,10 +8942,12 @@ c) address size (processor concept)
 
   [6_1_4] link options - https://gcc.gnu.org/onlinedocs/gcc/Link-Options.html
 
-[6_2] Instatntiation units - http://stackoverflow.com/questions/19971744/whats-the-meaning-of-instantiation-unit-in-c11-standard
+[6_2] Instantiation units - http://stackoverflow.com/questions/19971744/whats-the-meaning-of-instantiation-unit-in-c11-standard
 
 [6_3] Single Compilation Unit (SCU) -
       https://en.wikipedia.org/wiki/Single_Compilation_Unit
+
+[6_4] static (vs shared) libaries - https://www.geeksforgeeks.org/static-vs-dynamic-libraries/
 
 # ------------------------------------------------------------------------------
 
