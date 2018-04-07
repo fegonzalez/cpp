@@ -15,16 +15,14 @@ namespace path_finding {
     std::numeric_limits<TypeDistance>::infinity();
 
 
-  /* Función de optimización:   std::function<void (int)> func */
-
   
   /**************************************************************************/
-  /** @class Dijkstra
+  /** @class DijkstraStrategy
 
-      @brief Dijkstra algorithm implementation.
+      @brief Dijkstra's algorithm implementation interface.
   */
 
-  class Dijkstra
+  class DijkstraStrategy
   {
   public:
 
@@ -34,10 +32,21 @@ namespace path_finding {
 	@param graph the graph to apply Dijkstra.
 	@param start the initial vertex of the path
 	@return The distance from start to all the other vertex.
+
     */
-    DijkstraSolution shortest_path(const Graph &graph, 
-				   const UserVertexId &start,
-				   const UserVertexId &target);
+    virtual DijkstraSolution shortest_path(const Graph &graph, 
+					   const UserVertexId &start,
+					   const UserVertexId &target) = 0;
+  };
+
+
+  class UniformCostSearch: public DijkstraStrategy
+  {
+  public:
+
+    virtual DijkstraSolution shortest_path(const Graph &graph, 
+					   const UserVertexId &start,
+					   const UserVertexId &target);
   };
 
 

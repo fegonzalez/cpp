@@ -3,7 +3,8 @@
 
       @brief Implementation of Dijkstra algorithm 
 
-      (https://en.wikipedia.org/wiki/Dijkstra%27s_algorithm)
+      [dijkstra-wikipedia] https://en.wikipedia.org/wiki/Dijkstra's_algorithm
+
   */
 
 
@@ -30,11 +31,12 @@ namespace path_finding {
 
       @ error is start or target are not vertex of the graph.
   */
-  DijkstraSolution Dijkstra::shortest_path
+  DijkstraSolution UniformCostSearch::shortest_path
    (const Graph &graph,
     const UserVertexId &user_start,
     const UserVertexId &user_target)
   {
+
     assert(graph.validUserVertex(user_start) and
 	   graph.validUserVertex(user_target));
 
@@ -49,7 +51,7 @@ namespace path_finding {
     InnerVertexId target = graph.get_inner_id(user_target);
 
     // distances: total (OPTIMAL) distance from 'start' to all the rest.
-    /// @todo OPTIM: ir metiendo SOLAMENE los nodos visitados
+    /// @todo OPTIM: ir metiendo SOLAMENE los nodos explored
     std::unordered_map<InnerVertexId, TypeDistance> distances{};
 
     for(auto citer = graph.the_vertex_map.cbegin();
@@ -62,7 +64,7 @@ namespace path_finding {
 
 
     /// previous: prev-vertex in the optimal-path for every vertex in graph.
-    /// @todo OPTIM: ir metiendo SOLAMENE los nodos visitados
+    /// @todo OPTIM: ir metiendo SOLAMENE los nodos explored 
     std::unordered_map<InnerVertexId, InnerVertexId> previous{};
 
     for(auto citer = graph.the_vertex_map.cbegin();
@@ -73,19 +75,19 @@ namespace path_finding {
     }
 
 
-    ///@param candidates: next nodes to visit (priority_queue)
+    ///@param candidates: next nodes to explore (priority_queue)
     std::priority_queue< AdjPair,
 			 std::vector <AdjPair> , 
 			 std::greater<AdjPair> > candidates;
 
-    // optimization: only insert the first vertex to visit (start)
+    // optimization: only insert the first vertex to explore (start)
     candidates.push(std::make_pair(TYPEDISTANCE_ZERO, start));
 
     // optimization: exit upon success
     bool target_found = false;
 
-    //optimization: avoid process vertex already visited (old candidates)
-    std::unordered_set<InnerVertexId> visited;
+    //optimization: avoid process vertex already explored (old candidates)
+    std::unordered_set<InnerVertexId> explored;
 
     
     
@@ -116,8 +118,8 @@ namespace path_finding {
 		    { std::clog << " " << val.second; }); 
       std::clog << std::endl ;
 
-      std::clog << "visited: " ;
-      std::for_each(std::begin(visited), std::end(visited), 
+      std::clog << "explored: " ;
+      std::for_each(std::begin(explored), std::end(explored), 
 		    [](const InnerVertexId &val)
 		    { std::clog << " " << val; }); 
       std::clog << std::endl ;
@@ -134,21 +136,8 @@ namespace path_finding {
 #ifdef DEBUG_MODE_DIJKSTRA
       std::clog << "new_candidate: " << new_candidate << std::endl;
 #endif
-     
-      auto citr_visited = visited.find(new_candidate);
-      if(citr_visited == visited.end())
-      {
-	visited.insert(new_candidate);
-      }
-      else
-      {
-#ifdef DEBUG_MODE_DIJKSTRA
-	std::clog << "already visited: " << new_candidate << std::endl;
-#endif
-	continue;
-      }
 
-      //optimization: stop if target vertex reached
+      
       if(new_candidate == target)
       {
 #ifdef DEBUG_MODE_DIJKSTRA
@@ -156,6 +145,20 @@ namespace path_finding {
 #endif
 	target_found = true;
 	break;
+      }
+
+      //ignoring new candidates already explored
+      auto citr_explored = explored.find(new_candidate);
+      if(citr_explored == explored.end())
+      {
+	explored.insert(new_candidate);
+      }
+      else
+      {
+#ifdef DEBUG_MODE_DIJKSTRA
+	std::clog << "already explored: " << new_candidate << std::endl;
+#endif
+	continue;  
       }
 	
       const auto range =

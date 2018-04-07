@@ -38,7 +38,7 @@ int main()
     // => WARNING: idem all2all
     //
     // Time after 1e+07 examples (sin imprimir resultados): 68.8308
-    // Comprobando si candidatos fueron ya visited! (solo hay un caso
+    // Comprobando si candidatos fueron ya explored! (solo hay un caso
     // en el ejemplo
     //
     //

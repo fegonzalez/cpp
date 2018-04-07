@@ -2,9 +2,7 @@
 @todo optimzar est. datos:  distances  &  previous
 
 
-
   VER:  wikipedia, "Practical optimizations and infinite graphs".
-
 
 
 1) pseudocode
@@ -56,6 +54,11 @@ DUDA_2: Idem DUDA_1 con la est.datos "previous":
 \todo Generalizar Función de optimización:   
 
       Dijstra: Cambiar mimimizar por F_OPTIM = {F_MIN, F_MAX}.:
+
+
+   idea: std::function<void (int)> func   
+
+   idea: ¿Entrada a Dijkstra:  Dikstra <G, F> //  {grafo, fn_optimización} ?
 
 
 \todo Generalizar dijstra

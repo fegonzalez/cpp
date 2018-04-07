@@ -109,7 +109,7 @@ namespace path_finding {
 
     friend std::ostream& operator<<(std::ostream &, const Graph &);
 	
-    friend class Dijkstra;
+    friend class UniformCostSearch;
   
   public:
        

@@ -1,3 +1,7 @@
+# Dijkstra pseudocode
+#
+# This pseudocode does not follows the common Dijkstra's algorithm,
+# but an optimization algorithm that is called uniform-cost search [1]
 
 
 /**************************************************************************/
@@ -17,9 +21,9 @@ class Edge:
 	       // Edges idénticos
 	       // enum {START2END, // grafos dirigidos
 	       // BOTH}            // gs. no dirigidos
-    
 
-class Distance
+
+class Distance:  double
 
 
 // Matriz de adyacencias:
@@ -41,17 +45,22 @@ Vector<Vertex> the_result_path; // e.g. wikipedia:  1 -> 3 -> 6 -> 5
 
 
 
-///@param istances: total distance from the src vertex to all the rest.
+///@param distances: total distance from the src vertex to all the rest.
 
 Map<Vertex, Distance> distances;
 
 
+
+/**************************************************************************/
+/** Dijkstra (uniform-cost search) algorithm                              */
+/**************************************************************************/
+
 # Initialization step
 
-//
-// for each node N, distances[N] = weight(initial node, N)
-// e.g. wikipedia: {0, 7, 9, 20, 20, 11}
-//
+#
+# for each node N, distances[N] = weight(initial node, N)
+# e.g. wikipedia: {0, 7, 9, 20, 20, 11}
+#
 distances.fill(all_nodes, INFINITE)
 distances[start] = 0
 
@@ -59,7 +68,7 @@ distances[start] = 0
 /** @param previous vertex: current prev. vertex in the optimal path
     	   	    	    for EVERY vertex in the graph.
 
-    @todo OPTIM: ir metiendo SOLAMENE los nodos visitados
+    @todo OPTIM: ir metiendo SOLAMENTE los nodos visitados
 
 //
 // e.g. wikipedia: 1: null
@@ -74,12 +83,17 @@ Map<Vertex, Vertex> previous
 previous[start] = null
 
 
-///@param candidates: next nodes to visit (recommended: priority_queue)
+# @param candidates: next nodes to visit (recommended: priority_queue)
 priority_queue<Vertex, Distance> candidates
 candidates.push(start, 0)
 
 bool target_found = false
 
+
+# @param explored: optimization: avoid process vertex already explored
+#                  (old candidates)
+# not part of standard Dijkstra (UniformCostSearch) [1]
+set<Vertex> explored = empty set
 
 
 # Discovery step
@@ -87,12 +101,18 @@ bool target_found = false
 while !candidates.empty:
   candidate = candidates.pop_min()
     
-    # not part of standard Dijkstra
+    # not part of standard Dijkstra (UniformCostSearch) [1]
     if candidate == target:
         target_found = true
         break
-        
-    # relaxation step: candidate.next() can have additional filtering
+
+    # not part of standard Dijkstra (UniformCostSearch) [1]
+    explored.add(candidate)
+
+    # relaxation step: 
+    # for each of candidates's neighbors n
+    #   if n is not in explored
+    #       candidates.add(n)
     for neighbour in candidate.next():
         # distance(node, node) can also have internal logic
         neigh_distance = distances[candidate] + distance(candidate, neighbour)
