@@ -42,7 +42,7 @@ remote_c++_lib
 !ferlib/logs/std_streambuf/std_streambuf.tar.gz
 !ferlib/logs/std_streambuf/log.std_streambuf.thread.example.tar.gz
 !ferlib/logs/logger_2016.tar.gz
-
+ferlib/algorithms/pathfinding_lib/doc/makefile-sman
 
 #estudio
 #estudio-doc
@@ -53,4 +53,4 @@ estudio/cpp_language/doc_references/primer/*
 
 
 #code
-/home/fer/workspace/C_C++/ferlib/algorithms/old/*
+ferlib/algorithms/old/*
