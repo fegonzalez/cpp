@@ -281,24 +281,13 @@ namespace path_finding {
   void Graph::add_vertex(const UserVertexId &id)
   {
     const auto search_id = the_useridskeyed_map.find(id);
-
-    bool invariant = (search_id == the_useridskeyed_map.end());
-    assert(invariant);
-    const auto INVARIANT_N_USERS = the_useridskeyed_map.size();  // +1 expect
-    const auto INVARIANT_N_INNERS = the_inneridskeyed_map.size();// +1 expect
-    const auto INVARIANT_N_VERTEX = num_inner_indexes();         // +1 expect
+    assert(search_id == the_useridskeyed_map.end());
 
     //adding 'from' vertex
     InnerVertexId id_inner_id = num_inner_indexes() + 1;
     the_useridskeyed_map[id] = id_inner_id;
     the_inneridskeyed_map[id_inner_id] = id;
-    the_vertex_map[id_inner_id] = VertexValue(new Vertex(id_inner_id, id));
-    
-    invariant = invariant and 
-      ((INVARIANT_N_USERS  + 1 == the_useridskeyed_map.size()) and
-       (INVARIANT_N_INNERS + 1 == the_inneridskeyed_map.size()) and
-       (INVARIANT_N_VERTEX + 1 == num_inner_indexes()));
-    assert(invariant);
+    the_vertex_map[id_inner_id] = VertexValue(new Vertex(id_inner_id, id));    
   }
   
   //--------------------------------------------------------------------------
@@ -371,13 +360,9 @@ namespace path_finding {
 					 const UserEdgeId &edge_user_id)
   {
     (void) edge_user_id;
-    
-    auto invariant = num_edges();
-
     BaseEdgePtr new_value(new Edge(from, to, weight,
 				   EdgeDirection::FROM_TO));    
     the_edge_map[num_edges() + 1] = new_value;
-    assert(invariant == num_edges()-1);
     return new_value;
   }
      
@@ -387,19 +372,8 @@ namespace path_finding {
 					       const InnerVertexId &to, 
 					       const AdjacEdge &edge)
   {
-    const auto INVARIANT_OUTSIZE = the_adjacency_data.the_outward_edges.size();
-    const auto INVARIANT_INSIZE = the_adjacency_data.the_inward_edges.size();
-    unsigned int INVARIANT_NCHANGES = 1;
-      
     the_adjacency_data.the_outward_edges.insert(std::make_pair(from, edge));
     the_adjacency_data.the_inward_edges.insert(std::make_pair(to, edge));
-  	    
-    bool invariant =
-      (INVARIANT_OUTSIZE == the_adjacency_data.the_outward_edges.size() -
-       INVARIANT_NCHANGES) and
-      (INVARIANT_INSIZE == the_adjacency_data.the_inward_edges.size() -
-       INVARIANT_NCHANGES);
-    assert (invariant);
   }
 
 
@@ -416,13 +390,9 @@ namespace path_finding {
 					   const UserEdgeId &edge_user_id)
   {
     (void) edge_user_id;
-	
-    auto invariant = num_edges();
-    
     BaseEdgePtr new_value(new Edge(from, to, weight,
 				   EdgeDirection::BOTH));
     the_edge_map[num_edges() + 1] = new_value;
-    assert(invariant == num_edges()-1);
     return new_value;
   }
      
@@ -432,21 +402,10 @@ namespace path_finding {
 					       const InnerVertexId &to, 
 					       const AdjacEdge &edge)
   {
-    const auto INVARIANT_OUTSIZE = the_adjacency_data.the_outward_edges.size();
-    const auto INVARIANT_INSIZE = the_adjacency_data.the_inward_edges.size();
-    unsigned int INVARIANT_NCHANGES = 2;
-  
     the_adjacency_data.the_outward_edges.insert(std::make_pair(from, edge));
     the_adjacency_data.the_inward_edges.insert(std::make_pair(to, edge));
     the_adjacency_data.the_outward_edges.insert(std::make_pair(to, edge));
     the_adjacency_data.the_inward_edges.insert(std::make_pair(from, edge));
-	    
-    bool invariant =
-      (INVARIANT_OUTSIZE == the_adjacency_data.the_outward_edges.size() -
-       INVARIANT_NCHANGES) and
-      (INVARIANT_INSIZE == the_adjacency_data.the_inward_edges.size() -
-       INVARIANT_NCHANGES);
-    assert (invariant);
   }
 
 
