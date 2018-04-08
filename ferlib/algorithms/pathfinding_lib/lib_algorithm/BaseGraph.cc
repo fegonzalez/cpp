@@ -62,13 +62,13 @@ namespace path_finding {
       the_inneridskeyed_map[from_inner_id] = from;
       the_vertex_map[from_inner_id] =
 	VertexValue(new Vertex(from_inner_id, from));
-      the_vertex_map[from_inner_id]->add_neighbor(new_edge);
+      //the_vertex_map[from_inner_id]->add_neighbor(new_edge);
       //adding 'to' vertex
       the_useridskeyed_map[to] = to_inner_id;
       the_inneridskeyed_map[to_inner_id] = to;
       the_vertex_map[to_inner_id] =
 	VertexValue(new Vertex(to_inner_id, to));
-      the_vertex_map[to_inner_id]->add_neighbor(new_edge);
+      //the_vertex_map[to_inner_id]->add_neighbor(new_edge);
       // adjacency data
       insert_adjacency(from_inner_id, to_inner_id, new_edge);
    
@@ -91,12 +91,12 @@ namespace path_finding {
       InnerVertexId to_inner_id = num_inner_indexes() + 1;
       BaseEdgePtr new_edge = insert_edge(from_inner_id, to_inner_id, weight,
 					 edge_user_id);
-      the_vertex_map[from_inner_id]->add_neighbor(new_edge); // updating 'from'
+      //the_vertex_map[from_inner_id]->add_neighbor(new_edge); // updating 'from'
       the_useridskeyed_map[to] = to_inner_id; //adding 'to' vertex
       the_inneridskeyed_map[to_inner_id] = to;
       the_vertex_map[to_inner_id] =
 	VertexValue(new Vertex(to_inner_id, to));
-      the_vertex_map[to_inner_id]->add_neighbor(new_edge);
+      //the_vertex_map[to_inner_id]->add_neighbor(new_edge);
       insert_adjacency(from_inner_id, to_inner_id, new_edge);
 
       // verifying invariant 
@@ -123,8 +123,8 @@ namespace path_finding {
       the_inneridskeyed_map[from_inner_id] = from;
       the_vertex_map[from_inner_id] =
 	VertexValue(new Vertex(from_inner_id, from));
-      the_vertex_map[from_inner_id]->add_neighbor(new_edge);
-      the_vertex_map[to_inner_id]->add_neighbor(new_edge); // updating 'to'
+      //the_vertex_map[from_inner_id]->add_neighbor(new_edge);
+      //the_vertex_map[to_inner_id]->add_neighbor(new_edge); // updating 'to'
       insert_adjacency(from_inner_id, to_inner_id, new_edge);
 
       // verifying invariant 
@@ -147,8 +147,8 @@ namespace path_finding {
       InnerVertexId to_inner_id = the_useridskeyed_map[to];
       BaseEdgePtr new_edge = insert_edge(from_inner_id, to_inner_id, weight,
 					 edge_user_id);
-      the_vertex_map[from_inner_id]->add_neighbor(new_edge);
-      the_vertex_map[to_inner_id]->add_neighbor(new_edge);
+      //the_vertex_map[from_inner_id]->add_neighbor(new_edge);
+      //the_vertex_map[to_inner_id]->add_neighbor(new_edge);
       insert_adjacency(from_inner_id, to_inner_id, new_edge);
 	    
       // verifying invariant 

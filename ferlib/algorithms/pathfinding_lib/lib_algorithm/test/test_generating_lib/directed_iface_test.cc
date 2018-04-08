@@ -48,29 +48,29 @@ int main()
 
  
   // - short graphs: conclusions: short graphs => same performance
-  // example_wiki(1, 1e6); // @todo probar en maquina NO virtual
+  //example_wiki(1, 1e6); // @todo probar en maquina NO virtual
   //
   // try 1:
   // 1) Testing UCS for finite graphs
-  // Nodes: 21; Iterations: 1000000; Time: 23435.3 (ms)
+  // Nodes: 21; Iterations: 1000000; Time: 21302.1 (ms) 
   // 2) Testing UCS for infinite graphs
-  // Nodes: 21; Iterations: 1000000; Time: 23206.4 (ms)
+  // Nodes: 21; Iterations: 1000000; Time: 21481.4 (ms) 
   //
   // try n:
   // 1) Testing UCS for finite graphs
-  // Nodes: 21; Iterations: 1000000; Time: 23086.9 (ms)
+  // Nodes: 21; Iterations: 1000000; Time: 21536.4 (ms)
   // 2) Testing UCS for infinite graphs
-  // Nodes: 21; Iterations: 1000000; Time: 23199.6 (ms)
+  // Nodes: 21; Iterations: 1000000; Time: 21297.2 (ms)
 
 
 
   // - very large graphs: conclusions: InfiniteGraphUniformCostSearch is better
-  // example_wiki(1e6,1); // @todo probar en maquina NO virtual
+  //example_wiki(1e6,1); // @todo probar en maquina NO virtual
   //
   // 1) Testing UCS for finite graphs
-  // Nodes: 1999821; Iterations: 1; Time: 6030.15 (ms) 
+  // Nodes: 1999821; Iterations: 1; Time: 5194.1 (ms) 
   // 2) Testing UCS for infinite graphs
-  // Nodes: 1999821; Iterations: 1; Time: 5060.97 (ms)
+  // Nodes: 1999821; Iterations: 1; Time: 4540.57 (ms) 
 
 
   
@@ -78,9 +78,9 @@ int main()
   //example_wiki(600,1);
   //
   // 1) Testing UCS for finite graphs
-  // Nodes: 1021; Iterations: 1; Time: 1.XXX (ms) 
+  // Nodes: 1021; Iterations: 1; Time: 0.9XXX (ms) 
   // 2) Testing UCS for infinite graphs
-  // Nodes: 1021; Iterations: 1; Time: 1.XXX (ms) 
+  // Nodes: 1021; Iterations: 1; Time: 0.9XXX (ms) 
 
 
   return 0;

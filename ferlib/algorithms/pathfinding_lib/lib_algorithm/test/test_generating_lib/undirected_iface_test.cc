@@ -51,15 +51,15 @@ int main()
   //
   // try 1:
   // 1) Testing UCS for finite graphs
-  // Nodes: 11; Iterations: 1000000; Time: 20182 (ms) 
+  // Nodes: 11; Iterations: 1000000; Time: 17410.5 (ms) 
   // 2) Testing UCS for infinite graphs
-  // Nodes: 11; Iterations: 1000000; Time: 20655.7 (ms) 
+  // Nodes: 11; Iterations: 1000000; Time: 17468.5 (ms)
   //
   // try n:
   // 1) Testing UCS for finite graphs
-  // Nodes: 11; Iterations: 1000000; Time: 22225.4 (ms) 
+  // Nodes: 11; Iterations: 1000000; Time: 17620.5 (ms) 
   // 2) Testing UCS for infinite graphs
-  // Nodes: 11; Iterations: 1000000; Time: 21426.8 (ms) 
+  // Nodes: 11; Iterations: 1000000; Time: 17263.6 (ms)
 
 
 
@@ -67,9 +67,9 @@ int main()
   //example_wiki(1e6,1); // @todo probar en maquina NO virtual
   //
   // 1) Testing UCS for finite graphs
-  // Nodes: 999911; Iterations: 1; Time: 4921.71 (ms) 
+  // Nodes: 999911; Iterations: 1; Time: 3859.93 (ms)
   // 2) Testing UCS for infinite graphs
-  // Nodes: 999911; Iterations: 1; Time: 4249.43 (ms) 
+  // Nodes: 999911; Iterations: 1; Time: 3485.5 (ms)
 
 
   
@@ -77,9 +77,9 @@ int main()
   //example_wiki(1000,1);
   //
   // 1) Testing UCS for finite graphs
-  // Nodes: 1021; Iterations: 1; Time: 2.XXX (ms) 
+  // Nodes: 1021; Iterations: 1; Time: 1.XXX (ms) 
   // 2) Testing UCS for infinite graphs
-  // Nodes: 1021; Iterations: 1; Time: 2.XXX (ms) 
+  // Nodes: 1021; Iterations: 1; Time: 1.XXX (ms) 
 
   return 0;
 }

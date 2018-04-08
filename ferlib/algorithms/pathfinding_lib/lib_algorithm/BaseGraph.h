@@ -278,7 +278,7 @@ namespace path_finding {
     virtual InnerVertexId inner_id()const = 0;
     
     /// @brief (Optimization) Add an edge to connect to a neighbor vertex
-    virtual void add_neighbor(BaseEdgePtr edge) = 0;
+    //    virtual void add_neighbor(BaseEdgePtr edge) = 0;
 
 
     /// @todo ?
@@ -320,12 +320,8 @@ namespace path_finding {
     UserVertexId user_id()const {return the_user_id;}
     InnerVertexId inner_id()const {return the_inner_id;}
 
-    void add_neighbor(BaseEdgePtr edge)
-    { the_neighbourhood.push_back(edge); }
-
-    /// @todo?
-    /* const std::shared_ptr<TypeNeighbors> neighbors()const */
-    /* { return the_neighbourhood; } */
+    /* void add_neighbor(BaseEdgePtr edge) */
+    /* { the_neighbourhood.push_back(edge); } */
 
 	
   protected:
@@ -358,7 +354,7 @@ namespace path_finding {
 	// optional optim: split the_neighbourhood in three vectors: 
 	// inwards_only, outwards_only, undirected
     */
-    TypeNeighbors the_neighbourhood{};
+    //TypeNeighbors the_neighbourhood{}; // unused in this Dijkstra impl.
   };
 
 
