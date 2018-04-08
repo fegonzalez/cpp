@@ -30,7 +30,7 @@ namespace path_finding {
   {
   public:
 
-    /** @ brief Calculation of all the shortest paths from user_start
+    /** @ brief Calculation of all the shortest paths from 'user_start'
 	to all the other vertex of the graph.
 
 	@param graph: the graph to apply Dijkstra.
@@ -44,22 +44,6 @@ namespace path_finding {
 					   const UserVertexId &user_target) = 0;
   };
 
-  
-  /**************************************************************************/
-  /** @class OldUniformCostSearch
-
-      @brief Dijkstra's optimization: the uniform-cost search algorithm [1]
-  */
-  /**************************************************************************/
-  
-  /* class OldUniformCostSearch: public DijkstraStrategy */
-  /* { */
-  /* public: */
-
-  /*   virtual DijkstraSolution shortest_path(const Graph &graph,  */
-  /* 					   const UserVertexId &user_start, */
-  /* 					   const UserVertexId &user_target); */
-  /* }; */
   
   /**************************************************************************/
   /** @class UniformCostSearch
@@ -109,7 +93,7 @@ namespace path_finding {
   /** @class InfiniteGraphUniformCostSearch
 
       @brief 'previous' and 'distances' are set ONLY to the explored
-      vertex in the graph; which allows the execution of UCS on
+      vertexes in the graph; which allows the execution of UCS on
       infinite graphs or those too large to represent in memory.
   */
   /**************************************************************************/
@@ -134,9 +118,8 @@ namespace path_finding {
   /** @class FiniteGraphUniformCostSearch
 
       @brief 'previous' and 'distances' are initialized to all the
-      vertex in the graph; which is inefficient/impossible on infinite
-      graphs or those too large to represent in memory, but could be
-      faster in some shortest graphs.
+      vertexes in the graph; which could be faster in some short
+      graphs.
   */
   /**************************************************************************/
   
@@ -159,7 +142,7 @@ namespace path_finding {
   
 
 
-  
+  /**************************************************************************/
   /** @struct BaseDijkstraSolution
 
      @brief Interface class. Used to return the value of a call to
