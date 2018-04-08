@@ -1,12 +1,15 @@
 #ifndef DIJKSTRA_H
 #define DIJKSTRA_H
 
+#include "BaseGraph.h"
+#include <types.h>
+
 #include <limits>       // std::numeric_limits
 #include <list>
 
 namespace path_finding {
   
-  class Graph;
+  //class Graph;
   struct BaseDijkstraSolution;
   struct DijkstraSolution;
 
@@ -21,53 +24,157 @@ namespace path_finding {
 
       @brief Dijkstra's algorithm implementation interface.
   */
+  /**************************************************************************/
 
   class DijkstraStrategy
   {
   public:
 
-    /** @ brief Calculation of all the shortest paths from start
+    /** @ brief Calculation of all the shortest paths from user_start
 	to all the other vertex of the graph.
 
-	@param graph the graph to apply Dijkstra.
-	@param start the initial vertex of the path
-	@return The distance from start to all the other vertex.
-
+	@param graph: the graph to apply Dijkstra.
+	@param user_start: the initial vertex of the path.
+	@return The distance from 'user_start' to 'user_target'.
+	@return list of nodes from the start to the target node. 
+	@ error if 'user_start' or 'user_target' are not vertex of the graph.
     */
     virtual DijkstraSolution shortest_path(const Graph &graph, 
-					   const UserVertexId &start,
-					   const UserVertexId &target) = 0;
+					   const UserVertexId &user_start,
+					   const UserVertexId &user_target) = 0;
   };
 
+  
+  /**************************************************************************/
+  /** @class OldUniformCostSearch
 
+      @brief Dijkstra's optimization: the uniform-cost search algorithm [1]
+  */
+  /**************************************************************************/
+  
+  /* class OldUniformCostSearch: public DijkstraStrategy */
+  /* { */
+  /* public: */
+
+  /*   virtual DijkstraSolution shortest_path(const Graph &graph,  */
+  /* 					   const UserVertexId &user_start, */
+  /* 					   const UserVertexId &user_target); */
+  /* }; */
+  
+  /**************************************************************************/
+  /** @class UniformCostSearch
+
+      @brief Dijkstra's optimization: the uniform-cost search algorithm [1]
+  */
+  /**************************************************************************/
+  
   class UniformCostSearch: public DijkstraStrategy
   {
   public:
+    DijkstraSolution shortest_path(const Graph &graph, 
+				   const UserVertexId &user_start,
+				   const UserVertexId &user_target);
 
-    virtual DijkstraSolution shortest_path(const Graph &graph, 
-					   const UserVertexId &start,
-					   const UserVertexId &target);
+  protected:
+    
+    virtual void init_distances(const Graph &graph,
+				const InnerVertexId &start,
+				const InnerVertexId &target) = 0;
+    
+    virtual void init_distance(const InnerVertexId &vertex) = 0;
+
+
+    virtual void init_previous(const Graph &graph,
+				const InnerVertexId &start,
+				const InnerVertexId &target) = 0;
+      
+    //data area
+
+    /// @param distances: total (OPTIMAL) distance from 'start' to the rest.
+    typedef std::unordered_map<InnerVertexId, TypeDistance> TDistances;
+    TDistances distances{};
+
+    		   
+    /** @param previous: prev-vertex in the optimal-path for any
+	vertex in graph. 
+	(e.g.  Graph (1)-->(2) : previous[1] = NOVERTEXID; previous[2] = 1; )
+    */
+    typedef std::unordered_map<InnerVertexId, InnerVertexId> TPrevious;
+    TPrevious previous{};
+    
   };
-
-
+  
 
   /**************************************************************************/
+  /** @class InfiniteGraphUniformCostSearch
 
+      @brief 'previous' and 'distances' are set ONLY to the explored
+      vertex in the graph; which allows the execution of UCS on
+      infinite graphs or those too large to represent in memory.
+  */
+  /**************************************************************************/
+  
+  class InfiniteGraphUniformCostSearch: public UniformCostSearch
+  {
+  protected:
+    
+    virtual void init_distances(const Graph &graph,
+			const InnerVertexId &start,
+			const InnerVertexId &target);
+
+    virtual void init_distance(const InnerVertexId &vertex);
+
+    virtual void init_previous(const Graph &graph,
+				const InnerVertexId &start,
+				const InnerVertexId &target);
+
+  };
+  
+  /**************************************************************************/
+  /** @class FiniteGraphUniformCostSearch
+
+      @brief 'previous' and 'distances' are initialized to all the
+      vertex in the graph; which is inefficient/impossible on infinite
+      graphs or those too large to represent in memory, but could be
+      faster in some shortest graphs.
+  */
+  /**************************************************************************/
+  
+  class FiniteGraphUniformCostSearch: public UniformCostSearch
+  {
+  protected:
+
+    virtual void init_distances(const Graph &graph,
+			const InnerVertexId &start,
+			const InnerVertexId &target);
+    
+    virtual void init_distance(const InnerVertexId &vertex)
+    { (void) vertex; }
+
+    virtual void init_previous(const Graph &graph,
+				const InnerVertexId &start,
+				const InnerVertexId &target);
+
+  };
+  
+
+
+  
   /** @struct BaseDijkstraSolution
 
      @brief Interface class. Used to return the value of a call to
      Dijstra::shortest_path.
 
-     @param the_path: list of vertex of the shortest path. The first
-     value of the list is the 'start' node, and the last one is the
-     'target' vertex.
+     @param path(): list of vertex of the shortest path. The first
+     value of the list is the 'user_start' vertex, and the last one is
+     the 'user_target' vertex.
 
      @warning the ids in the path represent the "user_ids" in a
      BaseVertex, not the "inner_ids".
     
      @sa wikipedia: 1 -> 3 -> 6 -> 5
 
-     @retval: the_path is empty when a valid path wasn't found.
+     @retval: the path is empty when a valid path wasn't found.
   */
   /**************************************************************************/
   struct BaseDijkstraSolution

@@ -23,18 +23,3 @@
 
     make diff.directed_iface_test
     make diff.undirected_iface_test
-
-
-
-# Size of the binaries:
-
-  - Using the dynamic (shared) library: 
-
-    directed_iface_test:   32 K
-    undirected_iface_test: 32 K
- 
-
-  - Using the static library: 
-
-    directed_iface_test:   106 K
-    undirected_iface_test: 106 K

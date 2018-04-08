@@ -109,8 +109,7 @@ namespace path_finding {
 
     friend std::ostream& operator<<(std::ostream &, const Graph &);
 	
-    friend class UniformCostSearch;
-  
+    
   public:
        
     void add_edge
@@ -163,7 +162,7 @@ namespace path_finding {
 				 const AdjacEdge &edge) = 0;
     
     // data area
-    
+
   protected:
 
     // Keeping the relation between user & inner vertex_ids
@@ -174,9 +173,13 @@ namespace path_finding {
     // edge storage, keyed by edge id.
     std::unordered_map<EdgeId, EdgeValue> the_edge_map{};
 
+    
+  public: //otherwise "friend" must be add for every new Dijkstra class
+    
     // vertex storage, keyed by their id.
     std::unordered_map<InnerVertexId, VertexValue> the_vertex_map{};
-    
+
+
     struct
     {
       std::unordered_multimap<InnerVertexId, AdjacEdge> the_outward_edges{};

@@ -27,7 +27,7 @@ namespace path_finding {
     
     // std::cout << g << std::endl;    
 
-    DijkstraPtr alg(new UniformCostSearch()); 
+    DijkstraPtr alg(new InfiniteGraphUniformCostSearch()); 
     DijkstraSolution solution = alg->shortest_path(g, start_node, target_node);
     retval.the_path = (*solution.path());
     retval.the_total_distance = solution.total_distance();
@@ -50,7 +50,7 @@ namespace path_finding {
     
     //std::cout << g << std::endl;    
     
-    DijkstraPtr alg(new UniformCostSearch()); 
+    DijkstraPtr alg(new InfiniteGraphUniformCostSearch()); 
     DijkstraSolution solution = alg->shortest_path(g, start_node, target_node);
     retval.the_path = (*solution.path());
     retval.the_total_distance = solution.total_distance();

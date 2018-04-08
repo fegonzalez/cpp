@@ -24,8 +24,9 @@
   Dijkstra.cc
   Dijkstra.h
 
-	Dijkstra algorithm implementation. Using DirectedGraph or
-	UndirectedGraph as inputs.
+	Dijkstra algorithm implementations.
+	Using DirectedGraph or UndirectedGraph as inputs.
+	Implementing the uniform-cost search (UCS) variant of Dijkstra.
 
 
 # ./include

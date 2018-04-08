@@ -18,6 +18,9 @@
 #-- DO-CHANGE-HERE : set the proper relative path
 include ./Common.mk
 
+default: all
+	@echo 'Building target: $@'
+
 #############################################################################
 #-- pathfinding-library
 #############################################################################
@@ -230,17 +233,17 @@ RM.TRASH = $(RM.CORES) \
 # default target = all
 #===============================================================================
 
+all: test
+	@echo 'Building target: $@'
+
+test: $(TEST_EXECS)
+
+
 .PHONY: all runtest successtest difftest
 	@echo '$*'
 
 # .PHONY: test
 # #WARNING A phony target SHOULD NOT be a prerequisite of a real target file.
-
-
-all: test
-	@echo 'Building target: $@'
-
-test: $(TEST_EXECS)
 
 
 #-------------------------------------------------------------------------------

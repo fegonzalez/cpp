@@ -65,23 +65,28 @@ void example_wiki()
 
   std::vector<TypeEdgeData> edges;
   edges.push_back(TypeEdgeData("11", "22", 7.0, "edge11_22"));
-  edges.push_back(TypeEdgeData("22", "11", 7.0, "edge22_11"));
+  //edges.push_back(TypeEdgeData("22", "11", 7.0, "edge22_11"));
   edges.push_back(TypeEdgeData("11", "33", 9.0, "edge11_33"));
-  edges.push_back(TypeEdgeData("33", "11", 9.0, "edge33_11"));
+  //edges.push_back(TypeEdgeData("33", "11", 9.0, "edge33_11"));
   edges.push_back(TypeEdgeData("22", "44", 15.0, "edge22_44"));
-  edges.push_back(TypeEdgeData("44", "22", 15.0, "edge44_22"));
+  //edges.push_back(TypeEdgeData("44", "22", 15.0, "edge44_22"));
   edges.push_back(TypeEdgeData("44", "55", 6.0, "edge44_55"));
-  edges.push_back(TypeEdgeData("55", "44", 6.0, "edge55_44"));  
+  //edges.push_back(TypeEdgeData("55", "44", 6.0, "edge55_44"));  
   edges.push_back(TypeEdgeData("11", "66", 14.0, "edge11_66"));
-  edges.push_back(TypeEdgeData("66", "11", 14.0, "edge66_11"));
+  //edges.push_back(TypeEdgeData("66", "11", 14.0, "edge66_11"));
   edges.push_back(TypeEdgeData("22", "33", 10.0, "edge22_33"));
-  edges.push_back(TypeEdgeData("33", "22", 10.0, "edge33_22"));
+  //edges.push_back(TypeEdgeData("33", "22", 10.0, "edge33_22"));
   edges.push_back(TypeEdgeData("33", "44", 11.0, "edge33_44"));
-  edges.push_back(TypeEdgeData("44", "33", 11.0, "edge44_33"));
+  //edges.push_back(TypeEdgeData("44", "33", 11.0, "edge44_33"));
   edges.push_back(TypeEdgeData("33", "66", 2.0, "edge33_66"));
-  edges.push_back(TypeEdgeData("66", "33", 2.0, "edge66_33"));
-  edges.push_back(TypeEdgeData("55", "66", 9.0, "edge55_66"));
+  //edges.push_back(TypeEdgeData("66", "33", 2.0, "edge66_33"));
+  //edges.push_back(TypeEdgeData("55", "66", 9.0, "edge55_66"));
   edges.push_back(TypeEdgeData("66", "55", 9.0, "edge66_55"));
+  
+  //added additional vertex (off the optimal path) to check weights of value 0.
+  edges.push_back(path_finding::TypeEdgeData("66", "77", 0.0, "edge66_77"));
+  //added additional isolated vertex to check that they are ignoraed by the alg.
+  edges.push_back(path_finding::TypeEdgeData("88", "99", 1.0, "edge88_99"));
 
   PathFindingSolutionData solution =
     dijkstra_shortest_path_undirected_graph("11", "55", edges);
