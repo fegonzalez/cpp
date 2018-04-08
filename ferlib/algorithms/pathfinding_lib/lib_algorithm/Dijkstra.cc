@@ -44,6 +44,9 @@ namespace path_finding {
 
   //--------------------------------------------------------------------------
 
+  // Complexity (distances.find): Constant on average, worst case
+  // linear in the size of the container.
+  // (http://en.cppreference.com/w/cpp/container/unordered_map/find)
   void InfiniteGraphUniformCostSearch::init_distance
   (const InnerVertexId &vertex)
   {
@@ -53,6 +56,8 @@ namespace path_finding {
 
   //--------------------------------------------------------------------------
 
+  // Complexity: Constant on average, worst case linear
+  // in the size of the container.
   void InfiniteGraphUniformCostSearch::init_previous
   (const Graph &graph,
    const InnerVertexId &start,
@@ -68,6 +73,7 @@ namespace path_finding {
   /* FiniteGraphUniformCostSearch class implementation                      */
   /**************************************************************************/
 
+  // Complexity (for loop): linear.
   void FiniteGraphUniformCostSearch::init_distances
   (const Graph &graph,
    const InnerVertexId &start,
