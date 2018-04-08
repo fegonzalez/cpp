@@ -2,6 +2,15 @@
 
 Wikipedia's Dijkstra example on a DIRECTED graph (through interface).
 
+
+1) Testing UCS for finite graphs
+Vertex Distance from Source
+Distance (cost): 20
+Shortest-Path's size (n. of vertex): 4
+Shortest-Path:   11 -> 33 -> 66 -> 55
+Shortest-Path edges:   
+
+2) Testing UCS for infinite graphs
 Vertex Distance from Source
 Distance (cost): 20
 Shortest-Path's size (n. of vertex): 4

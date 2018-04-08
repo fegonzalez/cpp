@@ -17,8 +17,10 @@ namespace path_finding {
   /***************************************************************************/
 
   
-  /** @brief Applies the Dijkstra algorithm on a directed graph to
-      find the shortest path from 'start_node' to 'target_node'.
+  /** @brief Applies the Dijkstra algorithm on a finite (*) directed
+      graph to find the shortest path from 'start_node' to 'target_node'.
+
+      (*) infinite graphs: infinite or too large to represent in memory.
 
       @param start_node: the first node of the path to find.
       @param target_node: the last node of the path to find.
@@ -34,14 +36,48 @@ namespace path_finding {
      const std::vector<TypeEdgeData> & edges);
 
 
-    /** @brief Applies the Dijkstra algorithm on an undirected graph
+    /** @brief Applies the Dijkstra algorithm on a finite (*) undirected graph 
 	to find the shortest path from 'start_node' to 'target_node'.
+
+      (*) infinite graphs: infinite or too large to represent in memory.
     */    
     PathFindingSolutionData dijkstra_shortest_path_undirected_graph
     (const UserVertexId &start_node,
      const UserVertexId &target_node,
      const std::vector<TypeEdgeData> & edges);
 
+
+    
+  /** @brief Applies the Dijkstra algorithm on an infinite (*)
+      directed graph to find the shortest path from 'start_node' to
+      'target_node'.
+
+      (*) infinite graphs: infinite or too large to represent in memory.
+
+      @param start_node: the first node of the path to find.
+      @param target_node: the last node of the path to find.
+      @param edges: the list of edges of the graph.
+
+      @warning The list of edges provide enough information to create
+      the graph. Any node off the edge list would be irrelevant to
+      find the path.
+  */
+  PathFindingSolutionData dijkstra_shortest_path_directed_infinite_graph
+    (const UserVertexId &start_node,
+     const UserVertexId &target_node,
+     const std::vector<TypeEdgeData> & edges);
+
+
+    /** @brief Applies the Dijkstra algorithm on an infinite (*)
+	undirected graph to find the shortest path from 'start_node'
+	to 'target_node'.
+
+      (*) infinite graphs: infinite or too large to represent in memory.
+    */    
+    PathFindingSolutionData dijkstra_shortest_path_undirected_infinite_graph
+    (const UserVertexId &start_node,
+     const UserVertexId &target_node,
+     const std::vector<TypeEdgeData> & edges);
          
     } //end-of path_finding
 

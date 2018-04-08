@@ -18,42 +18,10 @@ void example_wiki();
 
 int main()
 {
-  const auto TEST_NUM_ITERATIONS = 1; //1e7;
-
-
-  // start -> target
-
-  auto start = std::chrono::steady_clock::now();   // record start time
-
-  for (auto times = 0; times < TEST_NUM_ITERATIONS; ++times) 
-  {
-    example_wiki();
-
-
-    // RESULTADOS (time)
-    //
-    // fase-2: 
-    //
-    // Time after 1e+07 examples (sin imprimir resultados): 55.4483
-    // => WARNING: idem all2all
-    //
-    // Time after 1e+07 examples (sin imprimir resultados): 68.8308
-    // Comprobando si candidatos fueron ya explored! (solo hay un caso
-    // en el ejemplo
-    //
-    //
-  }
-
-  // record end time
-  auto end = std::chrono::steady_clock::now();
-  std::chrono::duration<double> diff = end-start;
-  std::clog << "\nTime after " << TEST_NUM_ITERATIONS 
-	    << " examples (sin imprimir resultados): "
-	    << diff.count() <<  std::endl;
-
+  example_wiki();
   return 0;
-
 }
+
 
 //---------------------------------------------------------------------------
 
@@ -88,11 +56,65 @@ void example_wiki()
   //added additional isolated vertex to check that they are ignoraed by the alg.
   edges.push_back(path_finding::TypeEdgeData("88", "99", 1.0, "edge88_99"));
 
-  PathFindingSolutionData solution =
-    dijkstra_shortest_path_undirected_graph("11", "55", edges);
 
+  const auto TEST_NUM_ITERATIONS = 1; //1e7;
+  path_finding::PathFindingSolutionData solution;
+  
+  std::cout << "\n1) Testing UCS for finite graphs" << std::endl;
+  auto start = std::chrono::steady_clock::now();   // record start time
+  for (auto times = 0; times < TEST_NUM_ITERATIONS; ++times) 
+  {
+    solution = dijkstra_shortest_path_undirected_graph("11", "55", edges);
+    
+    // RESULTADOS (time)
+    //
+    // fase-2: 
+    //
+    // Time after 1e+07 examples (sin imprimir resultados): 55.4483
+    // => WARNING: idem all2all
+    //
+    // Time after 1e+07 examples (sin imprimir resultados): 68.8308
+    // Comprobando si candidatos fueron ya explored! (solo hay un caso
+    // en el ejemplo
+    //
+    //
+  }
+  auto end = std::chrono::steady_clock::now();
   std::cout << "Vertex Distance from Source" << std::endl;
   std::cout << solution << std::endl;
+  std::chrono::duration<double> diff = end-start;
+  std::clog << "Time after " << TEST_NUM_ITERATIONS 
+	    << " examples (sin imprimir resultados): "
+	    << diff.count() << std::endl;
+
+  
+
+  std::cout << "\n2) Testing UCS for infinite graphs" << std::endl;
+  start = std::chrono::steady_clock::now();   // record start time
+  for (auto times = 0; times < TEST_NUM_ITERATIONS; ++times) 
+  {
+    solution = dijkstra_shortest_path_undirected_infinite_graph("11", "55", edges);    
+
+    // RESULTADOS (time)
+    //
+    // fase-2: 
+    //
+    // Time after 1e+07 examples (sin imprimir resultados): 55.4483
+    // => WARNING: idem all2all
+    //
+    // Time after 1e+07 examples (sin imprimir resultados): 68.8308
+    // Comprobando si candidatos fueron ya explored! (solo hay un caso
+    // en el ejemplo
+    //
+    //
+  }
+  end = std::chrono::steady_clock::now();
+  std::cout << "Vertex Distance from Source" << std::endl;
+  std::cout << solution << std::endl;
+  diff = end-start;
+  std::clog << "Time after " << TEST_NUM_ITERATIONS 
+	    << " examples (sin imprimir resultados): "
+	    << diff.count() <<  std::endl;
 
   
 //   Solución esperada:
