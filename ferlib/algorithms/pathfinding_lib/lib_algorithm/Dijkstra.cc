@@ -32,6 +32,7 @@ namespace path_finding {
   /* InfiniteGraphUniformCostSearch class implementation                    */
   /**************************************************************************/
 
+  // Complexity: Constant.
   void InfiniteGraphUniformCostSearch::init_distances
   (const Graph &graph,
    const InnerVertexId &start,
@@ -56,8 +57,7 @@ namespace path_finding {
 
   //--------------------------------------------------------------------------
 
-  // Complexity: Constant on average, worst case linear
-  // in the size of the container.
+  // Complexity: Constant.
   void InfiniteGraphUniformCostSearch::init_previous
   (const Graph &graph,
    const InnerVertexId &start,
@@ -67,45 +67,6 @@ namespace path_finding {
     previous[start] = NOVERTEXID;
     previous[target] = NOVERTEXID;
   }
-
-  
-  /**************************************************************************/  
-  /* FiniteGraphUniformCostSearch class implementation                      */
-  /**************************************************************************/
-
-  // Complexity (for loop): linear.
-  void FiniteGraphUniformCostSearch::init_distances
-  (const Graph &graph,
-   const InnerVertexId &start,
-   const InnerVertexId &target)
-  {
-    for(auto citer = graph.the_vertex_map.cbegin();
-    	citer != graph.the_vertex_map.cend();
-    	++citer)
-    {
-      distances[citer->first] = TYPEDISTANCE_INFINITE;
-    }
-    distances[start] = TYPEDISTANCE_ZERO;
-    distances[target] = TYPEDISTANCE_INFINITE;
-  }
-
-  //--------------------------------------------------------------------------
-
-  void FiniteGraphUniformCostSearch::init_previous
-  (const Graph &graph,
-   const InnerVertexId &start,
-   const InnerVertexId &target)
-  {
-    for(auto citer = graph.the_vertex_map.cbegin();
-    	citer != graph.the_vertex_map.cend();
-    	++citer)
-    {
-      previous[citer->first] = NOVERTEXID;
-    }    
-    previous[start] = NOVERTEXID;
-    previous[target] = NOVERTEXID;
-  }
-
   
   /**************************************************************************/  
   /* UniformCostSearch class implementation                                 */

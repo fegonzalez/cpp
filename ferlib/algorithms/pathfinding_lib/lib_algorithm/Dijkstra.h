@@ -23,6 +23,10 @@ namespace path_finding {
   /** @class DijkstraStrategy
 
       @brief Dijkstra's algorithm implementation interface.
+
+      [1] dijkstra-wikipedia - 
+          https://en.wikipedia.org/wiki/Dijkstra's_algorithm
+
   */
   /**************************************************************************/
 
@@ -48,7 +52,8 @@ namespace path_finding {
   /**************************************************************************/
   /** @class UniformCostSearch
 
-      @brief Dijkstra's optimization: the uniform-cost search algorithm [1]
+      @brief Dijkstra's optimization: implementing the uniform-cost
+      search algorithm. [1]
   */
   /**************************************************************************/
   
@@ -113,34 +118,6 @@ namespace path_finding {
 				const InnerVertexId &target);
 
   };
-  
-  /**************************************************************************/
-  /** @class FiniteGraphUniformCostSearch
-
-      @brief 'previous' and 'distances' are initialized to all the
-      vertexes in the graph; which could be faster in some short
-      graphs.
-  */
-  /**************************************************************************/
-  
-  class FiniteGraphUniformCostSearch: public UniformCostSearch
-  {
-  protected:
-
-    virtual void init_distances(const Graph &graph,
-			const InnerVertexId &start,
-			const InnerVertexId &target);
-    
-    virtual void init_distance(const InnerVertexId &vertex)
-    { (void) vertex; }
-
-    virtual void init_previous(const Graph &graph,
-				const InnerVertexId &start,
-				const InnerVertexId &target);
-
-  };
-  
-
 
   /**************************************************************************/
   /** @struct BaseDijkstraSolution

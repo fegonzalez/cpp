@@ -19,67 +19,61 @@ int main()
   /// @test Test of use
   example_wiki(1, 1);
 
-
-
   /** @test performance tests
 
-      @test example_wiki [1]
+     @warning This aren't good performance times because it has been
+     tested (by executing the loop directly at "alg->shortest_path" on
+     path_finding_facade.cc), that most of the test time is used on
+     copying the vector of edges to the graph, rather than in the
+     algorithm execution itself:
+     e.g. example_wiki(1, 1e6): here: 9673.68 (ms); alg. only(**): 453.35 (ms)
+     e.g. example_wiki(1e6, 40): here: 94074.7 (ms); alg.: 2371.13 (ms)
+     e.g. example_wiki(1e6, 1000):                   alg.: 2421.57 (ms) 
+     e.g. example_wiki(1000, 100); here: 91.4363 (ms) ; alg.: 1.32089 (ms) 
+     e.g. example_wiki(1000, 1e6); alg.: 469.888 (ms) 
+     (**) include one copy of 'edges' to the graph.
 
-      solution sub-graph size = explored nodes = 6 nodes, (*)
+     @test example_wiki [1]
 
-      solution: 
-      Distance (cost): 20
-      Shortest-Path's size (n. of vertex): 4
-      Shortest-Path: 11 -> 33 -> 66 -> 55
+     solution sub-graph size = explored nodes = 6 nodes, (*)
 
+     solution: 
+     Distance (cost): 20
+     Shortest-Path's size (n. of vertex): 4
+     Shortest-Path: 11 -> 33 -> 66 -> 55
 
      (*) The rest of the nodes are never explored. They are used to
-         compare the performance difference between
-         InfiniteGraphUniformCostSearch and
-         FiniteGraphUniformCostSearch. (see Dijkstra.h):
-
-	 FiniteGraphUniformCostSearch: all the nodes are initialized in
-	 both 'distances' & 'previous' data structs.
-
-	 InfiniteGraphUniformCostSearch: only the explored nodes are
-	 initialized in both 'distances' & 'previous' data structs.
+         compare the performance in large graphs.
   */
 
  
-  // - short graphs: conclusions: short graphs => same performance
-  //example_wiki(1, 1e6); // @todo probar en maquina NO virtual
+  // - short graphs:
+  //example_wiki(1, 1e6);
   //
   // try 1:
-  // 1) Testing UCS for finite graphs
-  // Nodes: 11; Iterations: 1000000; Time: 17410.5 (ms) 
-  // 2) Testing UCS for infinite graphs
-  // Nodes: 11; Iterations: 1000000; Time: 17468.5 (ms)
+  // 1) Testing UCS.
+  // Nodes: 11; Iterations: 1000000; Time: 9673.68 (ms) 
+
+
+  // - very large graphs: 
+  //example_wiki(1e6, 1); //  example_wiki(1e6, 40); 
   //
-  // try n:
-  // 1) Testing UCS for finite graphs
-  // Nodes: 11; Iterations: 1000000; Time: 17620.5 (ms) 
-  // 2) Testing UCS for infinite graphs
-  // Nodes: 11; Iterations: 1000000; Time: 17263.6 (ms)
-
-
-
-  // - very large graphs: conclusions: InfiniteGraphUniformCostSearch is better
-  //example_wiki(1e6,1); // @todo probar en maquina NO virtual
+  // 1) Testing UCS.
+  // Nodes: 999911; Iterations: 1; Time: 2366.98 (ms) 
   //
-  // 1) Testing UCS for finite graphs
-  // Nodes: 999911; Iterations: 1; Time: 3859.93 (ms)
-  // 2) Testing UCS for infinite graphs
-  // Nodes: 999911; Iterations: 1; Time: 3485.5 (ms)
+  // 1) Testing UCS.
+  // Nodes: 999911; Iterations: 40; Time:  94074.7 (ms)
 
 
-  
-  // - intermediate graphs: conclusions: ??? @todo probar en maquina NO virtual
-  //example_wiki(1000,1);
+  // - intermediate graphs: 
+  //example_wiki(1000, 1);  //  example_wiki(1000, 100);
   //
-  // 1) Testing UCS for finite graphs
-  // Nodes: 1021; Iterations: 1; Time: 1.XXX (ms) 
-  // 2) Testing UCS for infinite graphs
-  // Nodes: 1021; Iterations: 1; Time: 1.XXX (ms) 
+  // 1) Testing UCS.
+  // Nodes: 911; Iterations: 1; Time: 0.97884 (ms) 
+  //
+  // 1) Testing UCS.
+  // Nodes: 911; Iterations: 100; Time: 91.4363 (ms) 
+
 
   return 0;
 }
@@ -107,9 +101,7 @@ void example_wiki(const unsigned int &MAX_NUM_NODOS,
   edges.push_back(path_finding::TypeEdgeData("66", "77", 0.0, "edge66_77"));
   //added additional isolated vertex to check that they are ignoraed by the alg.
   edges.push_back(path_finding::TypeEdgeData("88", "99", 1.0, "edge88_99"));
-
-  //adding edges to compare on large graphs the performance difference between
-  //InfiniteGraphUniformCostSearch and FiniteGraphUniformCostSearch.
+  //adding edges to compare on large graphs the performance
   for (unsigned int inner_id = 100; inner_id < MAX_NUM_NODOS; ++inner_id) 
   {    
     edges.push_back(path_finding::TypeEdgeData
@@ -120,7 +112,7 @@ void example_wiki(const unsigned int &MAX_NUM_NODOS,
   
   path_finding::PathFindingSolutionData solution;
   
-  std::cout << "\n1) Testing UCS for finite graphs" << std::endl;
+  std::cout << "\n1) Testing UCS." << std::endl;
   auto start = std::chrono::steady_clock::now();   // record start time
   for (unsigned int times = 0; times < TEST_NUM_ITERATIONS; ++times) 
   {
@@ -134,26 +126,6 @@ void example_wiki(const unsigned int &MAX_NUM_NODOS,
   	    << "; Iterations: " << TEST_NUM_ITERATIONS 
   	    << "; Time: "
 	    << diff.count() * 1000 <<  " (ms) " << std::endl;
-
-  
-
-  std::cout << "\n2) Testing UCS for infinite graphs" << std::endl;
-  start = std::chrono::steady_clock::now();   // record start time
-  for (unsigned int times = 0; times < TEST_NUM_ITERATIONS; ++times) 
-  {
-    solution =
-      dijkstra_shortest_path_undirected_infinite_graph("11", "55", edges);    
-  }
-  end = std::chrono::steady_clock::now();
-  std::cout << "Vertex Distance from Source" << std::endl;
-  std::cout << solution << std::endl;
-  diff = end-start;
-  std::clog << "Nodes: " << edges.size()
-	    << "; Iterations: " << TEST_NUM_ITERATIONS 
-	    << "; Time: "
-	    << diff.count() * 1000 <<  " (ms) " << std::endl;
-  
-  
   
 //   Solución esperada:
 // Vertex Distance from Source
