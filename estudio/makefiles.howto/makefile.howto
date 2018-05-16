@@ -2228,6 +2228,11 @@ WARNING Even targets not in the makefile may be specified if make can
 
 -Werror # all warnings as errors
 
+-Wno-error  # inverse of -Werror
+
+ e.g. -Wno-error=switch makes -Wswitch warnings not be errors, even
+       when -Werror is in effect.
+
 ################################################################################
 
 # 9.8 command line arguments
