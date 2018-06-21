@@ -195,7 +195,9 @@
 
 # Appendix II.B - Code examples (./code_examples)
 
-# Appendix II.C - Doc. References
+# Appendix II.C - make options notes
+
+# Appendix II.R - Doc. References
 
 
 
@@ -2978,7 +2980,15 @@ This error occurs after executing make due to a bad typing in the Makefile:
 
 
 ################################################################################
-# Appendix II.C - Doc. References
+# Appendix II.C - make options notes
+################################################################################
+
+-DNDEBUG	deactivate  assertions   (<cassert> header)
+
+
+
+################################################################################
+# Appendix II.R - Doc. References
 ################################################################################
 
 
