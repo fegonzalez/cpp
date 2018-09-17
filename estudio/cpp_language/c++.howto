@@ -5794,6 +5794,11 @@ FACT_14_2
 Because templates are language features, you have full support of type checking
 and scope.
 
+FACT_14_8
+Function Templates, Class Templates, ordinary functions and ordinary
+classes MAY share the same header file. Then the non-templates may be
+defined in a source file.  [k14109]
+
 
 # ------------------------------------------------------------------------------
 # 14.1 Function Templates [k1402]
@@ -5907,6 +5912,9 @@ b) When you want to override the default type deduction.
 
 # 14.1.4 Template Parameters (14.6.1)
 
+WARNING  template parameters VS template argumets: see 14.6.1.
+
+
 # a) Template parameters
 
      template <typename T>   // T is a template parameter
@@ -5914,7 +5922,9 @@ b) When you want to override the default type deduction.
 
 # b) Call parameters
 
-  ... max (const T &t1, conts T &t2)   // t1 and t2 are call parameters
+  ... max (const T &t1, conts T &t2)   // t1 and t2 are the call parameters
+
+
 
 
 FACT_14_6
@@ -5923,7 +5933,7 @@ You may have as many template parameters as you like.
 
 WARNING
 Unlike class templates, in function templates NO default template
-arguments can be specified.
+arguments can be specified (see 14.2.7)
 
 =>
 
@@ -6095,7 +6105,7 @@ Note.- In template <class T>.  Using class is equivalent to using typename.
 
   ~Vector();            
 
-  —end example ]
+  end example ]
 
 
 # 14.2.2 Implementation (definition) of Member Functions
@@ -6166,7 +6176,7 @@ You must specify the template arguments explicitly.
   —end example ]
 
   
-9) If you specialize a class template, you MUST also specialize all
+9) If you specialize a class template, you MUST also specialize ALL its
    member functions.
 
 10) Although it is possible to specialize a single member function,
@@ -6307,7 +6317,7 @@ The set of template arguments after the class name is the key.
     Goal: flexibility in choosing the optimal type for a particular application.
     
     i.e. using other types than size_t to manage very large or very
-    small memory buffers.
+    	 small memory buffers.
 
 
   [ Example: [k1401]
@@ -6588,7 +6598,7 @@ inherited.
 
   [ Example:
 
-  double dd =  3;      // trivial implicit converion to 1.0
+  double dd =  3;      // trivial implicit converion to 3.0
 
   vector<int> vi {10};
   vector<double> vd;
@@ -8071,6 +8081,7 @@ Details: see ../../ferlib/libraries/shared_howto/
   [k14107] Member templates, The Asymmetric Assignment Operator - 
   	   "./basics/asyn_assig_operatortest.cpp
   [k14108] Template Template Parameters - "./basics/stack8test.cpp
+  [k14109] Templates and Non-Templates sharing header - "./lib_units_example/"
 
 
 # Appendix I - Undocumented Issues - "./code_examples/issues"
