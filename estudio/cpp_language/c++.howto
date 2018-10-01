@@ -316,6 +316,8 @@
 
 # todo 18 ... to 30: libraries
 
+# todo 25 Algorithms library
+
 # todo 27 Input/output library
 
 # todo 29 Atomic operations library
@@ -8084,6 +8086,13 @@ Details: see ../../ferlib/libraries/shared_howto/
   [k14109] Templates and Non-Templates sharing header - "./lib_units_example/"
 
 
+# Chapter 17 Basic concepts - "./3_basic_concepts/"
+
+# Chapter 25 Algorithms library - "./25_algorithms_library/"
+
+  [k2501] remove_if algorithm VS hand-written loop - "./remove"
+
+
 # Appendix I - Undocumented Issues - "./code_examples/issues"
 
   [KI001]  static issues- "./static"
@@ -8677,12 +8686,21 @@ end example ]
 # Appendix X - C++ techniques
 # ==============================================================================
 
-# X.1 Erase-remove idiom
+# X.1 Erase-remove idiom [4_14_1]  [k2501]
 
 The erase–remove idiom is a common C++ technique to eliminate elements
 that fulfill a certain criterion from a C++ Standard Library container
 
-https://en.wikipedia.org/wiki/Erase%E2%80%93remove_idiom
+1) Motivation
+
+"... erase can be used to delete an element from a collection, but for
+containers which are based on an array, such as vector, all elements
+after the deleted element have to be moved forward, ..."
+
+2) Limitation
+
+The erase–remove idiom cannot be used for containers that return
+const_iterator (e.g.: set) [4_14_2]
 
 
 # ==============================================================================
@@ -8912,12 +8930,16 @@ c) address size (processor concept)
                http://en.cppreference.com/w/cpp/language/cast_operator
 
 
-[4_13] 
-
-
 [4_13] Expressions
  
   [4_13_1] What type of cast to use - https://stackoverflow.com/questions/332030/when-should-static-cast-dynamic-cast-const-cast-and-reinterpret-cast-be-used
+
+
+[4_14] Libray Algorithms
+
+[4_14_1] Erase-remove idiom - https://en.wikipedia.org/wiki/Erase%E2%80%93remove_idiom
+
+[4_14_2] Erase-remove idiom with set- https://stackoverflow.com/questions/3792600/erase-remove-idiom-with-stdset-failing-with-constness-related-error
 
 
 [4_100] Containers

@@ -1,0 +1,105 @@
+
+-------------------
+
+algorithm_test()...
+(size = 10); 0 1 2 3 4 5 6 7 8 9 
+(size = 4); 0 1 8 9 
+
+-------------------
+
+erroneous_hand_written_loop_test()...
+(size = 10); 0 1 2 3 4 5 6 7 8 9 
+
+index = 0
+v[index] = 0
+DO NOT remove: 0
+(size = 10); 0 1 2 3 4 5 6 7 8 9 
+
+index = 1
+v[index] = 1
+DO NOT remove: 1
+(size = 10); 0 1 2 3 4 5 6 7 8 9 
+
+index = 2
+v[index] = 2
+remove: 2
+(size = 9); 0 1 3 4 5 6 7 8 9 
+
+index = 3
+v[index] = 4
+remove: 4
+(size = 8); 0 1 3 5 6 7 8 9 
+
+index = 4
+v[index] = 6
+remove: 6
+(size = 7); 0 1 3 5 7 8 9 
+
+index = 5
+v[index] = 8
+DO NOT remove: 8
+(size = 7); 0 1 3 5 7 8 9 
+
+index = 6
+v[index] = 9
+DO NOT remove: 9
+(size = 7); 0 1 3 5 7 8 9 
+
+ERROR! ++index && remove => skipping several vector positions
+
+-------------------
+
+fixed_hand_written_loop_test()...
+(size = 10); 0 1 2 3 4 5 6 7 8 9 
+
+index = 0
+v[index] = 0
+DO NOT remove: 0
+(size = 10); 0 1 2 3 4 5 6 7 8 9 
+
+index = 1
+v[index] = 1
+DO NOT remove: 1
+(size = 10); 0 1 2 3 4 5 6 7 8 9 
+
+index = 2
+v[index] = 2
+remove: 2
+(size = 9); 0 1 3 4 5 6 7 8 9 
+
+index = 2
+v[index] = 3
+remove: 3
+(size = 8); 0 1 4 5 6 7 8 9 
+
+index = 2
+v[index] = 4
+remove: 4
+(size = 7); 0 1 5 6 7 8 9 
+
+index = 2
+v[index] = 5
+remove: 5
+(size = 6); 0 1 6 7 8 9 
+
+index = 2
+v[index] = 6
+remove: 6
+(size = 5); 0 1 7 8 9 
+
+index = 2
+v[index] = 7
+remove: 7
+(size = 4); 0 1 8 9 
+
+index = 2
+v[index] = 8
+DO NOT remove: 8
+(size = 4); 0 1 8 9 
+
+index = 3
+v[index] = 9
+DO NOT remove: 9
+(size = 4); 0 1 8 9 
+
+-------------------
