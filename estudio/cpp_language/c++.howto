@@ -7271,6 +7271,52 @@ NOTICE As becomes clear later, this requirement translates into
    control of the implementation.
 
 
+# ==============================================================================
+# todo 25 Algorithms library
+# ==============================================================================
+
+https://en.cppreference.com/w/cpp/algorithm
+
+
+remove_if: see # X.1 Erase-remove idiom [4_14_1] [k2501] 
+
+
+for_each:
+
+[ Example -  for_each and method overloading (13 Overloading)
+
+  // How to call an specific class::method while iterating?
+ 
+  class Example
+  {
+   public:
+   
+      void calculateCapacity();
+      void calculateCapacity(string interval) { ... }
+   ...      
+  };
+
+
+  //------
+
+ void Example::calculateCapacity()
+ {
+  // e.g. std::vector<std::string> = { "a", "b", "c" }
+
+  // How to call an Example::calculateCapacity(std::string) 
+
+
+  std::for_each
+     (std::begin(some_collection), std::end(some_collection),
+      std::bind(static_cast<void(Example::*)(std::string)>                   //*1
+  	       (&Example::calculateCapacity), this, std::placeholders::_1)); //*2
+ }
+
+ //*1 : explicitly passes to std::bind the method to overload
+ //*2 : arguments to std::bind: method, object owner of the method, method params
+
+end example ]
+
 
 # ==============================================================================
 # 27 Input/output library
@@ -7330,9 +7376,6 @@ WARNING always pass a NON-CONST reference to the stream as the first argument
   }
 
   —end example ]
-
-
-
 
 
 
