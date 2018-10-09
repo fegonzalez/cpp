@@ -7272,50 +7272,111 @@ NOTICE As becomes clear later, this requirement translates into
 
 
 # ==============================================================================
-# todo 25 Algorithms library
+# todo 25 Algorithms library [9_1]
 # ==============================================================================
 
-https://en.cppreference.com/w/cpp/algorithm
+Note.- Execution policies (C++17)
 
+1) Non-modifying sequence operations (<algorithm>)
 
-remove_if: see # X.1 Erase-remove idiom [4_14_1] [k2501] 
+   all_of   
+   ...
+   find
+   ...
+   search
+   ...
+   for_each
 
+   [ Example -  for_each and method overloading (13 Overloading)
 
-for_each:
-
-[ Example -  for_each and method overloading (13 Overloading)
-
-  // How to call an specific class::method while iterating?
+       // How to call an specific class::method while iterating?
  
-  class Example
-  {
-   public:
-   
-      void calculateCapacity();
-      void calculateCapacity(string interval) { ... }
-   ...      
-  };
+       struct Example
+       {
+	 void calculateCapacity();
+      	 void calculateCapacity(string interval) { ... }
+	 ...      
+       };
+
+         //------
+
+       void Example::calculateCapacity()
+       {
+	 // e.g. std::vector<std::string> = { "a", "b", "c" }
+
+  	 // How to call an Example::calculateCapacity(std::string) 
 
 
-  //------
+  	std::for_each
+     	(std::begin(some_collection), std::end(some_collection),
+      	 std::bind(static_cast<void(Example::*)(std::string)>             //(*)
+  	    (&Example::calculateCapacity), this, std::placeholders::_1)); //(**)
+       }
 
- void Example::calculateCapacity()
- {
-  // e.g. std::vector<std::string> = { "a", "b", "c" }
+       // (*): explicitly passes to std::bind the method to overload
+       // (**): args. to std::bind: method, object, method params
 
-  // How to call an Example::calculateCapacity(std::string) 
+   end example ]
 
+2) Modifying sequence operations (<algorithm>)
 
-  std::for_each
-     (std::begin(some_collection), std::end(some_collection),
-      std::bind(static_cast<void(Example::*)(std::string)>                   //*1
-  	       (&Example::calculateCapacity), this, std::placeholders::_1)); //*2
- }
+   copy 
+   ...
+   move
+   ...
+   remove
+   ...
+   rotate
+   ...
+   swap
+   ...
 
- //*1 : explicitly passes to std::bind the method to overload
- //*2 : arguments to std::bind: method, object owner of the method, method params
+3) Partitioning operations  (<algorithm>)
 
-end example ]
+4) Sorting operations  (<algorithm>)
+
+5) Binary search operations (on sorted ranges)  (<algorithm>)
+
+6) Other operations on sorted ranges  (<algorithm>)
+
+   merge
+   ...
+
+7) Set operations (on sorted ranges)  (<algorithm>)
+
+   set_union
+   ...
+
+8) Heap operations  (<algorithm>)
+
+   Note.- std::heap is a type of data structure, not related to heap memory
+   https://stackoverflow.com/questions/947394/what-is-the-point-of-make-heap
+
+9) Minimum/maximum operations  (<algorithm>)
+
+10) Comparison operations  (<algorithm>)
+
+    equal
+    ...
+    lexicographical_compare
+    
+11) Permutation operations  (<algorithm>)
+
+    is_permutation  determines if a sequence is a permutation of another seq.
+
+12)  Numeric operations  <numeric> 
+
+     iota
+     ...
+     inner_product
+     ...
+
+13) Operations on uninitialized memory  (<memory>)
+
+14) C library  (used over unspecified types)  (<cstdlib>)
+
+    qsort
+    bsearch
 
 
 # ==============================================================================
@@ -9043,11 +9104,14 @@ c) address size (processor concept)
 
 [9] STL
 
-https://www.geeksforgeeks.org/
+[9_1] Algorithms library - https://en.cppreference.com/w/cpp/algorithm
+
 
 https://www.geeksforgeeks.org/
 
 [std::unordered_map] - https://www.geeksforgeeks.org/unordered_map-in-stl-and-its-applications/
+
+
 
 # ------------------------------------------------------------------------------
 
