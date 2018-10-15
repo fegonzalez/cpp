@@ -54,3 +54,4 @@ estudio/cpp_language/doc_references/primer/*
 
 #code
 ferlib/algorithms/old/*
+!estudio/cpp_language/code_examples/dummy_temp/dummy.tar.gz
