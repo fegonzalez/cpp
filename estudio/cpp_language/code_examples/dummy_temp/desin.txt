@@ -1,0 +1,81 @@
+
+
+
+- RMAN logic
+
+1) schedule manager:  LpdBusinessLogicFacade::_schedules_generator
+
+
+LpdBusinessLogicFacade
+{
+
+ /**@param  boost::shared_ptr<LpschAbstractSchedulesGenerator> _schedules_generator; 
+
+  - centralized manager for schedule operations
+
+  - centralized interfaz for schedule data (e.g. DB::optimal, DB::active)
+
+    
+  - storage of the default-schedule (the one created at system init)
+
+*/
+ boost::shared_ptr<LpschAbstractSchedulesGenerator> _schedules_generator; 
+
+}
+
+
+2) Data Base
+
+class LrdbDataBase
+{
+   typedef LrdbDataTableBest<int, LrdbSchedule> ScheduleTable;
+   typedef LrdbDataTableAutoIndex<LrdbAlternativeSchedule> AlternativeScheduleTable;
+
+
+   AlternativeScheduleTable    r_alternativeSchedulesTable; // permite varios schedules (auto-index)
+
+   LrdbSchedule 	       r_optimalSchedule;    // la óptima
+   bool 		       r_hasOptimalSchedule;
+
+   LrdbAlternativeSchedule     r_activeSchedule;     // la activa
+   bool 		       r_hasActiveSchedule;
+
+
+
+   /**Visto en RMAN
+
+   a) LrdBusinessLogicFacade::complete 
+      => LrdBusinessLogicFacade::generateSchedulesForAllIntervals(void)
+      	 {
+	   LrdbDataBase::ScheduleTable & schTable = LrdbDataBase::Get().getScheduleTable();
+   	   schTable.clear();
+	   ...
+	   schTable.addElement(0, *default_schedule); //case default scheduke
+	   schTable.addElement(0, solution);          //otherwise : strore as optimal schedule
+
+
+   
+   b) Many other LrdBusinessLogicFacade::  places  :[0] used to store the current optimal schedule
+
+
+   => solo almacena un schedule, el último calcualdo/generado
+
+*/
+   ScheduleTable               r_schedulesTable; //varias 
+
+   // ; no son active ni optimal; ¿cuáles? => no hay nada (supongo que
+   // idea orig. era registrar todos ahí active, optimal, ...), y
+   // centralizar forwarrd, etc)
+
+}
+
+
+
+3) Creacion de active y optimal
+
+
+4) Activación del active schedule:
+
+   LrdBusinessLogicFacade::activateSchedule
+
+
