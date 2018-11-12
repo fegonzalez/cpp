@@ -37,6 +37,18 @@ class LrdbDataBase
    LrdbSchedule 	       r_optimalSchedule;    // la óptima
    bool 		       r_hasOptimalSchedule;
 
+
+   /** warning Design decision: Storing the active schedule in the DB as a
+       separate object:
+   
+       The current active schedule is either the default initial schedule, the
+       optimal schedule, or one of the altervative schedules (when available
+       for the RTP project). Then ,a simple pinter to the proper schedule would
+       be enought to store the active shedule. BUT, the active schedule KPIs
+       MUST be updated after any event (see [1 ), making its value different
+       from the original schedule; therfeore the active schedule MUST be stored
+       as a separate Schedule object in the DB
+   */    
    LrdbAlternativeSchedule     r_activeSchedule;     // la activa
    bool 		       r_hasActiveSchedule;
 
@@ -50,7 +62,7 @@ class LrdbDataBase
 	   LrdbDataBase::ScheduleTable & schTable = LrdbDataBase::Get().getScheduleTable();
    	   schTable.clear();
 	   ...
-	   schTable.addElement(0, *default_schedule); //case default scheduke
+	   schTable.addElement(0, *default_schedule); //case default schedule
 	   schTable.addElement(0, solution);          //otherwise : strore as optimal schedule
 
 
@@ -63,19 +75,119 @@ class LrdbDataBase
 */
    ScheduleTable               r_schedulesTable; //varias 
 
-   // ; no son active ni optimal; ¿cuáles? => no hay nada (supongo que
-   // idea orig. era registrar todos ahí active, optimal, ...), y
-   // centralizar forwarrd, etc)
-
 }
 
 
 
-3) Creacion de active y optimal
+3) Creación/Asignación de active schedule
+
+   call to    LrdbDataBase::Get().setActiveSchedule(active);
 
 
-4) Activación del active schedule:
+a) LrdBusinessLogicFacade::complete(void)
+	=> LrdBusinessLogicFacade::activateOptimalSchedule()
+	   => LrdBusinessLogicFacade::activateSchedule(-1,LriScheduleActivationType::E_AUTO);
+	      =>   LrdbDataBase::Get().setActiveSchedule(active);
+	      
+	   HERE:  active schedule = optimal schedule
 
-   LrdBusinessLogicFacade::activateSchedule
+	   HERE: activation type  = LriScheduleActivationType::E_AUTO
+	
+
+b) Evento:
+
+    LrdComponent::updateScheduleActivation()
+	=> LrdBusinessLogicFacade::updateScheduleActivation
+	   => LrdBusinessLogicFacade::activateSchedule(int schedule_id, LriScheduleActivationType::LriEnum activation_type)
+	      =>  LrdbDataBase::Get().setActiveSchedule(active);
+
+	      
+	  HERE:  active schedule = one of the alternative schedules
+
+	  HERE: activation type = E_MANUAL    ? meaning  ????
+	  
 
 
+4) Publicación del active schedule:
+
+ LrdBusinessLogicFacade::publishActiveSchedule(const LriCalculationReason::LriEnum & reason)
+ 
+
+
+5) Crear active/optimal al arrancar
+
+
+::complete()
+
+
+
+void LrdBusinessLogicFacade::complete(void)
+{
+
+   a) generateSchedulesForAllIntervals();  //guarda default en DB
+   /*
+	if (empty_demand)
+   	{
+	      if (default_schedule)
+	      {
+		schTable.addElement(0, *default_schedule);
+   	     }
+        }
+   */
+
+   ...
+
+   b)  generateOptimalSchedule();  // db.setOptimalSchedule(new_optimal);
+
+   c) activateOptimalSchedule();  // HERE: active schedule = optimal schedule
+                                  //       (ver arriba) }
+
+}
+
+
+6) Mi diseño
+
+   a) DB base
+   
+   LpdbOptimalShedule 	       r_optimalSchedule;    // la óptima
+   bool 		       r_hasOptimalSchedule;
+
+   LpdbActiveSchedule     r_activeSchedule;     // la activa
+   bool ...
+
+   LpdbDefaultSchedule     r_activeSchedule;     // la default al arrancar
+   bool 
+
+   //future: Table of LpdbAlternativeSchedule: the_alternatice_schedules;
+
+
+   b) Schedule classes
+
+   LpdbSchedule // NOT an interface class
+
+   LpdbOptimalShedule: public LpdbSchedule
+
+   LpdbActiveShedule: public LpdbSchedule
+
+   LpdbDefaultSchedule: public LpdbSchedule
+
+
+   // future:
+   LpdbAlternativeSchedule: public LpdbSchedule
+   
+
+
+   c)  class LpschSchedulesGenerator //manager
+
+   {
+     typedef boost::optional<std::shared_ptr<LpdbDefaultSchedule> > TypeDefSch;
+
+     public:
+
+       TypeDefSch getDefaultSchedule ();
+ 
+     protected:
+
+       TypeDefSch the_default_schedule;  // puede que no sea necesario
+                                         // Y SE DEVUELVA VALOR DE DB
+   }
