@@ -204,15 +204,4 @@ void LrdBusinessLogicFacade::complete(void)
 
    c)  class LpschSchedulesGenerator //manager
 
-   {
-     typedef boost::optional<std::shared_ptr<LpdbDefaultSchedule> > TypeDefSch;
-
-     public:
-
-       TypeDefSch getDefaultSchedule ();
- 
-     protected:
-
-       TypeDefSch the_default_schedule;  // puede que no sea necesario
-                                         // Y SE DEVUELVA VALOR DE DB
-   }
+   DONE
