@@ -953,6 +953,9 @@ pointer to member type; rather, a prvalue of this type is a null pointer
 constant and can be converted to a null pointer value or null member pointer
 value. See 4.10 and 4.11. —end note ]
 
+(See
+https://www.cprogramming.com/c++11/c++11-nullptr-strongly-typed-enum-class.html)
+
 
 2.13.8 user-defined-literal
 
@@ -8217,19 +8220,50 @@ Details: see ../../ferlib/libraries/shared_howto/
 https://www.cprogramming.com/c++11/c++11-nullptr-strongly-typed-enum-class.html
 
 	
-// this code will compile (if your compiler supports C++11 strongly typed enums)
-enum class Color {RED, GREEN, BLUE}; 
-enum class Feelings {EXCITED, MOODY, BLUE}; //C++98 error: BLUE already defined
+1) //This code will compile (if compiler supports C++11 strongly typed enums)
+
+   enum class Color {RED, GREEN, BLUE}; 
+   enum class Feelings {EXCITED, MOODY, BLUE}; //C++98 error: BLUE already defined
 
 
-Strongly typed enums, enum classes, also have better scoping. Each
+2) Strongly typed enums, enum classes, also have better scoping. Each
 enum value is scoped within the name of the enum class.
-	
-Color color = Color::GREEN;
-if ( Color::RED == color )
-{
-    // the color is red
-}
+
+   [ Example
+
+     Color color = Color::GREEN;
+     if ( Color::RED == color )
+     {
+	// the color is red
+     }
+
+   end example ]
+
+
+3) Enum classes have another advantages over old-style enums. You can
+have a forward declaration to a strongly typed enum:
+
+   [ Example 
+
+     enum class Mood;
+     void assessMood (Mood m);
+  
+     // later on:
+     enum class Mood { EXCITED, MOODY, BLUE };
+
+   end example ]
+
+4) Well-defined enum sizes
+
+   A final advantage of enum classes is that you can set the size of
+   your enum--you can use any signed or unsigned integer type.
+
+   [ Example
+
+     #include <cstdint>
+     enum class Colors : std::int8_t { RED = 1, GREEN = 2, BLUE = 3 };
+
+   end example ]
 
 
 # S.1.2 Lambda functions (closures)
