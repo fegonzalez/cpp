@@ -1,5 +1,21 @@
 
 
+- RMAN logic
+
+1) schedule manager:  LpdBusinessLogicFacade::_schedules_generator
+2) Data Base
+3) Creación/Asignación de active schedule
+4) Publicación del active schedule:
+5) Crear active/optimal al arrancar
+
+- RTP logic
+
+6) Mi diseño
+
+
+
+################################################################################
+
 
 - RMAN logic
 
@@ -63,7 +79,7 @@ class LrdbDataBase
    	   schTable.clear();
 	   ...
 	   schTable.addElement(0, *default_schedule); //case default schedule
-	   schTable.addElement(0, solution);          //otherwise : strore as optimal schedule
+	   schTable.addElement(0, solution);          //otherwise : store as optimal schedule
 
 
    
@@ -110,15 +126,19 @@ b) Evento:
 
 4) Publicación del active schedule:
 
- LrdBusinessLogicFacade::publishActiveSchedule(const LriCalculationReason::LriEnum & reason)
+   LrdBusinessLogicFacade::publishActiveSchedule(const LriCalculationReason::LriEnum & reason)
  
+
+   Al arrancar:
+
+  ::compelte()
+  {
+
+   publishOptimalAndActiveSchedules(LpiCalculationReason::E_INIT);   //HERE SEND default schedule to HMI at system init
+  }
 
 
 5) Crear active/optimal al arrancar
-
-
-::complete()
-
 
 
 void LrdBusinessLogicFacade::complete(void)
@@ -143,6 +163,11 @@ void LrdBusinessLogicFacade::complete(void)
                                   //       (ver arriba) }
 
 }
+
+
+
+
+########################################################################
 
 
 6) Mi diseño
