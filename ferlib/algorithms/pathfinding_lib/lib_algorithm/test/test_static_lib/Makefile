@@ -127,6 +127,13 @@ undirected_iface_test.successtest_output_options = > undirected_iface_test.OK
 undirected_iface_test.difftest_output_options = >undirected_iface_test.last_diff
 
 
+capacity_iface_test.input_options = 
+capacity_iface_test.run_options = 
+capacity_iface_test.runtest_output_options = 
+capacity_iface_test.successtest_output_options = > capacity_iface_test.OK
+capacity_iface_test.difftest_output_options = >capacity_iface_test.last_diff
+
+
 #header files & paths # i.e. HEADERS := a.$(HEADER_SUFFIX): b.$(HEADER_SUFFIX)
 #-- DO-CHANGE-HERE:  
 INCLUDE_DIRECTORIES := $(srcdir)
