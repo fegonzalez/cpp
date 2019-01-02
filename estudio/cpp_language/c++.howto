@@ -7288,9 +7288,15 @@ Note.- Execution policies (C++17)
    ...
    search
    ...
+
+
+  
    for_each
 
-   [ Example -  for_each and method overloading (13 Overloading)
+
+ 1.1) HINT for_each and method overloading (13 Overloading)
+
+    [ Example -  for_each and method overloading (13 Overloading)
 
        // How to call an specific class::method while iterating?
  
@@ -7319,7 +7325,39 @@ Note.- Execution policies (C++17)
        // (*): explicitly passes to std::bind the method to overload
        // (**): args. to std::bind: method, object, method params
 
-   end example ]
+    end example ]
+
+
+
+ 1.2) HINT: applying for_Each to a map (the iterator returns a pair)
+
+    See answer 47 at
+    https://stackoverflow.com/questions/2850312/use-of-for-each-on-map-elements
+
+    [ Example
+
+    std::unordered_multimap<unsigned int, std::string> my_mmap; //supose filled 
+
+    // error: std::for_each can not iterate straightly through a map 
+    std::for_each
+	(std::begin(my_mmap),
+	std::end(my_mmap),
+        [] (const std::string value);   // error: a pair returned here
+
+
+    // ok: use an intermediate function instead, to access the element in the pair
+    //
+    // a) intermediate function: using the "value" inside
+     auto fn_element = [] (const std::pair<unsigned int, std::string>& pair)
+     {
+    	const std::string pair_value = pair.second;
+	std::cout << pair_value;
+     }	   
+    // b) std::for_each
+    std::for_each(std::begin(my_mmap), std::end(my_mmap), fn_element);
+
+    end example ]
+
 
 2) Modifying sequence operations (<algorithm>)
 
