@@ -7514,6 +7514,12 @@ d) cout a collection in C++11
 
     end example ]
 
+e) std::stringstream   ( #include <sstream>)
+
+   Buffer.
+   Input: any kind of data
+   Output: std::string
+
 
 # ==============================================================================
 # Appendix A - Advanced concepts
