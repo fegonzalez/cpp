@@ -13,18 +13,18 @@
 
 # 5 Pointers and Arrays
 #
-# 5.1 Pointers and Addresses..... 83
-# 5.2 Pointers and Function Arguments  84
-# 5.3 Pointers and Arrays  87
-# 5.4 Address Arithmetic  90
-# 5.5 Character Pointers and Functions..... 93
-# 5.6 Pointer Arrays; Pointers to Pointers ..... 96
-# 5.7 Multi-dimensional Arrays  99
-# 5.8 Initialization of Pointer Arrays..... 101
-# 5.9 Pointers vs..... Multi-dimensional Arrays..... 101
-# 5.10 Command-line Arguments ..... 102
-# 5.11 Pointers to Functions 106
-# 5.12 Complicated Declarations  108
+# 5.1 Pointers and Addresses
+# 5.2 Pointers and Function Arguments
+# 5.3 Pointers and Arrays
+# 5.4 Address Arithmetic
+# 5.5 Character Pointers and Functions
+# 5.6 Pointer Arrays; Pointers to Pointers
+# 5.7 Multi-dimensional Arrays
+# 5.8 Initialization of Pointer Arrays
+# 5.9 Pointers vs..... Multi-dimensional Arrays
+# 5.10 Command-line Arguments
+# 5.11 Pointers to Functions
+# 5.12 Complicated Declarations
 
 
 # Appendix Z - References
@@ -44,7 +44,7 @@ Table Index
 # ==============================================================================
 
 # ==============================================================================
-# # 5 Pointers and Arrays
+# 5 Pointers and Arrays
 # ==============================================================================
 
 FACT_5_1
@@ -109,6 +109,167 @@ and a++ are illegal.
     f(a+2);     // OK
     f(pa+2)
 
+
+(7) If one is sure that the elements exist, it is also possible to
+    index backwards in an array; p[-1], p[-2], and so on are
+    syntactically legal, and refer to the elements that immediately
+    precede p[0].
+
+    Of course, it is illegal to refer to objects that are not within
+    the array bounds.
+
+
+# 5.11 Pointers to Functions
+
+(1) In C, a function itself is not a variable, but it is possible to
+    define pointers to functions, which can be assigned, placed in
+    arrays, passed to functions, returned by functions, and so on.
+
+    [ Example  [4_1_1]
+
+        #include <stdio.h> 
+      	// A normal function with an int parameter 
+      	// and void return type 
+      	void fun(int a) 
+      	{ 
+      	    printf("Value of a is %d\n", a); 
+        } 
+  
+        int main() 
+        { 
+            // fun_ptr is a pointer to function fun()  
+	    void (*fun_ptr)(int) = &fun; 
+  
+	    /* The above line is equivalent of following two 
+	       void (*fun_ptr)(int); 
+	       fun_ptr = &fun;  
+	    */
+  
+            // Invoking fun() using fun_ptr 
+            (*fun_ptr)(10); 
+  
+            return 0; 
+        } 
+
+        Output:
+            Value of a is 10
+
+    end example ]
+
+
+(2) passing a pointer to function as a function parameter  (see [3.1].5.11)
+ 
+    [ Example
+
+      // 1. fn. declaration
+      //
+      void some_fn (int left,
+      	 	   int right,
+		   int (*comp)(void *, double)
+		   )
+      {
+        ...
+
+        // 2. fn. use
+	//
+        if ( (*comp)(&left , 7.55) < 0 )
+        ...
+
+      }
+
+
+      // 3. passing the fn. as parameter
+
+      int egfn(void *, double) { /* whatever actions here */ }
+
+      int main()
+      { 
+         ...
+         some_fn(3, 5, egfn);
+	 ...
+       }
+
+    end example ]
+
+
+    1. fn. declaration: " int (*comp)(void *, double) "
+
+       comp: is a pointer to a function that:
+       	     has one void * argument,
+    	     has one double argument,
+	     and returns an int.
+
+    2. fn. use: " if ( (*comp)(&left , 7.55) < 0 )"
+
+       comp: is a pointer to a function,
+       *comp: is the function, 
+       (*comp)(v[i], v[left]): is the call to it.
+
+       The parentheses are needed so the components are correctly associated;
+       without them,  " int *comp(void *, void *) " // WRONG
+       says that comp is a function returning a pointer to an int,
+       which is very different.
+
+
+(3) Unlike normal pointers, a function pointer points to code, not
+    data.  Typically a function pointer stores the start of executable
+    code. [4_1_1]
+
+(4) Unlike normal pointers, we do not allocate de-allocate memory
+    using function pointers.  [4_1_1]
+
+(5) A function’s name can also be used to get functions’ address.  [4_1_1]
+
+    [ Example
+
+      void fun(int a) { printf("Value of a is %d\n", a); } 
+  
+      int main() 
+      {  
+         void (*fun_ptr)(int) = fun;  // & removed 
+         fun_ptr(10);  // * removed 
+         return 0; 
+      }
+      
+    end example ]
+    
+(6) Like normal pointers, we can have an array of function pointers.  [4_1_1]
+
+    [ Example
+
+        #include <stdio.h> 
+        void add(int a, int b) { printf("Addition is %d\n", a+b); } 
+	void subtract(int a, int b) { printf("Subtraction is %d\n", a-b); } 
+        void multiply(int a, int b) { printf("Multiplication is %d\n", a*b); } 
+  
+        int main() 
+        { 
+           // fun_ptr_arr is an array of function pointers 
+    	   void (*fun_ptr_arr[])(int, int) = {add, subtract, multiply}; 
+    	   unsigned int ch, a = 15, b = 10; 
+  
+	   printf("Enter Choice: 0 for add, 1 for subtract and 2 "
+                  "for multiply\n"); 
+           scanf("%d", &ch); 
+  
+	   if (ch > 2) return 0; 
+  
+           (*fun_ptr_arr[ch])(a, b); 
+  
+           return 0; 
+        } 
+
+
+        Output:
+
+	    Enter Choice: 0 for add, 1 for subtract and 2 for multiply
+	    2
+	    Multiplication is 150
+	    
+    end example ]
+
+
+
 # ==============================================================================
 # Appendix Z - References
 # ==============================================================================
@@ -116,7 +277,7 @@ and a++ are illegal.
 
 # ------------------------------------------------------------------------------
 
-[1] C++ documents
+[1] C documents
 
 [1_1] ANSI C standard - ??? 
 
@@ -139,6 +300,11 @@ and a++ are illegal.
 # ------------------------------------------------------------------------------
 
 [4] C Concepts
+
+[4_1] Pointers to Functions
+
+      [4_1_1] GeeksforGeeks - Function Pointer in C -
+              https://www.geeksforgeeks.org/function-pointer-in-c/
 
 # ------------------------------------------------------------------------------
 
