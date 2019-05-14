@@ -359,6 +359,7 @@
 # Appendix I - Undocumented Issues
 #
 # I.1 Local static variables are shared
+# I.2 Initialization of constants attributes
 
 
 # Appendix K - Code examples (./code_examples)
@@ -8138,6 +8139,35 @@ Details: see ../../ferlib/libraries/shared_howto/
 
   —end example ]
   
+
+# I.2 Initialization of constants attributes
+
+# Before c++11
+
+  [ example  before c++11
+
+    //  g++ test.cc
+    //   g++ -std=c++11 test.cc
+
+    class dummy_const
+    {
+     public:
+       static const std::string HIDE_LABEL;
+       //  const std::string HIDE_LABEL = ""; // error before c++11
+    };
+
+    
+    const std::string dummy_const::HIDE_LABEL = "hide"; // required before c++11
+
+    int main()
+    {
+        const char * dummy_char = dummy_const::HIDE_LABEL.c_str();
+	std::cout << dummy_char << std::endl;
+
+	return 0;
+    }
+    
+  --end example ]    
 
 
 # ==============================================================================
