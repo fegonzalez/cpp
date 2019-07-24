@@ -24,7 +24,8 @@
 # 2.2 Phases of translation
 # 2.3 Character sets
 # 2.4 Preprocessing tokens
-# 2.5 Alternative tokens
+# 2.5 Alternative tokens (and, or, ...)
+
 # 2.6 Tokens
 # 2.7 Comments
 # 2.8 Header names
@@ -731,11 +732,17 @@ My_note.- Here a brief explanation. Read [1_1] for details.
       information needed for execution in its execution environment.
 
 
+# 2.5 Alternative tokens (and, or, ...)
+
+  https://en.cppreference.com/w/cpp/language/operator_alternative
+
+
 # 2.3 - 2.9
 
 My_note.- Ignored. Read [1_1] for details. 
 
 - Basic Character set = [a-z][A-Z][0-9] _ {  ...  * +  ...  " ' 
+
 
 # 2.10 Identifiers
 
