@@ -125,8 +125,8 @@
 # \todo    5.2.7 Dynamic cast
 # \todo    5.2.8 Type identification
 # \todo    5.2.9 Static cast
-# \todo    5.2.10 Reinterpret cast
-# \todo    5.2.11 Const cast
+# 5.2.10 Reinterpret cast
+# 5.2.11 Const cast
 
 
 
@@ -332,7 +332,6 @@
 # A.1 Reference and Value Semantics
 
 
-
 # Appendix B - Debug, memory, ...
 #
 # B.1 Aids for Debugging: assert and NDEBUG [3_1].6.5.3
@@ -357,6 +356,9 @@
 # C.8. Shared libraries
 
 
+# Appendix D - Pointers and Arrays in C++
+
+
 # Appendix I - Undocumented Issues
 #
 # I.1 Local static variables are shared
@@ -366,11 +368,19 @@
 # Appendix K - Code examples (./code_examples)
 #
 # Compilation, Linkage, ...
+# Chapter 3 Basic concepts
 # io_first_look
 # iteration statements
 # references (lvalue references)
 # constructors
+# Virtual functions
 # templates
+# Chapter 11 member access control
+# initializers
+# templates
+# Chapter 25 Algorithms library
+# Appendix I - Undocumented Issues
+# Appendix D - Pointers and Arrays in C++
 
 
 # Appendix S - New Features 
@@ -2434,16 +2444,16 @@ explicit operator conversion-type-id 	(2) 	(since C++11)
 
 # \brief cast modes  [4_13_1]
 
-Use dynamic_cast for converting pointers/references within an
-inheritance hierarchy.
+1 Use dynamic_cast for converting pointers/references within an
+  inheritance hierarchy.
 
-Use static_cast for ordinary type conversions.
+2 Use static_cast for ordinary type conversions.
 
-Use reinterpret_cast for low-level reinterpreting of bit patterns. Use
-with extreme caution.
+3 Use reinterpret_cast for low-level reinterpreting of bit
+  patterns. Use with extreme caution.
 
-Use const_cast for casting away const/volatile. WARNING Avoid this unless you
-are stuck using a const-incorrect API.
+4 Use const_cast for casting away const/volatile. WARNING Avoid this
+  unless you are stuck using a const-incorrect API.
 
 
 
@@ -8124,6 +8134,114 @@ Details: see ../../ferlib/libraries/static_howto/
 Details: see ../../ferlib/libraries/shared_howto/
 
 
+
+# ==============================================================================
+# Appendix D - Pointers and Arrays in C++
+# ==============================================================================
+
+# D.1 Pointers and Arrays in C
+
+Details: see document "./c.howto"
+
+
+# D.2 Passing arrays as function arguments [kD001]
+
+(1) << When an array name is passed to a function, what is passed is
+    the location of the initial element (a memory address, a pointer)(*)
+    >> ([10.1], 5.3 Pointers and Arrays)
+
+    (*) @warning: therefore, the content can be changed.
+
+
+(2) function parameters - equivalent assignments: (char*) 
+
+[ Example
+
+  // C modes
+
+  void print_c1(char *s, unsigned int len);   // explicit => preferred
+
+  void print_c2(char s[], unsigned int len);  // implicit array => equivalent c1
+
+  void print_c3(char *s); // '\0' expected (undefined behaviour otherwise)
+
+  void print_c4(char s[1000] ); // equivalent, the dimension information
+                                // is discarded
+
+  void set_c1(char *s, unsigned int len);   // explicit => preferred
+
+  void set_c2(char s[], unsigned int len);  // implicit array => equivalent c1 
+
+
+  // C++ modes
+
+  void byref1 (const int (&a)[4], unsigned int len);
+
+  template<class A> 
+  void byref2(const A& a, unsigned int len);
+  //void byref2(const A& a)  //C++11
+
+-- end example ]
+
+
+# D.3 How to return a local array from a C/C++ function? [kD002]
+
+   [e.g. char cadena[3] = {'2','5','R'}; ]
+
+# D.3.1 Functions
+
+a) ERROR: return a local variable. (trivial)
+
+   - compilation: warning: << address of local variable 'arr' returned
+                              [-Wreturn-local-addr] >>
+
+   - output: UNDEFINED (It may produce values 10 20 as output or may
+             produce garbage values or may crash.)
+	     
+   - example: see retarray_error_undefined at [kD002]
+
+
+b) VALID: return a dynamically allocated (new/malloc), (pointer to an)
+          array. (trivial)
+	  
+   - problem: end of array management?
+   
+   - example: see retarray_dyn_alloc at [kD002]
+
+
+c) VALID: return a static array. (trivial)
+
+    - problem: end of array management?
+    
+    - example: see retarray_static at [kD002]
+
+
+d) VALID: return an structure containing the array. (array members of
+          structures are deeply copied!) [10.2]
+	  
+    << We can wrap array in a structure/class and return an instance
+    of the struct/class. The reason for this work is, array members of
+    structures are deeply copied. In below program deep copy happens
+    when we returned instance is copied in main. >> [10.2]
+
+    - advantage: returns a copy, not a pointer
+    
+    - problem: is the inner array is too long, maybe a copy is too large.
+    
+    - example: see retarray_within_struct at [kD002]
+
+
+# D.3.2 class's member functions
+
+e) VALID: return a reference to a member array (trivial);
+
+   - problems:
+     * Encapsulation is breached, 
+     * Lifetime issues, 
+     * Invariant are no longer sustainable (except returning const &)
+
+
+
 # ==============================================================================
 # Appendix I - Undocumented Issues
 # ==============================================================================
@@ -8284,8 +8402,6 @@ Details: see ../../ferlib/libraries/shared_howto/
   [k14109] Templates and Non-Templates sharing header - "./lib_units_example/"
 
 
-# Chapter 17 Basic concepts - "./3_basic_concepts/"
-
 # Chapter 25 Algorithms library - "./25_algorithms_library/"
 
   [k2501] remove_if algorithm VS hand-written loop - "./remove"
@@ -8293,9 +8409,15 @@ Details: see ../../ferlib/libraries/shared_howto/
 
 # Appendix I - Undocumented Issues - "./code_examples/issues"
 
-  [KI001]  static issues- "./static"
+  [kI001]  static issues- "./static"
 
 
+# Appendix D - Pointers and Arrays in C++ "./code_examples/"
+
+  [kD001] Passing arrays as function arguments - "./arrays_in_cpp.cpp"
+  [kD002] How to return a local array from a C/C++ function? - "./arrays_in_cpp"
+
+ 
 # ==============================================================================
 # Appendix S - New Features 
 # ==============================================================================
@@ -9018,9 +9140,14 @@ c) address size (processor concept)
 
     Reference books
 
-[4_301] The C++ Programming Language
+[3_301] The C++ Programming Language
 
-[4_302] The C++ Standard Library: A Tutorial and Reference
+[3_302] The C++ Standard Library: A Tutorial and Reference
+
+    
+    C books
+
+[3_401] The ANSI C Programming Language, Brian W. Kernighan
 
 
 # ------------------------------------------------------------------------------
@@ -9236,6 +9363,14 @@ https://www.geeksforgeeks.org/
 
 [std::unordered_map] - https://www.geeksforgeeks.org/unordered_map-in-stl-and-its-applications/
 
+
+# ------------------------------------------------------------------------------
+
+[10] Pointers and Arrays
+
+[10.1] See  [3_401], 5 Pointers and Arrays
+
+[10.2] How to return a local array from a C/C++ function? - https://www.geeksforgeeks.org/return-local-array-c-function/
 
 
 # ------------------------------------------------------------------------------

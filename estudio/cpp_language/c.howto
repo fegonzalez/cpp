@@ -27,7 +27,9 @@
 # 5.12 Complicated Declarations
 
 
-# Appendix Z - References
+# K - Code examples
+
+# Z - References
 
 
 # ==============================================================================
@@ -44,7 +46,7 @@ Table Index
 # ==============================================================================
 
 # ==============================================================================
-# 5 Pointers and Arrays
+# 5 Pointers and Arrays [k5001] [k5002]
 # ==============================================================================
 
 FACT_5_1
@@ -57,7 +59,7 @@ objects named a[0] , a[1] , ..., a[9], where 'a' is equivalent to &a[0]
 Then, a[i] are variables (they have memory reserved); but 'a' isn't.
 
 
-# 5.3 Pointers and Arrays
+# 5.3 Pointers and Arrays [k5001] [k5002]
 
 (1) Any operation that can be achieved by array subscription can also be
     done with pointers.
@@ -268,6 +270,16 @@ and a++ are illegal.
 	    
     end example ]
 
+
+
+# ==============================================================================
+# Appendix K - Code examples (./code_examples)
+# ==============================================================================
+
+# Pointers and Arrays "./code_examples/"
+
+  [k5001] Passing arrays as function arguments - "./arrays_in_cpp.cpp"
+  [k5002] How to return a local array from a C/C++ function? - "./arrays_in_cpp"
 
 
 # ==============================================================================
