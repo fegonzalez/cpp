@@ -2764,9 +2764,34 @@ not_2) Initialization of data members in a class and objects
 not_3) Initialization of aggregates (arrays / structs / string literals)
 
 Agregate init. requires braces '{}' ...
+
   int c1[2]={0,2};       /* (5) arrays */    
   struct S { int a,b; };
-  S s={0,1};             /* (6) structs  */
+
+  struct TypeDummy
+  {
+    int i;
+    char c;
+    const char * pc;
+  };
+  static TypeDummy dummy_array[] =  /* arrays of implicit size */
+  { 
+    {
+	1,
+	'a',
+	"uno-a"
+    },
+    {
+	2,
+    	'b',
+	"dos-b"
+    }
+  };
+
+
+  S s={0,1};    /* (6) structs  */
+
+
 
 ... with the exception of string literals:
   char c2[]="message";                           /* (7) string literals */
