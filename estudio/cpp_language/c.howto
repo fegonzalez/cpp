@@ -276,7 +276,7 @@ and a++ are illegal.
 # Appendix K - Code examples (./code_examples)
 # ==============================================================================
 
-# Pointers and Arrays "./code_examples/"
+# Pointers and Arrays "./code_examples/D_arrays"
 
   [k5001] Passing arrays as function arguments - "./arrays_in_cpp.cpp"
   [k5002] How to return a local array from a C/C++ function? - "./arrays_in_cpp"

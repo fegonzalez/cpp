@@ -2,6 +2,9 @@
 #include <iostream>
 #include <string>
 
+#include <cstdio> //snprintf
+#include <cstring>
+
 //   g++ -std=c++11 arrays_in_cpp.cpp
 
 /* Reference documents:
@@ -11,7 +14,6 @@
 [2] https://www.geeksforgeeks.org/return-local-array-c-function/
 
  */
-
 
 
 /*******************************************************************************/
@@ -102,10 +104,14 @@ d) VALID: return an structure containing the array. (array members of
 II.2 class's member  functions
 
 e) VALID: return a reference to a member array (trivial); 
-   - problems:
+f) VALID: return a POINTER to a member array
+
+   - problems (e & f):
      * Encapsulation is breached, 
      * Lifetime issues, 
      * Invariant are no longer sustainable (except returning const &)
+
+g) ERROR: return a local variable. (trivial)
 
 */
 /******************************************************************************/
@@ -119,6 +125,7 @@ struct arrWrap {
     int arr[100]; 
 }; 
 struct arrWrap retarray_within_struct();
+
 
 
 class ClassWithArrayMember
@@ -135,6 +142,23 @@ public:
   //  return a reference to a member array
   typedef int TarrayMember[100];
   const TarrayMember& getArray() const { return arr; }
+
+  const int *getArrayPtr() const { return arr; }
+
+  
+  // g) copy of a member as an array of characters
+  ///@error address of local variable ‘retCode’ returned
+  const char* GetElementAsCharArray()const
+  {  
+    char intermediateCode[2 + 1]; // code ("10") + terminating null character
+    char retCode[2]; ///error address of local variable ‘retCode’ returned
+    
+    snprintf(intermediateCode, 2+1, "%02d", arr[0]);
+    strncpy(retCode, intermediateCode, 2);
+    return retCode;
+
+    //    return "aa";
+  }
 
 
 private:
@@ -294,7 +318,7 @@ void byref1
 
   //  for (int n = 0; n < sizeof(a); ++n) // error sizeof(a) = 16 bits 
 
-  for (int n = 0; n < len; ++n)
+  for (unsigned int n = 0; n < len; ++n)
     std::cout << n << ' '; 
 
   /// compilaion error (const int (a) [4]: assignment of read-only location ‘a[0]
@@ -308,7 +332,7 @@ void byref1_bis
  unsigned int len)
 {
 
-  for (int n = 0; n < len; ++n)
+  for (unsigned int n = 0; n < len; ++n)
     std::cout << n << ' '; 
 
 }
@@ -321,7 +345,7 @@ void byref2(const A& a, unsigned int len)
 { 
   //  for (int n : a) std::cout << n << ' ';  //c++11
 
-  for (int n = 0; n < len; ++n)
+  for (unsigned int n = 0; n < len; ++n)
     std::cout << n << ' '; 
 
 }
@@ -378,6 +402,26 @@ void return_array_test()
   ClassWithArrayMember y;
   const ClassWithArrayMember::TarrayMember& yarr = y.getArray();
   std::cout << yarr[0] << " " << yarr[1] << std::endl;
+
+  
+  // f) VALID: return a POINTER to a member array
+  std::cout << "II.f VALID: return a pointer to a member array"
+	    << std::endl;
+  const int* yarr_ptr = y.getArrayPtr();
+  std::cout << yarr_ptr[0] << " " << yarr_ptr[1] << std::endl;
+
+  //only first elemented is printed: (*yarr_ptr)  IS  yarr_ptr[0] 
+  std::cout << *yarr_ptr << std::endl; 
+
+
+  // g) error: address of local variable ‘retCode’ returned
+  const char *char_value = y.GetElementAsCharArray();
+  std::cout << char_value[0] << " " << char_value[1] << std::endl;
+
+  
+  // g) copy of a member array
+  // int* ptr = retarray_error_undefined();
+  // std::cout << ptr[0] << " " << ptr[1] << std::endl;
 
 }
 
@@ -446,7 +490,8 @@ struct arrWrap retarray_within_struct()
   x.arr[1] = 20; 
   
   return x; ///@warning deep copy executed => nor returning a temporary local var
-} 
+}
+
 
 
 /******************************************************************************/
