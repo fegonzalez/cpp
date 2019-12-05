@@ -5,7 +5,7 @@
 #include <cstdio> //snprintf
 #include <cstring>
 
-//   g++ -std=c++11 arrays_in_cpp.cpp
+//   g++ -std=c++11  -Wall -Werror  arrays_in_cpp.cpp
 
 /* Reference documents:
 
@@ -36,11 +36,20 @@
 */
 /*******************************************************************************/
 
+  typedef char t_identifier[35];
+
 // C modes
-void print_c1(char *s, unsigned int len);   // explicit => preferred
-void print_c2(char s[], unsigned int len);  // implicit array => equivalent c1 
-void print_c3(char *s); ///@warning, '\0' expected (undefined behaviour otherwise
-void print_c4(char s[1000] ); // equivalent, the dimension information is discarded
+void print_c1(const char *s, unsigned int len);   // explicit => preferred
+void print_c2(const char s[], unsigned int len);  // implicit array => equivalent c1 
+void print_c3(const char *s); ///@warning, '\0' expected (undefined behaviour otherwise
+void print_c4(const char s[1000] ); // equivalent, the dimension information is discarded.
+
+
+void print_c5(const t_identifier &s); ///@warning NOT equivalent, due to the reference ('&'), the dimension MUST be exact (eg. 35)
+
+void print_c52(const t_identifier s); // equivalent, without the reference ('&')
+
+
 void set_c1(char *s, unsigned int len);   // explicit => preferred
 void set_c2(char s[], unsigned int len);  // implicit array => equivalent c1 
 void fn_arguments_C_test();
@@ -150,14 +159,14 @@ public:
   ///@error address of local variable ‘retCode’ returned
   const char* GetElementAsCharArray()const
   {  
-    char intermediateCode[2 + 1]; // code ("10") + terminating null character
-    char retCode[2]; ///error address of local variable ‘retCode’ returned
+    // char intermediateCode[2 + 1]; // code ("10") + terminating null character
+    // char retCode[2]; ///error address of local variable ‘retCode’ returned
     
-    snprintf(intermediateCode, 2+1, "%02d", arr[0]);
-    strncpy(retCode, intermediateCode, 2);
-    return retCode;
+    // snprintf(intermediateCode, 2+1, "%02d", arr[0]);
+    // strncpy(retCode, intermediateCode, 2);
+    // return retCode;
 
-    //    return "aa";
+          return "aa";
   }
 
 
@@ -196,7 +205,7 @@ int main()
 /* Implementation: I Passing arrays as function arguments                     */
 /******************************************************************************/
 
-void print_c1(char *s, unsigned int len)
+void print_c1(const char *s, unsigned int len)
 {
   std::cout << '[';
   std::cout << ' ';
@@ -210,7 +219,7 @@ void print_c1(char *s, unsigned int len)
 
 //------------------------------------------------------------------------------
 
-void print_c2(char s[], unsigned int len)
+void print_c2(const char s[], unsigned int len)
 {
   std::cout << '[';
   std::cout << ' ';
@@ -225,7 +234,7 @@ void print_c2(char s[], unsigned int len)
 //------------------------------------------------------------------------------
 
 ///@warning , '\0' expected (undefined behaviour otherwise
-void print_c3(char *s)
+void print_c3(const char *s)
 {
   std::cout << '[';
   std::cout << s << ']';
@@ -234,13 +243,33 @@ void print_c3(char *s)
 
 //------------------------------------------------------------------------------
 
-void print_c4(char s[1000]) // equivalent, the dimension information is discarded
+void print_c4(const char s[1000]) // equivalent, the dimension information is discarded
 {
   std::cout << '[';
   std::cout << s << ']';
   std::cout << std::endl;
 }
 
+//------------------------------------------------------------------------------
+
+///@warning NOT equivalent, due to the reference ('&'), the dimension
+///MUST be exact (eg. 35)
+void print_c5(const t_identifier &s)
+{
+  std::cout << '[';
+  std::cout << s << ']';
+  std::cout << std::endl;
+}
+
+//------------------------------------------------------------------------------
+
+// equivalent, without the reference ('&')
+void print_c52(const t_identifier s) 
+{
+  std::cout << '[';
+  std::cout << s << ']';
+  std::cout << std::endl;
+}
 
 //------------------------------------------------------------------------------
 
@@ -293,6 +322,21 @@ void fn_arguments_C_test()
 			     ///undefined
   print_c3(cadena);
   print_c4(cadena);
+
+  
+  //print_c5(cadena); //error len(cadena) = 3; esperado 35
+  //   arrays_in_cpp.cpp:310: error: invalid initialization of reference of type ‘const char (&)[35]’ from expression of type ‘char [3]’
+  // arrays_in_cpp.cpp:250: error: in passing argument 1 of ‘void print_c5(const char (&)[35])’
+  const unsigned int LEN_CADENA_35 = 35;
+  char cadena35[LEN_CADENA_35] = {"cadena35"};
+  print_c5(cadena35);
+
+  print_c52(cadena35);
+  cadena[0]= 'O';
+  cadena[1]= 'k';
+  print_c52(cadena);
+  
+  
 }
 
 //==============================================================================

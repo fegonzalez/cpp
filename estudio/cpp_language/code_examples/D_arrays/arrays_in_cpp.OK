@@ -1,0 +1,38 @@
+
+
+I Passing arrays as function arguments
+
+C TEST 
+SALIDA: (char *s, unsigned int len): [ 2 5 R ]
+SALIDA: (char [], unsigned int len): [ 2 5 R ]
+[ 3 6 S ]
+[ 4 7 T ]
+SALIDA: (char *) sin cerrar con '[47TuB]
+[47TuB]
+SALIDA: (char *) cerrada con '[47]
+[47]
+
+
+c++ TEST 
+0 1 2 3 
+0 1 2 3 
+0 1 2 
+
+
+
+
+II How to return a local array from a C/C++ function?
+II.b VALID return dynamically allocated array
+10 20
+II.c VALID return static array
+10 20
+II.d VALID return a wrapper struct with the array inside
+10 20
+II.e VALID: return a reference to a member array
+10 20
+II.f VALID: return a pointer to a member array
+10 20
+10
+a a
+
+

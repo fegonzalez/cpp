@@ -2462,14 +2462,15 @@ explicit operator conversion-type-id 	(2) 	(since C++11)
 # \todo    5.2.9 Static cast
 
 
-# 5.2.10 Reinterpret cast
+# 5.2.10 Reinterpret cast  [4_13_1] [4_13_2]
 
 1 The result of the expression reinterpret_cast<T>(v) is the result of
   converting the expression v to type T.
 
 2 The reinterpret_cast operator shall not cast away constness (5.2.11).
 
-3 [ Note: The mapping performed by reinterpret_cast might, or might
+3 The mapping performed by reinterpret_cast is implementation-defined.
+  [ Note: The mapping performed by reinterpret_cast might, or might
    not, produce a representation different from the original value. —
    end note ]
 
@@ -2477,8 +2478,6 @@ Note.- Largely, the only guarantee you get with reinterpret_cast is
        that normally if you cast the result back to the original type,
        you will get the exact same value (but not if the intermediate
        type is smaller than the original type). [4_13_1]
-
-
 
 
 # 5.2.11 Const cast  [1_1].114
@@ -8904,6 +8903,21 @@ Term used to describe the process by which the compiler verifies that the way
 objects of a given type are used is consistent with the definition of that type.
 
 
+- trivially copyable
+
+A trivially copyable class is a class (defined with class, struct or union) that:
+
+a) uses the implicitly defined copy and move constructors, copy and
+   move assignments, and destructor.
+b) has no virtual members.
+c) its base class and non-static data members (if any) are themselves
+   also trivially copyable types.
+
+@warning  memcpy on not trivially copyable objects is UNDEFINED.
+
+HINT (c++11) std::is_trivially_copyable
+
+
 U
 
 - undefined behavior
@@ -9314,6 +9328,8 @@ c) address size (processor concept)
 [4_13] Expressions
  
   [4_13_1] What type of cast to use - https://stackoverflow.com/questions/332030/when-should-static-cast-dynamic-cast-const-cast-and-reinterpret-cast-be-used
+
+  [4_13_2] https://stackoverflow.com/questions/1863069/casting-via-void-instead-of-using-reinterpret-cast
 
 
 [4_14] Libray Algorithms

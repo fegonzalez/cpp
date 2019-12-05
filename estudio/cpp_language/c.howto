@@ -26,6 +26,7 @@
 # 5.11 Pointers to Functions
 # 5.12 Complicated Declarations
 
+# H - String manipulation functions
 
 # K - Code examples
 
@@ -271,6 +272,83 @@ and a++ are illegal.
     end example ]
 
 
+# ==============================================================================
+# H - String manipulation functions
+# ==============================================================================
+
+
+# snprintf: integer to string
+
+# strncpy: Copy characters from string to string
+
+http://www.cplusplus.com/reference/cstring/strncpy/?kw=strncpy
+
+# sscanf: Read formatted data from string (eg. string to int)
+
+(http://www.cplusplus.com/reference/cstdio/sscanf/?kw=sscanf)
+
+
+[ Example - snprintf, strncpy
+
+#include <stdio.h>
+#include <string.h>
+
+int main ()
+{
+  char dest[6]; // non-initialized string
+  puts(dest);   // (o1)
+
+
+  ///@test snprintf: int2string
+  //
+  int numero = 77;
+  char num_aeronaves[2 + 1]; // code + terminating null character
+  snprintf(num_aeronaves, 
+	       2 + 1, 
+	       "%0*d", 
+	       2,
+ 	       numero);
+  puts(num_aeronaves); // (o2)
+
+  ///@test strncpy: (string + '\0') to (string) 
+  strncpy ( dest, num_aeronaves, 2 );
+  puts(dest); // (o3)
+  char tipo_aeronave[4] = {'a','b', 'c', 'd'};
+  strncpy ( &dest[2], tipo_aeronave, 4 );
+  puts(dest); // (o4)
+
+  return 0;
+}
+
+/// expected output
+//
+// (o1) ���4|
+// (o2) 77
+// (o3) 77��4|
+// (o4) 77abcd
+
+- end example ]
+
+
+
+
+[ Example - sscanf
+
+#include <stdio.h>
+
+int main ()
+{
+  char sentence []="Rudolph is 12 years old";
+  char str [20];
+  int i;
+
+  sscanf (sentence,"%s %*s %d",str,&i);
+  printf ("%s -> %d\n",str,i);
+  
+  return 0;
+}
+
+- end example ]
 
 # ==============================================================================
 # Appendix K - Code examples (./code_examples)
