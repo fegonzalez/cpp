@@ -52,7 +52,7 @@
 #     3.2.1 One-per-Program Constraints
 #     3.2.2 One-per-Translation Unit Constraints
 #     3.2.3 Cross-Translation Unit Equivalence Constraints
-
+#
 # 3.3 Scope
 #     3.3.1 Declarative regions and scopes
 #     3.3.2 Point of declaration
@@ -69,7 +69,7 @@
 
 #     3.3.10 Name hiding
 #
-# 3.4 Name lookup
+aki-lo-dejo# 3.4 Name lookup
 #     3.4.1 Unqualified name (Appendix T) lookup
 #     3.4.2 Argument-dependent name lookup
 #     3.4.3 Qualified name lookup
@@ -1073,7 +1073,6 @@ b) definition (entity)
   int f(int x) { return x+a; } 	// defines f and x
 
 
-
 # 3.2 One-definition rule [k3201]
 
 My_note.- Informally "odr-used" means "bind, or memory location accessed"
@@ -1386,7 +1385,6 @@ a) Naming the global namespace: the unary scope operator "::" (3.4.3 4)
    assert(::c==0);
    ...
   }
-
 
 
 # 3.3.7 Class scope
@@ -8171,33 +8169,16 @@ Details: see document "./c.howto"
 # D.2 Passing arrays as function arguments [kD001]
 
 (1) << When an array name is passed to a function, what is passed is
-    the location of the initial element (a memory address, a pointer)(*)
-    >> ([10.1], 5.3 Pointers and Arrays)
-
-    (*) @warning: therefore, the content can be changed.
-
+    the location of the initial element (a memory address, a pointer)
+    => therefore, the content
+    can be changed. >> ([10.1], 5.3 Pointers and Arrays)
 
 (2) function parameters - equivalent assignments: (char*) 
 
-[ Example
-
-  // C modes
-
-  void print_c1(char *s, unsigned int len);   // explicit => preferred
-
-  void print_c2(char s[], unsigned int len);  // implicit array => equivalent c1
-
-  void print_c3(char *s); // '\0' expected (undefined behaviour otherwise)
-
-  void print_c4(char s[1000] ); // equivalent, the dimension information
-                                // is discarded
-
-  void set_c1(char *s, unsigned int len);   // explicit => preferred
-
-  void set_c2(char s[], unsigned int len);  // implicit array => equivalent c1 
+[ Example - C modes: ([10.1], 5.3 Pointers and Arrays, (6)) -- end example ]
 
 
-  // C++ modes
+[ Example - C++ modes
 
   void byref1 (const int (&a)[4], unsigned int len);
 

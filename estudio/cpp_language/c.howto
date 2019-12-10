@@ -94,7 +94,8 @@ and a++ are illegal.
 
 
 (6) When an array name is passed to a function, what is passed is the
-    location of the initial element (a memory address, a pointer)
+    location of the initial element (a memory address, a pointer) =>
+    therefore, the content can be changed.
 
     (6.1) function parameters - equivalent assignments:
     int f(char *s);     // explicit => preferred
@@ -111,6 +112,29 @@ and a++ are illegal.
     f(&a[2]);	// OK
     f(a+2);     // OK
     f(pa+2)
+
+
+[ Example - C modes  [k5001] [k5002]
+
+  void print_c1(char *s, unsigned int len);   // explicit => preferred
+
+  void print_c2(char s[], unsigned int len);  // implicit array => equivalent c1
+
+  void print_c3(char *s); // '\0' expected (undefined behaviour otherwise)
+
+  void print_c4(char s[1000] ); // equivalent, the dimension information
+                                // is discarded
+
+  void print_c5(const t_identifier s); // equivalent
+
+  void print_c6(const t_identifier &s); ///@warning NOT equivalent, the
+                                        // dimension MUST be exact
+
+  void set_c1(char *s, unsigned int len);   // explicit => preferred
+
+  void set_c2(char s[], unsigned int len);  // implicit array => equivalent c1 
+
+-- end example ]
 
 
 (7) If one is sure that the elements exist, it is also possible to

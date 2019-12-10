@@ -44,12 +44,19 @@ void print_c2(const char s[], unsigned int len);  // implicit array => equivalen
 void print_c3(const char *s); ///@warning, '\0' expected (undefined behaviour otherwise
 void print_c4(const char s[1000] ); // equivalent, the dimension information is discarded.
 
-
-void print_c5(const t_identifier &s); ///@warning NOT equivalent, due to the reference ('&'), the dimension MUST be exact (eg. 35)
-
-void print_c52(const t_identifier s); // equivalent, without the reference ('&')
+void print_c5(const t_identifier s); // equivalent
 
 
+
+/**@warning NOT equivalent. Due to the reference ('&') the dimension
+   MUST be exact (eg. 35); compilation error otherwise.
+   [ Example 
+     char cadena[3] = {'2','5','R'};
+     print_c6(cadena); error: invalid initialization of reference of type 
+                       ‘const char (&)[35]’ from expression of type ‘char [3]’
+   -- end example ]
+  */
+void print_c6(const t_identifier &s); ///@warning NOT equivalent.
 void set_c1(char *s, unsigned int len);   // explicit => preferred
 void set_c2(char s[], unsigned int len);  // implicit array => equivalent c1 
 void fn_arguments_C_test();
@@ -254,7 +261,7 @@ void print_c4(const char s[1000]) // equivalent, the dimension information is di
 
 ///@warning NOT equivalent, due to the reference ('&'), the dimension
 ///MUST be exact (eg. 35)
-void print_c5(const t_identifier &s)
+void print_c6(const t_identifier &s)
 {
   std::cout << '[';
   std::cout << s << ']';
@@ -263,8 +270,7 @@ void print_c5(const t_identifier &s)
 
 //------------------------------------------------------------------------------
 
-// equivalent, without the reference ('&')
-void print_c52(const t_identifier s) 
+void print_c5(const t_identifier s) // equivalent
 {
   std::cout << '[';
   std::cout << s << ']';
@@ -324,17 +330,17 @@ void fn_arguments_C_test()
   print_c4(cadena);
 
   
-  //print_c5(cadena); //error len(cadena) = 3; esperado 35
+  //print_c6(cadena); //error len(cadena) = 3; esperado 35
   //   arrays_in_cpp.cpp:310: error: invalid initialization of reference of type ‘const char (&)[35]’ from expression of type ‘char [3]’
-  // arrays_in_cpp.cpp:250: error: in passing argument 1 of ‘void print_c5(const char (&)[35])’
+  // arrays_in_cpp.cpp:250: error: in passing argument 1 of ‘void print_c6(const char (&)[35])’
   const unsigned int LEN_CADENA_35 = 35;
   char cadena35[LEN_CADENA_35] = {"cadena35"};
-  print_c5(cadena35);
+  print_c6(cadena35);
 
-  print_c52(cadena35);
+  print_c5(cadena35);
   cadena[0]= 'O';
   cadena[1]= 'k';
-  print_c52(cadena);
+  print_c5(cadena);
   
   
 }
