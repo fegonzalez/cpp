@@ -1122,7 +1122,7 @@ RULE1_EXCEPTION This rule does not apply to entities with internal
   [ Example: (explicitly declared) static names // check at [k3201]
 
   // Translation unit 1:
-  static int counter = 2; // unrelated to other1 translation units
+  static int counter = 2; // unrelated to other translation units
   namespace n1 {
   static int counter = 2222; // unrelated to other translation units
   }
@@ -8246,6 +8246,26 @@ e) VALID: return a reference to a member array (trivial);
      * Invariant are no longer sustainable (except returning const &)
 
 
+# D.4 How to initialize an static array member [kD003]
+
+  [ Example:  Example
+
+    class ClassWithStaticArrayMember
+    {
+    	public:
+    	static const size_t R_CADENA_LEN = 100;
+
+        ///HERE static member declaration
+    	static char r_cadena[R_CADENA_LEN];
+    };
+
+
+    ///HERE static member initialization (to "" value)
+    char ClassWithStaticArrayMember::r_cadena[R_CADENA_LEN] = {};
+
+  —end example ]
+
+
 
 # ==============================================================================
 # Appendix I - Undocumented Issues
@@ -8421,6 +8441,7 @@ e) VALID: return a reference to a member array (trivial);
 
   [kD001] Passing arrays as function arguments - "./arrays_in_cpp.cpp"
   [kD002] How to return a local array from a C/C++ function? - "./arrays_in_cpp"
+  [kD003] How to initialize an static array member? - "./arrays_in_cpp.cpp"
 
  
 # ==============================================================================

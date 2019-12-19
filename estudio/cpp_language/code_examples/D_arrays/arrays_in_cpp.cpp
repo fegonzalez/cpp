@@ -7,11 +7,15 @@
 
 //   g++ -std=c++11  -Wall -Werror  arrays_in_cpp.cpp
 
-/* Reference documents:
+/**@file arrays_in_cpp.cpp  
 
-[1] "The ANSI C Programming Language", Brian W. Kernighan
+   - I   Passing arrays as function arguments
+   - II  How to return a local array from a C/C++ function?
+   - III How to initialize an static array member
 
-[2] https://www.geeksforgeeks.org/return-local-array-c-function/
+   - Reference documents:
+     [1] "The ANSI C Programming Language", Brian W. Kernighan
+     [2] https://www.geeksforgeeks.org/return-local-array-c-function/
 
  */
 
@@ -144,6 +148,7 @@ struct arrWrap retarray_within_struct();
 
 
 
+
 class ClassWithArrayMember
 {
 public:
@@ -183,6 +188,49 @@ private:
 
 
 /******************************************************************************/
+/* III How to initialize an static array member ?                             */
+/******************************************************************************/
+
+class ClassWithStaticArrayMember
+{
+public:
+
+  static const char * test()
+  {
+    memset(r_cadena, R_CADENA_INIT_VALUE, R_CADENA_LEN);
+    strcpy(r_cadena, "E_DISPONIBLE_CAMBIO");  
+    return r_cadena;
+  }
+
+  static const char * get_cadena()
+  {
+    return r_cadena;
+  }
+
+private:
+   static const size_t R_CADENA_LEN = 100;
+   static const char R_CADENA_INIT_VALUE = ' ';
+   static char r_cadena[R_CADENA_LEN]; // return value for obtenerEstado;
+};
+
+
+///HERE static member init
+char ClassWithStaticArrayMember::r_cadena[R_CADENA_LEN] = {};
+
+///@test static member init
+void init_static_array_test()
+{
+  std::cout << "III.a Init value: <" << ClassWithStaticArrayMember::get_cadena()
+	    << '>'
+	    << std::endl;
+  
+  std::cout << "III.b test value <" << ClassWithStaticArrayMember::test()
+	    << '>'
+	    << std::endl;
+}
+
+
+/******************************************************************************/
 
 int main()
 {
@@ -203,8 +251,15 @@ int main()
   return_array_test();
   std::cout << std::endl;
   std::cout << std::endl;
- 
 
+
+  std::cout << "\n\nIII How to initialise an static array member?" 
+	    << std::endl;
+  init_static_array_test();
+  std::cout << std::endl;
+  std::cout << std::endl;
+
+  
   return 0;
 }
 
