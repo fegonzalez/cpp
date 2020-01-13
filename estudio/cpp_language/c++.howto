@@ -15,7 +15,7 @@
 # 1.7 The C++ memory model
 # 1.8 The C++ object model
 # 1.9 Program execution
-#  1.10 Multi-threaded executions and data races
+# 1.10 Multi-threaded executions and data races
 
 
 # 2 Lexical conventions
@@ -69,7 +69,7 @@
 
 #     3.3.10 Name hiding
 #
-aki-lo-dejo# 3.4 Name lookup
+# 3.4 Name lookup
 #     3.4.1 Unqualified name (Appendix T) lookup
 #     3.4.2 Argument-dependent name lookup
 #     3.4.3 Qualified name lookup
@@ -79,7 +79,7 @@ aki-lo-dejo# 3.4 Name lookup
 #     3.4.5 Class member access
 #     3.4.6 Using-directives and namespace aliases [basic.lookup.udir]
 #
-# 3.5 Program and linkage
+aki-lo-dejo# 3.5 Program and linkage
 #
 
 # \todo # 3.6 Start and termination
