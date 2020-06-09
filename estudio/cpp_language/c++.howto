@@ -2040,7 +2040,7 @@ BEST_PRACTICE [3_1]
   - For Tiny integers:
     WARNING char is signed on some machines and unsigned on others =>
     	    explicitly specify either signed char or unsigned char.
-    my_note: use (unit8_t ,..) types in <stdint.h> library instead
+    my_note: use (uint8_t ,..) types in <stdint.h> library instead
 
 • Use double for floating-point computations:
   - Float lacks precision and in fact, on some machines, double-precision
