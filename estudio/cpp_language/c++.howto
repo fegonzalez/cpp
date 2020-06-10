@@ -4491,6 +4491,27 @@ declared outside the class before they can be used. But it is a good
 idea to provide separate declarations for friends. [3_1].7.2.1
 
 
+WARNING
+With an Unqualified name (see Appendix T), the friend declaration assumes
+the surrounding namespace. Explicit (or global) namespace is required.
+
+[ Example:
+
+  class GlobalClass;
+
+  name space n1
+  {
+    class Cn1
+    {
+      friend GlobalClass; //error: taken as "n1::GlobalClass"
+      friend ::GlobalClass; //ok
+    };
+  };
+
+—end example ]
+
+
+
 # 11.4 Protected member access 
 
 An additional access check beyond those described earlier in Clause 11
