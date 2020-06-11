@@ -300,60 +300,11 @@ and a++ are illegal.
 # H - String manipulation functions
 # ==============================================================================
 
-
-# snprintf: integer to string
-
-# strncpy: Copy characters from string to string
-
-http://www.cplusplus.com/reference/cstring/strncpy/?kw=strncpy
-
 # sscanf: Read formatted data from string (eg. string to int)
 
-(http://www.cplusplus.com/reference/cstdio/sscanf/?kw=sscanf)
+  (http://www.cplusplus.com/reference/cstdio/sscanf/?kw=sscanf)
 
-
-[ Example - snprintf, strncpy
-
-#include <stdio.h>
-#include <string.h>
-
-int main ()
-{
-  char dest[6]; // non-initialized string
-  puts(dest);   // (o1)
-
-
-  ///@test snprintf: int2string
-  //
-  int numero = 77;
-  char num_aeronaves[2 + 1]; // code + terminating null character
-  snprintf(num_aeronaves, 
-	       2 + 1, 
-	       "%0*d", 
-	       2,
- 	       numero);
-  puts(num_aeronaves); // (o2)
-
-  ///@test strncpy: (string + '\0') to (string) 
-  strncpy ( dest, num_aeronaves, 2 );
-  puts(dest); // (o3)
-  char tipo_aeronave[4] = {'a','b', 'c', 'd'};
-  strncpy ( &dest[2], tipo_aeronave, 4 );
-  puts(dest); // (o4)
-
-  return 0;
-}
-
-/// expected output
-//
-// (o1) ���4|
-// (o2) 77
-// (o3) 77��4|
-// (o4) 77abcd
-
-- end example ]
-
-
+  int sscanf(cosnt char * source, const char * format, ...);
 
 
 [ Example - sscanf
@@ -372,7 +323,86 @@ int main ()
   return 0;
 }
 
+
+/// expected output
+//
+// Rudolph -> 12
+
 - end example ]
+
+
+
+# snprintf: integer to string
+
+
+# strncpy: Copy characters from string to string
+
+  char * strncpy(char * dest, const char * source, size_t num)
+  dest: pointer to dest. array
+  source: C string to be copied
+  num: MAX. chars to be copied
+
+  WARNING No null-character is implicitly added at the end of 'dest'
+  	  if 'source' is longer than 'num'
+
+  (http://www.cplusplus.com/reference/cstring/strncpy/?kw=strncpy)
+
+
+[ Example - snprintf, strncpy
+
+#include <stdio.h>
+#include <string.h>
+
+int main ()
+{
+  char dest[6];     // non-initialized string
+  char dest_bis[6]; // non-initialized string
+    
+  puts(dest);       // (o1)
+
+
+  ///@test snprintf: int2string
+  //
+  int numero = 77;
+  char num_aeronaves[2 + 1]; // code + terminating null character
+  snprintf(num_aeronaves, 
+	       2 + 1, 
+	       "%0*d", 
+	       2,
+ 	       numero);
+  puts(num_aeronaves);   // (o2)
+
+  ///@test strncpy: (string + '\0') to (string) 
+  strncpy ( dest, num_aeronaves, 2 );
+  strncpy ( dest_bis, num_aeronaves, 2 );
+  
+  puts(dest);           // (o3)
+  puts(dest_bis);       // (o4)
+  
+  char tipo_aeronave[4] = {'a','b', 'c', 'd'};
+  strncpy ( &dest[2], tipo_aeronave, 4 );
+
+  puts(dest);          // (o5)
+
+
+  ///@warning iff required.
+  dest_bis[3] = '\0';   /* null character manually added */
+  puts(dest_bis);       // (o6)
+
+  return 0;
+}
+
+/// expected output
+//
+// (o1) ���4|
+// (o2) 77
+// (o3) 77��4|
+// (o4) 77��4|
+// (o5) 77abcd
+// (o6) 77
+
+- end example ]
+
 
 # ==============================================================================
 # Appendix K - Code examples (./code_examples)
