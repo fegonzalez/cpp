@@ -1,0 +1,31 @@
+
+Test Using bit fields and pragma pack. 
+
+sizeof(char) (¿1?) = 1
+sizeof(byte) (¿1?) = 1
+sizeof(int) (¿2?) = 4
+sizeof(TypeBitFieldMsg)  = 4
+sizeof(TypeBitFieldMsg2)  = 8
+sizeof(TypeBitFieldMsg3)  = 8
+sizeof(TypeRegularMsg)  = 8
+
+///@warning aki cambia a 12 bytes:
+sizeof(TypeBitFieldMsg4)  = 12
+
+msg_bitfield: 
+sizeof(TypeBitFieldMsg) = 4
+{-1; 7; 3}
+
+msg_regular: 
+sizeof(TypeRegularMsg)  = 8
+sizeof(datos.the_char) = 1
+sizeof(datos.the_byte) = 1
+sizeof(datos.the_int) = 4
+{65; 55; 4099}
+
+Copiar no pack (msg_bitfield) a variables
+sizeof(local_char) (¿1?) = 1
+sizeof(local_byte) (¿1?) = 1
+sizeof(local_int) (¿2?) = 4
+ msg_bitfield como vars: 
+{-1; 7; 3}

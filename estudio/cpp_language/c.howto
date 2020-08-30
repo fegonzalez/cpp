@@ -26,6 +26,12 @@
 # 5.11 Pointers to Functions
 # 5.12 Complicated Declarations
 
+
+# 6 Structures
+#
+# 6.9 Bit-fields
+
+
 # H - String manipulation functions
 
 # K - Code examples
@@ -297,6 +303,102 @@ and a++ are illegal.
 
 
 # ==============================================================================
+# 6 Structures
+# ==============================================================================
+
+# 6.9 Bit-fields [3.1]  [4_2_1] [k6901]
+
+(1) In C we can specify size (in bits) of structure and union members.
+
+(2) Almost everything about fields is implementation-dependent. 
+
+(3) Fields need not be names; unnamed fields (a colon and width only)
+      are used for padding.
+
+(4) The special width 0 may be used to force alignment at the next
+      word boundary (eg. int :0)
+
+(5) Fields may be declared only as integer types; for portability,
+      specify signed or unsigned explicitly.
+
+(6) They are not arrays and they do not have addresses, so the &
+      operator cannot be applied on them. [3_1]
+       Therefore, we can not have pointers to bit field members, as
+      they may not start at a byte boundary. [4_2_1]
+
+(7) In C++, bit fields cannot be static. [4_2_1]
+
+
+# 6.9.1  Bit fields and memory locations
+
+See c++.howto, 1.1 Scope, 4) Bit fields and memory locations
+
+
+# 6.9.2 Conclusions after testing [k6901]
+
+C1 - memory storage of a bit-field struct (without pragma pack): 
+
+      The minimum bytes required by the bit-fields (a), but following
+      the word-size of the architecture (b):
+
+    [ Example 
+        
+        struct TypeBitFieldMsg
+	{
+            char        the_char    :1;    // (a) 1 byte required (signed => 2's complement)
+            uint8_t     the_byte    :4;    // (a) 1 byte required
+            unsigned int         the_int     :9;    // (a) 2 bytes required
+	};
+
+	(a) At least 4 bytes required
+	(b) word size = 64 bits = 8 bytes =  4 or 8 bytes words => 4 bytes used
+
+
+C2 - memory storage of a regular struct:, without pragma pack:  
+
+      The sizeof of each data type, but following the word-size of the
+      architecture (b):
+
+    [ Example 
+        
+        struct TypeRegularMsg
+	{
+            char        the_char;    // (a) 1 byte required
+            uint8_t     the_byte;    // (a) 1 byte required
+            unsigned int         the_int;    // (a) 4 bytes required
+	};
+
+	(a) At least 6 bytes required
+
+	(b)  word size = 64 bits = 8 bytes = 4 or 8 bytes words: 	     
+	     required: 6 bytes
+	     minimum word size required: 8 bytes (6 of data + 2 bytes of padding)
+
+
+C3: value stored of the bit-field types
+
+(1)  Value included in the range of values supported by the bit-field length
+      [ Example - unsigned int the_int :9;  range [0, 2e9=512] -- end example ]
+      [ Example - unsigned int the_int :17;  range [0, 2e17= 131072] -- end example ]
+
+(2) In unsigned types, If the value of the fields goes beyond the
+    bits allocated, the exceeded bits are ignored.
+      [ Example - unsigned int the_int :9; the_int = 4099 => actual value stored is 3;
+      -- end example ]
+
+(3) In signed types, If the value of the fields goes beyond the bits
+    allocated, and the MSB bit is a '1', then it is considered a
+    negative number, and 2ś complement is executed to get the actual
+    value; (eg int the_int :5 = 31 (b 11111) => actual value = -1).
+
+
+
+@todo FIXME My conclussions
+
+
+
+
+# ==============================================================================
 # H - String manipulation functions
 # ==============================================================================
 
@@ -380,9 +482,16 @@ int main ()
 
 # Pointers and Arrays "./code_examples/D_arrays"
 
-  [k5001] Passing arrays as function arguments - "./arrays_in_cpp.cpp"
-  [k5002] How to return a local array from a C/C++ function? - "./arrays_in_cpp"
+  [k5001] Passing arrays as function arguments - "./D_arrays/arrays_in_cpp.cpp"
+  [k5002] How to return a local array from a C/C++ function? - "./D_arrays/arrays_in_cpp"
 
+
+# Bit fields & bitwise operations "./code_examples/C_code"
+
+  [k6901]  bit field & bitwise - "./bit_field.cpp"
+
+
+code_examples/issues/bit_field_pack/bit_field.cpp
 
 # ==============================================================================
 # Appendix Z - References
@@ -417,8 +526,16 @@ int main ()
 
 [4_1] Pointers to Functions
 
-      [4_1_1] GeeksforGeeks - Function Pointer in C -
+[4_1_1] GeeksforGeeks - Function Pointer in C -
               https://www.geeksforgeeks.org/function-pointer-in-c/
+
+
+[4_2] Bit fields & bitwise operations
+
+[4_2_1]  GeeksforGeeks - Bit Fields in C - 
+              https://www.geeksforgeeks.org/bit-fields-c/
+
+
 
 # ------------------------------------------------------------------------------
 

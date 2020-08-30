@@ -486,19 +486,20 @@ Note.- byte, word, and memory location (Y.1)
 
    mem address != mem location: a mem. location occupies one or more mem. addr.
 
-4) Bit fields and memory locations
+4) Bit fields and memory locations [kC001]
 
    - A bit-field and an adjacent non-bit-field are in separate memory locations.
 
-   - The same is applicable tot two bit-fields, if one is declared
+   - The same is applicable to two bit-fields, if one is declared
      inside a nested struct declaration and the other is not,
 
    - or if the two are separated by a zero-length bit-field declaration,
 
    - or if they are separated by a non-bit-field declaration.
 
-   It is not safe to concurrently update two bit-fields in the same struct
-   if all fields between them are also bit-fields of non-zero width.
+   - It is not safe to concurrently update two bit-fields in the same
+     struct if all fields between them are also bit-fields of non-zero
+     width.
 
    [ Example: 
 
@@ -8324,7 +8325,7 @@ e) VALID: return a reference to a member array (trivial);
 # Appendix K - Code examples (./code_examples)
 # ==============================================================================
 
-# Compilation, Linkage, "./code_examples/compilation_linkage
+# Compilation, Linkage, "./code_examples/compilation_linkage"
 
   [k1] 'gcc' versus 'g++' compilation - "gcc_vs_c++"
 
@@ -8332,6 +8333,11 @@ e) VALID: return a reference to a member array (trivial);
 
   [k11] multiple definitions of... linkage error -
   "linkage/multiple_definitions_error"
+
+
+# C code concepts, "./code_examples/C_code
+
+  [kC001]  bit field & bitwise - "./bit_field.cpp"
 
 
 # Chapter 3 Basic concepts - "./3_basic_concepts/"
@@ -9101,26 +9107,61 @@ const_iterator (e.g.: set) [4_14_2]
 
 # Y.1 Memory address  [7_1]
 
-a) byte & memory location: C++ concepts (1.7.1)
+(1) In computing, a memory address is a reference to a specific memory
+     location used at various levels by software and hardware.
 
-b) Word (processor concept)
+(2) Memory addresses are fixed-length sequences of digits
+    conventionally displayed and manipulated as unsigned integers.
 
-  A word is the natural unit (fixed-size) of data used by a particular
-  processor design (register size)
+(3) See  "byte & memory location: C++ concepts (1.7.1)"
 
-  Most common word sizes are 8, 16, 32 and 64 bits, but other are possible.
 
-c) address size (processor concept)
+# 1 Types
 
-   - address size = number of memory locations.  
+# 1.1 Physical addresses
 
-   - total memory available = 2 exp address-size
+(1) A digital computer's main memory consists of many memory locations.
 
-   - For a computer, the address size can be equal, larger or smaller
-     than the word size.
+(2) Each memory location has a physical address which is a code. 
 
-   - If equal, one memory address to be efficiently stored in one word    
-     e.g. 32-bit computer can address 2**32 = 4GB   
+(3) The CPU (or other device) can use the code to access the
+     corresponding memory location.
+
+# 1.2 Logical addresses
+
+(1) A computer program uses memory addresses to execute machine code,
+     and to store and retrieve data.
+
+                                                        (*)                                     
+(2) In modern computers: program <=> logical (virtual) address <=> phisical mem
+
+(*) using the computer's memory management unit and operating system
+     memory mapping.
+
+
+# 3 Unit of address resolution
+
+(1) Most modern computers are byte-addressable. Each address identifies 
+     a single byte (eight bits) of storage. Data larger than a single byte may 
+     be stored in a sequence of consecutive addresses.
+
+# 3.1 Word size versus address size (processor concepts)
+
+(1) Word size is a characteristic given to computer architecture. It denotes 
+     the number of bits that a CPU can process at one time (eg. 32, 64)
+
+(2) Very often, when referring to the word size of a modern computer,
+    one is also describing the size of address space on that computer
+    (eg. "32-bit" usually allows 32-bit mem addresses, 2**32 = 4Gb). 
+    This allows one memory address to be efficiently stored in one word.
+
+(3) However, this does not always hold true. Computers can have memory
+     addresses larger or smaller than their word size.
+
+(4) In theory, modern byte-addressable 64-bit computers can address
+    264 bytes (16 exbibytes), but in practice the amount of memory is
+    limited by the CPU, the memory controller, or the printed circuit
+    board design
 
 
 
@@ -9339,6 +9380,13 @@ c) address size (processor concept)
 [4_14_1] Erase-remove idiom - https://en.wikipedia.org/wiki/Erase%E2%80%93remove_idiom
 
 [4_14_2] Erase-remove idiom with set- https://stackoverflow.com/questions/3792600/erase-remove-idiom-with-stdset-failing-with-constness-related-error
+
+
+[4_15] Bit fields & bitwise operations
+
+[4_15_1]  GeeksforGeeks - Bit Fields in C - 
+              https://www.geeksforgeeks.org/bit-fields-c/
+
 
 
 [4_100] Containers
