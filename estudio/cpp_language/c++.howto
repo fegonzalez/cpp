@@ -2635,6 +2635,21 @@ WARNING (Recommendation) Put inline in Header Files [3_1].6.5.2).
 Why: Multiple (identical) definitions may exists (one-def rule, see 4)
 bellow). As a result, inline functions normally are defined in headers.
 
+WARNING (Best-practice) Put the "inline" in the definition not in the
+declaration (redundant) (geeksforgeeks.org/inline-functions-cpp)
+[ Example
+
+    class S
+    {
+	public:
+	int square(int s); //declare
+    };
+
+    inline int S::square(int s)  // use inline prefix 
+    { ... }
+		
+--end example]
+
 
 # ==============================================================================
 # 8 Declarators
