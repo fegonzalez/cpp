@@ -340,8 +340,9 @@ aki-lo-dejo# 3.5 Program and linkage
 #     B.2.1 Handling cores
 #
 # B.3 memory analysis
-#     B.3.1 valgrind tool
-
+#     B.3.1 nm tool (content of an object file)
+#     B.3.2 valgrind tool
+#
 
 # Appendix C - Compilation, Linkage, ...
 #
@@ -403,6 +404,17 @@ aki-lo-dejo# 3.5 Program and linkage
 # Y.1 Memory address
 
 # Appendix Z - References
+#
+# [1] C++ documents
+# [2] tools (compilers, debuggers, ...)
+# [3] books
+# [4] C++ Concepts
+# [5] Teacher index
+# [6] C++ compilation model
+# [7] Non-C++ concepts
+# [8] C++11 and after 
+# [9] STL
+# [10] Pointers and Arrays
 
 
 # ==============================================================================
@@ -2585,70 +2597,97 @@ or function parameters.
 
 # 7.1.2.1 inline
 
-2) The inline specifier indicates to the implementation that inline
+1) The inline specifier indicates to the implementation that inline
    substitution of the function body at the point of call is to be
    PREFERRED to the usual function call mechanism, thus Inline
    Functions Avoid Function Call Overhead
 
-WARNING
-An implementation IS NOT REQUIRED to perform this inline substitution
-at the point of call: the inline specification is only a request to
-the compiler.
+WARNING Its a suggestion not a requirement to the compiler.
 
 FACT_7_1 The inline keyword has no effect on the linkage of a function (3.5.4)
 
 
-3) A function defined within a class definition is an inline function.
+2) A function defined within a class definition is an inline function.
 
-   The inline specifier shall not appear on a block scope function declaration.
 
-   If the inline specifier is used in a friend declaration, that
-   declaration shall be a definition or the function shall have
-   previously been declared inline.
+3) When a function is actually inlined, then the body of the function
+   will be expanded (*), at compile time, in all places where it is
+   referenced:
+
+   => no linkage "undefined reference" occurs
+   => no function calling at runtime.
+
+  (*) "expanded" means that the body code is copied; not computed and resolved
+      [ example .-
+
+      	//Before inlining	
+      	inline f(int  x) { return x*2 +7;}
+        int a = f(3); 
+  
+        // after inlining
+	int a = 3*2 +7;   // yes: this is "inline expansion"
+	int a = 13;       // NO; this is not
+
+      -- end example ]
+
 
 4) An inline function shall be DEFINED in every translation unit in
    which it is odr-used and shall have exactly the same DEFINITION in
-   every case (3.2). [ Note: A call to the inline function may be
+   every case (3.2).
+
+   [ Note: A call to the inline function may be
    encountered before its definition appears in the translation
    unit. —end note ]
 
-   If the definition of a function appears in a translation unit
-   before its first declaration as inline, the program is ill-formed.
-
-   If a function with external linkage is DECLARED inline in one
-   translation unit, it shall be DECLARED inline in all translation
-   units in which it appears; no diagnostic is required.
-
-   An inline function with external linkage shall have the same
-   address in all translation units (My_note.- this is for the
-   compiler makers)
-
-   A static local variable in an extern inline function always refers
-   to the same object (I.1). 
-
-   A type defined within the body of an extern inline function is the
-   same type in every translation unit.
+   
+   4.1) My_note.- this would require intensive control from the programmer.
 
 
-WARNING (Recommendation) Put inline in Header Files [3_1].6.5.2).
-(Either in the declaration, or in the definition of template functions.)
-Why: Multiple (identical) definitions may exists (one-def rule, see 4)
-bellow). As a result, inline functions normally are defined in headers.
+5) HINT Dangers of linking inline functions [6_5]
 
-WARNING (Best-practice) Put the "inline" in the definition not in the
-declaration (redundant) (geeksforgeeks.org/inline-functions-cpp)
-[ Example
+   If not expanded, the "undefined reference" linking error could occur.
 
-    class S
-    {
-	public:
-	int square(int s); //declare
-    };
+   [ Example.-
 
-    inline int S::square(int s)  // use inline prefix 
-    { ... }
-		
---end example]
+       ///@file a.h
+       int f1();
+
+       ///@file a.cpp
+       inline int f1(){ ...}
+
+
+       ///@file  b.cpp
+       #include a.h        // correct
+       ... int aux = f1()  // compilation correct (f1 included ok)
+                           // linking error "undefined reference" to 'f1'
+
+   -- end example ]
+
+
+   Depending upon the compiler, it may show a warning if the function
+   is not expanded inline.
+
+
+6) Best practices
+
+6.1) Put the "inline" in the definition not in the declaration (redundant) [6_6]
+     
+    [ Example
+
+        class S
+	{
+	    public:
+	    int square(int s); //declare
+	};
+
+        inline int S::square(int s)  // use inline prefix 
+	{ ... }
+
+    --end example]
+
+6.2) Never put the "inline" function in a separate source file
+     + To avoid linking problems (see 5) above)
+     + To avoid  the need of control all the calls (see 4.1 above)
 
 
 # ==============================================================================
@@ -7816,7 +7855,14 @@ B.2.1 Handling cores
 # B.3 memory analysis 
 # ------------------------------------------------------------------------------
 
-# B.3.1 valgrind tool
+# B.3.1 nm tool (content of an object file)  [6_5]
+
+Command line tool
+Can be used to dump what's inside an object file.
+
+    >> nm <path_to_object_file>
+
+# B.3.2 valgrind tool
 
   valgrind [valgrind-options] [your-program] [your-program-options]
 
@@ -8930,6 +8976,13 @@ variables, which exist in separate source files, when one of them
 depends on the other to be initialized.
 
 
+- static (non-member) function or variable
+
+Used for internal linkage (see 3.5.2 Internal linkage)
+
+Names with internal linkage: (explicitly declared) static names
+ 
+
 - static type
 
 type of an expression (3.9) resulting from analysis of the program
@@ -9464,6 +9517,11 @@ const_iterator (e.g.: set) [4_14_2]
       https://en.wikipedia.org/wiki/Single_Compilation_Unit
 
 [6_4] static (vs shared) libaries - https://www.geeksforgeeks.org/static-vs-dynamic-libraries/
+
+[6_5] Dangers of linking inline functions - gudok.xyz
+
+[6_6] Inline functions in C++ - geeksforgeeks.org/inline-functions-cpp
+
 
 # ------------------------------------------------------------------------------
 
