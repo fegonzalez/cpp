@@ -2602,15 +2602,27 @@ or function parameters.
    PREFERRED to the usual function call mechanism, thus Inline
    Functions Avoid Function Call Overhead
 
-WARNING Its a suggestion not a requirement to the compiler.
 
 FACT_7_1 The inline keyword has no effect on the linkage of a function (3.5.4)
 
 
-2) A function defined within a class definition is an inline function.
+2) WARNING Its a suggestion not a requirement to the compiler.
+
+   Compiler may not perform inlining in such circumstances like: [6_6]
+   a) If a function contains a loop. (for, while, do-while)
+   b) If a function contains static variables.
+   c) If a function is recursive.
+   d) If a function return type is other than void, and the return
+      statement doesn’t exist in function body.
+   e) If a function contains switch or goto statement.
 
 
-3) When a function is actually inlined, then the body of the function
+
+
+3) A function defined within a class definition is an inline function.
+
+
+4) When a function is actually inlined, then the body of the function
    will be expanded (*), at compile time, in all places where it is
    referenced:
 
@@ -2631,19 +2643,20 @@ FACT_7_1 The inline keyword has no effect on the linkage of a function (3.5.4)
       -- end example ]
 
 
-4) An inline function shall be DEFINED in every translation unit in
+5) An inline function shall be DEFINED in every translation unit in
    which it is odr-used and shall have exactly the same DEFINITION in
-   every case (3.2).
+   every case (3.2 One-definition rule).
+
 
    [ Note: A call to the inline function may be
    encountered before its definition appears in the translation
    unit. —end note ]
 
    
-   4.1) My_note.- this would require intensive control from the programmer.
+5.1) My_note.- this would require intensive control from the programmer.
 
 
-5) HINT Dangers of linking inline functions [6_5]
+6) HINT Dangers of linking inline functions [6_5]
 
    If not expanded, the "undefined reference" linking error could occur.
 
@@ -2668,9 +2681,9 @@ FACT_7_1 The inline keyword has no effect on the linkage of a function (3.5.4)
    is not expanded inline.
 
 
-6) Best practices
+7) Best practices
 
-6.1) Put the "inline" in the definition not in the declaration (redundant) [6_6]
+7.1) Put the "inline" in the definition not in the declaration (redundant) [6_6]
      
     [ Example
 
@@ -2685,7 +2698,7 @@ FACT_7_1 The inline keyword has no effect on the linkage of a function (3.5.4)
 
     --end example]
 
-6.2) Never put the "inline" function in a separate source file
+7.2) Never put the "inline" function in a separate source file
      + To avoid linking problems (see 5) above)
      + To avoid  the need of control all the calls (see 4.1 above)
 
