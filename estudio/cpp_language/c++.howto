@@ -7584,6 +7584,27 @@ WARNING always pass a NON-CONST reference to the stream as the first argument
     std::ostream& operator<<(std::ostream &, const T &);
 
 
+HINT ostream in a class hierarchy; how to call parent ostream =>
+     => use static_cast over the parent class
+
+    [ Example
+
+      class A { ...};
+      class B {...};
+
+      std::ostream &operator<<(std::ostream &os, const B &obj)
+      {
+        os << static_cast<const A &>(obj); // here calling parent <<
+
+	//... B concrete output here
+	
+      	return os;
+      }
+
+    -- end example ]
+     
+
+
 - istream 
 
   //!\warning 2nd argument MUST NOT be CONST because it is to be modified
