@@ -4313,6 +4313,31 @@ e) Conclusions:
 
 # 10.3.10 Virtual functions FAQ  \todo [4_11_1]
 
+# 10.3.10.1 Is it possible to store polymorphic class in shared memory?
+
+NO!
+
+
+Virtuality forbidden [4_11_3]
+
+<< The virtual table pointer and the virtual table are in the address
+space of the process that constructs the object, so if we place a
+class with a virtual function or virtual base class, the virtual
+pointer placed in shared memory will be invalid for other processes
+and they will crash.
+
+This problem is very difficult to solve, since each process needs a
+different virtual table pointer and the object that contains that
+pointer is shared across many processes. Even if we map the mapped
+region in the same address in every process, the virtual table can be
+in a different address in every process. To enable virtual functions
+for objects shared between processes, deep compiler changes are needed
+and virtual functions would suffer a performance hit. That's why
+Boost.Interprocess does not have any plan to support virtual function
+and virtual inheritance in mapped regions shared between processes. >>
+
+
+
 
 # ==============================================================================
 # 11 Member access control
@@ -9478,6 +9503,7 @@ const_iterator (e.g.: set) [4_14_2]
       	       https://isocpp.org/wiki/faq/virtual-functions#dyn-binding 
 	       https://isocpp.org/wiki/faq/virtual-functions#dyn-binding2
 
+      [4_11_3] virtaul && shared memory - [https://stackoverflow.com/questions/12969391/is-it-possible-to-store-polymorphic-class-in-shared-memory]
 
 [4_12] Conversions
 
